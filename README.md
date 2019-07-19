@@ -17,12 +17,12 @@ Need a title.
 
 
 # Possible Data Sources
-- Data from pew research
+- Data from pew research (pew social trends): https://www.pewsocialtrends.org/datasets/
 - General Social Survey: https://www.kaggle.com/norc/general-social-survey/
-- Gapminder
+- Gapminder: https://www.gapminder.org/data/
 - American Community Survey: Perhaps accessible through tidycensus R package
-- Text data based on books
-- Bike data
+- Text data based on books: https://www.gutenberg.org/browse/scores/top
+- Bike data: https://www.niceridemn.com/system-data
 - Animal Bites: https://www.kaggle.com/rtatman/animal-bites
 - Lego Database: https://www.kaggle.com/rtatman/lego-database
 - Museums: https://www.kaggle.com/imls/museum-directory
