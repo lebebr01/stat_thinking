@@ -15,7 +15,16 @@
 
 
 # Possible Data Sources
-- 
-- 
-- 
-- 
+- Data from pew research
+- General Social Survey: https://www.kaggle.com/norc/general-social-survey/
+- Gapminder
+- American Community Survey: Perhaps accessible through tidycensus R package
+- Text data based on books
+- Bike data
+- Animal Bites: https://www.kaggle.com/rtatman/animal-bites
+- Lego Database: https://www.kaggle.com/rtatman/lego-database
+- Museums: https://www.kaggle.com/imls/museum-directory
+- Groundhog day: https://www.kaggle.com/groundhogclub/groundhog-day
+- Noise Complaints: https://www.kaggle.com/somesnm/partynyc
+- Speed Dating Experiment: https://www.kaggle.com/annavictoria/speed-dating-experiment
+
