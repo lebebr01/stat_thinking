@@ -1,5 +1,7 @@
 # stat_thinking
 
+Need a title.
+
 # Chapters
 1. Introduction
 2. Visualization - univariate
