@@ -7,9 +7,12 @@ Need a title.
 2. Visualization - univariate (to show syntax), present multivariate (two/three variable) to explore complex questions.
 3. Descriptive Statistics / Applying functions to columns of data
 11. Classification - move this earlier, more concrete for many students.
+    a. overfitting
+    b. cross-validation
+    c. performance measures
 4. Simulation
 5. Sampling vs Empirical Distribution
-6. What is a model / Randomization
+6. What is a model / Randomization - Is this a useful way to think about data?
 7. Estimation / Bootstrap
 9. Linear Model
 10. Prediction
