@@ -6,10 +6,10 @@ Need a title.
 1. Introduction
 2. Visualization - univariate (to show syntax), present multivariate (two/three variable) to explore complex questions.
 3. Descriptive Statistics / Applying functions to columns of data
-11. Classification - move this earlier, more concrete for many students.
-    a. overfitting
-    b. cross-validation
-    c. performance measures
+11. Classification - move this earlier, more concrete for many students.  
+     a. overfitting
+     b. cross-validation
+     c. performance measures
 9. Linear Model
 7. Estimation / Bootstrap / Uncertainty
 4. Simulation
