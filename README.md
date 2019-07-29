@@ -13,7 +13,7 @@ Need a title.
 8. Visualization - Multivariate (two/three variable)
 9. Linear Model
 10. Prediction
-11. Classification
+11. Classification - move this earlier, more concrete for many students.
 
 
 # Possible Data Sources
