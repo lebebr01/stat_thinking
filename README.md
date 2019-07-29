@@ -10,12 +10,13 @@ Need a title.
     a. overfitting
     b. cross-validation
     c. performance measures
+9. Linear Model
+7. Estimation / Bootstrap / Uncertainty
 4. Simulation
 5. Sampling vs Empirical Distribution
-6. What is a model / Randomization - Is this a useful way to think about data?
-7. Estimation / Bootstrap
-9. Linear Model
 10. Prediction
+
+
 
 
 
