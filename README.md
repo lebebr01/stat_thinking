@@ -9,16 +9,16 @@ Need a title.
     c. Data Structure    
 2. Visualization - univariate (to show syntax), present multivariate (two/three variable) to explore complex questions.    
      a. Explore distributions    
-         1. density plots    
-         2. histograms    
-         3. violin plots    
+          1. density plots    
+          2. histograms    
+          3. violin plots    
      b. Conditional (multivariate) distributions    
-         1. distribution plots by groups    
+          1. distribution plots by groups    
      c. Scatterplots    
-         1. 2d scatterplots    
-         2. Add color/shapes    
-         3. Label interesting points    
-         4. Faceting    
+          1. 2d scatterplots    
+          2. Add color/shapes    
+          3. Label interesting points    
+          4. Faceting    
 3. Descriptive Statistics / Applying functions to columns of data    
      a. Functions to columns of data    
      b. Functions to columns by groups    
