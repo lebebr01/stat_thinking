@@ -4,17 +4,36 @@ Need a title.
 
 # Chapters
 1. Introduction
+   a. Statistics vs Data Science
+   b. Experiments vs Observations
+   c. Data Structure
 2. Visualization - univariate (to show syntax), present multivariate (two/three variable) to explore complex questions.
+    a. Explore distributions
+        1. density plots
+        2. histograms
+        3. violin plots
+    b. Conditional (multivariate) distributions
+        1. distribution plots by groups
+    c. Scatterplots
+        1. 2d scatterplots
+        2. Add color/shapes
+        3. Label interesting points
+        4. Faceting
 3. Descriptive Statistics / Applying functions to columns of data
+    a. Functions to columns of data
+    b. Functions to columns by groups
 11. Classification - move this earlier, more concrete for many students.  
-      a. overfitting.   
-      b. cross-validation.   
-      c. performance measures.   
+    a. overfitting.   
+    b. cross-validation.   
+    c. performance measures.   
 9. Linear Model
+    a. Correlation
+    b. 
 7. Estimation / Bootstrap / Uncertainty
 4. Simulation
 5. Sampling vs Empirical Distribution
 10. Prediction
+    a. Comparison of classification / linear model
 
 
 
