@@ -2,6 +2,13 @@ book_filename: "stat-thinking"
 chapter_name: "Chapter "
 repo: https://github.com/lebebr01/stat_thinking
 output_dir: docs
-rmd_files: []
+rmd_files: ["index.Rmd",
+    "01-introduction.Rmd",
+    "02-visualization.Rmd",
+    "03-descriptive.Rmd",
+    "04-classification.Rmd",
+    "05-regression.Rmd",
+    "06-estimation.Rmd",
+    "07-prediction.Rmd"]
 clean: [packages.bib, bookdown.bbl]
 new_session: yes

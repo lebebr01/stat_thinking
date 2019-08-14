@@ -1,0 +1,41 @@
+# Visualization   
+
+
+## Explore Distributions 
+
+
+### Histograms    
+
+
+### Density Plots    
+
+
+## Conditional (Multivariate) Distributions 
+
+
+### Distribution Plots by Groups   
+
+
+### Violin Plots   
+
+
+### Ridge Plots?
+
+
+## Scatterplots    
+
+
+### 2d Scatterplots    
+
+
+### Add Color and Shapes    
+
+
+### Label Interesting Points    
+
+
+### Faceting   
+
+
+## Additional Resources
+
