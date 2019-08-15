@@ -65,3 +65,7 @@ Tentative Title: Statistical Reasoning through Computation and R
 - Mosaic R package
 - John Hopkins Data Science package.
 
+
+# Book Themes
+- Explore msmbstyle package: https://www-huber.embl.de/msmb/ and https://github.com/grimbough/msmbstyle 
+
