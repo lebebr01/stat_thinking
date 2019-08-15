@@ -15,3 +15,5 @@ url:
 # Preface {-}
   
 This book provides a modern statistical reasoning and introduction to statistics text. Computation, using the R programming language, are used instead of relying on traditional statistical theory.
+
+

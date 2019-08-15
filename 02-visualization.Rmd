@@ -1,22 +1,98 @@
 # Visualization   
 
+```{r load-packages, message = FALSE}
+library(ggformula)
+library(mosaic)
+
+head(CPS85)
+```
+
 
 ## Explore Distributions 
 
 
 ### Histograms    
 
+```{r histogram}
+gf_histogram(~ wage, data = CPS85)
+```
+
+#### Adjust Number of Bins
+```{r histogram-bins}
+gf_histogram(~ wage, data = CPS85, bins = 15)
+```
+
+
+#### Adjust Binwidth
+
+```{r histogram-binwidth}
+gf_histogram(~ wage, data = CPS85, binwidth = 1)
+```
+
+
+#### See Bin location
+```{r histogram-see-bins}
+gf_histogram(~ wage, data = CPS85, binwidth = 1, color = 'black')
+```
+
+#### Plot Customization
+```{r plot-customization}
+gf_histogram(~ wage, data = CPS85, binwidth = 1) %>%
+  gf_theme(theme_bw())
+```
+
+```{r gf-labs}
+gf_histogram(~ wage, data = CPS85, binwidth = 1) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Number")
+```
+
+
 
 ### Density Plots    
+
+```{r density}
+gf_density(~ wage, data = CPS85) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Density")
+```
 
 
 ## Conditional (Multivariate) Distributions 
 
-
 ### Distribution Plots by Groups   
+```{r hist-by-group}
+gf_histogram(~ wage, data = CPS85, binwidth = 1, fill = ~ sex) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Number")
+```
+
+```{r density-by-group}
+gf_density(~ wage, data = CPS85, fill = ~ sex) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Density")
+```
 
 
 ### Violin Plots   
+```{r violin-plot-by-group}
+gf_violin(wage ~ sex, data = CPS85) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Sex", 
+          y = "Wage ($ per hour)")
+```
+
+
+```{r violin-plot-by-group-fill}
+gf_violin(wage ~ sex, data = CPS85, fill = 'gray85') %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Sex", 
+          y = "Wage ($ per hour)")
+```
 
 
 ### Ridge Plots?
