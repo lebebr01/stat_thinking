@@ -157,8 +157,6 @@ gf_point(wage ~ age, data = CPS85) %>%
 
 <img src="02-visualization_files/figure-html/scatter-1.png" width="672" />
 
-
-
 ### Add Color and Shapes    
 
 
@@ -204,6 +202,17 @@ gf_point(wage ~ age, data = CPS85, color = ~ sex) %>%
 ```
 
 <img src="02-visualization_files/figure-html/scatter-facet-1.png" width="672" />
+
+### Jittered Points
+
+```r
+gf_jitter(wage ~ age, data = CPS85) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+<img src="02-visualization_files/figure-html/jitter-1.png" width="672" />
 
 
 ## Hex Bins

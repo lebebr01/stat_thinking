@@ -150,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3.1" data-path="visualization.html"><a href="visualization.html#d-scatterplots"><i class="fa fa-check"></i><b>2.3.1</b> 2d Scatterplots</a></li>
 <li class="chapter" data-level="2.3.2" data-path="visualization.html"><a href="visualization.html#add-color-and-shapes"><i class="fa fa-check"></i><b>2.3.2</b> Add Color and Shapes</a></li>
 <li class="chapter" data-level="2.3.3" data-path="visualization.html"><a href="visualization.html#faceting"><i class="fa fa-check"></i><b>2.3.3</b> Faceting</a></li>
+<li class="chapter" data-level="2.3.4" data-path="visualization.html"><a href="visualization.html#jittered-points"><i class="fa fa-check"></i><b>2.3.4</b> Jittered Points</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="visualization.html"><a href="visualization.html#hex-bins"><i class="fa fa-check"></i><b>2.4</b> Hex Bins</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="visualization.html"><a href="visualization.html#adjust-color"><i class="fa fa-check"></i><b>2.4.1</b> Adjust color</a></li>
@@ -326,6 +327,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age (in years)&quot;</span>, 
           <span class="dt">y =</span> <span class="st">&quot;Wage ($ per hour)&quot;</span>)</code></pre>
 <p><img src="02-visualization_files/figure-html/scatter-facet-1.png" width="672" /></p>
+</div>
+<div id="jittered-points" class="section level3">
+<h3><span class="header-section-number">2.3.4</span> Jittered Points</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_jitter</span>(wage <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> CPS85) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_bw</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age (in years)&quot;</span>, 
+          <span class="dt">y =</span> <span class="st">&quot;Wage ($ per hour)&quot;</span>)</code></pre>
+<p><img src="02-visualization_files/figure-html/jitter-1.png" width="672" /></p>
 </div>
 </div>
 <div id="hex-bins" class="section level2">

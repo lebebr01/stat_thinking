@@ -110,8 +110,6 @@ gf_point(wage ~ age, data = CPS85) %>%
           y = "Wage ($ per hour)")
 ```
 
-
-
 ### Add Color and Shapes    
 
 ```{r scatter-color}
@@ -141,6 +139,14 @@ gf_point(wage ~ age, data = CPS85, color = ~ sex, shape = ~ married) %>%
 ```{r scatter-facet}
 gf_point(wage ~ age, data = CPS85, color = ~ sex) %>%
   gf_facet_wrap(~ married) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+### Jittered Points
+```{r jitter}
+gf_jitter(wage ~ age, data = CPS85) %>%
   gf_theme(theme_bw()) %>%
   gf_labs(x = "Age (in years)", 
           y = "Wage ($ per hour)")
