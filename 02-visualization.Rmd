@@ -1,0 +1,183 @@
+# Visualization   
+
+```{r load-packages, message = FALSE}
+library(ggformula)
+library(mosaic)
+library(RColorBrewer)
+
+head(CPS85)
+```
+
+
+## Explore Distributions 
+
+
+### Histograms    
+
+```{r histogram}
+gf_histogram(~ wage, data = CPS85)
+```
+
+#### Adjust Number of Bins
+```{r histogram-bins}
+gf_histogram(~ wage, data = CPS85, bins = 15)
+```
+
+
+#### Adjust Binwidth
+
+```{r histogram-binwidth}
+gf_histogram(~ wage, data = CPS85, binwidth = 1)
+```
+
+
+#### See Bin location
+```{r histogram-see-bins}
+gf_histogram(~ wage, data = CPS85, binwidth = 1, color = 'black')
+```
+
+#### Plot Customization
+```{r plot-customization}
+gf_histogram(~ wage, data = CPS85, binwidth = 1) %>%
+  gf_theme(theme_bw())
+```
+
+```{r gf-labs}
+gf_histogram(~ wage, data = CPS85, binwidth = 1) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Number")
+```
+
+
+
+### Density Plots    
+
+```{r density}
+gf_density(~ wage, data = CPS85) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Density")
+```
+
+
+## Conditional (Multivariate) Distributions 
+
+### Distribution Plots by Groups   
+```{r hist-by-group}
+gf_histogram(~ wage, data = CPS85, binwidth = 1, fill = ~ sex) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Number")
+```
+
+```{r density-by-group}
+gf_density(~ wage, data = CPS85, fill = ~ sex) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Wage ($ per hour)", 
+          y = "Density")
+```
+
+
+### Violin Plots   
+```{r violin-plot-by-group}
+gf_violin(wage ~ sex, data = CPS85) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Sex", 
+          y = "Wage ($ per hour)")
+```
+
+
+```{r violin-plot-by-group-fill}
+gf_violin(wage ~ sex, data = CPS85, fill = 'gray85') %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Sex", 
+          y = "Wage ($ per hour)")
+```
+
+
+### Ridge Plots?
+
+
+## Scatterplots    
+
+
+### 2d Scatterplots    
+```{r scatter}
+gf_point(wage ~ age, data = CPS85) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+### Add Color and Shapes    
+
+```{r scatter-color}
+gf_point(wage ~ age, data = CPS85, color = ~ sex) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+
+```{r scatter-shape}
+gf_point(wage ~ age, data = CPS85, shape = ~ married) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+```{r scatter-shape-color}
+gf_point(wage ~ age, data = CPS85, color = ~ sex, shape = ~ married) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+
+### Faceting   
+```{r scatter-facet}
+gf_point(wage ~ age, data = CPS85, color = ~ sex) %>%
+  gf_facet_wrap(~ married) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+### Jittered Points
+```{r jitter}
+gf_jitter(wage ~ age, data = CPS85) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+
+## Hex Bins
+```{r hex}
+gf_hex(wage ~ age, data = CPS85) %>% 
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+### Adjust color
+```{r hex-color}
+gf_hex(wage ~ age, data = CPS85) %>% 
+  gf_refine(scale_fill_gradientn(colors  = rev(brewer.pal(9, "YlGnBu")),
+                                 values = c(0, exp(seq(-5, 0, length.out = 100))))) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(x = "Age (in years)", 
+          y = "Wage ($ per hour)")
+```
+
+
+
+
+### Label Interesting Points  
+
+May need some new data for this.
+
+
+## Additional Resources
+
