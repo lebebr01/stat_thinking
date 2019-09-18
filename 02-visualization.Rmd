@@ -9,6 +9,7 @@ library(ggformula)
 ## Univariate Data Visualization
 
 Data visualization is an incredibly rich tool to explore and understand data. Data visualization is often a first way to see if there are extreme data values, how much variation there is in the data, and where typical values lie in the distribution. In this section of the course, we plan to explore the following related to distributions:
+
 1. Univariate distributions
     + Shape
     + Center
@@ -131,7 +132,7 @@ gf_histogram(~ adm_rate, data = college_score, color = 'black', bins = 25) %>%
 A custom theme has been created for the book. This has been included in the supplemental book package that can be installed and loaded with the following commands:
 
 ```{r install-book-package}
-#remotes::install_github('lebebr01/statthink')
+remotes::install_github('lebebr01/statthink')
 library(statthink)
 ```
 
