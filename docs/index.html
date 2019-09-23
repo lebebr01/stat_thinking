@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2019-09-10" />
+<meta name="date" content="2019-09-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 
-<link rel="next" href="introduction.html"/>
+<link rel="next" href="introduction.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -55,6 +55,7 @@ a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -135,48 +136,56 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a><ul>
-<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#univariate-data-visualization"><i class="fa fa-check"></i><b>2.1</b> Univariate Data Visualization</a></li>
-<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#univariate-distributions"><i class="fa fa-check"></i><b>2.2</b> Univariate Distributions</a><ul>
-<li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#read-in-data"><i class="fa fa-check"></i><b>2.2.1</b> Read in Data</a></li>
-<li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.2.2</b> View the Data</a></li>
+<li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
+<li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
+<li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#univariate-distributions-1"><i class="fa fa-check"></i><b>2.3</b> Univariate Distributions</a><ul>
-<li class="chapter" data-level="2.3.1" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.3.1</b> Interpretting Histograms</a></li>
-<li class="chapter" data-level="2.3.2" data-path="visualization.html"><a href="visualization.html#adjusting-number-of-bins"><i class="fa fa-check"></i><b>2.3.2</b> Adjusting Number of Bins</a></li>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
+<li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
+<li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.4</b> Plot Customization</a><ul>
-<li class="chapter" data-level="2.4.1" data-path="visualization.html"><a href="visualization.html#change-x-axis-label"><i class="fa fa-check"></i><b>2.4.1</b> Change x-axis label</a></li>
-<li class="chapter" data-level="2.4.2" data-path="visualization.html"><a href="visualization.html#change-plot-title"><i class="fa fa-check"></i><b>2.4.2</b> Change plot title</a></li>
-<li class="chapter" data-level="2.4.3" data-path="visualization.html"><a href="visualization.html#change-plot-theme"><i class="fa fa-check"></i><b>2.4.3</b> Change plot theme</a></li>
-</ul></li>
-<li class="chapter" data-level="2.5" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.5</b> Density plots</a></li>
-<li class="chapter" data-level="2.6" data-path="visualization.html"><a href="visualization.html#multivariate-data-visualization"><i class="fa fa-check"></i><b>2.6</b> Multivariate Data Visualization</a></li>
-<li class="chapter" data-level="2.7" data-path="visualization.html"><a href="visualization.html#facetting"><i class="fa fa-check"></i><b>2.7</b> Facetting</a></li>
+<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics / Applying functions to columns of data</a><ul>
-<li class="chapter" data-level="3.1" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#bring-back-data-structure"><i class="fa fa-check"></i><b>3.1</b> Bring back data structure</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#motivate-with-data-reduction"><i class="fa fa-check"></i><b>3.2</b> Motivate with data reduction</a></li>
+<li class="chapter" data-level="3.1" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#applying-functions-to-data"><i class="fa fa-check"></i><b>3.1</b> Applying Functions to Data</a></li>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#setup"><i class="fa fa-check"></i><b>3.2</b> Setup</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#loading-r-packages"><i class="fa fa-check"></i><b>3.2.1</b> Loading R packages</a></li>
+<li class="chapter" data-level="3.2.2" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#read-in-data"><i class="fa fa-check"></i><b>3.2.2</b> Read in Data</a></li>
+</ul></li>
 <li class="chapter" data-level="3.3" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#functions-to-columns-of-data"><i class="fa fa-check"></i><b>3.3</b> Functions to columns of data</a></li>
-<li class="chapter" data-level="3.4" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#functions-to-columns-by-groups"><i class="fa fa-check"></i><b>3.4</b> Functions to columns by groups</a></li>
-<li class="chapter" data-level="3.5" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#correlation"><i class="fa fa-check"></i><b>3.5</b> Correlation</a></li>
+<li class="chapter" data-level="3.4" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#considering-groups"><i class="fa fa-check"></i><b>3.4</b> Considering Groups</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#adding-additional-groups"><i class="fa fa-check"></i><b>3.4.1</b> Adding additional groups</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>4</b> Classification</a><ul>
-<li class="chapter" data-level="4.1" data-path="classification.html"><a href="classification.html#topic-decision-trees---bar-charts-of-percentage-of-correct-classification"><i class="fa fa-check"></i><b>4.1</b> Topic: Decision Trees - bar charts of percentage of correct classification</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="classification.html"><a href="classification.html#performance-measures"><i class="fa fa-check"></i><b>4.1.1</b> Performance Measures</a></li>
-<li class="chapter" data-level="4.1.2" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>4.1.2</b> Comparison to Baseline</a></li>
-<li class="chapter" data-level="4.1.3" data-path="classification.html"><a href="classification.html#overfitting"><i class="fa fa-check"></i><b>4.1.3</b> Overfitting</a></li>
-<li class="chapter" data-level="4.1.4" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>4.1.4</b> Cross-validation</a></li>
+<li class="chapter" data-level="3.5" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#other-statistics-of-center"><i class="fa fa-check"></i><b>3.5</b> Other statistics of center</a></li>
+<li class="chapter" data-level="3.6" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#measures-of-variation"><i class="fa fa-check"></i><b>3.6</b> Measures of Variation</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#robust-measure-of-variation"><i class="fa fa-check"></i><b>3.6.1</b> Robust measure of variation</a></li>
+<li class="chapter" data-level="3.6.2" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#variation-by-group"><i class="fa fa-check"></i><b>3.6.2</b> Variation by Group</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#other-measures-of-variation"><i class="fa fa-check"></i><b>3.7</b> Other measures of variation</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
+<li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees---bar-charts-of-percentage-of-correct-classification"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees - bar charts of percentage of correct classification</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#performance-measures"><i class="fa fa-check"></i><b>5.1.1</b> Performance Measures</a></li>
+<li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.1.2</b> Comparison to Baseline</a></li>
+<li class="chapter" data-level="5.1.3" data-path="classification.html"><a href="classification.html#overfitting"><i class="fa fa-check"></i><b>5.1.3</b> Overfitting</a></li>
+<li class="chapter" data-level="5.1.4" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>5.1.4</b> Cross-validation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>5</b> Linear Model</a><ul>
-<li class="chapter" data-level="5.1" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>5.1</b> Simple Regression continuous predictor</a></li>
-<li class="chapter" data-level="5.2" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>5.2</b> Conditional Means</a></li>
-<li class="chapter" data-level="5.3" data-path="linear-model.html"><a href="linear-model.html#categorical-predictors"><i class="fa fa-check"></i><b>5.3</b> Categorical Predictor(s)</a></li>
-<li class="chapter" data-level="5.4" data-path="linear-model.html"><a href="linear-model.html#multiple-regression"><i class="fa fa-check"></i><b>5.4</b> Multiple Regression</a></li>
+<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.1</b> Simple Regression continuous predictor</a></li>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.2</b> Conditional Means</a></li>
+<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#categorical-predictors"><i class="fa fa-check"></i><b>6.3</b> Categorical Predictor(s)</a></li>
+<li class="chapter" data-level="6.4" data-path="linear-model.html"><a href="linear-model.html#multiple-regression"><i class="fa fa-check"></i><b>6.4</b> Multiple Regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>6</b> Estimation / Bootstrap / Uncertainty</a></li>
-<li class="chapter" data-level="7" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>7</b> Prediction for individuals</a><ul>
-<li class="chapter" data-level="7.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>7.1</b> Comparison of classification / linear model</a></li>
+<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a></li>
+<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
+<li class="chapter" data-level="8.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>8.1</b> Comparison of classification / linear model</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -201,7 +210,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Statistical Reasoning through Computation and R</h1>
 <p class="author"><em>Brandon LeBeau and Andrew S. Zieffler</em></p>
-<p class="date"><em>2019-09-10</em></p>
+<p class="date"><em>2019-09-23</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
