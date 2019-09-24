@@ -3,6 +3,7 @@ title: "Statistical Reasoning through Computation and R"
 author: "Brandon LeBeau and Andrew S. Zieffler"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
+output: bookdown::gitbook
 documentclass: book
 bibliography: [book.bib]
 biblio-style: apalike
