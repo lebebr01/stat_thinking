@@ -209,6 +209,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="visualization" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Visualization</h1>
+<<<<<<< Updated upstream
 <p>Data scientists and statisticians visualize data to explore and understand data. Visualization can help analysts identify features in the data such as typical or extreme observations and also for describe variation. Because it is so powerful, data visualiztion is often the first step in any statistical analysis.</p>
 <div id="college-scorecard-data" class="section level3">
 <h3><span class="header-section-number">2.0.1</span> College Scorecard Data</h3>
@@ -223,6 +224,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   )</code></pre>
 <p>In this syntax we have passed two arguments to the <code>read_csv()</code> function. The first argument, <code>file=</code>, indicates the path to the data file. The data file here is stored on GitHub, so the path is specified as a URL. The second argument, <code>guess_max=</code>, helps ensure that the data are read in appropriately. This argument will be described in more detail later.</p>
 <p>The syntax to the left of the <code>read_csv()</code> function, namely <code>colleges &lt;-</code>, takes the output of the function and stores it, or in the language of R, assigns it to an object named <code>colleges</code>. In data analysis, it is often useful to use results in later computations, so rather than continually re-running syntax to obtain these results, we can instead store those results in an object and then compute on the object. Here for example, we would like to use the data that was read by the <code>read_csv()</code> function to explore it. When we want to assign computational results to an object, we use the assignment operator, <code>&lt;-</code> . (Note that the assignment operator looks like a left-pointing arrow; it is taking the computational result produced on the right side and storing it in the object to the left side.)</p>
+=======
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(ggformula)</a></code></pre></div>
+<div id="univariate-data-visualization" class="section level2">
+<h2><span class="header-section-number">2.1</span> Univariate Data Visualization</h2>
+<p>Data visualization is an incredibly rich tool to explore and understand data. Data visualization is often a first way to see if there are extreme data values, how much variation there is in the data, and where typical values lie in the distribution. In this section of the course, we plan to explore the following related to distributions:</p>
+<ol style="list-style-type: decimal">
+<li>Univariate distributions
+<ul>
+<li>Shape</li>
+<li>Center</li>
+<li>Spread</li>
+<li>Extreme Values</li>
+</ul></li>
+<li>Multivariate distributions
+<ul>
+<li>Shape</li>
+<li>Center</li>
+<li>Spread</li>
+<li>Extreme Values</li>
+<li>Comparing distributions</li>
+</ul></li>
+</ol>
+</div>
+<div id="univariate-distributions" class="section level2">
+<h2><span class="header-section-number">2.2</span> Univariate Distributions</h2>
+<p>The college scorecard (<a href="https://collegescorecard.ed.gov/" class="uri">https://collegescorecard.ed.gov/</a>) publishes data on higher education institutions to help make the institutions more transparent and provide a place for parents, students, educators, etc can get information about specific instituations from a third party (i.e. US Department of Education).</p>
+<div id="read-in-data" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Read in Data</h3>
+<p>The below code will read in the data for us to use in the future. The R function to read in the data is <code>read_csv()</code>. Function arguments are passed within the parentheses and for the <code>read_csv()</code> function the first argument is the path to the data. The data for this example are posted on GitHub in a comma separated file. This means the data is stored in a text format and each variable (i.e. column in the data) is separated by a comma. This is a common format data is stored.</p>
+<p>The data is stored to an object named <code>college_score</code>. In R (and other statistical programming languages), it is common to use objects to store results to use later. In this instance, we would like to read in the data and store it to use it later. For example, we will likely want to explore the data visually to see if we can extract some trends from the data. The assignment to an object in R is done with the <code>&lt;-</code> assignment operator. Finally, there is one additional argument, <code>guess_max</code> which helps to ensure that the data are read in appropriately. More on this later.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-4143.csv&quot;</span>, <span class="dt">guess_max =</span> <span class="dv">10000</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   instnm = col_character(),
+##   city = col_character(),
+##   stabbr = col_character(),
+##   preddeg = col_character(),
+##   region = col_character(),
+##   locale = col_character(),
+##   adm_rate = col_double(),
+##   actcmmid = col_double(),
+##   ugds = col_double(),
+##   costt4_a = col_double(),
+##   costt4_p = col_double(),
+##   tuitionfee_in = col_double(),
+##   tuitionfee_out = col_double(),
+##   debt_mdn = col_double(),
+##   grad_debt_mdn = col_double(),
+##   female = col_double()
+## )</code></pre>
+>>>>>>> Stashed changes
 </div>
 <div id="view-the-data" class="section level3">
 <h3><span class="header-section-number">2.0.2</span> View the Data</h3>
@@ -323,6 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     ) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_statthinking</span>())</code></pre>
 <p><img src="02-visualization_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<<<<<<< Updated upstream
 <div id="setting-the-default-plot-theme" class="section level4">
 <h4><span class="header-section-number">2.2.3.1</span> Setting the default plot theme</h4>
 <p>Since we will be using this theme for all of our plots, it is useful to make it the default theme (rather than the grey bckground with white gridlines). To set a different theme as the default, we will use the <code>theme_set()</code> function and call our <code>theme_statthinking()</code> within this function.</p>
@@ -336,10 +390,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="dt">subtitle =</span> <span class="st">&#39;Data Source: U.S. Department of Education College Scorecard&#39;</span>
     )</code></pre>
 <p><img src="02-visualization_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+=======
+<div id="book-theme" class="section level4">
+<h4><span class="header-section-number">2.4.3.1</span> Book Theme</h4>
+<p>A custom theme has been created for the book. This has been included in the supplemental book package that can be installed and loaded with the following commands:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;lebebr01/statthink&#39;</span>)</a></code></pre></div>
+<pre><code>## Skipping install of &#39;statthink&#39; from a github remote, the SHA1 (4d5bf5d8) has not changed since last install.
+##   Use `force = TRUE` to force installation</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">library</span>(statthink)</a></code></pre></div>
+<p>The book theme can then be applied as before:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())</a>
+<a class="sourceLine" id="cb25-2" title="2"></a>
+<a class="sourceLine" id="cb25-3" title="3"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score, <span class="dt">color =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">bins =</span> <span class="dv">25</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-4" title="4"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb25-5" title="5">          <span class="dt">title =</span> <span class="st">&#39;Univariate distribution of higher education admission rates&#39;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="02-visualization_files/figure-html/apply-book-theme-1.png" width="672" /></p>
+>>>>>>> Stashed changes
 </div>
 </div>
 </div>
 <div id="density-plots" class="section level2">
+<<<<<<< Updated upstream
 <h2><span class="header-section-number">2.3</span> Density plots</h2>
 <p>Another plot that is useful for exploring attributes is the density plot. This plot usually highlights similar distributional features as the histogram, but the visualization does not have the same dependency on the specification of bins. Density plots can be created with the <code>gf_density()</code> function which takes similar arguments as <code>gf_histogram()</code>, namely a formula identifying the attribute to be plotted and the data object.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges)</code></pre>
@@ -354,6 +426,99 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="dt">subtitle =</span> <span class="st">&#39;Data Source: U.S. Department of Education College Scorecard&#39;</span>
     )</code></pre>
 <p><img src="02-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+=======
+<h2><span class="header-section-number">2.5</span> Density plots</h2>
+<p>Another useful univariate plot is the density plot. This plot usually gives similar information as the histogram, but the visualization does not depend on the bins. One nice feature of density plots is that the area under the density figure sums to 1 as is obtained from kernel density estimation. In this class we will use a normal kernel to estimate the distribution of interest. Density figures can be created with the <code>gf_density()</code> function and the same primary arguments when creating histograms are used. More specifically this includes the formula identifying the variables of interest and the data to be used.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The x-axis labels and plot title can be added the same as with the histogram.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb29-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb29-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Univariate distribution of higher education admission rates&#39;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="multivariate-data-visualization" class="section level2">
+<h2><span class="header-section-number">2.6</span> Multivariate Data Visualization</h2>
+<p>Real world data are never as simple exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score, <span class="dt">bins =</span> <span class="dv">30</span>, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>preddeg) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb31-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb31-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb31-4" title="4">          <span class="dt">fill =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Often density plots are easier to visualize when there are more than one group. To plot more than one density curve, we need to specify the color argument instead of fill.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>preddeg) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb33-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb33-4" title="4">          <span class="dt">color =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>preddeg) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb35-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb35-4" title="4">          <span class="dt">fill =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>preddeg) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb37-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb37-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb37-4" title="4">          <span class="dt">color =</span> <span class="st">&quot;Primary Deg&quot;</span>,</a>
+<a class="sourceLine" id="cb37-5" title="5">          <span class="dt">fill =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> college_score, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb39-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb39-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb39-4" title="4">          <span class="dt">color =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+## Violin Plots</p>
+<p>Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.ArithmeticError</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb41-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb41-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb41-4" title="4">          <span class="dt">x =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the <code>fill =</code> argument.ArithmeticError</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb43-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb43-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb43-4" title="4">          <span class="dt">x =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Adding quantiles are useful to aid in the comparison with the violin plots. These can be added with the <code>draw_quantiles</code> argument.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, <span class="fl">.5</span>, <span class="fl">.9</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb45-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb45-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb45-4" title="4">          <span class="dt">x =</span> <span class="st">&quot;Primary Deg&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+### Violin Plots with many groups</p>
+<p>Many groups are more easily shown in the violin plot framework.</p>
+<p>With many groups, it is often of interest to put the long x-axis labels representing each group on the y-axis so that it reads the correct direction and the labels do not run into each other. This can be done with the <code>gf_refine()</code> function with <code>coord_flip()</code>.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>region, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="st">&#39;gray80&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, <span class="fl">.5</span>, <span class="fl">.9</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb47-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb47-4" title="4">          <span class="dt">x =</span> <span class="st">&quot;US Region&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-5" title="5"><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="facetting" class="section level2">
+<h2><span class="header-section-number">2.7</span> Facetting</h2>
+<p>Facetting is another way to explore distributions of two or more variables.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>region, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="st">&#39;gray80&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, <span class="fl">.5</span>, <span class="fl">.9</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-2" title="2"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,</a>
+<a class="sourceLine" id="cb49-3" title="3">          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,</a>
+<a class="sourceLine" id="cb49-4" title="4">          <span class="dt">x =</span> <span class="st">&quot;US Region&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-5" title="5"><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-6" title="6"><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>preddeg)</a></code></pre></div>
+<pre><code>## Warning: Removed 5039 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="02-visualization_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+>>>>>>> Stashed changes
 
 </div>
 </div>

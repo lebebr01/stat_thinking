@@ -169,8 +169,8 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins
 <img src="02-visualization_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 
-We have created a custom theme to use in the `gf_theme()` function that we will use for most of the plots in the book. The theme, `theme_statthinking()` is included in the **statthink** library, a supplemental package to the text that can be installed and loaded with the following commands:
 
+We have created a custom theme to use in the `gf_theme()` function that we will use for most of the plots in the book. The theme, `theme_statthinking()` is included in the **statthink** library, a supplemental package to the text that can be installed and loaded with the following commands:
 
 ```r
 remotes::install_github('lebebr01/statthink')

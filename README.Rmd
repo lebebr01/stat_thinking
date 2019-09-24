@@ -14,7 +14,7 @@ Tentative Title: Statistical Reasoning through Computation and R
      b. Conditional (multivariate) distributions    
            1. distribution plots by groups   
            2. violin plots   
-           3. Ridge plots?
+           3. Ridge plots?    
      c. Scatterplots    
            1. 2d scatterplots    
            2. Add color/shapes    
