@@ -1,0 +1,10 @@
+Package: placeholder
+Title: book
+Version: 0.0.1
+Imports:
+  bookdown,
+  tidyverse,
+  ggformula,
+  mosaic,
+  statthink
+Remotes: lebebr01/statthink
