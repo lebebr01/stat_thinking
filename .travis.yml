@@ -1,0 +1,16 @@
+language: r
+cache: packages
+pandoc_version: 1.19.2.1
+
+script:
+  - Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: docs
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  target_branch: master
+  on:
+    branch: master

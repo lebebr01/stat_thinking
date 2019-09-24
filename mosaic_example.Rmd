@@ -1,0 +1,82 @@
+---
+title: "Some Examples of ggformula and mosaic Functions"
+author: "Andrew Zieffler"
+date: "8/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preparation
+
+```{r message=FALSE}
+library(ggformula)
+library(mosaic)
+
+head(Births2015)
+```
+
+
+## ggformula Plots
+
+Uses formula notation: `y~x, data=d`
+
+```{r}
+gf_point(births ~ day_of_year, data = Births2015)
+```
+
+Can also pipe.
+
+```{r}
+Births2015 %>% 
+  gf_point(births ~ day_of_year)
+```
+
+Add aesthetics. Fixed aesthetics are quoted. Variable aesthetics are `~variable`
+
+```{r}
+Births2015 %>% 
+  gf_point(births ~ day_of_year, color = "red")
+```
+
+
+```{r}
+Births2015 %>% 
+  gf_point(births ~ day_of_year, color = ~wday)
+```
+
+
+Add layers with piping.
+
+```{r}
+Births2015 %>% 
+  gf_point(births ~ day_of_year, color = ~wday) %>%
+  gf_smooth()
+```
+
+
+## Summary Stats
+
+```{r}
+# Marginal
+Births2015 %>% 
+  df_stats(~births)
+
+# Conditional
+Births2015 %>% 
+  df_stats(births~wday)
+```
+
+
+## Resampling
+
+```{r}
+# Means
+do(10) * {mean(resample(Births2015$births))}
+
+# Regression
+do(10) * {lm(births~wday, data = resample(Births2015))}
+```
+
