@@ -6,5 +6,9 @@ Imports:
   tidyverse,
   ggformula,
   mosaic,
-  statthink
+  statthink,
+  titanic,
+  rsample,
+  rpart,
+  rpart.plot
 Remotes: lebebr01/statthink
