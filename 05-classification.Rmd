@@ -1,19 +1,276 @@
 # Classification   
 
+In this example, we will explore data from the titanic that comes from Kaggle (https://www.kaggle.com/c/titanic/data). You can view the attributes in the data from the link previous. The following set of code will install a couple a new packages that we will utilize for this section of the course, the titanic package has the data we will use and the rpart package includes functions to perform the tree based models we will employ.
 
-## Topic: Decision Trees - bar charts of percentage of correct classification
+## Topic: Decision Trees 
+
+```{r}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(titanic)
+library(rpart)
+library(rsample)
+library(rpart.plot)
+library(statthink)
+
+theme_set(theme_statthinking())
+
+titanic <- bind_rows(titanic_train, titanic_test) %>% 
+  mutate(survived = ifelse(Survived == 1, 'Survived', 'Died')) %>% 
+  select(-Survived) %>%
+  drop_na(survived)
+
+head(titanic)
+```
+
+```{r}
+count(titanic, survived)
+```
+
+```{r}
+gf_bar(~ survived,  data = titanic)
+```
 
 
-### Performance Measures
+### Fitting a Classification Tree
+
+Let's class_tree our first classification tree to predict the dichotomous attribute, survival. For this, we will use the rpart() function from the rpart package. The first argument to the rpart() function is a formula where the outcome of interest is specified to the left of the ~ and the attributes that are predictive of the outcome are specified to the right of the ~ separated with + signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify individuals based on the values in the data, therefore we specify method = 'class'. The final argument is the data element, in this case titanic.
+
+In this example, I picked a handful of attributes that would seem important. These can either be numeric or represent categories, the method does not care the type of attributes that are included in the analysis. Notice that I save the computation to the object, class_tree.
+
+```{r}
+class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Parch, 
+   method = 'class', data = titanic)
+
+rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
+```
+
+```{r}
+rpart.rules(class_tree, cover = TRUE)
+```
+
+### Pruning Trees
+
+One downside of decision trees, is that they can tend to overfit the data and capitalize on chance variation in our sample that we can not generalize to another sample. This means that there are features in the current sample that would not be present in another sample of data. There are a few ways to overcome this, one is to prune the tree to only include the attributes that are most important and improve the classification accuracy. One measure of this can be used is called the complexity parameter (CP) and this statistic attempts to balance the tree complexity related to how strongly the levels of the tree improve the classification accuracy. We can view these statistics with the printcp() and plotcp() functions where the only argument to be specified is the classification tree computation that was saved in the previous step.
+
+```{r}
+printcp(class_tree)
+plotcp(class_tree)
+```
+
+```{r}
+prune_class_tree <- prune(class_tree, cp = .02)
+rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
+```
+
+### Accuracy
+
+```{r}
+titanic_predict <- titanic %>%
+  mutate(tree_predict = predict(prune_class_tree, type = 'class')) %>%
+  cbind(predict(prune_class_tree, type = 'prob'))
+head(titanic_predict, n = 20)
+```
+
+```{r}
+titanic_predict %>%
+  count(survived, tree_predict)
+```
+
+```{r}
+gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict)
+```
+
+```{r}
+gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict, position = "fill") %>%
+  gf_labs(y = 'Proportion') %>%
+  gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
+```
+
+```{r}
+titanic_predict %>%
+  mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
+  df_stats(~ same_class, mean, sum)
+```
+
 
 
 ### Comparison to Baseline
 
+```{r}
+titanic_predict <- titanic_predict %>%
+  mutate(tree_predict_full = predict(class_tree, type = 'class'))
+
+titanic_predict %>%
+  count(survived, tree_predict_full)
+```
+
+```{r}
+gf_bar(~ survived, fill = ~tree_predict_full, data = titanic_predict, position = "fill") %>%
+  gf_labs(y = "proportion") %>%
+  gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
+```
+
+```{r}
+titanic_predict %>%
+  mutate(same_class = ifelse(survived == tree_predict_Full, 1, 0)) %>%
+  df_stats(~ same_class, mean, sum)
+```
 
 #### Absolute vs Relative Comparison
 
 
-### Overfitting 
+### Training/Test Data
+
+So far we have used the entire data to make our classification. This is not best practice and we will explore this is a bit more detail. First, take a minute to hypothesize why using the entire data to make our classification prediction may not be the best?
+
+It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let's refit the classification tree to the titanic data by splitting the data into 70% training and 30% test data. Why 70% training and 30% test? This is a number that is sometimes used as the splitting, an 80/20 split is also common. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. Secondly, the test data does not need to be quite as large, but we would like it to be representative. Here, the data are not too large, about 1000 passengers with available survival data, therefore, withholding more data helps to ensure the test data is representative of the 1000 total passengers.
+Splitting the data into training/test
+
+This is done with the rsample package utilizing three functions, initial_split(), training(), and test(). The initial_split() function helps to take the initial random sample and the proportion of data to use for the training data is initially identified. The random sample is done without replacement meaning that the data are randomly selected, but can not show up in the data more than once. Then, after using the initial_split() function, the training() and test() functions are used on the resulting output from initial_split() to obtain the training and test data respectively. It is good practice to use the set.seed() function to save the seed that was used as this is a random process. Without using the set.seed() function, the same split of data would likely not be able to be recreated in the code was ran again.
+
+Let's do the data splitting.
+ 
+```{r}
+set.seed(2019)
+titanic_split <- initial_split(titanic, prop = .7)
+titanic_train <- training(titanic_split)
+titanic_test <- testing(titanic_split)
+```
+ 
+```{r}
+class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Parch, 
+   method = 'class', data = titanic_train)
+
+rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
+```
+
+```{r}
+prune_class_tree <- prune(class_tree, cp = .02)
+
+rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
+```
+
+This seems like a reasonable model. Let's check the model accuracy.
+
+```{r}
+titanic_predict <- titanic_train %>%
+  mutate(tree_predict = predict(prune_class_tree, type = 'class'))
+titanic_predict %>%
+  mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
+  df_stats(~ same_class, mean, sum)
+```
+
+ This is actually slightly better accuracy compared to the model last time, about xxx compared to about xxx prediction accuracy. But, let's test the model out on the test data to see the prediction accuracy for the test data, the real test.
+
+
+```{r}
+titanic_predict_test <- titanic_test %>%
+  mutate(tree_predict = predict(prune_class_tree, newdata = titanic_test, type = 'class'))
+titanic_predict_test %>%
+  mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
+  df_stats(~ same_class, mean, sum)
+
+```
+
+For the test data, prediction accuracy was quite a bit lower, about xxx.
+
+### Introduction to resampling/bootstrap
+
+To explore these ideas in more detail, it will be helpful to use a statistical technique called resampling or the bootstrap. We will use these ideas a lot going forward in this course. In very simple terminology, resampling or the bootstrap can help us understand uncertainty in our estimates and also allow us to be more flexible in the statistics that we run. The main drawback of resampling and bootstrap methods is that they can be computationally heavy, therefore depending on the situation, more time is needed to come to the conclusion desired.
+
+Resampling and bootstrap methods use the sample data we have and perform the sampling procedure again treating the sample we have data for as the population. Generating the new samples is done with replacement (more on this later). This resampling is done many times (100, 500, 1000, etc.) with more in general being better. As an example with the titanic data, let's take the titanic data, assume this is the population of interest, and resample from this population 1000 times (with replacement) and each time we will calculate the proportion that survived the disaster in each sample. Before we write the code for this, a few questions to consider.
+
+1. Would you expect the proportion that survived to be the same in each new sample? Why or why not?
+2. Sampling with replacement keeps coming up, what do you think this means?
+3. Hypothesize why sampling with replacement would be a good idea?
+
+Let's now try the resampling with the calculation of the proportion that survived. We will then save these 1000 survival proportions and create a visualization.
+
+```{r}
+resample_titanic <- function(...) {
+    titanic %>%
+        sample_n(nrow(titanic), replace = TRUE) %>%
+        df_stats(~ Survived, mean)
+}
+
+survival_prop <- map(1:1000, resample_titanic) %>% 
+  bind_rows()
+
+gf_density(~ mean_Survived, data = survival_prop)
+```
+
+#### Bootstrap variation in prediction accuracy
+
+We can apply these same methods to evaluate the prediction accuracy based on the classification model above. When using the bootstrap, we can get an estimate for how much variation there is in the classification accuracy based on the sample that we have. In addition, we can explore how different the prediction accuracy would be for many samples when using all the data and by splitting the data into training and test sets.
+Bootstrap full data.
+
+Let's first explore the full data to see how much variation there is in the prediction accuracy using all of the data. Here we will again use the sample_n() function to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I'm going to write a function to do all of these steps one time.
+
+```{r}
+calc_predict_acc <- function(data) {
+  rsamp_titanic <- titanic %>%
+    sample_n(nrow(titanic), replace = TRUE)
+
+  class_model <- rpart(survived ~ Pclass + Sex + Age + Fare + SibSp + Parch, 
+        method = 'class', data = rsamp_titanic, cp = .02)
+
+  titanic_predict <- rsamp_titanic %>%
+    mutate(tree_predict = predict(class_model, type = 'class'))
+  titanic_predict %>%
+    mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
+    df_stats(~ same_class, mean, sum)
+}
+
+calc_predict_acc()
+```
+
+
+ To do the bootstrap, this process can be replicated many times. In this case, I'm going to do 500. In practice, we would likely want to do a few more.
+
+
+```{r}
+predict_accuracy_fulldata <- map(1:2000, calc_predict_acc) %>%
+  bind_rows()
+
+gf_density(~ mean_same_class, data = predict_accuracy_fulldata)
+```
+
+```{r}
+calc_predict_acc_split <- function(data) {
+  titanic_split <- initial_split(titanic, prop = .7)
+  titanic_train <- training(titanic_split)
+  titanic_test <- testing(titanic_split)
+
+  class_model <- rpart(survived ~ Pclass + Sex + Age + Fare + SibSp + Parch, 
+        method = 'class', data = titanic_train, cp = .02)
+
+  titanic_predict <- titanic_test %>%
+    mutate(tree_predict = predict(class_model, newdata = titanic_test, type = 'class'))
+  titanic_predict %>%
+    mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
+    df_stats(~ same_class, mean, sum)
+}
+
+calc_predict_acc_split()
+
+```
+
+```{r}
+predict_accuracy_traintest <- map(1:2000, calc_predict_acc_split) %>%
+  bind_rows()
+
+gf_density(~ mean_same_class, data = predict_accuracy_traintest)
+```
+
+```{r}
+bind_rows(
+  mutate(predict_accuracy_fulldata, type = "Full Data"),
+  mutate(predict_accuracy_traintest, type = "Train/Test")
+) %>%
+  gf_density(~ mean_same_class, color = ~ type, fill = NA, size = 1.25)
+```
 
 
 ### Cross-validation
