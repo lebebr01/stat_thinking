@@ -149,59 +149,35 @@ library(mosaic)
 ```
 
 ```r
-theme_set(theme_bw())
+library(statthink)
+
+theme_set(theme_statthinking())
 ```
 
 ### Read in Data
 
 The below code will read in the data for us to use in the future. The R function to read in the data is `read_csv()`. Function arguments are passed within the parentheses and for the `read_csv()` function the first argument is the path to the data. The data for this example are posted on GitHub in a comma separated file. This means the data is stored in a text format and each variable (i.e. column in the data) is separated by a comma. This is a common format data is stored.
 
-The data is stored to an object named `college_score`. In R (and other statistical programming languages), it is common to use objects to store results to use later. In this instance, we would like to read in the data and store it to use it later. For example, we will likely want to explore the data visually to see if we can extract some trends from the data. The assignment to an object in R is done with the `<-` assignment operator. Finally, there is one additional argument, `guess_max` which helps to ensure that the data are read in appropriately. More on this later.
+The data is stored to an object named `colleges`. In R (and other statistical programming languages), it is common to use objects to store results to use later. In this instance, we would like to read in the data and store it to use it later. For example, we will likely want to explore the data visually to see if we can extract some trends from the data. The assignment to an object in R is done with the `<-` assignment operator. Finally, there is one additional argument, `guess_max` which helps to ensure that the data are read in appropriately. More on this later.
 
 
 ```r
-college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", guess_max = 10000)
+head(colleges)
 ```
 
 ```
-## Parsed with column specification:
-## cols(
-##   instnm = col_character(),
-##   city = col_character(),
-##   stabbr = col_character(),
-##   preddeg = col_character(),
-##   region = col_character(),
-##   locale = col_character(),
-##   adm_rate = col_double(),
-##   actcmmid = col_double(),
-##   ugds = col_double(),
-##   costt4_a = col_double(),
-##   costt4_p = col_double(),
-##   tuitionfee_in = col_double(),
-##   tuitionfee_out = col_double(),
-##   debt_mdn = col_double(),
-##   grad_debt_mdn = col_double(),
-##   female = col_double()
-## )
-```
-
-```r
-head(college_score)
-```
-
-```
-## # A tibble: 6 x 16
+## # A tibble: 6 x 17
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds
-##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>
+##   <chr>  <chr> <chr>  <fct>   <fct>  <fct>     <dbl>    <dbl> <dbl>
 ## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824
 ## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866
 ## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917
 ## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189
 ## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387
 ## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211
-## # … with 7 more variables: costt4_a <dbl>, costt4_p <dbl>,
+## # … with 8 more variables: costt4_a <dbl>, costt4_p <dbl>,
 ## #   tuitionfee_in <dbl>, tuitionfee_out <dbl>, debt_mdn <dbl>,
-## #   grad_debt_mdn <dbl>, female <dbl>
+## #   grad_debt_mdn <dbl>, female <dbl>, bachelor_degree <dbl>
 ```
 
 ## Functions to columns of data
@@ -214,7 +190,7 @@ Let's keep talking about the admission rate as we have explored that visually al
 
 
 ```r
-df_stats(~ adm_rate, data = college_score, median)
+df_stats(~ adm_rate, data = colleges, median)
 ```
 
 ```
@@ -228,8 +204,8 @@ Let's think where this shows up on the admission rate distribution we plotted ea
 
 
 ```r
-gf_histogram(~ adm_rate, data = college_score, bins = 30) %>%
-  gf_vline(color = 'blue', xintercept = ~df_stats(~ adm_rate, data = college_score, median)[[1]], size = 1)
+gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_vline(color = 'blue', xintercept = ~df_stats(~ adm_rate, data = colleges, median)[[1]], size = 1)
 ```
 
 <img src="03-descriptive_files/figure-html/unnamed-chunk-4-1.png" width="672" />
@@ -240,7 +216,7 @@ The median is a special percentile, however other percentiles may be of interest
 
 
 ```r
-q <- college_score %>%
+q <- colleges %>%
   df_stats(~ adm_rate, quantile(c(0.2, 0.5, 0.8)), nice_names = TRUE)
 q
 ```
@@ -254,7 +230,7 @@ Let's look where these fall on our distribution.
 
 
 ```r
-gf_histogram(~ adm_rate, data = college_score, bins = 30) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'blue', xintercept = ~ value, data = gather(q), size = 1)
 ```
 
@@ -264,7 +240,7 @@ Does it appear that 20% of the data are below the first line and 20% are above t
 
 
 ```r
-gf_ecdf(~ adm_rate, data = college_score) %>%
+gf_ecdf(~ adm_rate, data = colleges) %>%
   gf_vline(color = 'blue', xintercept = ~ value, data = gather(q), linetype = 2) %>%
   gf_hline(color = 'darkblue', yintercept = ~c(0.2, 0.5, 0.8), data = NA, linetype = 3) %>%
   gf_labs(y = 'Cumulative proportion')
@@ -281,22 +257,22 @@ Instead, it is common to compute conditional statistics based on other character
 
 
 ```r
-college_score %>%
+colleges %>%
   df_stats(adm_rate ~ region, median)
 ```
 
 ```
 ##                region median_adm_rate
-## 1            Far West         0.70360
-## 2         Great Lakes         0.71110
+## 1  US Service Schools         0.10740
+## 2         New England         0.73590
 ## 3            Mid East         0.73735
-## 4         New England         0.73590
-## 5      Outlying Areas         0.81160
-## 6              Plains         0.69600
-## 7     Rocky Mountains         0.82865
-## 8           Southeast         0.65965
-## 9           Southwest         0.71220
-## 10 US Service Schools         0.10740
+## 4         Great Lakes         0.71110
+## 5              Plains         0.69600
+## 6           Southeast         0.65965
+## 7           Southwest         0.71220
+## 8     Rocky Mountains         0.82865
+## 9            Far West         0.70360
+## 10     Outlying Areas         0.81160
 ```
 
 Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now `outcome ~ grouping` where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the `~` is the grouping variable. This syntax is similar to the violin plots that were created earlier.
@@ -307,22 +283,22 @@ One thing that is useful to add in when computing conditional statisics, is how 
 
 
 ```r
-college_score %>%
+colleges %>%
   df_stats(adm_rate ~ region, median, length)
 ```
 
 ```
 ##                region median_adm_rate length_adm_rate
-## 1            Far West         0.70360             221
-## 2         Great Lakes         0.71110             297
+## 1  US Service Schools         0.10740               4
+## 2         New England         0.73590             167
 ## 3            Mid East         0.73735             458
-## 4         New England         0.73590             167
-## 5      Outlying Areas         0.81160              35
-## 6              Plains         0.69600             200
-## 7     Rocky Mountains         0.82865              50
-## 8           Southeast         0.65965             454
-## 9           Southwest         0.71220             133
-## 10 US Service Schools         0.10740               4
+## 4         Great Lakes         0.71110             297
+## 5              Plains         0.69600             200
+## 6           Southeast         0.65965             454
+## 7           Southwest         0.71220             133
+## 8     Rocky Mountains         0.82865              50
+## 9            Far West         0.70360             221
+## 10     Outlying Areas         0.81160              35
 ```
 
 This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on.
@@ -332,40 +308,40 @@ What if we thought more than one variable was important in explaining variation 
 
 
 ```r
-college_score %>%
+colleges %>%
   df_stats(adm_rate ~ region + preddeg, median, length)
 ```
 
 ```
 ##                region            preddeg median_adm_rate length_adm_rate
-## 1            Far West   Associate Degree         0.58935              12
-## 2         Great Lakes   Associate Degree         0.79515              22
-## 3            Mid East   Associate Degree         0.80290              54
-## 4         New England   Associate Degree         0.78430               7
-## 5      Outlying Areas   Associate Degree         0.87040               6
-## 6              Plains   Associate Degree         0.74610               8
-## 7     Rocky Mountains   Associate Degree         0.83970               5
-## 8           Southeast   Associate Degree         0.72525              34
-## 9           Southwest   Associate Degree         0.42260               5
-## 10           Far West    Bachelor Degree         0.69260             172
-## 11        Great Lakes    Bachelor Degree         0.70560             252
-## 12           Mid East    Bachelor Degree         0.70790             340
-## 13        New England    Bachelor Degree         0.72980             145
-## 14     Outlying Areas    Bachelor Degree         0.70905              24
-## 15             Plains    Bachelor Degree         0.68330             173
-## 16    Rocky Mountains    Bachelor Degree         0.82865              40
-## 17          Southeast    Bachelor Degree         0.64180             393
-## 18          Southwest    Bachelor Degree         0.71975             116
+## 1         New England Certificate Degree         0.81820              15
+## 2            Mid East Certificate Degree         0.79505              64
+## 3         Great Lakes Certificate Degree         0.83960              23
+## 4              Plains Certificate Degree         0.82140              19
+## 5           Southeast Certificate Degree         0.75700              27
+## 6           Southwest Certificate Degree         0.72365              12
+## 7     Rocky Mountains Certificate Degree         0.67200               5
+## 8            Far West Certificate Degree         0.76470              37
+## 9      Outlying Areas Certificate Degree         1.00000               5
+## 10        New England   Associate Degree         0.78430               7
+## 11           Mid East   Associate Degree         0.80290              54
+## 12        Great Lakes   Associate Degree         0.79515              22
+## 13             Plains   Associate Degree         0.74610               8
+## 14          Southeast   Associate Degree         0.72525              34
+## 15          Southwest   Associate Degree         0.42260               5
+## 16    Rocky Mountains   Associate Degree         0.83970               5
+## 17           Far West   Associate Degree         0.58935              12
+## 18     Outlying Areas   Associate Degree         0.87040               6
 ## 19 US Service Schools    Bachelor Degree         0.10740               4
-## 20           Far West Certificate Degree         0.76470              37
-## 21        Great Lakes Certificate Degree         0.83960              23
-## 22           Mid East Certificate Degree         0.79505              64
-## 23        New England Certificate Degree         0.81820              15
-## 24     Outlying Areas Certificate Degree         1.00000               5
-## 25             Plains Certificate Degree         0.82140              19
-## 26    Rocky Mountains Certificate Degree         0.67200               5
-## 27          Southeast Certificate Degree         0.75700              27
-## 28          Southwest Certificate Degree         0.72365              12
+## 20        New England    Bachelor Degree         0.72980             145
+## 21           Mid East    Bachelor Degree         0.70790             340
+## 22        Great Lakes    Bachelor Degree         0.70560             252
+## 23             Plains    Bachelor Degree         0.68330             173
+## 24          Southeast    Bachelor Degree         0.64180             393
+## 25          Southwest    Bachelor Degree         0.71975             116
+## 26    Rocky Mountains    Bachelor Degree         0.82865              40
+## 27           Far West    Bachelor Degree         0.69260             172
+## 28     Outlying Areas    Bachelor Degree         0.70905              24
 ```
 
 ## Other statistics of center
@@ -373,23 +349,23 @@ So far we have been discussing the median. The median attempts to provide a sing
 
 
 ```r
-stats_compute <- college_score %>%
+stats_compute <- colleges %>%
   df_stats(adm_rate ~ region, median, mean, length)
 stats_compute
 ```
 
 ```
 ##                region median_adm_rate mean_adm_rate length_adm_rate
-## 1            Far West         0.70360     0.6682570             221
-## 2         Great Lakes         0.71110     0.7015263             297
+## 1  US Service Schools         0.10740     0.1302000               4
+## 2         New England         0.73590     0.6672838             167
 ## 3            Mid East         0.73735     0.6920234             458
-## 4         New England         0.73590     0.6672838             167
-## 5      Outlying Areas         0.81160     0.7885600              35
-## 6              Plains         0.69600     0.7000135             200
-## 7     Rocky Mountains         0.82865     0.7800680              50
-## 8           Southeast         0.65965     0.6560097             454
-## 9           Southwest         0.71220     0.6696759             133
-## 10 US Service Schools         0.10740     0.1302000               4
+## 4         Great Lakes         0.71110     0.7015263             297
+## 5              Plains         0.69600     0.7000135             200
+## 6           Southeast         0.65965     0.6560097             454
+## 7           Southwest         0.71220     0.6696759             133
+## 8     Rocky Mountains         0.82865     0.7800680              50
+## 9            Far West         0.70360     0.6682570             221
+## 10     Outlying Areas         0.81160     0.7885600              35
 ```
 
 Do you notice any trends in the direction the mean and median typically follow? More specifically, is the mean typically larger than the median or vice versa?
@@ -398,7 +374,7 @@ Let's visualize them.
 
 
 ```r
-gf_histogram(~ adm_rate, data = college_score, bins = 30) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_facet_wrap(~ region) %>%
   gf_vline(color = 'blue', xintercept = ~ median_adm_rate, data = stats_compute, size = 1) %>%
   gf_vline(color = 'lightblue', xintercept = ~ mean_adm_rate, data = stats_compute, size = 1)
@@ -416,7 +392,7 @@ One crude measure of variation that is intuitive is the range of a variable. The
 
 
 ```r
-college_score %>%
+colleges %>%
   df_stats(~ adm_rate, range)
 ```
 
@@ -432,7 +408,7 @@ A robust measure of variation that often is used in tandem with the median is th
 
 
 ```r
-college_score %>%
+colleges %>%
   df_stats(~ adm_rate, IQR, quantile(c(0.25, 0.75)), nice_names = TRUE)
 ```
 
@@ -445,7 +421,7 @@ The IQR is the difference between the 75th and 25th percentiles and in this exam
 
 
 ```r
-mid_80 <- college_score %>%
+mid_80 <- colleges %>%
   df_stats(~ adm_rate, quantile(c(0.1, 0.9)), nice_names = TRUE)
 mid_80
 ```
@@ -459,7 +435,7 @@ As you can see, once you extend the amount of the distribution contained, the di
 
 
 ```r
-gf_histogram(~ adm_rate, data = college_score, bins = 30, color = 'black') %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>%
   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1)
 ```
 
@@ -469,7 +445,7 @@ We can also view the exact percentages using the empirical cumulative density fu
 
 
 ```r
-gf_ecdf(~ adm_rate, data = college_score) %>%
+gf_ecdf(~ adm_rate, data = colleges) %>%
   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1)
 ```
 
@@ -480,30 +456,30 @@ These statistics can also be calculated by different grouping variables similar 
 
 
 ```r
-iqr_groups <- college_score %>%
+iqr_groups <- colleges %>%
   df_stats(adm_rate ~ region, IQR, quantile(c(0.25, 0.75)), nice_names = TRUE)
 iqr_groups
 ```
 
 ```
 ##                region IQR_adm_rate    X25.     X75.
-## 1            Far West     0.306700 0.52480 0.831500
-## 2         Great Lakes     0.220300 0.60580 0.826100
+## 1  US Service Schools     0.052000 0.09280 0.144800
+## 2         New England     0.288000 0.54525 0.833250
 ## 3            Mid East     0.279425 0.57140 0.850825
-## 4         New England     0.288000 0.54525 0.833250
-## 5      Outlying Areas     0.318600 0.64135 0.959950
-## 6              Plains     0.272200 0.56990 0.842100
-## 7     Rocky Mountains     0.281950 0.64590 0.927850
-## 8           Southeast     0.286950 0.52525 0.812200
-## 9           Southwest     0.311400 0.51900 0.830400
-## 10 US Service Schools     0.052000 0.09280 0.144800
+## 4         Great Lakes     0.220300 0.60580 0.826100
+## 5              Plains     0.272200 0.56990 0.842100
+## 6           Southeast     0.286950 0.52525 0.812200
+## 7           Southwest     0.311400 0.51900 0.830400
+## 8     Rocky Mountains     0.281950 0.64590 0.927850
+## 9            Far West     0.306700 0.52480 0.831500
+## 10     Outlying Areas     0.318600 0.64135 0.959950
 ```
 
 This can also be visualized to see how these statistics vary across the groups.
 
 
 ```r
-gf_histogram(~ adm_rate, data = college_score, bins = 30, color = 'black') %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>%
   gf_vline(color = 'blue', xintercept = ~ value, 
      data = filter(pivot_longer(iqr_groups, IQR_adm_rate:'X75.'), name %in% c('X25.', 'X75.')), size = 1) %>%
   gf_facet_wrap(~ region)
@@ -516,7 +492,7 @@ There are many other variation measures that are used in statistics. We will app
 
 
 ```r
-college_score %>%
+colleges %>%
   df_stats(~ adm_rate, sd, var)
 ```
 
@@ -541,12 +517,44 @@ We can now use this new function just like any other function.
 
 
 ```r
-college_score %>%
+colleges %>%
   df_stats(~ adm_rate, sd, var, mae)
 ```
 
 ```
 ##   sd_adm_rate var_adm_rate mae_adm_rate
 ## 1   0.2113571   0.04467182    0.1692953
+```
+
+## Dichtomous Attributes
+Dichotomous attributes are common attributes and these take on two unique values. Sometimes these represent categories, such as "Passed" vs "Not-Passed" or "Have Cancer" vs "Does not have cancer" but other times these attributes may be represented numerically. When represented numerically, using 0's and 1's for the numerical representation has some advantages over other schemes, although really any numerical quantity could be used to represent the categories. Part of the advantages we will explore later when fitting statistical models to the data attributes, but another advantage is the ability to generate useful descriptive statistics more easily with dichotomous attributes that are represented with 0's and 1's. 
+
+### Applying functions to dichotomous attributes
+
+
+```r
+count(colleges, bachelor_degree)
+```
+
+```
+## # A tibble: 2 x 2
+##   bachelor_degree     n
+##             <dbl> <int>
+## 1               0   360
+## 2               1  1659
+```
+
+
+
+```r
+colleges %>%
+  df_stats(~ bachelor_degree, sum, mean, median, sd, IQR, length)
+```
+
+```
+##   sum_bachelor_degree mean_bachelor_degree median_bachelor_degree
+## 1                1659            0.8216939                      1
+##   sd_bachelor_degree IQR_bachelor_degree length_bachelor_degree
+## 1           0.382865                   0                   2019
 ```
 

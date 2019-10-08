@@ -40,7 +40,7 @@ head(colleges)
 ```
 
 ```
-## # A tibble: 6 x 16
+## # A tibble: 6 x 17
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds
 ##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>
 ## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824
@@ -49,9 +49,9 @@ head(colleges)
 ## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189
 ## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387
 ## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211
-## # … with 7 more variables: costt4_a <dbl>, costt4_p <dbl>,
+## # … with 8 more variables: costt4_a <dbl>, costt4_p <dbl>,
 ## #   tuitionfee_in <dbl>, tuitionfee_out <dbl>, debt_mdn <dbl>,
-## #   grad_debt_mdn <dbl>, female <dbl>
+## #   grad_debt_mdn <dbl>, female <dbl>, bachelor_degree <dbl>
 ```
 
 
@@ -177,12 +177,23 @@ remotes::install_github('lebebr01/statthink')
 ```
 
 ```
-## Skipping install of 'statthink' from a github remote, the SHA1 (e9837dfb) has not changed since last install.
+## Skipping install of 'statthink' from a github remote, the SHA1 (03b24970) has not changed since last install.
 ##   Use `force = TRUE` to force installation
 ```
 
 ```r
 library(statthink)
+```
+
+```
+## 
+## Attaching package: 'statthink'
+```
+
+```
+## The following object is masked _by_ '.GlobalEnv':
+## 
+##     colleges
 ```
 
 We can then change the theme in a similar manner to how we changed the theme before.

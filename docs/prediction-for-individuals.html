@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Prediction for individuals | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 8 Prediction for individuals | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Prediction for individuals | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2019-09-24" />
+<meta name="date" content="2019-10-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -40,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -139,16 +142,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.6.2" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#variation-by-group"><i class="fa fa-check"></i><b>3.6.2</b> Variation by Group</a></li>
 </ul></li>
 <li class="chapter" data-level="3.7" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#other-measures-of-variation"><i class="fa fa-check"></i><b>3.7</b> Other measures of variation</a></li>
+<li class="chapter" data-level="3.8" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#dichtomous-attributes"><i class="fa fa-check"></i><b>3.8</b> Dichtomous Attributes</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="descriptive-statistics-applying-functions-to-columns-of-data.html"><a href="descriptive-statistics-applying-functions-to-columns-of-data.html#applying-functions-to-dichotomous-attributes"><i class="fa fa-check"></i><b>3.8.1</b> Applying functions to dichotomous attributes</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees---bar-charts-of-percentage-of-correct-classification"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees - bar charts of percentage of correct classification</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#performance-measures"><i class="fa fa-check"></i><b>5.1.1</b> Performance Measures</a></li>
-<li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.1.2</b> Comparison to Baseline</a></li>
-<li class="chapter" data-level="5.1.3" data-path="classification.html"><a href="classification.html#overfitting"><i class="fa fa-check"></i><b>5.1.3</b> Overfitting</a></li>
-<li class="chapter" data-level="5.1.4" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>5.1.4</b> Cross-validation</a></li>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
+<li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#pruning-trees"><i class="fa fa-check"></i><b>5.1.2</b> Pruning Trees</a></li>
+<li class="chapter" data-level="5.1.3" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.3</b> Accuracy</a></li>
+<li class="chapter" data-level="5.1.4" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.1.4</b> Comparison to Baseline</a></li>
+<li class="chapter" data-level="5.1.5" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.1.5</b> Training/Test Data</a></li>
+<li class="chapter" data-level="5.1.6" data-path="classification.html"><a href="classification.html#introduction-to-resamplingbootstrap"><i class="fa fa-check"></i><b>5.1.6</b> Introduction to resampling/bootstrap</a></li>
+<li class="chapter" data-level="5.1.7" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>5.1.7</b> Cross-validation</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
@@ -207,11 +216,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
