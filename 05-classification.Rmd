@@ -133,6 +133,10 @@ This is done with the rsample package utilizing three functions, initial_split()
 Let's do the data splitting.
  
 ```{r}
+titanic <- bind_rows(titanic_train, titanic_test) %>% 
+  mutate(survived = ifelse(Survived == 1, 'Survived', 'Died')) %>% 
+  drop_na(survived)
+
 set.seed(2019)
 titanic_split <- initial_split(titanic, prop = .7)
 titanic_train <- training(titanic_split)
