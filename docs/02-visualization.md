@@ -177,7 +177,7 @@ remotes::install_github('lebebr01/statthink')
 ```
 
 ```
-## Skipping install of 'statthink' from a github remote, the SHA1 (03b24970) has not changed since last install.
+## Skipping install of 'statthink' from a github remote, the SHA1 (98b0498e) has not changed since last install.
 ##   Use `force = TRUE` to force installation
 ```
 
