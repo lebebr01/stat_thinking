@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Descriptive Statistics: Numerically Describing the Sample Data | Statistical Reasoning through Computation and R</title>
+  <meta name="description" content="Chapter 3 Descriptive Statistics: Numerically Describing the Sample Data | Statistical Reasoning through Computation and R" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Descriptive Statistics: Numerically Describing the Sample Data | Statistical Reasoning through Computation and R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="true" />
+  
+  
+  <meta name="github-repo" content="lebebr01/stat_thinking" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Descriptive Statistics: Numerically Describing the Sample Data | Statistical Reasoning through Computation and R" />
+  
+  
+  
+
+<meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
+
+
+<meta name="date" content="2019-10-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="visualization.html"/>
+<link rel="next" href="multivariate-visualization.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Statistical Reasoning through Computation and R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a><ul>
+<li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
+<li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
+<li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
+<li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
+<li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#visualizing-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Visualizing the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#range"><i class="fa fa-check"></i><b>3.3.1</b> Range</a></li>
+<li class="chapter" data-level="3.3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#percentile-range"><i class="fa fa-check"></i><b>3.3.2</b> Percentile Range</a></li>
+<li class="chapter" data-level="3.3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#interquartile-range-iqr"><i class="fa fa-check"></i><b>3.3.3</b> Interquartile Range (IQR)</a></li>
+<li class="chapter" data-level="3.3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#empirical-cumulative-density"><i class="fa fa-check"></i><b>3.3.4</b> Empirical Cumulative Density</a></li>
+<li class="chapter" data-level="3.3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>3.3.5</b> Variance and Standard Deviation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-categorical-attributes"><i class="fa fa-check"></i><b>3.4</b> Summarizing Categorical Attributes</a></li>
+<li class="chapter" data-level="3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#advanced-extension-computing-your-own-measure-of-variation"><i class="fa fa-check"></i><b>3.5</b> Advanced Extension: Computing Your Own Measure of Variation</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
+<li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
+<li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#pruning-trees"><i class="fa fa-check"></i><b>5.1.2</b> Pruning Trees</a></li>
+<li class="chapter" data-level="5.1.3" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.3</b> Accuracy</a></li>
+<li class="chapter" data-level="5.1.4" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.1.4</b> Comparison to Baseline</a></li>
+<li class="chapter" data-level="5.1.5" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.1.5</b> Training/Test Data</a></li>
+<li class="chapter" data-level="5.1.6" data-path="classification.html"><a href="classification.html#introduction-to-resamplingbootstrap"><i class="fa fa-check"></i><b>5.1.6</b> Introduction to resampling/bootstrap</a></li>
+<li class="chapter" data-level="5.1.7" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>5.1.7</b> Cross-validation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.1</b> Simple Regression continuous predictor</a></li>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.2</b> Conditional Means</a></li>
+<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#categorical-predictors"><i class="fa fa-check"></i><b>6.3</b> Categorical Predictor(s)</a></li>
+<li class="chapter" data-level="6.4" data-path="linear-model.html"><a href="linear-model.html#multiple-regression"><i class="fa fa-check"></i><b>6.4</b> Multiple Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a></li>
+<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
+<li class="chapter" data-level="8.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>8.1</b> Comparison of classification / linear model</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistical Reasoning through Computation and R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="descriptive-statistics-numerically-describing-the-sample-data" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Descriptive Statistics: Numerically Describing the Sample Data</h1>
+<p>Data visualization is often the first step on the statistical journey to explore a research question. However, this is usually not where the journey stops, instead additional analyses are often performed to learn more about the trends and structure in the data. In this chapter we will learn about methods that useful for numerically summarizing a sample of data. These methods are commonly referred to as <em>descriptive statistics</em>.</p>
+<p>We will again use the data provided in the file <em>College-scorecard-clean.csv</em> to examine admissions rates for 2,019 institutions of higher education. As in the previous chapter, before we begin the analysis, we will load several packages that include functions we will use in the chapter. We also import the College Scorecard data using the <code>read_csv()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load packages</span>
+<span class="kw">library</span>(tidyverse)</code></pre></div>
+<pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)</code></pre></div>
+<pre><code>## Loading required package: ggstance</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggstance&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
+## 
+##     geom_errorbarh, GeomErrorbarh</code></pre>
+<pre><code>## 
+## New to ggformula?  Try the tutorials: 
+##  learnr::run_tutorial(&quot;introduction&quot;, package = &quot;ggformula&quot;)
+##  learnr::run_tutorial(&quot;refining&quot;, package = &quot;ggformula&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre></div>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: mosaicData</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;mosaic&#39;:
+##   method                           from   
+##   fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
+<pre><code>## 
+## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.
+## 
+## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;mosaic&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     mean</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     count, do, tally</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     cross</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     stat</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
+##     prop.test, quantile, sd, t.test, var</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     max, mean, min, prod, range, sample, sum</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(statthink)
+
+<span class="co"># Set theme for plots</span>
+<span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())
+
+<span class="co"># Import the data</span>
+colleges &lt;-<span class="st"> </span><span class="kw">read_csv</span>(
+  <span class="dt">file =</span> <span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, 
+  <span class="dt">guess_max =</span> <span class="dv">10000</span>
+  )</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   instnm = col_character(),
+##   city = col_character(),
+##   stabbr = col_character(),
+##   preddeg = col_character(),
+##   region = col_character(),
+##   locale = col_character(),
+##   adm_rate = col_double(),
+##   actcmmid = col_double(),
+##   ugds = col_double(),
+##   costt4_a = col_double(),
+##   costt4_p = col_double(),
+##   tuitionfee_in = col_double(),
+##   tuitionfee_out = col_double(),
+##   debt_mdn = col_double(),
+##   grad_debt_mdn = col_double(),
+##   female = col_double(),
+##   bachelor_degree = col_double()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># View first six cases</span>
+<span class="kw">head</span>(colleges)</code></pre></div>
+<pre><code>## # A tibble: 6 x 17
+##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds
+##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824
+## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866
+## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917
+## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189
+## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387
+## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211
+## # … with 8 more variables: costt4_a &lt;dbl&gt;, costt4_p &lt;dbl&gt;,
+## #   tuitionfee_in &lt;dbl&gt;, tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;,
+## #   grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;, bachelor_degree &lt;dbl&gt;</code></pre>
+<div id="summarizing-attributes" class="section level2">
+<h2><span class="header-section-number">3.1</span> Summarizing Attributes</h2>
+<p>Data are often stored in a tabular format where the rows of the data are the <em>cases</em> and the columns are <em>attributes</em>. For example, in the college scorecard data (displayed above) the rows each represent a specific institution of higher education (cases) and the columns represent various attributes measured on those higher education institutions. This type of tabular representation is a common structure for storing and analyzing data.</p>
+<p>In the previous chapter, we visualized different attributes by referencing those attributes in the function we used to create a plot of the distribution. For example, when we wanted to plot a histogram of the distribution of admission rates, we referenced the <code>adm_rate</code> attribute in the <code>gf_histogram()</code> function. In a similar vein, we will obtain numerical summaries of an attribute by referencing that attribute in the <code>df_stats()</code> function. Below, we obtain numerical summaries for the admissions rate attribute:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, median)</code></pre></div>
+<pre><code>##   median_adm_rate
+## 1          0.7077</code></pre>
+<p>The <code>df_stats()</code> function takes a formula syntax that is the same as the formula syntax we introduced in the previous chapter. In particular, the variable that we wish to compute a statistic on is specified after the <code>~</code>. We also specify the data object with the <code>data=</code> argument. Finally, we include additional arguments indicating the name of the particular numerical summary (or summaries) that we want to compute.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> In the syntax above, we compute the median admission rate.</p>
+<p>The median is also referred to as the 50th percentile, and is the value at which half of the admission rates in the data are above and half are below. In our data, the medain admission rate is 70.8%. In our data 1,009 institutions have an admission rate below 70.8% and 1,009 have an admission rate above 70.8%. In the histogram below, we add a vertical line at the median admission rate to help you visualize what this means.</p>
+<p>Another common numerical summary that is often used to describe a distribution is the mean. To compute the mean admission rate we again use the <code>df_stats()</code> function, but include <code>mean</code> as our additional argument.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, mean)</code></pre></div>
+<pre><code>##   mean_adm_rate
+## 1     0.6827355</code></pre>
+<p>The mean (or average) admission rate for the 2,019 institutions of higher education is 68.3%.</p>
+</div>
+<div id="visualizing-the-median-and-mean" class="section level2">
+<h2><span class="header-section-number">3.2</span> Visualizing the Median and Mean</h2>
+<p>In your previous educational experiences with the mean and median, you may have learned the formulas or algorithms that produce these values. For example:</p>
+<ul>
+<li><strong>Mean:</strong> Add up all the values of the attribute and divide by the number of values;</li>
+<li><strong>Median:</strong> Order all the values of the attribute from smallest to largest and find the one in the middle. If there is an even number of observations, find the mean of the middle two values.</li>
+</ul>
+<p>To better understand these summaries, we will visualize them on the distirbution of admission rates.</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-4"></span>
+<img src="03-descriptive_files/figure-html/unnamed-chunk-4-1.png" alt="Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line." width="672" />
+<p class="caption">
+Figure 3.1: Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.
+</p>
+</div>
+<p>The mean (displayed as a red, dashed line) represents the “balance point” of the distribution. If the distribution were a physical entity, it is the location where you would put you finger underneath the distribution to balance it. In a statistical sense, we balance the distribution by “balancing” the deviations. To explain this, let’s examine a toy data set of five observations:</p>
+<p><span class="math display">\[
+Y = \begin{pmatrix}10\\ 10\\ 20\\ 30\\ 50\end{pmatrix}
+\]</span></p>
+<p>The mean of these five values is 24. Each of these values has a deviation which is computed as the difference between the observed value and the mean value. For the toy data,</p>
+<p><span class="math display">\[
+Y = \begin{pmatrix}10 - 24\\ 10-24\\ 20-24\\ 30-24\\ 50-24\end{pmatrix} = \begin{pmatrix}-14\\ -14\\ -4\\ 6\\ 26\end{pmatrix}
+\]</span></p>
+<p>Notice that some of the deviations are negative (the observation was below the mean) and some are positive (the observation was above the mean). The mean “balances” these deviations since the sum of the deviations is 0. What if we had instead looked at the deviations from the median, which is 20?</p>
+<p><span class="math display">\[
+Y = \begin{pmatrix}10 - 20\\ 10-20\\ 20-20\\ 30-20\\ 50-20\end{pmatrix} = \begin{pmatrix}-10\\ -10\\ 0\\ 10\\ 30\end{pmatrix}
+\]</span></p>
+<p>The median does not balance the deviations; the sum is not zero (it is <span class="math inline">\(+20\)</span>). The mean is the only value we can use to “balance” the deviations.</p>
+<p>What about the median?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="fl">0.708</span>, <span class="dt">size =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<p><img src="03-descriptive_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the <span class="math inline">\(x\)</span>-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.</p>
+<div id="summarize-with-the-mean-or-median" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Summarize with the Mean or Median?</h3>
+<p>The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is “closest” (at least on average) to all of the observations. (It is the value that produces the smallest <em>average deviation</em>—since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-6"></span>
+<img src="03-descriptive_files/figure-html/unnamed-chunk-6-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
+<p class="caption">
+Figure 3.2: Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.
+</p>
+</div>
+<p>In this example, both values are quite similar, so either would send a simlar message about the distribution of admission rates, namely that a typical admission rate for these 2,019 institutions of higher education is around 70%.</p>
+<p>Looking at the plot, we see that the mean admission rate is lower than the median admission rate. In a left-skewed distribution this will often be the case. The mean is “pulled toward the tail” of the distribution. This is because the mean is influenced by extreme values (which in a skewed distribution are in the tail). The median is not influenced by extreme values; we say it is <em>robust</em> to these values. This is because in calculating the median, only the middle score (or middle two scores) are used, so its value is not informed by the extreme values in the distribution.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>In practice, it is a good idea to compute both the mean and the median and explore whether one is more representative than the other (perhaps by plotting them on the distribution). The choice of one over the other should also be guided by substantive knowledge.</p>
+</div>
+</div>
+<div id="numerically-summarizing-variation" class="section level2">
+<h2><span class="header-section-number">3.3</span> Numerically Summarizing Variation</h2>
+<p>In the distribution of admission rates, both the mean and median seems to offer a representative admission rate since both are close to the modal clump of the distribution. (There are several colleges that have an admission rate close to 70%.) But, you will also notice that an admission rate of 70% does not do a great job representing all of the institutions’ admissions rates. This is true for any single statistic we pick to summarize the distribution.</p>
+<p>To more fully summarize the distribution we need to summarize the variability in the distribution in addition to a “typical” or representative value. There are several summaries that statisticians and data scientists use to describe the variation in a distribution. And, like the representative summary measures, each of the summaries of variation provide slightly different information by highlighting different aspects of the variability. We will explore some of these measures below.</p>
+<div id="range" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Range</h3>
+<p>One measure of variation that you have almost surely encountered before is the range. This numerical measure is the difference between the maximum and minimum values in the data. To compute this we provide the <code>df_stats()</code> function with two additional arguments, <code>min</code> and <code>max</code>. Then we can compute the difference between these values.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Obtain minimum and maximum admission rate</span>
+<span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, min, max)</code></pre></div>
+<pre><code>##   min_adm_rate max_adm_rate
+## 1            0            1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute range</span>
+<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="dv">0</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>The range of the admission rates is 1. When people colloquially describe the range, they typically provide the limits of the data rather than actually providing the range. For example, they may describe the range of the admission rates as: “the admission rates range from 0 to 1”. While this is technially not the range (which is a single number), it is probably more descriptive as it also gives a sense of the lower- and upper-limits for the observations.</p>
+<p>One problem with the range is that if there are extreme values, the range will not give an accurate picture of the variation encompassing most observations. For example, consider the following five test scores:</p>
+<p><span class="math display">\[
+Y = \begin{pmatrix}30\\ 35\\ 36\\ 37\\ 100\end{pmatrix}
+\]</span></p>
+<p>The range of these data is 70, indicating that the variation between the lowest and highest score is 70 points, suggesting a lot of variation in the scores. The range, however, is clearly influenced by the score of 100. Were it not for that score, we would have a much different take on the score variability; the other scores are between 30 and 37 (a range of 7), suggesting that there is not a lot of differenes in the test scores.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<p>While the range is perhaps not the best measure of variation, it is quite useful as a validity check on the data to ensure that the attribute’s values are theoretically possible. In this case the values are all between 0 and 1, which are values that are theoretically plausible for admission rate.</p>
+</div>
+<div id="percentile-range" class="section level3">
+<h3><span class="header-section-number">3.3.2</span> Percentile Range</h3>
+<p>One way to deal with extreme values in the sample is simply to not include them when we calculate the range. For example, instead of computing the difference between the maximum and minimum value in the data (which includes extreme values), truncate the bottom 10% and upper 10% of the data and calculate the range between the remaining maximum and minimum values. This is essentially the range of the middle 80% of the data.</p>
+<p>To compute the endpoint after truncatng the lower- and upper 10% we will use the <code>quantile()</code> function. This function finds the data value for an associated percentile provided to the function. If we wnat to truncate the lower- and upper 10% of a distribution we are interested in finding the values associated with the 10th and 90th percentiles. The syntax below shows two manners for obtaining these values for the admissions rate attribute.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Provide both percentiles separately</span>
+colleges <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="kw">quantile</span>(<span class="fl">0.10</span>), <span class="kw">quantile</span>(.<span class="dv">90</span>))</code></pre></div>
+<pre><code>##       10%     90%
+## 1 0.39284 0.94706</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Provide both percentiles in a single quantile() call</span>
+colleges <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>)))</code></pre></div>
+<pre><code>##       10%     90%
+## 1 0.39284 0.94706</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute the range ofthe middle 80% of the data</span>
+<span class="fl">0.94706</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.39284</span></code></pre></div>
+<pre><code>## [1] 0.55422</code></pre>
+<p>The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-9"></span>
+<img src="03-descriptive_files/figure-html/unnamed-chunk-9-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
+<p class="caption">
+Figure 3.3: Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.
+</p>
+</div>
+</div>
+<div id="interquartile-range-iqr" class="section level3">
+<h3><span class="header-section-number">3.3.3</span> Interquartile Range (IQR)</h3>
+<p>One percentile range that statisticians and data scientists use a great deal is the interquartile range (IQR). This range demarcates the middle 50% of the distribution; it truncates the lower and upper 25% of the values. In other words it is based on finding the range between the 25th- and the 75th-percentiles.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Obtain values for the 25th- and 75th percentiles</span>
+colleges <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)))</code></pre></div>
+<pre><code>##      25%     75%
+## 1 0.5524 0.83815</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute the IQR</span>
+<span class="fl">0.83815</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.5524</span></code></pre></div>
+<pre><code>## [1] 0.28575</code></pre>
+<p>The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for “most” of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions’ admission rates and can be useful for describing the variation.</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-11"></span>
+<img src="03-descriptive_files/figure-html/unnamed-chunk-11-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
+<p class="caption">
+Figure 3.4: Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.
+</p>
+</div>
+<p>Since the IQR describes the range for half of the observations, it can also be useful to compare this range with the entire range of the data. Below we compute these values and visualize them on a histogram of the distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Obtain values for the 25th- and 75th percentiles</span>
+colleges <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, min, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), max)</code></pre></div>
+<pre><code>##   min_adm_rate    25%     75% max_adm_rate
+## 1            0 0.5524 0.83815            1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute the IQR</span>
+<span class="fl">0.83815</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.5524</span></code></pre></div>
+<pre><code>## [1] 0.28575</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute the range</span>
+<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="dv">0</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-13"></span>
+<img src="03-descriptive_files/figure-html/unnamed-chunk-13-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively." width="672" />
+<p class="caption">
+Figure 3.5: Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.
+</p>
+</div>
+<p>Although our sample of 2,019 institutions of higher education have wildy varying admissions rates (from 0% to 100%), the middle half of those institutions have admissions rates between 55% and 84%. We also note that the 25% of institutions with the lowest admissions rate range from 0% to 55%, while the 25% of institutions with the highest admissions rate range from only 84% to 100%. This means that there is more variation in the admissions rates in the institutions with the lowest admissions rate than in the institutions with the highest admissions rates.</p>
+<p>Understanding how similar the range of variation is in these areas of the distribution can give us information about the shape f the distribution. For example, the bigger range in the lowest 25% of the data suggests that the distribution has a tail on the left side. Seventy-five percent of the institutions have admissions rates higher than 50%. These two features suggest that the distribtion is left-skewed (which we also see in the histogram). When we describe the shape of a distribution, we are actually describing the variability in the data!</p>
+<p>Examining the lowest 25%, highest 25%, and middle 50% of the data is so common that a statistician named John Tukey invented a visualization technique called the box-and-whiskers plot to show these ranges. To create a box-and-whiskers plot we use the <code>gf_boxploth()</code> function.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> This function takes a formula that is slightly different than we have been using, namely <code>0 ~ attribute name</code>. (Note that the <code>0</code> in the formula is where the box-and-whiskers plot is centered on the <em>y</em>-axis.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_boxploth</span>(<span class="dv">0</span> <span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, <span class="dt">fill =</span> <span class="st">&quot;skyblue&quot;</span>)  <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Admission rate&quot;</span>)</code></pre></div>
+<p><img src="03-descriptive_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>The “box”, etxending from 0.55 to 0.84, depicts the interuartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The “whiskers” extend to either the end of the range, or the next closest observation that is not an extreme value. (There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates.) The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.</p>
+</div>
+<div id="empirical-cumulative-density" class="section level3">
+<h3><span class="header-section-number">3.3.4</span> Empirical Cumulative Density</h3>
+<p>The percentile range plots and the boxplot indicated the values of the distribution that demarcated a particular proportion of the distribution. For example, the boxplot visually showed the admission rates that were at the 25th, 50th, and 75th percentiles. Another plot that can be useful for understanding how much of a distribution is at or below a particular value is a plot of the <em>empirical cumulative density</em>. To create this plot we use the <code>gf_ecdf()</code> function from the <strong>ggformula</strong> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_ecdf</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Admission rate&quot;</span>, <span class="dt">y =</span> <span class="st">&#39;Cumulative proportion&#39;</span>)</code></pre></div>
+<p><img src="03-descriptive_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>To read this plot, we can map admission rates to their associated cumulative proportion. For example, one-quarter of the admission rates in the distribution are at or below 0.55; that is the admission rate of 0.55 has an associated cumulative proportion of 0.25. Similarly, an admission rate of 0.71 is associated with a cumulative proportion of 0.50; one-half of the admission rates in the distribution are at or below the value of 0.71.</p>
+</div>
+<div id="variance-and-standard-deviation" class="section level3">
+<h3><span class="header-section-number">3.3.5</span> Variance and Standard Deviation</h3>
+<p>Two measures of variation that are commonly used by statisticians and datd scientists are the variance and the standard deviation. These can be obtained by including <code>var</code> and <code>sd</code>, respectively, in the <code>df_stats()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute variance and standard deviation</span>
+colleges <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, var, sd)</code></pre></div>
+<pre><code>##   var_adm_rate sd_adm_rate
+## 1   0.04467182   0.2113571</code></pre>
+<p>The variance and standard deviation are related to each other in that if we square the value of the standard deviation we obtain the variance.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Square the standard deviation</span>
+<span class="fl">0.2113571</span> <span class="op">^</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
+<pre><code>## [1] 0.04467182</code></pre>
+<p>In general, the standard deviation is more useful for describing the variation in a sample because it is in the same metric as the data. In our example, the metric of the data is proportion of students admitted, and the standard deviation is also in this metric. The variance, as the square of the standard deviation, is in the squared metric—in our example, proportion of students admitted squared. While this is not a useful metric in description, it does have some nice mathematical properties, so it is also a useful measure of the variation.</p>
+<div id="understanding-the-standard-deviation" class="section level4">
+<h4><span class="header-section-number">3.3.5.1</span> Understanding the Standard Deviation</h4>
+<p>To understand how we interpret the standard deviation, it is useful to see how it is calculated. To do so, we will return to our toy data set:</p>
+<p><span class="math display">\[
+Y = \begin{pmatrix}10 \\ 10\\ 20\\ 30\\ 50\end{pmatrix}
+\]</span></p>
+<p>Recall that earlier we computed the deviation from the mean for each of these observations, and that these deviations was a measure of how far above or below the mean each observation was.</p>
+<p><span class="math display">\[
+Y = \begin{pmatrix}10 - 24\\ 10-24\\ 20-24\\ 30-24\\ 50-24\end{pmatrix} = \begin{pmatrix}-14\\ -14\\ -4\\ 6\\ 26\end{pmatrix}
+\]</span></p>
+<p>A useful measure of the variation in the data would be the average of these deviations. This would tell us, on average, how far from the mean the data are. Unfortunately, if we were to compute the mean we would get zero because the sum of the deviations is zero. (That was a property of the mean discussed earlier in the chapter!) To alleviate this, we square the deviations before summing them.</p>
+<p><span class="math display">\[
+\begin{pmatrix}-14^2\\ -14^2\\ -4^2\\ 6^2\\ 26^2\end{pmatrix} = \begin{pmatrix}196\\ 196\\ 16\\ 36\\ 676\end{pmatrix}
+\]</span></p>
+<p>The sum of these squared deviations is 1,120. And the average squared deviation is then <span class="math inline">\(1120/5 = 224\)</span>. If we take the square root of 224, which is 14.97, we now have the average deviation for the five observations. On average, the observations in the distribution are 14.97 units from the mean value of 24. The standard deviation is interpreted as the average deviation from the mean.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
+</div>
+<div id="using-the-standard-deviation" class="section level4">
+<h4><span class="header-section-number">3.3.5.2</span> Using the Standard Deviation</h4>
+<p>In our example, the mean admission rate for the 2,019 institutions of higher education was 68.2%, and the standard deviation was 21.1%. We can combine these two pieces of information to make a statement about the admission rates for most of the institutions in our sample. In general, most observations in a distribution fall within one standard deviation of the mean. So, for our example, most institutions have an admission rate that is between 47.1% and 89.3%.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1 SD below the mean</span>
+<span class="fl">0.682</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.211</span></code></pre></div>
+<pre><code>## [1] 0.471</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1 SD above the mean</span>
+<span class="fl">0.682</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.211</span></code></pre></div>
+<pre><code>## [1] 0.893</code></pre>
+</div>
+</div>
+</div>
+<div id="summarizing-categorical-attributes" class="section level2">
+<h2><span class="header-section-number">3.4</span> Summarizing Categorical Attributes</h2>
+<p>Categorical attributes are attributes that have values that represent categories. For example, the attribute <code>region</code> indicates the region in the United States where the institution is located (e.g., Midwest). The attribute <code>bachelor_degree</code> is a categorical value indicating whether ir not the institution offers a Bachelor’s degree. Sometimes statisticians anddata scientists use the terms dichotmous (two categories) and polychotomous (more than two categories) to further define categorical variables. Using this nomenclature, <code>region</code> is a polychotomous categorical variable and <code>bachelor_degree</code> is a dichotomous categorical variable.</p>
+<p>Sometimes analysts use numeric values to encode the categories of a categorical attribute. For example, the attribute <code>bachelor_degree</code> is encoded using the values of 0 and 1. It is important to note that these values just indicate whether the institution offers a Bachelor’s degree (1) or not (0). The values are not necessarily ordinal in the sense that a 1 means more of the attribute than a 0. Since the values just refer to categories, an analyst might have reversed the coding and used 0 to encode institutions that offer a Bachelor’s degree and 1 to encode those institutions that do not. Similarly, the values of 0 and 1 are not sancrosanct; any two numers could have been used to represent the categories.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+<p>Most of the time, the numerical summaries we computed earlier in the chapter do not work so well for categorical attributes. For example, it would not make sense to compute the mean region for the institutions. In general, it suffices to compute counts and proportions for the categories included in these attributes. To compute the category counts we use the <code>tally()</code> function. This function takes a formula indicating the name of the categorical attribute and the name of the data object. To find the category counts for the <code>region</code> attribute:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute category counts</span>
+<span class="kw">tally</span>(<span class="op">~</span>region, <span class="dt">data =</span> colleges)</code></pre></div>
+<pre><code>## region
+##           Far West        Great Lakes           Mid East 
+##                221                297                458 
+##        New England     Outlying Areas             Plains 
+##                167                 35                200 
+##    Rocky Mountains          Southeast          Southwest 
+##                 50                454                133 
+## US Service Schools 
+##                  4</code></pre>
+<p>To find the proportion of institutions in each region, we can divide each of the counts by 2,019.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute category proportions</span>
+<span class="kw">tally</span>(<span class="op">~</span>region, <span class="dt">data =</span> colleges) <span class="op">/</span><span class="st"> </span><span class="dv">2019</span></code></pre></div>
+<pre><code>## region
+##           Far West        Great Lakes           Mid East 
+##        0.109460129        0.147102526        0.226844973 
+##        New England     Outlying Areas             Plains 
+##        0.082714215        0.017335315        0.099058940 
+##    Rocky Mountains          Southeast          Southwest 
+##        0.024764735        0.224863794        0.065874195 
+## US Service Schools 
+##        0.001981179</code></pre>
+<p>You could also compute the proportions directly with the <code>tally()</code> function by specifying the argument <code>format = &quot;proportion&quot;</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute category proportions</span>
+<span class="kw">tally</span>(<span class="op">~</span>region, <span class="dt">data =</span> colleges, <span class="dt">format =</span> <span class="st">&quot;proportion&quot;</span>)</code></pre></div>
+<pre><code>## region
+##           Far West        Great Lakes           Mid East 
+##        0.109460129        0.147102526        0.226844973 
+##        New England     Outlying Areas             Plains 
+##        0.082714215        0.017335315        0.099058940 
+##    Rocky Mountains          Southeast          Southwest 
+##        0.024764735        0.224863794        0.065874195 
+## US Service Schools 
+##        0.001981179</code></pre>
+</div>
+<div id="advanced-extension-computing-your-own-measure-of-variation" class="section level2">
+<h2><span class="header-section-number">3.5</span> Advanced Extension: Computing Your Own Measure of Variation</h2>
+<p>If you have another non-standard measure of variation that you want to compute, you can always write your own function to compute it. For example, say you wanted to compute the mean absolute error (the mean of the absolute values of the deviations). To compute the mean absolute error, we first need to define a new function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mae &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>, ...) {
+  avg &lt;-<span class="st"> </span><span class="kw">mean</span>(x, <span class="dt">na.rm =</span> na.rm, ...)
+  abs_avg &lt;-<span class="st"> </span><span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span>avg)
+  
+  <span class="kw">mean</span>(abs_avg)
+} </code></pre></div>
+<p>We can now use this new function by employing it as an argument in the <code>df_stats()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">colleges <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, mae)</code></pre></div>
+<pre><code>##   mae_adm_rate
+## 1    0.1692953</code></pre>
+<!-- ## Considering Groups -->
+<!-- We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful. -->
+<!-- Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly. -->
+<!-- ```{r} -->
+<!-- colleges %>% -->
+<!--   df_stats(adm_rate ~ region, median) -->
+<!-- ``` -->
+<!-- Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now `outcome ~ grouping` where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the `~` is the grouping variable. This syntax is similar to the violin plots that were created earlier. -->
+<!-- Can you see differences in the admission rates across the regions? -->
+<!-- One thing that is useful to add in when computing conditional statisics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which is common. To do this, we can add another function to the `df_stats()` function. -->
+<!-- ```{r} -->
+<!-- colleges %>% -->
+<!--   df_stats(adm_rate ~ region, median, length) -->
+<!-- ``` -->
+<!-- This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on. -->
+<!-- ### Adding additional groups -->
+<!-- What if we thought more than one variable was important in explaining variation in the outcome variable? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another variable to the right-hand side of the formula argument. More than one variable are separated with a `+` symbol. -->
+<!-- ```{r} -->
+<!-- colleges %>% -->
+<!--   df_stats(adm_rate ~ region + preddeg, median, length) -->
+<!-- ``` -->
+<!-- ## Other statistics of center -->
+<!-- So far we have been discussing the median. The median attempts to provide a single number summary for the center of the distribution. It is a robust statistic, but likely isn't the most popular statistic to provide a location for the center of a distribution. The mean is often more commonly used as a measure of the center of a distribution. Part of this is due to the usage of the mean in common statistical methods and the mean also uses the values of all the data in the calculation. The median only considers the values of the middle score or scores, therefore this statistic is less sensitive to extreme values than the mean. I like to look at both statistics and this can provide some insight into the distribution of interest. We can add the mean using the `df_stats()` function by adding the function `mean`. -->
+<!-- ```{r} -->
+<!-- stats_compute <- colleges %>% -->
+<!--   df_stats(adm_rate ~ region, median, mean, length) -->
+<!-- stats_compute -->
+<!-- ``` -->
+<!-- Do you notice any trends in the direction the mean and median typically follow? More specifically, is the mean typically larger than the median or vice versa? -->
+<!-- Let's visualize them. -->
+<!-- ```{r} -->
+<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30) %>% -->
+<!--   gf_facet_wrap(~ region) %>% -->
+<!--   gf_vline(color = 'blue', xintercept = ~ median_adm_rate, data = stats_compute, size = 1) %>% -->
+<!--   gf_vline(color = 'lightblue', xintercept = ~ mean_adm_rate, data = stats_compute, size = 1) -->
+<!-- ``` -->
+<!-- What is different about the distributions that have larger differences in the mean and median? -->
+<!-- ## Measures of Variation -->
+<!-- So far we have focused primarily on applying functions to columns of data to provide a single numeric summary for where the center of the distribution may lie. The center of the distribution is important, however the primary goal in research and with statistics is to try to understand the variation in the distribution. -->
+<!-- One crude measure of variation that is intuitive is the range of a variable. The range is the difference between the smallest and the largest number in the data. We can compute this with the `df_stats()` function. -->
+<!-- ```{r} -->
+<!-- colleges %>% -->
+<!--   df_stats(~ adm_rate, range) -->
+<!-- ``` -->
+<!-- The details of the `df_stats()` function are in the previous course notes. The output for this computation returns two values, the minimum and maximum value in the data and unsurprisingly, is 0 and 1 respectively.  -->
+<!-- ### Robust measure of variation -->
+<!-- The idea behind the IQR representing differences in percentiles allows us to extend this to different percentiles that may be more directly interpretable for a given situation. For example, suppose we wanted to know how spread out the middle 80% of the distribution is. We can do this directly by computing the 90th and 10th percentiles and finding the difference between the two. -->
+<!-- ```{r} -->
+<!-- mid_80 <- colleges %>% -->
+<!--   df_stats(~ adm_rate, quantile(c(0.1, 0.9)), nice_names = TRUE) -->
+<!-- mid_80 -->
+<!-- ``` -->
+<!-- As you can see, once you extend the amount of the distribution contained, the distance increases, now to 0.555 or 55.5% the the range of the middle 80% of the admission rate distribution. We can also visualize what this looks like. -->
+<!-- ```{r} -->
+<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
+<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
+<!-- ``` -->
+<!-- We can also view the exact percentages using the empirical cumulative density function. -->
+<!-- ```{r} -->
+<!-- gf_ecdf(~ adm_rate, data = colleges) %>% -->
+<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
+<!-- ``` -->
+<!-- ### Variation by Group -->
+<!-- These statistics can also be calculated by different grouping variables similar to what was done with statisitcs of center. Now the variable of interest is on the left-hand side of the equation and the grouping variable is on the right hand side. -->
+<!-- ```{r} -->
+<!-- iqr_groups <- colleges %>% -->
+<!--   df_stats(adm_rate ~ region, IQR, quantile(c(0.25, 0.75)), nice_names = TRUE) -->
+<!-- iqr_groups -->
+<!-- ``` -->
+<!-- This can also be visualized to see how these statistics vary across the groups. -->
+<!-- ```{r} -->
+<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
+<!--   gf_vline(color = 'blue', xintercept = ~ value,  -->
+<!--      data = filter(pivot_longer(iqr_groups, IQR_adm_rate:'X75.'), name %in% c('X25.', 'X75.')), size = 1) %>% -->
+<!--   gf_facet_wrap(~ region) -->
+<!-- ``` -->
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="4">
+<li id="fn4"><p>Note that the names of the summaries we include in the <code>df_stats()</code> function need to be the actual names of functions that R recognizes.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref4">↩</a></p></li>
+<li id="fn5"><p>The downside of using the median is that it is only informed by one or two observations in the data. The mean is informed by all of the observations. This property of the mean makes it a more useful than the median in some mathematical and theoretical applications.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref5">↩</a></p></li>
+<li id="fn6"><p>A second issue with range is that it is a <em>biased statistic</em>. If we use it as an estimate of the population range, it will almose inevitably be too small. The population range will almost always be larger since the sampling process will often not select extreme population values.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref6">↩</a></p></li>
+<li id="fn7"><p>The <code>gf_boxplot()</code> function creates vertical a box-and-whiskers plot, and the <code>gf_boxploth()</code> function creates a horizontal box-and-whiskers plot.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref7">↩</a></p></li>
+<li id="fn8"><p>Technically, after summing the squared deviations, we divide this sum by <span class="math inline">\(n-1\)</span> rather than <span class="math inline">\(n\)</span>. But, when the sample size is even somewhat large, this difference is trivial.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref8">↩</a></p></li>
+<li id="fn9"><p>If we know the exact shape of the distribution we can be more specific about the proportion of the distribution that fall within one standard deviation of the mean.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref9">↩</a></p></li>
+<li id="fn10"><p>Using 0’s and 1’s for the encoding does have some advantages over other coding schemes which we will explore later when fitting statistical models.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref10">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="visualization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multivariate-visualization.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
