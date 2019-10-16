@@ -5,7 +5,7 @@ Data visualization is often the first step on the statistical journey to explore
 
 We will again use the data provided in the file *College-scorecard-clean.csv* to examine admissions rates for 2,019 institutions of higher education. As in the previous chapter, before we begin the analysis, we will load several packages that include functions we will use in the chapter. We also import the College Scorecard data using the `read_csv()` function.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 # Load packages
 library(tidyverse)
 library(ggformula)
@@ -49,7 +49,7 @@ df_stats(~ adm_rate, data = colleges, mean)
 The mean (or average) admission rate for the 2,019 institutions of higher education is 68.3%. 
 
 
-## Visualizing the Median and Mean
+## Understanding the Median and Mean
 
 In your previous educational experiences with the mean and median, you may have learned the formulas or algorithms that produce these values. For example:
 
@@ -58,8 +58,9 @@ In your previous educational experiences with the mean and median, you may have 
 
 To better understand these summaries, we will visualize them on the distirbution of admission rates. 
 
-```{r echo=FALSE, fig.cap='Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.'}
+```{r echo=FALSE, fig.cap='Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.', warning=FALSE}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_labs(x = "Admission rate", y = "Frequency") %>%
   gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed")
 ```
 
@@ -86,9 +87,12 @@ The median does not balance the deviations; the sum is not zero (it is $+20$). T
 
 What about the median?
 
-```{r}
+```{r echo=FALSE, fig.cap='Distribution of admission rates for thw 2,019 institutions of higher education. The median admission rate is displayed as a blue, solid line.', warning=FALSE}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'blue', xintercept = 0.708, size = 1)
+  gf_labs(x = "Admission rate", y = "Frequency") %>%
+  gf_vline(color = 'blue', xintercept = 0.708, size = 1) %>%
+  gf_text(x = 0.4, y = 5, label = "50%", color = "blue", size = 5) %>%
+  gf_text(x = 0.9, y = 5, label = "50%", color = "blue", size = 5)
 ```
 
 In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the $x$-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.
@@ -99,8 +103,9 @@ In the figure, half of the observations in the histogram have an admission rate 
 The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is "closest" (at least on average) to all of the observations. (It is the value that produces the smallest *average deviation*---since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?
 
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.'}
+```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.', warning=FALSE}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_labs(x = "Admission rate", y = "Frequency") %>%
   gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed") %>%
   gf_vline(color = 'blue', xintercept = 0.708, size = 1)
 ```
@@ -165,8 +170,9 @@ colleges %>%
 
 The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.'}
+```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.', warning=FALSE}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_labs(x = "Admission rate", y = "Frequency") %>%
   gf_vline(color = 'red', xintercept = 0.39284, size = 1) %>%
   gf_vline(color = 'red', xintercept = 0.94706, size = 1) %>%
   gf_text(x = 0.2, y = 5, label = "10%", color = "red", size = 5) %>%
@@ -189,8 +195,9 @@ colleges %>%
 
 The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.'}
+```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.', warning=FALSE}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_labs(x = "Admission rate", y = "Frequency") %>%
   gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%
   gf_vline(color = 'red', xintercept = 0.83815, size = 1)  %>%
   gf_text(x = 0.3, y = 5, label = "25%", color = "red", size = 5) %>%
@@ -215,9 +222,10 @@ colleges %>%
 1 - 0
 ```
 
-```{r  echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.'}
+```{r  echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.', warning=FALSE}
 # Plot the IQR and range on the distribution
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_labs(x = "Admission rate", y = "Frequency") %>%
   gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%
   gf_vline(color = 'red', xintercept = 0.83815, size = 1) %>%
   gf_vline(color = 'blue', xintercept = 0, size = 1, linetype = "dashed") %>%
@@ -245,6 +253,14 @@ gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  %>%
 ```
 
 The "box", etxending from 0.55 to 0.84, depicts the interuartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The "whiskers" extend to either the end of the range, or the next closest observation that is not an extreme value. (There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates.) The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.
+
+The syntax below displays both the histogram and box-and-whiskers plot. Here the box-and-whiskers plot is centered at a *y*-value of 170. We also made it a little wider using the `width=10` argument. 
+
+```{r}
+gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+gf_boxploth(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10)  %>%
+  gf_labs(x = "Admission rate", y = "Frequency")
+```
 
 
 ### Empirical Cumulative Density
@@ -362,115 +378,6 @@ colleges %>%
   df_stats(~ adm_rate, mae)
 ```
 
-
-
-
-<!-- ## Considering Groups -->
-<!-- We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful. -->
-
-<!-- Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median) -->
-<!-- ``` -->
-
-<!-- Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now `outcome ~ grouping` where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the `~` is the grouping variable. This syntax is similar to the violin plots that were created earlier. -->
-
-<!-- Can you see differences in the admission rates across the regions? -->
-
-<!-- One thing that is useful to add in when computing conditional statisics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which is common. To do this, we can add another function to the `df_stats()` function. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median, length) -->
-<!-- ``` -->
-
-<!-- This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on. -->
-
-<!-- ### Adding additional groups -->
-<!-- What if we thought more than one variable was important in explaining variation in the outcome variable? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another variable to the right-hand side of the formula argument. More than one variable are separated with a `+` symbol. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region + preddeg, median, length) -->
-<!-- ``` -->
-
-<!-- ## Other statistics of center -->
-<!-- So far we have been discussing the median. The median attempts to provide a single number summary for the center of the distribution. It is a robust statistic, but likely isn't the most popular statistic to provide a location for the center of a distribution. The mean is often more commonly used as a measure of the center of a distribution. Part of this is due to the usage of the mean in common statistical methods and the mean also uses the values of all the data in the calculation. The median only considers the values of the middle score or scores, therefore this statistic is less sensitive to extreme values than the mean. I like to look at both statistics and this can provide some insight into the distribution of interest. We can add the mean using the `df_stats()` function by adding the function `mean`. -->
-
-<!-- ```{r} -->
-<!-- stats_compute <- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median, mean, length) -->
-<!-- stats_compute -->
-<!-- ``` -->
-
-<!-- Do you notice any trends in the direction the mean and median typically follow? More specifically, is the mean typically larger than the median or vice versa? -->
-
-<!-- Let's visualize them. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30) %>% -->
-<!--   gf_facet_wrap(~ region) %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ median_adm_rate, data = stats_compute, size = 1) %>% -->
-<!--   gf_vline(color = 'lightblue', xintercept = ~ mean_adm_rate, data = stats_compute, size = 1) -->
-<!-- ``` -->
-
-<!-- What is different about the distributions that have larger differences in the mean and median? -->
-
-<!-- ## Measures of Variation -->
-
-<!-- So far we have focused primarily on applying functions to columns of data to provide a single numeric summary for where the center of the distribution may lie. The center of the distribution is important, however the primary goal in research and with statistics is to try to understand the variation in the distribution. -->
-
-<!-- One crude measure of variation that is intuitive is the range of a variable. The range is the difference between the smallest and the largest number in the data. We can compute this with the `df_stats()` function. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(~ adm_rate, range) -->
-<!-- ``` -->
-
-<!-- The details of the `df_stats()` function are in the previous course notes. The output for this computation returns two values, the minimum and maximum value in the data and unsurprisingly, is 0 and 1 respectively.  -->
-
-<!-- ### Robust measure of variation -->
-<!-- The idea behind the IQR representing differences in percentiles allows us to extend this to different percentiles that may be more directly interpretable for a given situation. For example, suppose we wanted to know how spread out the middle 80% of the distribution is. We can do this directly by computing the 90th and 10th percentiles and finding the difference between the two. -->
-
-<!-- ```{r} -->
-<!-- mid_80 <- colleges %>% -->
-<!--   df_stats(~ adm_rate, quantile(c(0.1, 0.9)), nice_names = TRUE) -->
-<!-- mid_80 -->
-<!-- ``` -->
-
-<!-- As you can see, once you extend the amount of the distribution contained, the distance increases, now to 0.555 or 55.5% the the range of the middle 80% of the admission rate distribution. We can also visualize what this looks like. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
-<!-- ``` -->
-
-<!-- We can also view the exact percentages using the empirical cumulative density function. -->
-
-<!-- ```{r} -->
-<!-- gf_ecdf(~ adm_rate, data = colleges) %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
-<!-- ``` -->
-
-<!-- ### Variation by Group -->
-<!-- These statistics can also be calculated by different grouping variables similar to what was done with statisitcs of center. Now the variable of interest is on the left-hand side of the equation and the grouping variable is on the right hand side. -->
-
-<!-- ```{r} -->
-<!-- iqr_groups <- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, IQR, quantile(c(0.25, 0.75)), nice_names = TRUE) -->
-<!-- iqr_groups -->
-<!-- ``` -->
-
-<!-- This can also be visualized to see how these statistics vary across the groups. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value,  -->
-<!--      data = filter(pivot_longer(iqr_groups, IQR_adm_rate:'X75.'), name %in% c('X25.', 'X75.')), size = 1) %>% -->
-<!--   gf_facet_wrap(~ region) -->
-<!-- ``` -->
 
 
 
