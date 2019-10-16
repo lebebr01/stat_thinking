@@ -709,7 +709,7 @@ colleges %>%
 ```
 
 
-<!-- This is a test. -->
+
 
 <!-- ## Considering Groups -->
 <!-- We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful. -->
