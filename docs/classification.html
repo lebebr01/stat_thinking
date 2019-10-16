@@ -128,7 +128,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#visualizing-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Visualizing the Median and Mean</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
@@ -324,10 +324,10 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ##         CP nsplit rel error  xerror     xstd
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
-## 3 0.023392      3   0.49415 0.51754 0.034823
-## 4 0.020468      4   0.47076 0.52047 0.034897
-## 5 0.010234      5   0.45029 0.50292 0.034448
-## 6 0.010000      8   0.41813 0.47368 0.033663</code></pre>
+## 3 0.023392      3   0.49415 0.52632 0.035043
+## 4 0.020468      4   0.47076 0.50585 0.034524
+## 5 0.010234      5   0.45029 0.51462 0.034749
+## 6 0.010000      8   0.41813 0.50000 0.034372</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotcp</span>(class_tree)</code></pre></div>
 <p><img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prune_class_tree &lt;-<span class="st"> </span><span class="kw">prune</span>(class_tree, <span class="dt">cp =</span> .<span class="dv">02</span>)
