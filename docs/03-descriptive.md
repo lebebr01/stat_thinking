@@ -9,8 +9,135 @@ We will again use the data provided in the file *College-scorecard-clean.csv* to
 ```r
 # Load packages
 library(tidyverse)
+```
+
+```
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
 library(ggformula)
+```
+
+```
+## Loading required package: ggstance
+```
+
+```
+## 
+## Attaching package: 'ggstance'
+```
+
+```
+## The following objects are masked from 'package:ggplot2':
+## 
+##     geom_errorbarh, GeomErrorbarh
+```
+
+```
+## 
+## New to ggformula?  Try the tutorials: 
+## 	learnr::run_tutorial("introduction", package = "ggformula")
+## 	learnr::run_tutorial("refining", package = "ggformula")
+```
+
+```r
 library(mosaic)
+```
+
+```
+## Loading required package: lattice
+```
+
+```
+## Loading required package: mosaicData
+```
+
+```
+## Loading required package: Matrix
+```
+
+```
+## 
+## Attaching package: 'Matrix'
+```
+
+```
+## The following objects are masked from 'package:tidyr':
+## 
+##     expand, pack, unpack
+```
+
+```
+## Registered S3 method overwritten by 'mosaic':
+##   method                           from   
+##   fortify.SpatialPolygonsDataFrame ggplot2
+```
+
+```
+## 
+## The 'mosaic' package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.
+## 
+## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.
+```
+
+```
+## 
+## Attaching package: 'mosaic'
+```
+
+```
+## The following object is masked from 'package:Matrix':
+## 
+##     mean
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     count, do, tally
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     cross
+```
+
+```
+## The following object is masked from 'package:ggplot2':
+## 
+##     stat
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
+##     prop.test, quantile, sd, t.test, var
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     max, mean, min, prod, range, sample, sum
+```
+
+```r
 library(statthink)
 
 # Set theme for plots
@@ -21,7 +148,32 @@ colleges <- read_csv(
   file = "https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", 
   guess_max = 10000
   )
+```
 
+```
+## Parsed with column specification:
+## cols(
+##   instnm = col_character(),
+##   city = col_character(),
+##   stabbr = col_character(),
+##   preddeg = col_character(),
+##   region = col_character(),
+##   locale = col_character(),
+##   adm_rate = col_double(),
+##   actcmmid = col_double(),
+##   ugds = col_double(),
+##   costt4_a = col_double(),
+##   costt4_p = col_double(),
+##   tuitionfee_in = col_double(),
+##   tuitionfee_out = col_double(),
+##   debt_mdn = col_double(),
+##   grad_debt_mdn = col_double(),
+##   female = col_double(),
+##   bachelor_degree = col_double()
+## )
+```
+
+```r
 # View first six cases
 head(colleges)
 ```
@@ -119,6 +271,16 @@ The median does not balance the deviations; the sum is not zero (it is $+20$). T
 
 What about the median?
 
+
+```r
+gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_vline(color = 'blue', xintercept = 0.708, size = 1)
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
 <img src="03-descriptive_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the $x$-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.
@@ -128,6 +290,15 @@ In the figure, half of the observations in the histogram have an admission rate 
 
 The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is "closest" (at least on average) to all of the observations. (It is the value that produces the smallest *average deviation*---since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?
 
+
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
 
 <div class="figure">
 <img src="03-descriptive_files/figure-html/unnamed-chunk-6-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
@@ -225,6 +396,15 @@ colleges %>%
 
 The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.
 
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
 <div class="figure">
 <img src="03-descriptive_files/figure-html/unnamed-chunk-9-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
 <p class="caption">(\#fig:unnamed-chunk-9)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.</p>
@@ -256,6 +436,15 @@ colleges %>%
 ```
 
 The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
+
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
 
 <div class="figure">
 <img src="03-descriptive_files/figure-html/unnamed-chunk-11-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
@@ -292,6 +481,23 @@ colleges %>%
 
 ```
 ## [1] 1
+```
+
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
 ```
 
 <div class="figure">
@@ -504,113 +710,4 @@ colleges %>%
 
 
 <!-- This is a test. -->
-
-<!-- ## Considering Groups -->
-<!-- We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful. -->
-
-<!-- Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median) -->
-<!-- ``` -->
-
-<!-- Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now `outcome ~ grouping` where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the `~` is the grouping variable. This syntax is similar to the violin plots that were created earlier. -->
-
-<!-- Can you see differences in the admission rates across the regions? -->
-
-<!-- One thing that is useful to add in when computing conditional statisics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which is common. To do this, we can add another function to the `df_stats()` function. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median, length) -->
-<!-- ``` -->
-
-<!-- This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on. -->
-
-<!-- ### Adding additional groups -->
-<!-- What if we thought more than one variable was important in explaining variation in the outcome variable? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another variable to the right-hand side of the formula argument. More than one variable are separated with a `+` symbol. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region + preddeg, median, length) -->
-<!-- ``` -->
-
-<!-- ## Other statistics of center -->
-<!-- So far we have been discussing the median. The median attempts to provide a single number summary for the center of the distribution. It is a robust statistic, but likely isn't the most popular statistic to provide a location for the center of a distribution. The mean is often more commonly used as a measure of the center of a distribution. Part of this is due to the usage of the mean in common statistical methods and the mean also uses the values of all the data in the calculation. The median only considers the values of the middle score or scores, therefore this statistic is less sensitive to extreme values than the mean. I like to look at both statistics and this can provide some insight into the distribution of interest. We can add the mean using the `df_stats()` function by adding the function `mean`. -->
-
-<!-- ```{r} -->
-<!-- stats_compute <- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median, mean, length) -->
-<!-- stats_compute -->
-<!-- ``` -->
-
-<!-- Do you notice any trends in the direction the mean and median typically follow? More specifically, is the mean typically larger than the median or vice versa? -->
-
-<!-- Let's visualize them. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30) %>% -->
-<!--   gf_facet_wrap(~ region) %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ median_adm_rate, data = stats_compute, size = 1) %>% -->
-<!--   gf_vline(color = 'lightblue', xintercept = ~ mean_adm_rate, data = stats_compute, size = 1) -->
-<!-- ``` -->
-
-<!-- What is different about the distributions that have larger differences in the mean and median? -->
-
-<!-- ## Measures of Variation -->
-
-<!-- So far we have focused primarily on applying functions to columns of data to provide a single numeric summary for where the center of the distribution may lie. The center of the distribution is important, however the primary goal in research and with statistics is to try to understand the variation in the distribution. -->
-
-<!-- One crude measure of variation that is intuitive is the range of a variable. The range is the difference between the smallest and the largest number in the data. We can compute this with the `df_stats()` function. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(~ adm_rate, range) -->
-<!-- ``` -->
-
-<!-- The details of the `df_stats()` function are in the previous course notes. The output for this computation returns two values, the minimum and maximum value in the data and unsurprisingly, is 0 and 1 respectively.  -->
-
-<!-- ### Robust measure of variation -->
-<!-- The idea behind the IQR representing differences in percentiles allows us to extend this to different percentiles that may be more directly interpretable for a given situation. For example, suppose we wanted to know how spread out the middle 80% of the distribution is. We can do this directly by computing the 90th and 10th percentiles and finding the difference between the two. -->
-
-<!-- ```{r} -->
-<!-- mid_80 <- colleges %>% -->
-<!--   df_stats(~ adm_rate, quantile(c(0.1, 0.9)), nice_names = TRUE) -->
-<!-- mid_80 -->
-<!-- ``` -->
-
-<!-- As you can see, once you extend the amount of the distribution contained, the distance increases, now to 0.555 or 55.5% the the range of the middle 80% of the admission rate distribution. We can also visualize what this looks like. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
-<!-- ``` -->
-
-<!-- We can also view the exact percentages using the empirical cumulative density function. -->
-
-<!-- ```{r} -->
-<!-- gf_ecdf(~ adm_rate, data = colleges) %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
-<!-- ``` -->
-
-<!-- ### Variation by Group -->
-<!-- These statistics can also be calculated by different grouping variables similar to what was done with statisitcs of center. Now the variable of interest is on the left-hand side of the equation and the grouping variable is on the right hand side. -->
-
-<!-- ```{r} -->
-<!-- iqr_groups <- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, IQR, quantile(c(0.25, 0.75)), nice_names = TRUE) -->
-<!-- iqr_groups -->
-<!-- ``` -->
-
-<!-- This can also be visualized to see how these statistics vary across the groups. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value,  -->
-<!--      data = filter(pivot_longer(iqr_groups, IQR_adm_rate:'X75.'), name %in% c('X25.', 'X75.')), size = 1) %>% -->
-<!--   gf_facet_wrap(~ region) -->
-<!-- ``` -->
-
-
 
