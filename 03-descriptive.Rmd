@@ -5,7 +5,7 @@ Data visualization is often the first step on the statistical journey to explore
 
 We will again use the data provided in the file *College-scorecard-clean.csv* to examine admissions rates for 2,019 institutions of higher education. As in the previous chapter, before we begin the analysis, we will load several packages that include functions we will use in the chapter. We also import the College Scorecard data using the `read_csv()` function.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 # Load packages
 library(tidyverse)
 library(ggformula)
@@ -86,7 +86,7 @@ The median does not balance the deviations; the sum is not zero (it is $+20$). T
 
 What about the median?
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'blue', xintercept = 0.708, size = 1)
 ```
@@ -99,7 +99,7 @@ In the figure, half of the observations in the histogram have an admission rate 
 The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is "closest" (at least on average) to all of the observations. (It is the value that produces the smallest *average deviation*---since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?
 
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.'}
+```{r  echo=FALSE, warning=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.'}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed") %>%
   gf_vline(color = 'blue', xintercept = 0.708, size = 1)
@@ -165,7 +165,7 @@ colleges %>%
 
 The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.'}
+```{r  echo=FALSE, warning=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.'}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.39284, size = 1) %>%
   gf_vline(color = 'red', xintercept = 0.94706, size = 1) %>%
@@ -189,7 +189,7 @@ colleges %>%
 
 The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.'}
+```{r  echo=FALSE, warning=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.'}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%
   gf_vline(color = 'red', xintercept = 0.83815, size = 1)  %>%
@@ -215,7 +215,7 @@ colleges %>%
 1 - 0
 ```
 
-```{r  echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.'}
+```{r   echo=FALSE, warning=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.'}
 # Plot the IQR and range on the distribution
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%

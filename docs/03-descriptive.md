@@ -9,135 +9,8 @@ We will again use the data provided in the file *College-scorecard-clean.csv* to
 ```r
 # Load packages
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0
-```
-
-```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-```
-
-```r
 library(ggformula)
-```
-
-```
-## Loading required package: ggstance
-```
-
-```
-## 
-## Attaching package: 'ggstance'
-```
-
-```
-## The following objects are masked from 'package:ggplot2':
-## 
-##     geom_errorbarh, GeomErrorbarh
-```
-
-```
-## 
-## New to ggformula?  Try the tutorials: 
-## 	learnr::run_tutorial("introduction", package = "ggformula")
-## 	learnr::run_tutorial("refining", package = "ggformula")
-```
-
-```r
 library(mosaic)
-```
-
-```
-## Loading required package: lattice
-```
-
-```
-## Loading required package: mosaicData
-```
-
-```
-## Loading required package: Matrix
-```
-
-```
-## 
-## Attaching package: 'Matrix'
-```
-
-```
-## The following objects are masked from 'package:tidyr':
-## 
-##     expand, pack, unpack
-```
-
-```
-## Registered S3 method overwritten by 'mosaic':
-##   method                           from   
-##   fortify.SpatialPolygonsDataFrame ggplot2
-```
-
-```
-## 
-## The 'mosaic' package masks several functions from core packages in order to add 
-## additional features.  The original behavior of these functions should not be affected by this.
-## 
-## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.
-```
-
-```
-## 
-## Attaching package: 'mosaic'
-```
-
-```
-## The following object is masked from 'package:Matrix':
-## 
-##     mean
-```
-
-```
-## The following objects are masked from 'package:dplyr':
-## 
-##     count, do, tally
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     cross
-```
-
-```
-## The following object is masked from 'package:ggplot2':
-## 
-##     stat
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
-##     prop.test, quantile, sd, t.test, var
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     max, mean, min, prod, range, sample, sum
-```
-
-```r
 library(statthink)
 
 # Set theme for plots
@@ -148,32 +21,7 @@ colleges <- read_csv(
   file = "https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", 
   guess_max = 10000
   )
-```
 
-```
-## Parsed with column specification:
-## cols(
-##   instnm = col_character(),
-##   city = col_character(),
-##   stabbr = col_character(),
-##   preddeg = col_character(),
-##   region = col_character(),
-##   locale = col_character(),
-##   adm_rate = col_double(),
-##   actcmmid = col_double(),
-##   ugds = col_double(),
-##   costt4_a = col_double(),
-##   costt4_p = col_double(),
-##   tuitionfee_in = col_double(),
-##   tuitionfee_out = col_double(),
-##   debt_mdn = col_double(),
-##   grad_debt_mdn = col_double(),
-##   female = col_double(),
-##   bachelor_degree = col_double()
-## )
-```
-
-```r
 # View first six cases
 head(colleges)
 ```
@@ -271,16 +119,6 @@ The median does not balance the deviations; the sum is not zero (it is $+20$). T
 
 What about the median?
 
-
-```r
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'blue', xintercept = 0.708, size = 1)
-```
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
 <img src="03-descriptive_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the $x$-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.
@@ -290,15 +128,6 @@ In the figure, half of the observations in the histogram have an admission rate 
 
 The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is "closest" (at least on average) to all of the observations. (It is the value that produces the smallest *average deviation*---since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?
 
-
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
 
 <div class="figure">
 <img src="03-descriptive_files/figure-html/unnamed-chunk-6-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
@@ -396,15 +225,6 @@ colleges %>%
 
 The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.
 
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
 <div class="figure">
 <img src="03-descriptive_files/figure-html/unnamed-chunk-9-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
 <p class="caption">(\#fig:unnamed-chunk-9)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.</p>
@@ -436,15 +256,6 @@ colleges %>%
 ```
 
 The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
-
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
 
 <div class="figure">
 <img src="03-descriptive_files/figure-html/unnamed-chunk-11-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
@@ -481,23 +292,6 @@ colleges %>%
 
 ```
 ## [1] 1
-```
-
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
-```
-
-```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
 ```
 
 <div class="figure">

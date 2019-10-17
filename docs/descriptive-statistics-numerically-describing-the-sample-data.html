@@ -190,65 +190,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Data visualization is often the first step on the statistical journey to explore a research question. However, this is usually not where the journey stops, instead additional analyses are often performed to learn more about the trends and structure in the data. In this chapter we will learn about methods that useful for numerically summarizing a sample of data. These methods are commonly referred to as <em>descriptive statistics</em>.</p>
 <p>We will again use the data provided in the file <em>College-scorecard-clean.csv</em> to examine admissions rates for 2,019 institutions of higher education. As in the previous chapter, before we begin the analysis, we will load several packages that include functions we will use in the chapter. We also import the College Scorecard data using the <code>read_csv()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load packages</span>
-<span class="kw">library</span>(tidyverse)</code></pre></div>
-<pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)</code></pre></div>
-<pre><code>## Loading required package: ggstance</code></pre>
-<pre><code>## 
-## Attaching package: &#39;ggstance&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
-## 
-##     geom_errorbarh, GeomErrorbarh</code></pre>
-<pre><code>## 
-## New to ggformula?  Try the tutorials: 
-##  learnr::run_tutorial(&quot;introduction&quot;, package = &quot;ggformula&quot;)
-##  learnr::run_tutorial(&quot;refining&quot;, package = &quot;ggformula&quot;)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre></div>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## Loading required package: mosaicData</code></pre>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## 
-## Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
-## 
-##     expand, pack, unpack</code></pre>
-<pre><code>## Registered S3 method overwritten by &#39;mosaic&#39;:
-##   method                           from   
-##   fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
-<pre><code>## 
-## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
-## additional features.  The original behavior of these functions should not be affected by this.
-## 
-## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
-<pre><code>## 
-## Attaching package: &#39;mosaic&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
-## 
-##     mean</code></pre>
-<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
-## 
-##     count, do, tally</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     cross</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     stat</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
-##     prop.test, quantile, sd, t.test, var</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     max, mean, min, prod, range, sample, sum</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(statthink)
+<span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(ggformula)
+<span class="kw">library</span>(mosaic)
+<span class="kw">library</span>(statthink)
 
 <span class="co"># Set theme for plots</span>
 <span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())
@@ -257,28 +202,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 colleges &lt;-<span class="st"> </span><span class="kw">read_csv</span>(
   <span class="dt">file =</span> <span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, 
   <span class="dt">guess_max =</span> <span class="dv">10000</span>
-  )</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   instnm = col_character(),
-##   city = col_character(),
-##   stabbr = col_character(),
-##   preddeg = col_character(),
-##   region = col_character(),
-##   locale = col_character(),
-##   adm_rate = col_double(),
-##   actcmmid = col_double(),
-##   ugds = col_double(),
-##   costt4_a = col_double(),
-##   costt4_p = col_double(),
-##   tuitionfee_in = col_double(),
-##   tuitionfee_out = col_double(),
-##   debt_mdn = col_double(),
-##   grad_debt_mdn = col_double(),
-##   female = col_double(),
-##   bachelor_degree = col_double()
-## )</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># View first six cases</span>
+  )
+
+<span class="co"># View first six cases</span>
 <span class="kw">head</span>(colleges)</code></pre></div>
 <pre><code>## # A tibble: 6 x 17
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds
@@ -336,16 +262,11 @@ Y = \begin{pmatrix}10 - 20\\ 10-20\\ 20-20\\ 30-20\\ 50-20\end{pmatrix} = \begin
 \]</span></p>
 <p>The median does not balance the deviations; the sum is not zero (it is <span class="math inline">\(+20\)</span>). The mean is the only value we can use to “balance” the deviations.</p>
 <p>What about the median?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="fl">0.708</span>, <span class="dt">size =</span> <span class="dv">1</span>)</code></pre></div>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <p><img src="03-descriptive_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the <span class="math inline">\(x\)</span>-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.</p>
 <div id="summarize-with-the-mean-or-median" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> Summarize with the Mean or Median?</h3>
 <p>The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is “closest” (at least on average) to all of the observations. (It is the value that produces the smallest <em>average deviation</em>—since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?</p>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-6"></span>
 <img src="03-descriptive_files/figure-html/unnamed-chunk-6-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
 <p class="caption">
@@ -397,8 +318,6 @@ colleges <span class="op">%&gt;%</span>
 <span class="fl">0.94706</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.39284</span></code></pre></div>
 <pre><code>## [1] 0.55422</code></pre>
 <p>The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.</p>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-9"></span>
 <img src="03-descriptive_files/figure-html/unnamed-chunk-9-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
 <p class="caption">
@@ -418,8 +337,6 @@ colleges <span class="op">%&gt;%</span>
 <span class="fl">0.83815</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.5524</span></code></pre></div>
 <pre><code>## [1] 0.28575</code></pre>
 <p>The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for “most” of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions’ admission rates and can be useful for describing the variation.</p>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-11"></span>
 <img src="03-descriptive_files/figure-html/unnamed-chunk-11-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
 <p class="caption">
@@ -438,10 +355,6 @@ colleges <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute the range</span>
 <span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="dv">0</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
-<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-13"></span>
 <img src="03-descriptive_files/figure-html/unnamed-chunk-13-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively." width="672" />
 <p class="caption">
