@@ -5,7 +5,7 @@ Data visualization is often the first step on the statistical journey to explore
 
 We will again use the data provided in the file *College-scorecard-clean.csv* to examine admissions rates for 2,019 institutions of higher education. As in the previous chapter, before we begin the analysis, we will load several packages that include functions we will use in the chapter. We also import the College Scorecard data using the `read_csv()` function.
 
-```{r}
+```{r load, message=FALSE, warning=FALSE}
 # Load packages
 library(tidyverse)
 library(ggformula)
@@ -31,7 +31,7 @@ Data are often stored in a tabular format where the rows of the data are the *ca
 
 In the previous chapter, we visualized different attributes by referencing those attributes in the function we used to create a plot of the distribution. For example, when we wanted to plot a histogram of the distribution of admission rates, we referenced the `adm_rate` attribute in the `gf_histogram()` function. In a similar vein, we will obtain numerical summaries of an attribute by referencing that attribute in the `df_stats()` function. Below, we obtain numerical summaries for the admissions rate attribute:
 
-```{r}
+```{r median}
 df_stats(~ adm_rate, data = colleges, median)
 ```
 
@@ -42,7 +42,7 @@ The median is also referred to as the 50th percentile, and is the value at which
 Another common numerical summary that is often used to describe a distribution is the mean. To compute the mean admission rate we again use the `df_stats()` function, but include `mean` as our additional argument.
 
 
-```{r}
+```{r mean}
 df_stats(~ adm_rate, data = colleges, mean)
 ```
 
@@ -58,7 +58,7 @@ In your previous educational experiences with the mean and median, you may have 
 
 To better understand these summaries, we will visualize them on the distirbution of admission rates. 
 
-```{r echo=FALSE, fig.cap='Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.'}
+```{r hist,echo=FALSE, fig.cap='Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.'}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed")
 ```
@@ -86,7 +86,7 @@ The median does not balance the deviations; the sum is not zero (it is $+20$). T
 
 What about the median?
 
-```{r}
+```{r hist-median}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'blue', xintercept = 0.708, size = 1)
 ```
@@ -99,7 +99,7 @@ In the figure, half of the observations in the histogram have an admission rate 
 The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is "closest" (at least on average) to all of the observations. (It is the value that produces the smallest *average deviation*---since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?
 
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.'}
+```{r hist-mean-median, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.'}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed") %>%
   gf_vline(color = 'blue', xintercept = 0.708, size = 1)
@@ -124,7 +124,7 @@ To more fully summarize the distribution we need to summarize the variability in
 
 One measure of variation that you have almost surely encountered before is the range. This numerical measure is the difference between the maximum and minimum values in the data. To compute this we provide the `df_stats()` function with two additional arguments, `min` and `max`. Then we can compute the difference between these values.
 
-```{r}
+```{r range}
 # Obtain minimum and maximum admission rate
 df_stats(~ adm_rate, data = colleges, min, max)
 
@@ -150,7 +150,7 @@ One way to deal with extreme values in the sample is simply to not include them 
 
 To compute the endpoint after truncatng the lower- and upper 10% we will use the `quantile()` function. This function finds the data value for an associated percentile provided to the function. If we wnat to truncate the lower- and upper 10% of a distribution we are interested in finding the values associated with the 10th and 90th percentiles. The syntax below shows two manners for obtaining these values for the admissions rate attribute.
 
-```{r}
+```{r percentiles}
 # Provide both percentiles separately
 colleges %>%
   df_stats(~ adm_rate, quantile(0.10), quantile(.90))
@@ -165,7 +165,7 @@ colleges %>%
 
 The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.'}
+```{r hist-percentiles, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.'}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.39284, size = 1) %>%
   gf_vline(color = 'red', xintercept = 0.94706, size = 1) %>%
@@ -178,7 +178,7 @@ gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
 
 One percentile range that statisticians and data scientists use a great deal is the interquartile range (IQR). This range demarcates the middle 50% of the distribution; it truncates the lower and upper 25% of the values. In other words it is based on finding the range between the 25th- and the 75th-percentiles. 
 
-```{r}
+```{r iqr}
 # Obtain values for the 25th- and 75th percentiles
 colleges %>%
   df_stats(~ adm_rate, quantile(c(0.25, 0.75)))
@@ -189,7 +189,7 @@ colleges %>%
 
 The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
 
-```{r echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.'}
+```{r hist-iqr, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.'}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%
   gf_vline(color = 'red', xintercept = 0.83815, size = 1)  %>%
@@ -203,7 +203,7 @@ gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
 
 Since the IQR describes the range for half of the observations, it can also be useful to compare this range with the entire range of the data. Below we compute these values and visualize them on a histogram of the distribution.
 
-```{r}
+```{r range-iqr}
 # Obtain values for the 25th- and 75th percentiles
 colleges %>%
   df_stats(~ adm_rate, min, quantile(c(0.25, 0.75)), max)
@@ -215,7 +215,7 @@ colleges %>%
 1 - 0
 ```
 
-```{r  echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.'}
+```{r  hist-range-iqr, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.'}
 # Plot the IQR and range on the distribution
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%
@@ -239,7 +239,7 @@ Understanding how similar the range of variation is in these areas of the distri
 
 Examining the lowest 25%, highest 25%, and middle 50% of the data is so common that a statistician named John Tukey invented a visualization technique called the box-and-whiskers plot to show these ranges. To create a box-and-whiskers plot we use the `gf_boxploth()` function.^[The `gf_boxplot()` function creates vertical a box-and-whiskers plot, and the `gf_boxploth()` function creates a horizontal box-and-whiskers plot.] This function takes a formula that is slightly different than we have been using, namely `0 ~ attribute name`.  (Note that the `0` in the formula is where the box-and-whiskers plot is centered on the *y*-axis.)
 
-```{r}
+```{r boxplot}
 gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  %>%
   gf_labs(x = "Admission rate")
 ```
@@ -251,7 +251,7 @@ The "box", etxending from 0.55 to 0.84, depicts the interuartile range; the midd
 
 The percentile range plots and the boxplot indicated the values of the distribution that demarcated a particular proportion of the distribution. For example, the boxplot visually showed the admission rates that were at the 25th, 50th, and 75th percentiles. Another plot that can be useful for understanding how much of a distribution is at or below a particular value is a plot of the *empirical cumulative density*. To create this plot we use the `gf_ecdf()` function from the **ggformula** package.
 
-```{r}
+```{r ecdf}
 gf_ecdf(~ adm_rate, data = colleges) %>%
   gf_labs(x = "Admission rate", y = 'Cumulative proportion')
 ```
@@ -262,7 +262,7 @@ To read this plot, we can map admission rates to their associated cumulative pro
 
 Two measures of variation that are commonly used by statisticians and datd scientists are the variance and the standard deviation. These can be obtained by including `var` and `sd`, respectively, in the `df_stats()` function.
 
-```{r}
+```{r var}
 # Compute variance and standard deviation
 colleges %>%
   df_stats(~ adm_rate, var, sd)
@@ -270,7 +270,7 @@ colleges %>%
 
 The variance and standard deviation are related to each other in that if we square the value of the standard deviation we obtain the variance.
 
-```{r}
+```{r sd-squared}
 # Square the standard deviation
 0.2113571 ^ 2
 ```
@@ -304,7 +304,7 @@ The sum of these squared deviations is 1,120. And the average squared deviation 
 
 In our example, the mean admission rate for the 2,019 institutions of higher education was 68.2%, and the standard deviation was 21.1%. We can combine these two pieces of information to make a statement about the admission rates for most of the institutions in our sample. In general, most observations in a distribution fall within one standard deviation of the mean. So, for our example, most institutions have an admission rate that is between 47.1% and 89.3%.^[If we know the exact shape of the distribution we can be more specific about the proportion of the distribution that fall within one standard deviation of the mean.]
 
-```{r}
+```{r sd-use}
 # 1 SD below the mean
 0.682 - 0.211
 
@@ -320,7 +320,7 @@ Sometimes analysts use numeric values to encode the categories of a categorical 
 
 Most of the time, the numerical summaries we computed earlier in the chapter do not work so well for categorical attributes. For example, it would not make sense to compute the mean region for the institutions. In general, it suffices to compute counts and proportions for the categories included in these attributes. To compute the category counts we use the `tally()` function. This function takes a formula indicating the name of the categorical attribute and the name of the data object. To find the category counts for the `region` attribute:
 
-```{r}
+```{r tally}
 # Compute category counts
 tally(~region, data = colleges)
 ```
@@ -328,7 +328,7 @@ tally(~region, data = colleges)
 
 To find the proportion of institutions in each region, we can divide each of the counts by 2,019.
 
-```{r}
+```{r tally-prop}
 # Compute category proportions
 tally(~region, data = colleges) / 2019
 ```
@@ -336,7 +336,7 @@ tally(~region, data = colleges) / 2019
 
 You could also compute the proportions directly with the `tally()` function by specifying the argument `format = "proportion"`.
 
-```{r}
+```{r tally-prop-direct}
 # Compute category proportions
 tally(~region, data = colleges, format = "proportion")
 ```
@@ -346,7 +346,7 @@ tally(~region, data = colleges, format = "proportion")
 
 If you have another non-standard measure of variation that you want to compute, you can always write your own function to compute it. For example, say you wanted to compute the mean absolute error (the mean of the absolute values of the deviations). To compute the mean absolute error, we first need to define a new function.
 
-```{r}
+```{r mae-func}
 mae <- function(x, na.rm = TRUE, ...) {
   avg <- mean(x, na.rm = na.rm, ...)
   abs_avg <- abs(x - avg)
@@ -357,7 +357,7 @@ mae <- function(x, na.rm = TRUE, ...) {
 
 We can now use this new function by employing it as an argument in the `df_stats()` function.
 
-```{r}
+```{r mae}
 colleges %>%
   df_stats(~ adm_rate, mae)
 ```
