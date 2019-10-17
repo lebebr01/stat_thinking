@@ -92,8 +92,8 @@ To better understand these summaries, we will visualize them on the distirbution
 ```
 
 <div class="figure">
-<img src="03-descriptive_files/figure-html/unnamed-chunk-4-1.png" alt="Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line." width="672" />
-<p class="caption">(\#fig:unnamed-chunk-4)Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.</p>
+<img src="03-descriptive_files/figure-html/hist-1.png" alt="Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line." width="672" />
+<p class="caption">(\#fig:hist)Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.</p>
 </div>
 
 The mean (displayed as a red, dashed line) represents the "balance point" of the distribution. If the distribution were a physical entity, it is the location where you would put you finger underneath the distribution to balance it. In a statistical sense, we balance the distribution by "balancing" the deviations. To explain this, let's examine a toy data set of five observations:
@@ -129,7 +129,7 @@ gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
 ## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
 ```
 
-<img src="03-descriptive_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="03-descriptive_files/figure-html/hist-median-1.png" width="672" />
 
 In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the $x$-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.
 
@@ -149,8 +149,8 @@ The goal of summarizing the distribution numerically is to provide a value that 
 ```
 
 <div class="figure">
-<img src="03-descriptive_files/figure-html/unnamed-chunk-6-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
-<p class="caption">(\#fig:unnamed-chunk-6)Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.</p>
+<img src="03-descriptive_files/figure-html/hist-mean-median-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
+<p class="caption">(\#fig:hist-mean-median)Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.</p>
 </div>
 
 In this example, both values are quite similar, so either would send a simlar message about the distribution of admission rates, namely that a typical admission rate for these 2,019 institutions of higher education is around 70%. 
@@ -254,8 +254,8 @@ The range of admissions rates for 80% of the 2,019 institutions of higher educat
 ```
 
 <div class="figure">
-<img src="03-descriptive_files/figure-html/unnamed-chunk-9-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
-<p class="caption">(\#fig:unnamed-chunk-9)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.</p>
+<img src="03-descriptive_files/figure-html/hist-percentiles-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
+<p class="caption">(\#fig:hist-percentiles)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.</p>
 </div>
 
 ### Interquartile Range (IQR)
@@ -295,8 +295,8 @@ The range of admission rates for the middle 50% of the distribution is 28.5%. Si
 ```
 
 <div class="figure">
-<img src="03-descriptive_files/figure-html/unnamed-chunk-11-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
-<p class="caption">(\#fig:unnamed-chunk-11)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.</p>
+<img src="03-descriptive_files/figure-html/hist-iqr-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
+<p class="caption">(\#fig:hist-iqr)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.</p>
 </div>
 
 Since the IQR describes the range for half of the observations, it can also be useful to compare this range with the entire range of the data. Below we compute these values and visualize them on a histogram of the distribution.
@@ -349,8 +349,8 @@ colleges %>%
 ```
 
 <div class="figure">
-<img src="03-descriptive_files/figure-html/unnamed-chunk-13-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively." width="672" />
-<p class="caption">(\#fig:unnamed-chunk-13)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.</p>
+<img src="03-descriptive_files/figure-html/hist-range-iqr-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively." width="672" />
+<p class="caption">(\#fig:hist-range-iqr)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.</p>
 </div>
 
 Although our sample of 2,019 institutions of higher education have wildy varying admissions rates (from 0% to 100%), the middle half of those institutions have admissions rates between 55% and 84%. We also note that the 25% of institutions with the lowest admissions rate range from 0% to 55%, while the 25% of institutions with the highest admissions rate range from only 84% to 100%. This means that there is more variation in the admissions rates in the institutions with the lowest admissions rate than in the institutions with the highest admissions rates.
@@ -365,7 +365,7 @@ gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  %>%
   gf_labs(x = "Admission rate")
 ```
 
-<img src="03-descriptive_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="03-descriptive_files/figure-html/boxplot-1.png" width="672" />
 
 The "box", etxending from 0.55 to 0.84, depicts the interuartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The "whiskers" extend to either the end of the range, or the next closest observation that is not an extreme value. (There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates.) The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.
 
@@ -380,7 +380,7 @@ gf_ecdf(~ adm_rate, data = colleges) %>%
   gf_labs(x = "Admission rate", y = 'Cumulative proportion')
 ```
 
-<img src="03-descriptive_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="03-descriptive_files/figure-html/ecdf-1.png" width="672" />
 
 To read this plot, we can map admission rates to their associated cumulative proportion. For example, one-quarter of the admission rates in the distribution are at or below 0.55; that is the admission rate of 0.55 has an associated cumulative proportion of 0.25. Similarly, an admission rate of 0.71 is associated with a cumulative proportion of 0.50; one-half of the admission rates in the distribution are at or below the value of 0.71.
 
