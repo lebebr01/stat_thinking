@@ -5,7 +5,7 @@ Data visualization is often the first step on the statistical journey to explore
 
 We will again use the data provided in the file *College-scorecard-clean.csv* to examine admissions rates for 2,019 institutions of higher education. As in the previous chapter, before we begin the analysis, we will load several packages that include functions we will use in the chapter. We also import the College Scorecard data using the `read_csv()` function.
 
-```{r message=FALSE}
+```{r}
 # Load packages
 library(tidyverse)
 library(ggformula)
