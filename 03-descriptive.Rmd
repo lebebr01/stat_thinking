@@ -275,6 +275,7 @@ We can also display both the histogram and the box-and-whiskers plot. In the syn
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_boxploth(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10) %>%
   gf_labs(x = "Admission rate", y = "Frequency")
+```
 
 ### Empirical Cumulative Density
 
