@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2019-10-18" />
+<meta name="date" content="2019-10-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -156,10 +156,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.1</b> Simple Regression continuous predictor</a></li>
-<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.2</b> Conditional Means</a></li>
-<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#categorical-predictors"><i class="fa fa-check"></i><b>6.3</b> Categorical Predictor(s)</a></li>
-<li class="chapter" data-level="6.4" data-path="linear-model.html"><a href="linear-model.html#multiple-regression"><i class="fa fa-check"></i><b>6.4</b> Multiple Regression</a></li>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="linear-model.html"><a href="linear-model.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Visualize distributions</a></li>
+<li class="chapter" data-level="6.1.2" data-path="linear-model.html"><a href="linear-model.html#decision-tree---regression-tree"><i class="fa fa-check"></i><b>6.1.2</b> Decision Tree - Regression Tree</a></li>
+<li class="chapter" data-level="6.1.3" data-path="linear-model.html"><a href="linear-model.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.1.3</b> Evaluating accuracy</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a></li>
+<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.3</b> Conditional Means</a></li>
+<li class="chapter" data-level="6.4" data-path="linear-model.html"><a href="linear-model.html#categorical-predictors"><i class="fa fa-check"></i><b>6.4</b> Categorical Predictor(s)</a></li>
+<li class="chapter" data-level="6.5" data-path="linear-model.html"><a href="linear-model.html#multiple-regression"><i class="fa fa-check"></i><b>6.5</b> Multiple Regression</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a></li>
 <li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
@@ -187,17 +192,169 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="linear-model" class="section level1">
 <h1><span class="header-section-number">Chapter 6</span> Linear Model</h1>
+<div id="regression-trees" class="section level2">
+<h2><span class="header-section-number">6.1</span> Regression Trees</h2>
+<p>In this example, data on major league baseball players that comes with an R package, <code>ISLR</code>. These data contain information about hitters in major league baseball for the 1986 season and also contain information about their starting salary for the 1987 season. Missing data related to salary information was dropped from the data. ### Loading R packages hen the packages can be loaded and some processing is done on the <code>Hitters</code> data to drop any missing data elements from the salary data attribute. Finally, the first few rows of the data are shown with the <code>head()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(ggformula)
+<span class="kw">library</span>(mosaic)
+<span class="kw">library</span>(ISLR)
+<span class="kw">library</span>(rpart)
+<span class="kw">library</span>(rsample)
+<span class="kw">library</span>(rpart.plot)
+
+<span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
+
+Hitters &lt;-<span class="st"> </span>Hitters <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">drop_na</span>(Salary)
+
+<span class="kw">head</span>(Hitters)</code></pre></div>
+<pre><code>##                   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits
+## -Alan Ashby         315   81     7   24  38    39    14   3449   835
+## -Alvin Davis        479  130    18   66  72    76     3   1624   457
+## -Andre Dawson       496  141    20   65  78    37    11   5628  1575
+## -Andres Galarraga   321   87    10   39  42    30     2    396   101
+## -Alfredo Griffin    594  169     4   74  51    35    11   4408  1133
+## -Al Newman          185   37     1   23   8    21     2    214    42
+##                   CHmRun CRuns CRBI CWalks League Division PutOuts Assists
+## -Alan Ashby           69   321  414    375      N        W     632      43
+## -Alvin Davis          63   224  266    263      A        W     880      82
+## -Andre Dawson        225   828  838    354      N        E     200      11
+## -Andres Galarraga     12    48   46     33      N        E     805      40
+## -Alfredo Griffin      19   501  336    194      A        W     282     421
+## -Al Newman             1    30    9     24      N        E      76     127
+##                   Errors Salary NewLeague
+## -Alan Ashby           10  475.0         N
+## -Alvin Davis          14  480.0         A
+## -Andre Dawson          3  500.0         N
+## -Andres Galarraga      4   91.5         N
+## -Alfredo Griffin      25  750.0         A
+## -Al Newman             7   70.0         A</code></pre>
+<div id="visualize-distributions" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> Visualize distributions</h3>
+<p>Exploring the distribution of the variable of interest is often the first step in an analysis. Here, we are interested in exploring the distribution of salaries of major league baseball players and seeing if data attributes can help to predict the salary for the player. The first plot explored is the density of the salary variable.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>Salary, <span class="dt">data =</span> Hitters)</code></pre></div>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<ol style="list-style-type: decimal">
+<li>What are some features of the distribution above?</li>
+<li>Could there be some concerns about this distribution if we are looking to do some analysis on this?</li>
+</ol>
+<p>In general, symmetric distributions are preferred over skewed distributions and some models make an assumption of normality, a special type of symmetric distribution. One way to help make a skewed distribution more symmetric is to transform the data. For a positively skewed distribution, such as income, rent, salary, etc, a log transformation is a common transformation that is used by econometricians and is a meaningful transformation. The largest downside of the transformation is that the original metric is lost and the analysis is done on the transformed metric. The log transformation identified above is often referred to as a non-linear transformation such that it alters values differently based on where these are on the scale. For example, the log transformation will minimize gaps that are higher up on the scale and spread out gaps in small values, this is why this type of transformation is common for right or positively skewed data. Below is a figure applying the log transformation to the salary attribute.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span><span class="kw">log</span>(Salary), <span class="dt">data =</span> Hitters)</code></pre></div>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /> ### Explore relationships between two quantitative attributes So far, the course has focused on exploring relationships between a quantitative and various qualitative (i.e. categorical or grouping) attributes. It is also common to want to explore relationships between two quantitative attributes. One way to visualize this type of relationship is with a scatterplot and this can be done with the <code>gf_point()</code> function. Similar to other multivariate figures, this function takes a formula as the input where the attribute of interest (log of salary here) is placed on the left hand side of the equation and the second attribute is placed on the right hand side of the equation. Below, the equation <code>log(Salary) ~ HmRun</code> means that the log salary is the attribute of interest (placed on the y-axis) is going to be plotted in conjunction with the number of home runs the player hit (placed on the x-axis). Let’s look at the figure.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(<span class="kw">log</span>(Salary) <span class="op">~</span><span class="st"> </span>HmRun, <span class="dt">data =</span> Hitters)</code></pre></div>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Another measure of association between two attributes is the correlation. This statistic gives a single number summary about the <strong>linear</strong> relationship between two quantitative attributes. The correlation ranges between -1 and +1 where 0 means no relationship. The closer the correlation gets to -1 or +1 indicates a stronger linear relationship between the two attributes. A correlation of -1 means the two attributes are inversely related, more specifically this means that as one goes up the other will tend to decrease. The opposite is true for a correlation of +1 indicating a positive relationship, as one attribute increases the other tends to increase as well.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(<span class="kw">log</span>(Salary) <span class="op">~</span><span class="st"> </span>HmRun, <span class="dt">data =</span> Hitters)</code></pre></div>
+<pre><code>## [1] 0.3398543</code></pre>
+</div>
+<div id="decision-tree---regression-tree" class="section level3">
+<h3><span class="header-section-number">6.1.2</span> Decision Tree - Regression Tree</h3>
+<p>Another way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. In this case, the regression tree will predict the numeric variable with many potential values rather than just two.</p>
+<p>The syntax for fitting a regression tree is very similar in R compared to the classification tree. The same function, <code>rpart()</code> is used and the function <code>rpart.plot()</code> will be used to visualize the fitted regression tree similar to before. The primary argument to the <code>rpart()</code> function is a formula where the left-hand side is the attribute of interest and the right hand side contains attributes that help predict the outcome. In the example below, the log of salary is the outcome and the number of home runs hit during the previous season is used as the sole continuous attribute used to predict the log of the salary. The data argument is also specified and the only difference here between a classification tree and the regression tree here is the <code>method</code> argument. In the regression tree the method argument should be set to <code>method = 'anova'</code>. This tells the <code>rpart()</code> function that the outcome is numeric and that an anova method should be used in the model fitting. The anova stands for Analysis of Variance and we will discuss this in more detail moving forward.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hit_reg &lt;-<span class="st"> </span><span class="kw">rpart</span>(<span class="kw">log</span>(Salary) <span class="op">~</span><span class="st"> </span>HmRun, <span class="dt">data =</span> Hitters, <span class="dt">method =</span> <span class="st">&quot;anova&quot;</span>)
+
+<span class="kw">rpart.plot</span>(hit_reg, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-5-1.png" width="672" /> The output from the regression tree is similar to that from a classification tree. One major difference however is that the predicted values in the end are numeric quantities instead of classes and the probabilities that were shown previously are not shown here as there is not a probability of being in a class. The percentage of cases in the predicted nodes at the end of the tree are still shown. The logic for following the tree is the same as before where each split can have two new paths to follow and then the variable(s) are re-evaluated after the first split to see if additional splits can help predict the outcome of interest.</p>
+<p>Below is a figure that builds on the scatterplot we saw above. Vertical lines are shown that indicate the two splits that were established from the above regression tree. These splits are where the end buckets lie and all of the data points residing in a single area have the same predicted log salary.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(<span class="kw">log</span>(Salary) <span class="op">~</span><span class="st"> </span>HmRun, <span class="dt">data =</span> Hitters, <span class="dt">color =</span> <span class="st">&#39;gray55&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">gf_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(<span class="fl">8.5</span>, <span class="dv">19</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">2</span>, <span class="dt">y =</span> <span class="fl">4.2</span>, <span class="dt">label =</span> <span class="st">&quot;5.6&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">12</span>, <span class="dt">y =</span> <span class="fl">4.2</span>, <span class="dt">label =</span> <span class="st">&quot;6.1&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">32</span>, <span class="dt">y =</span> <span class="fl">4.2</span>, <span class="dt">label =</span> <span class="st">&quot;6.4&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Log of player salary&quot;</span>,
+            <span class="dt">x =</span> <span class="st">&quot;Number of Home Runs&quot;</span>,
+            <span class="dt">title =</span> <span class="st">&quot;Log salary by number of home runs&quot;</span>)</code></pre></div>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-6-1.png" width="672" /> #### Explore another attribute Let’s explore another attribute, the number of hits in the previous season and how this may be related to the log of the salary. First a scatterplot is shown then the correlation is computed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(<span class="kw">log</span>(Salary) <span class="op">~</span><span class="st"> </span>Hits, <span class="dt">data =</span> Hitters)</code></pre></div>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(<span class="kw">log</span>(Salary) <span class="op">~</span><span class="st"> </span>Hits, <span class="dt">data =</span> Hitters)</code></pre></div>
+<pre><code>## [1] 0.4495841</code></pre>
+<p>Updating the regression tree with another variable is similar to a classification tree. More than one attribute used to help predict the outcome are separated by <code>+</code> signs. In addition, I specified the model to terminate when the complexity parameter (CP) gets smaller than .012.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hit_reg &lt;-<span class="st"> </span><span class="kw">rpart</span>(<span class="kw">log</span>(Salary) <span class="op">~</span><span class="st"> </span>HmRun <span class="op">+</span><span class="st"> </span>Hits, <span class="dt">data =</span> Hitters, <span class="dt">method =</span> <span class="st">&quot;anova&quot;</span>, <span class="dt">cp =</span> .<span class="dv">012</span>)
+
+<span class="kw">rpart.plot</span>(hit_reg, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The figure below attempts to show the regression tree in a scatterplot. Now there are more predicted buckets and these are represented by the square areas of the figure below. All of the data points within each square would receive the same predicted score.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(HmRun <span class="op">~</span><span class="st"> </span>Hits, <span class="dt">data =</span> Hitters, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">log</span>(Salary)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">gf_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(<span class="dv">118</span>, <span class="dv">146</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_segment</span>(<span class="fl">8.5</span> <span class="op">+</span><span class="st"> </span><span class="fl">8.5</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="dv">118</span>, <span class="dt">size =</span> <span class="fl">0.75</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_segment</span>(<span class="fl">8.5</span> <span class="op">+</span><span class="st"> </span><span class="fl">8.5</span> <span class="op">~</span><span class="st"> </span><span class="dv">146</span> <span class="op">+</span><span class="st"> </span><span class="dv">238</span>, <span class="dt">size =</span> <span class="fl">0.75</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">1</span>, <span class="dt">y =</span> <span class="dv">3</span>, <span class="dt">label =</span> <span class="st">&quot;5.4&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">128</span>, <span class="dt">y =</span> <span class="dv">3</span>, <span class="dt">label =</span> <span class="st">&quot;6.3&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">170</span>, <span class="dt">y =</span> <span class="dv">3</span>, <span class="dt">label =</span> <span class="st">&quot;6.1&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">50</span>, <span class="dt">y =</span> <span class="dv">35</span>, <span class="dt">label =</span> <span class="st">&quot;5.9&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_text</span>(<span class="dt">x =</span> <span class="dv">200</span>, <span class="dt">y =</span> <span class="dv">35</span>, <span class="dt">label =</span> <span class="st">&quot;6.7&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Number of Hits&quot;</span>,
+            <span class="dt">y =</span> <span class="st">&quot;Number of Home Runs&quot;</span>,
+            <span class="dt">title =</span> <span class="st">&quot;Log salary by number of home runs and hits&quot;</span>)</code></pre></div>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<p><img src="06-regression_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>One thing that can help with interpretation when the data are transformed, in this case by taking the log of the salary variable, is to back-transform to the original salary metric. In this case, the inverse of the log is the exponential function. This can be achieved in R with the <code>exp()</code> function. The predicted values from the regression tree are back-transformed to show the salaries in their original metric, in thousands of dollars.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exp</span>(<span class="kw">c</span>(<span class="fl">5.4</span>, <span class="fl">5.9</span>, <span class="fl">6.3</span>, <span class="fl">6.1</span>, <span class="fl">6.7</span>))</code></pre></div>
+<pre><code>## [1] 221.4064 365.0375 544.5719 445.8578 812.4058</code></pre>
+</div>
+<div id="evaluating-accuracy" class="section level3">
+<h3><span class="header-section-number">6.1.3</span> Evaluating accuracy</h3>
+<p>In the classification tree example, a natural metric to evaluate how well the model was doing was the classification accuracy. This was most useful being computed individually for each class that was predicted instead of solely overall. In the regression tree example, we do not have class membership, instead we have the original observed salary and the predicted salary. One measure that could be used for accuracy is on average how far do the predicted scores deviate from the observed scores. The below code chunk computes those variables for use, one on the log scale and another on the original back-transformed scale.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Hitters &lt;-<span class="st"> </span>Hitters <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">log_salary_pred =</span> <span class="kw">predict</span>(hit_reg),
+         <span class="dt">log_salary =</span> <span class="kw">log</span>(Salary),
+         <span class="dt">log_error =</span> log_salary <span class="op">-</span><span class="st"> </span>log_salary_pred,
+         <span class="dt">salary_pred =</span> <span class="kw">exp</span>(log_salary_pred),
+         <span class="dt">error =</span> Salary <span class="op">-</span><span class="st"> </span>salary_pred)
+<span class="kw">head</span>(Hitters)</code></pre></div>
+<pre><code>##   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun CRuns CRBI
+## 1   315   81     7   24  38    39    14   3449   835     69   321  414
+## 2   479  130    18   66  72    76     3   1624   457     63   224  266
+## 3   496  141    20   65  78    37    11   5628  1575    225   828  838
+## 4   321   87    10   39  42    30     2    396   101     12    48   46
+## 5   594  169     4   74  51    35    11   4408  1133     19   501  336
+## 6   185   37     1   23   8    21     2    214    42      1    30    9
+##   CWalks League Division PutOuts Assists Errors Salary NewLeague
+## 1    375      N        W     632      43     10  475.0         N
+## 2    263      A        W     880      82     14  480.0         A
+## 3    354      N        E     200      11      3  500.0         N
+## 4     33      N        E     805      40      4   91.5         N
+## 5    194      A        W     282     421     25  750.0         A
+## 6     24      N        E      76     127      7   70.0         A
+##   log_salary_pred log_salary   log_error salary_pred      error
+## 1        5.375205   6.163315  0.78810957    215.9842  259.01581
+## 2        6.260120   6.173786 -0.08633342    523.2815  -43.28148
+## 3        6.260120   6.214608 -0.04551143    523.2815  -23.28148
+## 4        5.872782   4.516339 -1.35644260    355.2357 -263.73572
+## 5        6.112038   6.620073  0.50803537    451.2574  298.74263
+## 6        5.375205   4.248495 -1.12670999    215.9842 -145.98419</code></pre>
+<p>hen, the <code>df_stats()</code> function is used to compute summary statistics for the <code>log_error</code> attribute which represented the difference between the observed and predicted log salaries. After this, the same statistics are computed for the error after back-transforming the data. Both of these are not quite what we want here, any idea why?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Hitters <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>log_error, mean, median, sd, min, max)</code></pre></div>
+<pre><code>##   mean_log_error median_log_error sd_log_error min_log_error max_log_error
+## 1    1.09754e-15         0.118683    0.7493933     -1.612228      2.287419</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Hitters <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>error, mean, median, sd, min, max)</code></pre></div>
+<pre><code>##   mean_error median_error sd_error min_error max_error
+## 1   115.4757     34.01581 386.1183  -609.801  1911.349</code></pre>
+<p>Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the log salary scale. In general, lower average distances means the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without some prior standardization.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Hitters <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span><span class="kw">abs</span>(log_error), mean, median, sd, min, max)</code></pre></div>
+<pre><code>##   mean_abs(log_error) median_abs(log_error) sd_abs(log_error)
+## 1           0.6128455              0.527838         0.4296245
+##   min_abs(log_error) max_abs(log_error)
+## 1       0.0002568557           2.287419</code></pre>
+</div>
+</div>
 <div id="simple-regression-continuous-predictor" class="section level2">
-<h2><span class="header-section-number">6.1</span> Simple Regression continuous predictor</h2>
+<h2><span class="header-section-number">6.2</span> Simple Regression continuous predictor</h2>
 </div>
 <div id="conditional-means" class="section level2">
-<h2><span class="header-section-number">6.2</span> Conditional Means</h2>
+<h2><span class="header-section-number">6.3</span> Conditional Means</h2>
 </div>
 <div id="categorical-predictors" class="section level2">
-<h2><span class="header-section-number">6.3</span> Categorical Predictor(s)</h2>
+<h2><span class="header-section-number">6.4</span> Categorical Predictor(s)</h2>
 </div>
 <div id="multiple-regression" class="section level2">
-<h2><span class="header-section-number">6.4</span> Multiple Regression</h2>
+<h2><span class="header-section-number">6.5</span> Multiple Regression</h2>
 
 </div>
 </div>
