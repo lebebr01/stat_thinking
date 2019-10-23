@@ -10,5 +10,6 @@ Imports:
   titanic,
   rsample,
   rpart,
-  rpart.plot
+  rpart.plot,
+  ISLR
 Remotes: lebebr01/statthink
