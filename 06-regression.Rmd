@@ -13,14 +13,15 @@ library(ISLR)
 library(rpart)
 library(rsample)
 library(rpart.plot)
+library(statthink)
 
-theme_set(theme_bw())
+# Set theme for plots
+theme_set(theme_statthinking())
 
 Hitters <- Hitters %>%
   drop_na(Salary)
 
 head(Hitters)
-
 ```
 
 

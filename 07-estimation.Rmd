@@ -1,5 +1,19 @@
 # Estimation / Bootstrap / Uncertainty   
 
+```{r chap-setup}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(statthink)
+
+# Set theme for plots
+theme_set(theme_statthinking())
+
+baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv")
+head(baby)
+```
+
+
 Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. 
 
 ## Estimating Error
