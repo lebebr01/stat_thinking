@@ -2,7 +2,7 @@
 
 Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. 
 
-### Estimating Error
+## Estimating Error
 To get some sense of the amount of error in the estimate of the linear slope here, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:
 
 1. Resample the observed data available, with replacement
@@ -42,3 +42,8 @@ gf_density(~ slope, data = baby_coef)
 baby_coef %>%
   df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
 ```
+
+## Categorical Predictor(s)
+
+
+## Multiple Regression

@@ -264,9 +264,3 @@ coef(baby_reg_max)
 
 ## Conditional Means
 
-
-## Categorical Predictor(s)
-
-
-## Multiple Regression
-
