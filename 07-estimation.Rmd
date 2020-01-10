@@ -1,6 +1,6 @@
 # Estimation / Bootstrap / Uncertainty   
 
-```{r chap-setup}
+```{r chap-setup, message = FALSE}
 library(tidyverse)
 library(ggformula)
 library(mosaic)
