@@ -51,7 +51,7 @@ gf_density(~ tripduration_minutes, data = nice_ride, color = ~ morning,
   gf_labs(x = "Trip Duration (in minutes)", 
           title = "Multivariate distribution of trip duration by time of day bike was rented",
           fill = "",
-          color =)
+          color = "")
 ```
 
 ```{r}
