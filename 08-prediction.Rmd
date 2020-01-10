@@ -5,8 +5,8 @@
 
 
 ## Compared linear model with median
-## Skewed Data - Inference
-#  In one example, a skewed distribution was transformed prior to conducting the analysis with a regression tree. Another approach could be to use a more robust statistic such as the median. One limitation of the median, is that a linear regression model as we have covered so far, does not allow you to fit the model while using the median.
+### Skewed Data - Inference
+In one example, a skewed distribution was transformed prior to conducting the analysis with a regression tree. Another approach could be to use a more robust statistic such as the median. One limitation of the median, is that a linear regression model as we have covered so far, does not allow you to fit the model while using the median.
 
 ```{r chap-setup}
 library(tidyverse)
@@ -27,7 +27,7 @@ adm_model <- lm(adm_rate ~ preddeg, data = college_score)
 coef(adm_model)
 ```
 
-rior to doing the median, we can bootstrap the mean difference from the model above.
+Prior to doing the median, we can bootstrap the mean difference from the model above.
 
 ```{r boot-admrate}
 resample_admrate <- function(...) {
