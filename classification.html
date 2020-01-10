@@ -217,65 +217,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In this example, we will explore data from the titanic that comes from Kaggle (<a href="https://www.kaggle.com/c/titanic/data" class="uri">https://www.kaggle.com/c/titanic/data</a>). You can view the attributes in the data from the link previous. The following set of code will install a couple a new packages that we will utilize for this section of the course, the titanic package has the data we will use and the rpart package includes functions to perform the tree based models we will employ.</p>
 <div id="topic-decision-trees" class="section level2">
 <h2><span class="header-section-number">5.1</span> Topic: Decision Trees</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)</code></pre></div>
-<pre><code>## Loading required package: ggstance</code></pre>
-<pre><code>## 
-## Attaching package: &#39;ggstance&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
-## 
-##     geom_errorbarh, GeomErrorbarh</code></pre>
-<pre><code>## 
-## New to ggformula?  Try the tutorials: 
-##  learnr::run_tutorial(&quot;introduction&quot;, package = &quot;ggformula&quot;)
-##  learnr::run_tutorial(&quot;refining&quot;, package = &quot;ggformula&quot;)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre></div>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## Loading required package: mosaicData</code></pre>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## 
-## Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
-## 
-##     expand, pack, unpack</code></pre>
-<pre><code>## Registered S3 method overwritten by &#39;mosaic&#39;:
-##   method                           from   
-##   fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
-<pre><code>## 
-## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
-## additional features.  The original behavior of these functions should not be affected by this.
-## 
-## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
-<pre><code>## 
-## Attaching package: &#39;mosaic&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
-## 
-##     mean</code></pre>
-<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
-## 
-##     count, do, tally</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     cross</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     stat</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
-##     quantile, sd, t.test, var</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     max, mean, min, prod, range, sample, sum</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(titanic)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(ggformula)
+<span class="kw">library</span>(mosaic)
+<span class="kw">library</span>(titanic)
 <span class="kw">library</span>(rpart)
 <span class="kw">library</span>(rsample)
 <span class="kw">library</span>(rpart.plot)
@@ -310,7 +255,7 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ## 1 Died       549
 ## 2 Survived   342</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived,  <span class="dt">data =</span> titanic)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <div id="fitting-a-classification-tree" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Fitting a Classification Tree</h3>
 <p>Let’s class_tree our first classification tree to predict the dichotomous attribute, survival. For this, we will use the rpart() function from the rpart package. The first argument to the rpart() function is a formula where the outcome of interest is specified to the left of the ~ and the attributes that are predictive of the outcome are specified to the right of the ~ separated with + signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify individuals based on the values in the data, therefore we specify method = ‘class’. The final argument is the data element, in this case titanic.</p>
@@ -319,7 +264,7 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
    <span class="dt">method =</span> <span class="st">&#39;class&#39;</span>, <span class="dt">data =</span> titanic)
 
 <span class="kw">rpart.plot</span>(class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpart.rules</span>(class_tree, <span class="dt">cover =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>##  survived                                                                                                      cover
 ##      0.11 when Sex is   male                                                       &amp; Age &lt;  6.5 &amp; SibSp &gt;= 3      1%
@@ -352,14 +297,14 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
 ## 3 0.023392      3   0.49415 0.51170 0.034675
-## 4 0.020468      4   0.47076 0.50585 0.034524
-## 5 0.010234      5   0.45029 0.51462 0.034749
-## 6 0.010000      8   0.41813 0.49708 0.034295</code></pre>
+## 4 0.020468      4   0.47076 0.49415 0.034217
+## 5 0.010234      5   0.45029 0.50585 0.034524
+## 6 0.010000      8   0.41813 0.51170 0.034675</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotcp</span>(class_tree)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prune_class_tree &lt;-<span class="st"> </span><span class="kw">prune</span>(class_tree, <span class="dt">cp =</span> .<span class="dv">02</span>)
 <span class="kw">rpart.plot</span>(prune_class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="accuracy" class="section level3">
 <h3><span class="header-section-number">5.1.3</span> Accuracy</h3>
@@ -440,11 +385,11 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ## 3 Survived Died            97
 ## 4 Survived Survived       245</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict, <span class="dt">data =</span> titanic_predict)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict, <span class="dt">data =</span> titanic_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Proportion&#39;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">1</span>)))</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">same_class =</span> <span class="kw">ifelse</span>(survived <span class="op">==</span><span class="st"> </span>tree_predict, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>same_class, mean, sum)</code></pre></div>
@@ -468,7 +413,7 @@ titanic_predict <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict_full, <span class="dt">data =</span> titanic_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;proportion&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">1</span>)))</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">same_class =</span> <span class="kw">ifelse</span>(survived <span class="op">==</span><span class="st"> </span>tree_predict_full, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>same_class, mean, sum)</code></pre></div>
@@ -496,11 +441,11 @@ titanic_test &lt;-<span class="st"> </span><span class="kw">testing</span>(titan
    <span class="dt">method =</span> <span class="st">&#39;class&#39;</span>, <span class="dt">data =</span> titanic_train)
 
 <span class="kw">rpart.plot</span>(class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prune_class_tree &lt;-<span class="st"> </span><span class="kw">prune</span>(class_tree, <span class="dt">cp =</span> .<span class="dv">02</span>)
 
 <span class="kw">rpart.plot</span>(prune_class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>This seems like a reasonable model. Let’s check the model accuracy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict &lt;-<span class="st"> </span>titanic_train <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tree_predict =</span> <span class="kw">predict</span>(prune_class_tree, <span class="dt">type =</span> <span class="st">&#39;class&#39;</span>))
@@ -539,7 +484,7 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
 <span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_Survived, <span class="dt">data =</span> survival_prop)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <div id="bootstrap-variation-in-prediction-accuracy" class="section level4">
 <h4><span class="header-section-number">5.1.6.1</span> Bootstrap variation in prediction accuracy</h4>
 <p>We can apply these same methods to evaluate the prediction accuracy based on the classification model above. When using the bootstrap, we can get an estimate for how much variation there is in the classification accuracy based on the sample that we have. In addition, we can explore how different the prediction accuracy would be for many samples when using all the data and by splitting the data into training and test sets. Bootstrap full data.</p>
@@ -566,7 +511,7 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
 <span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_same_class, <span class="dt">data =</span> predict_accuracy_fulldata)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_predict_acc_split &lt;-<span class="st"> </span><span class="cf">function</span>(data) {
   titanic_split &lt;-<span class="st"> </span><span class="kw">initial_split</span>(titanic, <span class="dt">prop =</span> .<span class="dv">7</span>)
   titanic_train &lt;-<span class="st"> </span><span class="kw">training</span>(titanic_split)
@@ -589,13 +534,13 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
 <span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_same_class, <span class="dt">data =</span> predict_accuracy_traintest)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(
   <span class="kw">mutate</span>(predict_accuracy_fulldata, <span class="dt">type =</span> <span class="st">&quot;Full Data&quot;</span>),
   <span class="kw">mutate</span>(predict_accuracy_traintest, <span class="dt">type =</span> <span class="st">&quot;Train/Test&quot;</span>)
 ) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_same_class, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>type, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">size =</span> <span class="fl">1.25</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 </div>
 </div>
 <div id="cross-validation" class="section level3">

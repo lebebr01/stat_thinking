@@ -214,81 +214,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="estimation-bootstrap-uncertainty" class="section level1">
 <h1><span class="header-section-number">Chapter 7</span> Estimation / Bootstrap / Uncertainty</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)</code></pre></div>
-<pre><code>## Loading required package: ggstance</code></pre>
-<pre><code>## 
-## Attaching package: &#39;ggstance&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
-## 
-##     geom_errorbarh, GeomErrorbarh</code></pre>
-<pre><code>## 
-## New to ggformula?  Try the tutorials: 
-##  learnr::run_tutorial(&quot;introduction&quot;, package = &quot;ggformula&quot;)
-##  learnr::run_tutorial(&quot;refining&quot;, package = &quot;ggformula&quot;)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre></div>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## Loading required package: mosaicData</code></pre>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## 
-## Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
-## 
-##     expand, pack, unpack</code></pre>
-<pre><code>## Registered S3 method overwritten by &#39;mosaic&#39;:
-##   method                           from   
-##   fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
-<pre><code>## 
-## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
-## additional features.  The original behavior of these functions should not be affected by this.
-## 
-## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
-<pre><code>## 
-## Attaching package: &#39;mosaic&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
-## 
-##     mean</code></pre>
-<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
-## 
-##     count, do, tally</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     cross</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     stat</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
-##     quantile, sd, t.test, var</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     max, mean, min, prod, range, sample, sum</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(ggformula)
+<span class="kw">library</span>(mosaic)
+<span class="kw">library</span>(broom)
 <span class="kw">library</span>(statthink)
 
 <span class="co"># Set theme for plots</span>
 <span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())
 
-baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv&quot;</span>)</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   birth_weight = col_double(),
-##   gestational_days = col_double(),
-##   maternal_age = col_double(),
-##   maternal_height = col_double(),
-##   maternal_pregnancy_weight = col_double(),
-##   maternal_smoker = col_logical()
-## )</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(baby)</code></pre></div>
+baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv&quot;</span>)
+<span class="kw">head</span>(baby)</code></pre></div>
 <pre><code>## # A tibble: 6 x 6
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
 ##          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
@@ -324,7 +260,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 
 <span class="kw">resample_baby</span>()</code></pre></div>
 <pre><code>##                          .
-## gestational_days 0.4605535</code></pre>
+## gestational_days 0.4315377</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -335,7 +271,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
 <pre><code>##          5%       50%       95%
-## 1 0.3955261 0.4676609 0.5429267</code></pre>
+## 1 0.3950924 0.4684728 0.5437349</code></pre>
 </div>
 <div id="categorical-predictors" class="section level2">
 <h2><span class="header-section-number">7.2</span> Categorical Predictor(s)</h2>
@@ -428,7 +364,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 
 <span class="kw">resample_baby</span>()</code></pre></div>
 <pre><code>##                             .
-## maternal_smokerTRUE -9.502995</code></pre>
+## maternal_smokerTRUE -8.115329</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -439,7 +375,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
 <pre><code>##          5%       50%       95%
-## 1 -10.98198 -9.254646 -7.514375</code></pre>
+## 1 -11.05733 -9.255647 -7.484528</code></pre>
 </div>
 </div>
 <div id="more-than-2-categorical-groups" class="section level2">
@@ -547,9 +483,9 @@ birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.1
 <pre><code>## # A tibble: 3 x 2
 ##   term                                         estimate
 ##   &lt;chr&gt;                                           &lt;dbl&gt;
-## 1 (Intercept)                                   123.   
-## 2 I(gestational_days - mean(gestational_days))    0.468
-## 3 maternal_smokerTRUE                           -10.2</code></pre>
+## 1 (Intercept)                                   122.   
+## 2 I(gestational_days - mean(gestational_days))    0.396
+## 3 maternal_smokerTRUE                            -8.29</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
@@ -588,10 +524,10 @@ coef_baby <span class="op">%&gt;%</span>
 <pre><code>## # A tibble: 4 x 2
 ##   term                                                             estimate
 ##   &lt;chr&gt;                                                               &lt;dbl&gt;
-## 1 (Intercept)                                                       124.   
-## 2 I(gestational_days - mean(gestational_days))                        0.324
-## 3 maternal_smokerTRUE                                                -8.89 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.332</code></pre>
+## 1 (Intercept)                                                       122.   
+## 2 I(gestational_days - mean(gestational_days))                        0.359
+## 3 maternal_smokerTRUE                                                -7.93 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.326</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 

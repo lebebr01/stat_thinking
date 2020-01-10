@@ -7,135 +7,8 @@ In this example, we will explore data from the titanic that comes from Kaggle (h
 
 ```r
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
-```
-
-```
-## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0
-```
-
-```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-```
-
-```r
 library(ggformula)
-```
-
-```
-## Loading required package: ggstance
-```
-
-```
-## 
-## Attaching package: 'ggstance'
-```
-
-```
-## The following objects are masked from 'package:ggplot2':
-## 
-##     geom_errorbarh, GeomErrorbarh
-```
-
-```
-## 
-## New to ggformula?  Try the tutorials: 
-## 	learnr::run_tutorial("introduction", package = "ggformula")
-## 	learnr::run_tutorial("refining", package = "ggformula")
-```
-
-```r
 library(mosaic)
-```
-
-```
-## Loading required package: lattice
-```
-
-```
-## Loading required package: mosaicData
-```
-
-```
-## Loading required package: Matrix
-```
-
-```
-## 
-## Attaching package: 'Matrix'
-```
-
-```
-## The following objects are masked from 'package:tidyr':
-## 
-##     expand, pack, unpack
-```
-
-```
-## Registered S3 method overwritten by 'mosaic':
-##   method                           from   
-##   fortify.SpatialPolygonsDataFrame ggplot2
-```
-
-```
-## 
-## The 'mosaic' package masks several functions from core packages in order to add 
-## additional features.  The original behavior of these functions should not be affected by this.
-## 
-## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.
-```
-
-```
-## 
-## Attaching package: 'mosaic'
-```
-
-```
-## The following object is masked from 'package:Matrix':
-## 
-##     mean
-```
-
-```
-## The following objects are masked from 'package:dplyr':
-## 
-##     count, do, tally
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     cross
-```
-
-```
-## The following object is masked from 'package:ggplot2':
-## 
-##     stat
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
-##     quantile, sd, t.test, var
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     max, mean, min, prod, range, sample, sum
-```
-
-```r
 library(titanic)
 library(rpart)
 library(rsample)
@@ -187,7 +60,7 @@ count(titanic, survived)
 gf_bar(~ survived,  data = titanic)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
 
 ### Fitting a Classification Tree
@@ -204,7 +77,7 @@ class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Pa
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 ```r
@@ -250,16 +123,16 @@ printcp(class_tree)
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
 ## 3 0.023392      3   0.49415 0.51170 0.034675
-## 4 0.020468      4   0.47076 0.50585 0.034524
-## 5 0.010234      5   0.45029 0.51462 0.034749
-## 6 0.010000      8   0.41813 0.49708 0.034295
+## 4 0.020468      4   0.47076 0.49415 0.034217
+## 5 0.010234      5   0.45029 0.50585 0.034524
+## 6 0.010000      8   0.41813 0.51170 0.034675
 ```
 
 ```r
 plotcp(class_tree)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 
 ```r
@@ -267,7 +140,7 @@ prune_class_tree <- prune(class_tree, cp = .02)
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 ### Accuracy
 
@@ -366,7 +239,7 @@ titanic_predict %>%
 gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 
 ```r
@@ -375,7 +248,7 @@ gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict, position = "fil
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 
 ```r
@@ -419,7 +292,7 @@ gf_bar(~ survived, fill = ~tree_predict_full, data = titanic_predict, position =
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 
 
 ```r
@@ -467,7 +340,7 @@ class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Pa
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
 
 ```r
@@ -476,7 +349,7 @@ prune_class_tree <- prune(class_tree, cp = .02)
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 This seems like a reasonable model. Let's check the model accuracy.
 
@@ -539,7 +412,7 @@ survival_prop <- map(1:1000, resample_titanic) %>%
 gf_density(~ mean_Survived, data = survival_prop)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 
 #### Bootstrap variation in prediction accuracy
 
@@ -584,7 +457,7 @@ predict_accuracy_fulldata <- map(1:2000, calc_predict_acc) %>%
 gf_density(~ mean_same_class, data = predict_accuracy_fulldata)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-22-1.png" width="672" />
 
 
 ```r
@@ -619,7 +492,7 @@ predict_accuracy_traintest <- map(1:2000, calc_predict_acc_split) %>%
 gf_density(~ mean_same_class, data = predict_accuracy_traintest)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-24-1.png" width="672" />
 
 
 ```r
@@ -630,7 +503,7 @@ bind_rows(
   gf_density(~ mean_same_class, color = ~ type, fill = NA, size = 1.25)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" />
 
 
 ### Cross-validation
