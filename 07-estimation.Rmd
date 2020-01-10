@@ -167,7 +167,7 @@ baby_coef %>%
 Before the model contained one attribute that represented two groups. What happens when there are more than two groups for an attribute? To explore this, the college scorecard data will be used again.
 
 ```{r read-college-data}
-college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-4143.csv", guess_max = 10000)
+college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", guess_max = 10000)
 head(college_score)
 ```
 

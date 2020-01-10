@@ -18,7 +18,7 @@ library(statthink)
 # Set theme for plots
 theme_set(theme_statthinking())
 
-college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-4143.csv", guess_max = 10000)
+college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", guess_max = 10000)
 head(college_score)
 ```
 
