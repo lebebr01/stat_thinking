@@ -6,68 +6,95 @@ library(tidyverse)
 library(ggformula)
 library(statthink)
 
+# Add plot theme
+theme_set(theme_statthinking())
+
 # Import data
-colleges <- read_csv(
-  file = "https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", 
-  guess_max = 10000
-  )
+head(nice_ride)
+```
+
+```
+## # A tibble: 6 x 17
+##   tripduration start_station start_station_n… end_station end_station_name
+##          <dbl> <chr>         <chr>            <chr>       <chr>           
+## 1         3290 36            South 2nd Stree… 36          South 2nd Stree…
+## 2         2413 NULL          NULL             NULL        NULL            
+## 3         1505 154           Lake Harriet Ba… 180         Lake Street & K…
+## 4         1416 180           Lake Street & K… 180         Lake Street & K…
+## 5          915 8             YWCA Downtown    48          26th Street & H…
+## 6         3841 39            Loring Park      39          Loring Park     
+## # … with 12 more variables: bikeid <dbl>, usertype <chr>, birth_year <dbl>,
+## #   sex <dbl>, bike_type <chr>, month <dbl>, year <dbl>, day <int>, hour <int>,
+## #   minute <int>, morning <chr>, tripduration_minutes <dbl>
 ```
 
 Real world data are never as simple exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.
+
+
+```r
+gf_histogram(~ tripduration_minutes, data = nice_ride, bins = 30) %>% 
+  gf_labs(x = "Trip Duration (in minutes)", 
+          title = "Univariate distribution of trip duration")
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+
  
 
 
 ```r
-gf_histogram(~ adm_rate, data = colleges, bins = 30, fill = ~ preddeg) %>%
-  gf_labs(x = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          fill = "Primary Deg")
+gf_histogram(~ tripduration_minutes, data = nice_ride, bins = 30, fill = ~ factor(month)) %>%
+  gf_labs(x = "Trip Duration (in minutes)", 
+          title = "Multivariate distribution of trip duration by time of day bike was rented",
+          fill = "")
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
 Often density plots are easier to visualize when there are more than one group. To plot more than one density curve, we need to specify the color argument instead of fill.
 
 
 ```r
-gf_density(~ adm_rate, data = colleges, color = ~ preddeg) %>%
-  gf_labs(x = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          color = "Primary Deg")
-```
-
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-2-1.png" width="672" />
-
-
-```r
-gf_density(~ adm_rate, data = colleges, fill = ~ preddeg) %>%
-  gf_labs(x = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          fill = "Primary Deg")
+gf_density(~ tripduration_minutes, data = nice_ride, color = ~ morning, size = 1) %>%
+  gf_labs(x = "Trip Duration (in minutes)", 
+          title = "Multivariate distribution of trip duration by time of day bike was rented",
+          color = "")
 ```
 
 <img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 ```r
-gf_density(~ adm_rate, data = colleges, fill = ~ preddeg, color = ~ preddeg) %>%
-  gf_labs(x = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          color = "Primary Deg",
-          fill = "Primary Deg")
+gf_density(~ tripduration_minutes, data = nice_ride, fill = ~ morning, size = 1) %>%
+  gf_labs(x = "Trip Duration (in minutes)", 
+          title = "Multivariate distribution of trip duration by time of day bike was rented",
+          fill = "")
 ```
 
 <img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 
 ```r
-gf_density(~ adm_rate, data = colleges, color = ~ preddeg, fill = 'gray85', size = 1) %>%
-  gf_labs(x = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          color = "Primary Deg")
+gf_density(~ tripduration_minutes, data = nice_ride, color = ~ morning, 
+           fill = ~ morning, size = 1) %>%
+  gf_labs(x = "Trip Duration (in minutes)", 
+          title = "Multivariate distribution of trip duration by time of day bike was rented",
+          fill = "",
+          color = "")
 ```
 
 <img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+
+
+```r
+gf_density(~ tripduration_minutes, data = nice_ride, color = ~ factor(month), 
+           fill = 'gray85', size = 1) %>%
+  gf_labs(x = "Trip Duration (in minutes)", 
+          title = "Multivariate distribution of trip duration by time of day bike was rented",
+          color = "")
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 ## Violin Plots
  
 Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.ArithmeticError
@@ -80,7 +107,7 @@ gf_violin(adm_rate ~ preddeg, data = colleges) %>%
           x = "Primary Deg")
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
 Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the `fill = ` argument.ArithmeticError
 
@@ -92,7 +119,7 @@ gf_violin(adm_rate ~ preddeg, data = colleges, fill = 'gray85') %>%
           x = "Primary Deg")
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 Adding quantiles are useful to aid in the comparison with the violin plots. These can be added with the `draw_quantiles` argument.
 
@@ -104,7 +131,7 @@ gf_violin(adm_rate ~ preddeg, data = colleges, fill = 'gray85', draw_quantiles =
           x = "Primary Deg")
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 ### Violin Plots with many groups
  
 Many groups are more easily shown in the violin plot framework.
@@ -120,7 +147,7 @@ gf_violin(adm_rate ~ region, data = colleges, fill = 'gray80', draw_quantiles = 
   gf_refine(coord_flip())
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 ## Facetting
  
@@ -136,7 +163,7 @@ gf_violin(adm_rate ~ region, data = colleges, fill = 'gray80', draw_quantiles = 
   gf_facet_wrap(~ preddeg)
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 
 

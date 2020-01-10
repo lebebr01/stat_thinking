@@ -10,7 +10,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
@@ -21,7 +21,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -125,8 +125,8 @@ library(mosaic)
 ```
 ## The following objects are masked from 'package:stats':
 ## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
-##     prop.test, quantile, sd, t.test, var
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
+##     quantile, sd, t.test, var
 ```
 
 ```
@@ -153,20 +153,20 @@ head(titanic)
 ```
 
 ```
-##   PassengerId Pclass                                                Name
-## 1           1      3                             Braund, Mr. Owen Harris
-## 2           2      1 Cumings, Mrs. John Bradley (Florence Briggs Thayer)
-## 3           3      3                              Heikkinen, Miss. Laina
-## 4           4      1        Futrelle, Mrs. Jacques Heath (Lily May Peel)
-## 5           5      3                            Allen, Mr. William Henry
-## 6           6      3                                    Moran, Mr. James
-##      Sex Age SibSp Parch           Ticket    Fare Cabin Embarked survived
-## 1   male  22     1     0        A/5 21171  7.2500              S     Died
-## 2 female  38     1     0         PC 17599 71.2833   C85        C Survived
-## 3 female  26     0     0 STON/O2. 3101282  7.9250              S Survived
-## 4 female  35     1     0           113803 53.1000  C123        S Survived
-## 5   male  35     0     0           373450  8.0500              S     Died
-## 6   male  NA     0     0           330877  8.4583              Q     Died
+##   PassengerId Pclass                                                Name    Sex
+## 1           1      3                             Braund, Mr. Owen Harris   male
+## 2           2      1 Cumings, Mrs. John Bradley (Florence Briggs Thayer) female
+## 3           3      3                              Heikkinen, Miss. Laina female
+## 4           4      1        Futrelle, Mrs. Jacques Heath (Lily May Peel) female
+## 5           5      3                            Allen, Mr. William Henry   male
+## 6           6      3                                    Moran, Mr. James   male
+##   Age SibSp Parch           Ticket    Fare Cabin Embarked survived
+## 1  22     1     0        A/5 21171  7.2500              S     Died
+## 2  38     1     0         PC 17599 71.2833   C85        C Survived
+## 3  26     0     0 STON/O2. 3101282  7.9250              S Survived
+## 4  35     1     0           113803 53.1000  C123        S Survived
+## 5  35     0     0           373450  8.0500              S     Died
+## 6  NA     0     0           330877  8.4583              Q     Died
 ```
 
 
@@ -249,10 +249,10 @@ printcp(class_tree)
 ##         CP nsplit rel error  xerror     xstd
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
-## 3 0.023392      3   0.49415 0.49708 0.034295
-## 4 0.020468      4   0.47076 0.49708 0.034295
-## 5 0.010234      5   0.45029 0.50000 0.034372
-## 6 0.010000      8   0.41813 0.50000 0.034372
+## 3 0.023392      3   0.49415 0.51170 0.034675
+## 4 0.020468      4   0.47076 0.50585 0.034524
+## 5 0.010234      5   0.45029 0.51462 0.034749
+## 6 0.010000      8   0.41813 0.49708 0.034295
 ```
 
 ```r
@@ -280,69 +280,48 @@ head(titanic_predict, n = 20)
 ```
 
 ```
-##    PassengerId Pclass
-## 1            1      3
-## 2            2      1
-## 3            3      3
-## 4            4      1
-## 5            5      3
-## 6            6      3
-## 7            7      1
-## 8            8      3
-## 9            9      3
-## 10          10      2
-## 11          11      3
-## 12          12      1
-## 13          13      3
-## 14          14      3
-## 15          15      3
-## 16          16      2
-## 17          17      3
-## 18          18      2
-## 19          19      3
-## 20          20      3
-##                                                       Name    Sex Age
-## 1                                  Braund, Mr. Owen Harris   male  22
-## 2      Cumings, Mrs. John Bradley (Florence Briggs Thayer) female  38
-## 3                                   Heikkinen, Miss. Laina female  26
-## 4             Futrelle, Mrs. Jacques Heath (Lily May Peel) female  35
-## 5                                 Allen, Mr. William Henry   male  35
-## 6                                         Moran, Mr. James   male  NA
-## 7                                  McCarthy, Mr. Timothy J   male  54
-## 8                           Palsson, Master. Gosta Leonard   male   2
-## 9        Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg) female  27
-## 10                     Nasser, Mrs. Nicholas (Adele Achem) female  14
-## 11                         Sandstrom, Miss. Marguerite Rut female   4
-## 12                                Bonnell, Miss. Elizabeth female  58
-## 13                          Saundercock, Mr. William Henry   male  20
-## 14                             Andersson, Mr. Anders Johan   male  39
-## 15                    Vestrom, Miss. Hulda Amanda Adolfina female  14
-## 16                        Hewlett, Mrs. (Mary D Kingcome)  female  55
-## 17                                    Rice, Master. Eugene   male   2
-## 18                            Williams, Mr. Charles Eugene   male  NA
-## 19 Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele) female  31
-## 20                                 Masselmani, Mrs. Fatima female  NA
-##    SibSp Parch           Ticket    Fare Cabin Embarked survived
-## 1      1     0        A/5 21171  7.2500              S     Died
-## 2      1     0         PC 17599 71.2833   C85        C Survived
-## 3      0     0 STON/O2. 3101282  7.9250              S Survived
-## 4      1     0           113803 53.1000  C123        S Survived
-## 5      0     0           373450  8.0500              S     Died
-## 6      0     0           330877  8.4583              Q     Died
-## 7      0     0            17463 51.8625   E46        S     Died
-## 8      3     1           349909 21.0750              S     Died
-## 9      0     2           347742 11.1333              S Survived
-## 10     1     0           237736 30.0708              C Survived
-## 11     1     1          PP 9549 16.7000    G6        S Survived
-## 12     0     0           113783 26.5500  C103        S Survived
-## 13     0     0        A/5. 2151  8.0500              S     Died
-## 14     1     5           347082 31.2750              S     Died
-## 15     0     0           350406  7.8542              S     Died
-## 16     0     0           248706 16.0000              S Survived
-## 17     4     1           382652 29.1250              Q     Died
-## 18     0     0           244373 13.0000              S Survived
-## 19     1     0           345763 18.0000              S     Died
-## 20     0     0             2649  7.2250              C Survived
+##    PassengerId Pclass                                                    Name
+## 1            1      3                                 Braund, Mr. Owen Harris
+## 2            2      1     Cumings, Mrs. John Bradley (Florence Briggs Thayer)
+## 3            3      3                                  Heikkinen, Miss. Laina
+## 4            4      1            Futrelle, Mrs. Jacques Heath (Lily May Peel)
+## 5            5      3                                Allen, Mr. William Henry
+## 6            6      3                                        Moran, Mr. James
+## 7            7      1                                 McCarthy, Mr. Timothy J
+## 8            8      3                          Palsson, Master. Gosta Leonard
+## 9            9      3       Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)
+## 10          10      2                     Nasser, Mrs. Nicholas (Adele Achem)
+## 11          11      3                         Sandstrom, Miss. Marguerite Rut
+## 12          12      1                                Bonnell, Miss. Elizabeth
+## 13          13      3                          Saundercock, Mr. William Henry
+## 14          14      3                             Andersson, Mr. Anders Johan
+## 15          15      3                    Vestrom, Miss. Hulda Amanda Adolfina
+## 16          16      2                        Hewlett, Mrs. (Mary D Kingcome) 
+## 17          17      3                                    Rice, Master. Eugene
+## 18          18      2                            Williams, Mr. Charles Eugene
+## 19          19      3 Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele)
+## 20          20      3                                 Masselmani, Mrs. Fatima
+##       Sex Age SibSp Parch           Ticket    Fare Cabin Embarked survived
+## 1    male  22     1     0        A/5 21171  7.2500              S     Died
+## 2  female  38     1     0         PC 17599 71.2833   C85        C Survived
+## 3  female  26     0     0 STON/O2. 3101282  7.9250              S Survived
+## 4  female  35     1     0           113803 53.1000  C123        S Survived
+## 5    male  35     0     0           373450  8.0500              S     Died
+## 6    male  NA     0     0           330877  8.4583              Q     Died
+## 7    male  54     0     0            17463 51.8625   E46        S     Died
+## 8    male   2     3     1           349909 21.0750              S     Died
+## 9  female  27     0     2           347742 11.1333              S Survived
+## 10 female  14     1     0           237736 30.0708              C Survived
+## 11 female   4     1     1          PP 9549 16.7000    G6        S Survived
+## 12 female  58     0     0           113783 26.5500  C103        S Survived
+## 13   male  20     0     0        A/5. 2151  8.0500              S     Died
+## 14   male  39     1     5           347082 31.2750              S     Died
+## 15 female  14     0     0           350406  7.8542              S     Died
+## 16 female  55     0     0           248706 16.0000              S Survived
+## 17   male   2     4     1           382652 29.1250              Q     Died
+## 18   male  NA     0     0           244373 13.0000              S Survived
+## 19 female  31     1     0           345763 18.0000              S     Died
+## 20 female  NA     0     0             2649  7.2250              C Survived
 ##    tree_predict       Died  Survived
 ## 1          Died 0.83182640 0.1681736
 ## 2      Survived 0.05294118 0.9470588

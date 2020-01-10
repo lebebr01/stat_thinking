@@ -28,17 +28,17 @@ head(colleges)
 
 ```
 ## # A tibble: 6 x 17
-##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds
-##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211
-## # … with 8 more variables: costt4_a <dbl>, costt4_p <dbl>,
-## #   tuitionfee_in <dbl>, tuitionfee_out <dbl>, debt_mdn <dbl>,
-## #   grad_debt_mdn <dbl>, female <dbl>, bachelor_degree <dbl>
+##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
+##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
+## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
+## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
+## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
+## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
+## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
+## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
+## # … with 7 more variables: costt4_p <dbl>, tuitionfee_in <dbl>,
+## #   tuitionfee_out <dbl>, debt_mdn <dbl>, grad_debt_mdn <dbl>, female <dbl>,
+## #   bachelor_degree <dbl>
 ```
 
 ## Summarizing Attributes
@@ -432,14 +432,12 @@ tally(~region, data = colleges)
 
 ```
 ## region
-##           Far West        Great Lakes           Mid East 
-##                221                297                458 
-##        New England     Outlying Areas             Plains 
-##                167                 35                200 
-##    Rocky Mountains          Southeast          Southwest 
-##                 50                454                133 
-## US Service Schools 
-##                  4
+##           Far West        Great Lakes           Mid East        New England 
+##                221                297                458                167 
+##     Outlying Areas             Plains    Rocky Mountains          Southeast 
+##                 35                200                 50                454 
+##          Southwest US Service Schools 
+##                133                  4
 ```
 
 
@@ -453,14 +451,12 @@ tally(~region, data = colleges) / 2019
 
 ```
 ## region
-##           Far West        Great Lakes           Mid East 
-##        0.109460129        0.147102526        0.226844973 
-##        New England     Outlying Areas             Plains 
-##        0.082714215        0.017335315        0.099058940 
-##    Rocky Mountains          Southeast          Southwest 
-##        0.024764735        0.224863794        0.065874195 
-## US Service Schools 
-##        0.001981179
+##           Far West        Great Lakes           Mid East        New England 
+##        0.109460129        0.147102526        0.226844973        0.082714215 
+##     Outlying Areas             Plains    Rocky Mountains          Southeast 
+##        0.017335315        0.099058940        0.024764735        0.224863794 
+##          Southwest US Service Schools 
+##        0.065874195        0.001981179
 ```
 
 
@@ -474,14 +470,12 @@ tally(~region, data = colleges, format = "proportion")
 
 ```
 ## region
-##           Far West        Great Lakes           Mid East 
-##        0.109460129        0.147102526        0.226844973 
-##        New England     Outlying Areas             Plains 
-##        0.082714215        0.017335315        0.099058940 
-##    Rocky Mountains          Southeast          Southwest 
-##        0.024764735        0.224863794        0.065874195 
-## US Service Schools 
-##        0.001981179
+##           Far West        Great Lakes           Mid East        New England 
+##        0.109460129        0.147102526        0.226844973        0.082714215 
+##     Outlying Areas             Plains    Rocky Mountains          Southeast 
+##        0.017335315        0.099058940        0.024764735        0.224863794 
+##          Southwest US Service Schools 
+##        0.065874195        0.001981179
 ```
 
 

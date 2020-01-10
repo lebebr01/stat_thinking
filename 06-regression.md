@@ -14,8 +14,10 @@ library(ISLR)
 library(rpart)
 library(rsample)
 library(rpart.plot)
+library(statthink)
 
-theme_set(theme_bw())
+# Set theme for plots
+theme_set(theme_statthinking())
 
 Hitters <- Hitters %>%
   drop_na(Salary)
@@ -24,27 +26,27 @@ head(Hitters)
 ```
 
 ```
-##                   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits
-## -Alan Ashby         315   81     7   24  38    39    14   3449   835
-## -Alvin Davis        479  130    18   66  72    76     3   1624   457
-## -Andre Dawson       496  141    20   65  78    37    11   5628  1575
-## -Andres Galarraga   321   87    10   39  42    30     2    396   101
-## -Alfredo Griffin    594  169     4   74  51    35    11   4408  1133
-## -Al Newman          185   37     1   23   8    21     2    214    42
-##                   CHmRun CRuns CRBI CWalks League Division PutOuts Assists
-## -Alan Ashby           69   321  414    375      N        W     632      43
-## -Alvin Davis          63   224  266    263      A        W     880      82
-## -Andre Dawson        225   828  838    354      N        E     200      11
-## -Andres Galarraga     12    48   46     33      N        E     805      40
-## -Alfredo Griffin      19   501  336    194      A        W     282     421
-## -Al Newman             1    30    9     24      N        E      76     127
-##                   Errors Salary NewLeague
-## -Alan Ashby           10  475.0         N
-## -Alvin Davis          14  480.0         A
-## -Andre Dawson          3  500.0         N
-## -Andres Galarraga      4   91.5         N
-## -Alfredo Griffin      25  750.0         A
-## -Al Newman             7   70.0         A
+##                   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun
+## -Alan Ashby         315   81     7   24  38    39    14   3449   835     69
+## -Alvin Davis        479  130    18   66  72    76     3   1624   457     63
+## -Andre Dawson       496  141    20   65  78    37    11   5628  1575    225
+## -Andres Galarraga   321   87    10   39  42    30     2    396   101     12
+## -Alfredo Griffin    594  169     4   74  51    35    11   4408  1133     19
+## -Al Newman          185   37     1   23   8    21     2    214    42      1
+##                   CRuns CRBI CWalks League Division PutOuts Assists Errors
+## -Alan Ashby         321  414    375      N        W     632      43     10
+## -Alvin Davis        224  266    263      A        W     880      82     14
+## -Andre Dawson       828  838    354      N        E     200      11      3
+## -Andres Galarraga    48   46     33      N        E     805      40      4
+## -Alfredo Griffin    501  336    194      A        W     282     421     25
+## -Al Newman           30    9     24      N        E      76     127      7
+##                   Salary NewLeague
+## -Alan Ashby        475.0         N
+## -Alvin Davis       480.0         A
+## -Andre Dawson      500.0         N
+## -Andres Galarraga   91.5         N
+## -Alfredo Griffin   750.0         A
+## -Al Newman          70.0         A
 ```
 
 
@@ -203,27 +205,27 @@ head(Hitters)
 ```
 
 ```
-##   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun CRuns CRBI
-## 1   315   81     7   24  38    39    14   3449   835     69   321  414
-## 2   479  130    18   66  72    76     3   1624   457     63   224  266
-## 3   496  141    20   65  78    37    11   5628  1575    225   828  838
-## 4   321   87    10   39  42    30     2    396   101     12    48   46
-## 5   594  169     4   74  51    35    11   4408  1133     19   501  336
-## 6   185   37     1   23   8    21     2    214    42      1    30    9
-##   CWalks League Division PutOuts Assists Errors Salary NewLeague
-## 1    375      N        W     632      43     10  475.0         N
-## 2    263      A        W     880      82     14  480.0         A
-## 3    354      N        E     200      11      3  500.0         N
-## 4     33      N        E     805      40      4   91.5         N
-## 5    194      A        W     282     421     25  750.0         A
-## 6     24      N        E      76     127      7   70.0         A
-##   log_salary_pred log_salary   log_error salary_pred      error
-## 1        5.375205   6.163315  0.78810957    215.9842  259.01581
-## 2        6.260120   6.173786 -0.08633342    523.2815  -43.28148
-## 3        6.260120   6.214608 -0.04551143    523.2815  -23.28148
-## 4        5.872782   4.516339 -1.35644260    355.2357 -263.73572
-## 5        6.112038   6.620073  0.50803537    451.2574  298.74263
-## 6        5.375205   4.248495 -1.12670999    215.9842 -145.98419
+##   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun CRuns CRBI CWalks
+## 1   315   81     7   24  38    39    14   3449   835     69   321  414    375
+## 2   479  130    18   66  72    76     3   1624   457     63   224  266    263
+## 3   496  141    20   65  78    37    11   5628  1575    225   828  838    354
+## 4   321   87    10   39  42    30     2    396   101     12    48   46     33
+## 5   594  169     4   74  51    35    11   4408  1133     19   501  336    194
+## 6   185   37     1   23   8    21     2    214    42      1    30    9     24
+##   League Division PutOuts Assists Errors Salary NewLeague log_salary_pred
+## 1      N        W     632      43     10  475.0         N        5.375205
+## 2      A        W     880      82     14  480.0         A        6.260120
+## 3      N        E     200      11      3  500.0         N        6.260120
+## 4      N        E     805      40      4   91.5         N        5.872782
+## 5      A        W     282     421     25  750.0         A        6.112038
+## 6      N        E      76     127      7   70.0         A        5.375205
+##   log_salary   log_error salary_pred      error
+## 1   6.163315  0.78810957    215.9842  259.01581
+## 2   6.173786 -0.08633342    523.2815  -43.28148
+## 3   6.214608 -0.04551143    523.2815  -23.28148
+## 4   4.516339 -1.35644260    355.2357 -263.73572
+## 5   6.620073  0.50803537    451.2574  298.74263
+## 6   4.248495 -1.12670999    215.9842 -145.98419
 ```
 
 hen, the `df_stats()` function is used to compute summary statistics for the `log_error` attribute which represented the difference between the observed and predicted log salaries. After this, the same statistics are computed for the error after back-transforming the data. Both of these are not quite what we want here, any idea why?
@@ -268,13 +270,215 @@ Hitters %>%
 
 
 ## Simple Regression continuous predictor
+### Description of the Data
+These data contain information on mother's and baby's health for 1,174 pregnant women.
+
+
+```r
+baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   birth_weight = col_double(),
+##   gestational_days = col_double(),
+##   maternal_age = col_double(),
+##   maternal_height = col_double(),
+##   maternal_pregnancy_weight = col_double(),
+##   maternal_smoker = col_logical()
+## )
+```
+
+```r
+head(baby)
+```
+
+```
+## # A tibble: 6 x 6
+##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
+##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
+## 1          120              284           27              62              100
+## 2          113              282           33              64              135
+## 3          128              279           28              64              115
+## 4          108              282           23              67              125
+## 5          136              286           25              62               93
+## 6          138              244           33              62              178
+## # … with 1 more variable: maternal_smoker <lgl>
+```
+
+
+
+### Scatterplots
+As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between birth weight and gestational days.
+
+
+```r
+gf_point(birth_weight ~ gestational_days, data = baby, size = 3, alpha = .2) %>%
+  gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
+  gf_smooth(size = 1)
+```
+
+```
+## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+```
+
+<img src="06-regression_files/figure-html/scatter-baby-1.png" width="672" />
+
+The figure shows two types of lines, the dashed line is assuming a linear relationship (specified with `gf_smooth(method = 'lm')`) and the solid line is allowing the relationship to be more flexible to account for any non-linearity. There does appear to be some evidence of non-linearity, particularly in the tails of gestational days distribution. We can attempt to summarize this relationship in a single numeric value by computing the correlation coefficient. The correlation was initially explored when fitting regression trees. The correlation can be calculated with the `cor()` function with the primary argument being a formula depicting the two variables to compute the correlation on.
+
+
+```r
+cor(birth_weight ~ gestational_days, data = baby)
+```
+
+```
+## [1] 0.4075428
+```
+
+Here the correlation represents the degree of **linear** relationship between the two variables. Values closer to 1 in absolute value (i.e. +1 or -1) show a stronger linear relationship and values closer to 0 indicate no relationship or weaker relationship. The correlation between the two variables above was about 0.41 indicating that there is a moderate positive linear relationship between birth weight and gestational days. The correlation is shown to be positive due to the coefficient being positive and the general trend from the scatterplot shows a direction of relationship moving from the lower left of the figure to the upper right of the figure. A negative correlation would have a negative sign associated with it and would trend from the upper left to the lower right of a scatterplot.
+
+### Fitting a linear regression model
+Now that the correlation was computed, we have evidence that there is a relationship between the baby birth weight and the gestational days. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the `lm()` function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: `birth_weight ~ gestational_days`, where birth weight is the outcome of interest (in language we've used previously, this is the attribute we want to predict) and gestational days is the attribute we want to use to do the predicting of birth weight. Another way to think about what these variables represent is to explain variation in the birth weight with gestational days. In other words, the assumption is made that gestational days impacts or explains differences in the baby birth weight.
+
+
+```r
+baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
+coef(baby_reg)
+```
+
+```
+##      (Intercept) gestational_days 
+##      -10.7541389        0.4665569
+```
+
+he following coefficients represent the linear regression equation that more generally can be show as:
+
+\begin{equation}
+birth\_weight = -10.8 + 0.47 gestational\_days + \epsilon
+\end{equation}
+
+The equation can also be represented without the error, $\epsilon$ as:
+
+begin{equation}
+\hat{birth\_weight} = -10.8 + 0.47 gestational\_days
+\end{equation}
+
+where now the birth weight outcome has a hat (i.e. $\hat{y}$) that denotes mathematically that the equation predicts a value of birth weight given solely the number of gestational days. The first equation above says that the original observed birth weight is a function of gestational days plus some error. Using the equation above, the predicted birth weight can be obtained by including a value inserted for gestational days. Let's pick a few values for gestational days to try.
+
+
+```r
+-10.8 + 0.47 * 200
+```
+
+```
+## [1] 83.2
+```
+
+```r
+-10.8 + 0.47 * 275
+```
+
+```
+## [1] 118.45
+```
+
+```r
+-10.8 + 0.47 * 276
+```
+
+```
+## [1] 118.92
+```
+
+You may notice that the predicted value of birth weight increases by 0.47 grams for every one day increase in gestational days, often referred to as the linear slope. The predicted values would fit on the dashed line shown in the scatterplot shown above. This highlights the assumption made here from the linear regression model above in which the relationship between birth weight and gestational days is assumed to be linear. It is possible to relax this assumption with a more complicated model, however this is the assumption being made currently.
+
+### Explore the y-intercept
+So far the discussion has focused on the linear slope, often a term that is of most interest. However, the y-intercept can also be made to be more interesting by adjusting the range of gestational days.
+
+#### Mean center gestational days
+First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of gestational days.
+
+
+```r
+gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby, size = 3, alpha = .2) %>%
+  gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
+  gf_smooth(size = 1)
+```
+
+```
+## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+```
+
+<img src="06-regression_files/figure-html/scatter-mean-center-1.png" width="672" />
+
+Notice that the relationship is the same as before, but now the scale of gestational days is different. It may be more difficult to interpret now as the number of days a women is pregnant is relatively well known, but now the mean gestational days is represented as 0 in the figure and all the values are in reference to that instead of referencing when a women became pregnant. Using this same approach, a linear regression can be fitted to this newly recentered gestational days variable.
+
+
+```r
+baby_reg_centered <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby)
+coef(baby_reg_centered)
+```
+
+```
+##                                  (Intercept) 
+##                                  119.4625213 
+## I(gestational_days - mean(gestational_days)) 
+##                                    0.4665569
+```
+
+he new equation would look like:
+
+begin{equation}
+\hat{birth\_weight} = 119.5 + 0.47 (gestational\_days - mean(gestational\_days))
+\end{equation}
+
+
+```r
+119.5 + 0.47 * -3
+```
+
+```
+## [1] 118.09
+```
+
+```r
+119.5 + 0.47 * 0
+```
+
+```
+## [1] 119.5
+```
+
+#### Minimum or Maximum centered gestational days
+A few other options that are common are to subtract the minimum or maximum values from the x attribute.
+
+
+```r
+baby_reg_min <- lm(birth_weight ~ I(gestational_days - min(gestational_days)), data = baby)
+coef(baby_reg_min)
+```
+
+```
+##                                 (Intercept) 
+##                                  58.2962789 
+## I(gestational_days - min(gestational_days)) 
+##                                   0.4665569
+```
+
+
+```r
+baby_reg_max <- lm(birth_weight ~ I(gestational_days - max(gestational_days)), data = baby)
+coef(baby_reg_max)
+```
+
+```
+##                                 (Intercept) 
+##                                 153.9404386 
+## I(gestational_days - max(gestational_days)) 
+##                                   0.4665569
+```
 
 
 ## Conditional Means
-
-
-## Categorical Predictor(s)
-
-
-## Multiple Regression
 
