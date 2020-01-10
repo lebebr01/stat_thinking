@@ -4,6 +4,7 @@
 library(tidyverse)
 library(ggformula)
 library(mosaic)
+library(broom)
 library(statthink)
 
 # Set theme for plots
