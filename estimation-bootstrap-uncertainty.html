@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Estimation / Bootstrap / Uncertainty | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 7 Estimation / Bootstrap / Uncertainty | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Estimation / Bootstrap / Uncertainty | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-01-10" />
+<meta name="date" content="2020-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -260,7 +260,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 
 <span class="kw">resample_baby</span>()</code></pre></div>
 <pre><code>##                          .
-## gestational_days 0.4315377</code></pre>
+## gestational_days 0.5269056</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -271,7 +271,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
 <pre><code>##          5%       50%       95%
-## 1 0.3950924 0.4684728 0.5437349</code></pre>
+## 1 0.3963413 0.4685931 0.5439389</code></pre>
 </div>
 <div id="categorical-predictors" class="section level2">
 <h2><span class="header-section-number">7.2</span> Categorical Predictor(s)</h2>
@@ -364,7 +364,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 
 <span class="kw">resample_baby</span>()</code></pre></div>
 <pre><code>##                             .
-## maternal_smokerTRUE -8.115329</code></pre>
+## maternal_smokerTRUE -11.30882</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -374,8 +374,8 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <p><img src="07-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
-<pre><code>##          5%       50%       95%
-## 1 -11.05733 -9.255647 -7.484528</code></pre>
+<pre><code>##          5%      50%       95%
+## 1 -11.06159 -9.28266 -7.495451</code></pre>
 </div>
 </div>
 <div id="more-than-2-categorical-groups" class="section level2">
@@ -483,9 +483,9 @@ birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.1
 <pre><code>## # A tibble: 3 x 2
 ##   term                                         estimate
 ##   &lt;chr&gt;                                           &lt;dbl&gt;
-## 1 (Intercept)                                   122.   
-## 2 I(gestational_days - mean(gestational_days))    0.396
-## 3 maternal_smokerTRUE                            -8.29</code></pre>
+## 1 (Intercept)                                   124.   
+## 2 I(gestational_days - mean(gestational_days))    0.452
+## 3 maternal_smokerTRUE                           -10.2</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
@@ -524,10 +524,10 @@ coef_baby <span class="op">%&gt;%</span>
 <pre><code>## # A tibble: 4 x 2
 ##   term                                                             estimate
 ##   &lt;chr&gt;                                                               &lt;dbl&gt;
-## 1 (Intercept)                                                       122.   
-## 2 I(gestational_days - mean(gestational_days))                        0.359
-## 3 maternal_smokerTRUE                                                -7.93 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.326</code></pre>
+## 1 (Intercept)                                                       124.   
+## 2 I(gestational_days - mean(gestational_days))                        0.323
+## 3 maternal_smokerTRUE                                                -9.42 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.306</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 

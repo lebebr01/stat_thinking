@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Classification | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 5 Classification | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Classification | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-01-10" />
+<meta name="date" content="2020-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -296,10 +296,10 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ##         CP nsplit rel error  xerror     xstd
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
-## 3 0.023392      3   0.49415 0.51170 0.034675
-## 4 0.020468      4   0.47076 0.49415 0.034217
-## 5 0.010234      5   0.45029 0.50585 0.034524
-## 6 0.010000      8   0.41813 0.51170 0.034675</code></pre>
+## 3 0.023392      3   0.49415 0.54094 0.035402
+## 4 0.020468      4   0.47076 0.52047 0.034897
+## 5 0.010234      5   0.45029 0.51462 0.034749
+## 6 0.010000      8   0.41813 0.52632 0.035043</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotcp</span>(class_tree)</code></pre></div>
 <p><img src="05-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prune_class_tree &lt;-<span class="st"> </span><span class="kw">prune</span>(class_tree, <span class="dt">cp =</span> .<span class="dv">02</span>)
