@@ -123,12 +123,13 @@ gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85',
 Facetting is another way to explore distributions of two or more variables.
 
 ```{r}
-gf_violin(adm_rate ~ region, data = us_weather, fill = 'gray80', draw_quantiles = c(.1, .5, .9)) %>%
-  gf_labs(y = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          x = "US Region") %>%
+gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
+          draw_quantiles = c(.1, .5, .9)) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          title = 'Multivariate distribution of average daily temperature by location',
+          x = "Location") %>%
   gf_refine(coord_flip()) %>%
-  gf_facet_wrap(~ preddeg)
+  gf_facet_wrap(~ snow)
 ```
 
 
