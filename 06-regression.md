@@ -121,7 +121,7 @@ gf_point(log(Salary) ~ HmRun, data = Hitters, color = 'gray55') %>%
 ```
 
 ```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+## Warning: geom_vline(): Ignoring `mapping` because `xintercept` was provided.
 ```
 
 <img src="06-regression_files/figure-html/unnamed-chunk-6-1.png" width="672" />
@@ -174,7 +174,7 @@ gf_point(HmRun ~ Hits, data = Hitters, color = ~ log(Salary)) %>%
 ```
 
 ```
-## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+## Warning: geom_vline(): Ignoring `mapping` because `xintercept` was provided.
 ```
 
 <img src="06-regression_files/figure-html/unnamed-chunk-10-1.png" width="672" />
@@ -320,7 +320,7 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3, alpha = .2) %>%
 ```
 
 ```
-## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+## `geom_smooth()` using method = 'gam'
 ```
 
 <img src="06-regression_files/figure-html/scatter-baby-1.png" width="672" />
@@ -407,7 +407,7 @@ gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = bab
 ```
 
 ```
-## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+## `geom_smooth()` using method = 'gam'
 ```
 
 <img src="06-regression_files/figure-html/scatter-mean-center-1.png" width="672" />

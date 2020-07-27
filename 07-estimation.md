@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.5269056
+## gestational_days 0.4722485
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -84,7 +84,7 @@ baby_coef %>%
 
 ```
 ##          5%       50%       95%
-## 1 0.3963413 0.4685931 0.5439389
+## 1 0.3952682 0.4680952 0.5417259
 ```
 
 ## Categorical Predictor(s)
@@ -238,8 +238,8 @@ resample_baby()
 ```
 
 ```
-##                             .
-## maternal_smokerTRUE -11.30882
+##                            .
+## maternal_smokerTRUE -9.52569
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -262,8 +262,8 @@ baby_coef %>%
 ```
 
 ```
-##          5%      50%       95%
-## 1 -11.06159 -9.28266 -7.495451
+##          5%       50%       95%
+## 1 -11.00007 -9.267034 -7.533942
 ```
 
 ## More than 2 categorical groups
@@ -389,7 +389,7 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
 ```
 
 ```
-## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+## `geom_smooth()` using method = 'loess'
 ```
 
 <img src="07-estimation_files/figure-html/scatter-smoker-1.png" width="672" />
@@ -444,9 +444,9 @@ resample_baby()
 ## # A tibble: 3 x 2
 ##   term                                         estimate
 ##   <chr>                                           <dbl>
-## 1 (Intercept)                                   124.   
-## 2 I(gestational_days - mean(gestational_days))    0.452
-## 3 maternal_smokerTRUE                           -10.2
+## 1 (Intercept)                                   123.   
+## 2 I(gestational_days - mean(gestational_days))    0.464
+## 3 maternal_smokerTRUE                            -9.54
 ```
 
 
@@ -472,7 +472,7 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
 ```
 
 ```
-## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+## `geom_smooth()` using method = 'loess'
 ```
 
 <img src="07-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" />
@@ -513,9 +513,9 @@ resample_baby()
 ##   term                                                             estimate
 ##   <chr>                                                               <dbl>
 ## 1 (Intercept)                                                       124.   
-## 2 I(gestational_days - mean(gestational_days))                        0.323
-## 3 maternal_smokerTRUE                                                -9.42 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.306
+## 2 I(gestational_days - mean(gestational_days))                        0.420
+## 3 maternal_smokerTRUE                                                -8.39 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.137
 ```
 
 

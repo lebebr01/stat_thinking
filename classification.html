@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Classification | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 5 Classification | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Classification | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-01-13" />
+<meta name="date" content="2020-07-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
 <li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
 <li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother’s smoking</a></li>
+<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
 <li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
 </ul></li>
@@ -249,16 +249,19 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ## 5  35     0     0           373450  8.0500              S     Died
 ## 6  NA     0     0           330877  8.4583              Q     Died</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(titanic, survived)</code></pre></div>
-<pre><code>## # A tibble: 2 x 2
-##   survived     n
-##   &lt;chr&gt;    &lt;int&gt;
-## 1 Died       549
-## 2 Survived   342</code></pre>
+<pre><code>## Warning: `count_()` is deprecated as of dplyr 0.7.0.
+## Please use `count()` instead.
+## See vignette(&#39;programming&#39;) for more help
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>##   survived   n
+## 1     Died 549
+## 2 Survived 342</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived,  <span class="dt">data =</span> titanic)</code></pre></div>
 <p><img src="05-classification_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <div id="fitting-a-classification-tree" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Fitting a Classification Tree</h3>
-<p>Let’s class_tree our first classification tree to predict the dichotomous attribute, survival. For this, we will use the rpart() function from the rpart package. The first argument to the rpart() function is a formula where the outcome of interest is specified to the left of the ~ and the attributes that are predictive of the outcome are specified to the right of the ~ separated with + signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify individuals based on the values in the data, therefore we specify method = ‘class’. The final argument is the data element, in this case titanic.</p>
+<p>Let's class_tree our first classification tree to predict the dichotomous attribute, survival. For this, we will use the rpart() function from the rpart package. The first argument to the rpart() function is a formula where the outcome of interest is specified to the left of the ~ and the attributes that are predictive of the outcome are specified to the right of the ~ separated with + signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify individuals based on the values in the data, therefore we specify method = 'class'. The final argument is the data element, in this case titanic.</p>
 <p>In this example, I picked a handful of attributes that would seem important. These can either be numeric or represent categories, the method does not care the type of attributes that are included in the analysis. Notice that I save the computation to the object, class_tree.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">class_tree &lt;-<span class="st"> </span><span class="kw">rpart</span>(survived <span class="op">~</span><span class="st"> </span>Pclass <span class="op">+</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Age <span class="op">+</span><span class="st"> </span>Fare <span class="op">+</span><span class="st"> </span>Embarked <span class="op">+</span><span class="st"> </span>SibSp <span class="op">+</span><span class="st"> </span>Parch, 
    <span class="dt">method =</span> <span class="st">&#39;class&#39;</span>, <span class="dt">data =</span> titanic)
@@ -296,10 +299,10 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ##         CP nsplit rel error  xerror     xstd
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
-## 3 0.023392      3   0.49415 0.54094 0.035402
-## 4 0.020468      4   0.47076 0.52047 0.034897
-## 5 0.010234      5   0.45029 0.51462 0.034749
-## 6 0.010000      8   0.41813 0.52632 0.035043</code></pre>
+## 3 0.023392      3   0.49415 0.49415 0.034217
+## 4 0.020468      4   0.47076 0.49123 0.034140
+## 5 0.010234      5   0.45029 0.50000 0.034372
+## 6 0.010000      8   0.41813 0.48830 0.034061</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotcp</span>(class_tree)</code></pre></div>
 <p><img src="05-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prune_class_tree &lt;-<span class="st"> </span><span class="kw">prune</span>(class_tree, <span class="dt">cp =</span> .<span class="dv">02</span>)
@@ -377,13 +380,11 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ## 20     Survived 0.41025641 0.5897436</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">count</span>(survived, tree_predict)</code></pre></div>
-<pre><code>## # A tibble: 4 x 3
-##   survived tree_predict     n
-##   &lt;chr&gt;    &lt;fct&gt;        &lt;int&gt;
-## 1 Died     Died           492
-## 2 Died     Survived        57
-## 3 Survived Died            97
-## 4 Survived Survived       245</code></pre>
+<pre><code>##   survived tree_predict   n
+## 1     Died         Died 492
+## 2     Died     Survived  57
+## 3 Survived         Died  97
+## 4 Survived     Survived 245</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict, <span class="dt">data =</span> titanic_predict)</code></pre></div>
 <p><img src="05-classification_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict, <span class="dt">data =</span> titanic_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span>
@@ -403,13 +404,11 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 
 titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">count</span>(survived, tree_predict_full)</code></pre></div>
-<pre><code>## # A tibble: 4 x 3
-##   survived tree_predict_full     n
-##   &lt;chr&gt;    &lt;fct&gt;             &lt;int&gt;
-## 1 Died     Died                521
-## 2 Died     Survived             28
-## 3 Survived Died                115
-## 4 Survived Survived            227</code></pre>
+<pre><code>##   survived tree_predict_full   n
+## 1     Died              Died 521
+## 2     Died          Survived  28
+## 3 Survived              Died 115
+## 4 Survived          Survived 227</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict_full, <span class="dt">data =</span> titanic_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;proportion&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">1</span>)))</code></pre></div>
@@ -426,9 +425,9 @@ titanic_predict <span class="op">%&gt;%</span>
 <div id="trainingtest-data" class="section level3">
 <h3><span class="header-section-number">5.1.5</span> Training/Test Data</h3>
 <p>So far we have used the entire data to make our classification. This is not best practice and we will explore this is a bit more detail. First, take a minute to hypothesize why using the entire data to make our classification prediction may not be the best?</p>
-<p>It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let’s refit the classification tree to the titanic data by splitting the data into 70% training and 30% test data. Why 70% training and 30% test? This is a number that is sometimes used as the splitting, an 80/20 split is also common. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. Secondly, the test data does not need to be quite as large, but we would like it to be representative. Here, the data are not too large, about 1000 passengers with available survival data, therefore, withholding more data helps to ensure the test data is representative of the 1000 total passengers. Splitting the data into training/test</p>
+<p>It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let's refit the classification tree to the titanic data by splitting the data into 70% training and 30% test data. Why 70% training and 30% test? This is a number that is sometimes used as the splitting, an 80/20 split is also common. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. Secondly, the test data does not need to be quite as large, but we would like it to be representative. Here, the data are not too large, about 1000 passengers with available survival data, therefore, withholding more data helps to ensure the test data is representative of the 1000 total passengers. Splitting the data into training/test</p>
 <p>This is done with the rsample package utilizing three functions, initial_split(), training(), and test(). The initial_split() function helps to take the initial random sample and the proportion of data to use for the training data is initially identified. The random sample is done without replacement meaning that the data are randomly selected, but can not show up in the data more than once. Then, after using the initial_split() function, the training() and test() functions are used on the resulting output from initial_split() to obtain the training and test data respectively. It is good practice to use the set.seed() function to save the seed that was used as this is a random process. Without using the set.seed() function, the same split of data would likely not be able to be recreated in the code was ran again.</p>
-<p>Let’s do the data splitting.</p>
+<p>Let's do the data splitting.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_train, titanic_test) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">survived =</span> <span class="kw">ifelse</span>(Survived <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&#39;Survived&#39;</span>, <span class="st">&#39;Died&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">drop_na</span>(survived)
@@ -446,7 +445,7 @@ titanic_test &lt;-<span class="st"> </span><span class="kw">testing</span>(titan
 
 <span class="kw">rpart.plot</span>(prune_class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
 <p><img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<p>This seems like a reasonable model. Let’s check the model accuracy.</p>
+<p>This seems like a reasonable model. Let's check the model accuracy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict &lt;-<span class="st"> </span>titanic_train <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tree_predict =</span> <span class="kw">predict</span>(prune_class_tree, <span class="dt">type =</span> <span class="st">&#39;class&#39;</span>))
 titanic_predict <span class="op">%&gt;%</span>
@@ -454,7 +453,7 @@ titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>same_class, mean, sum)</code></pre></div>
 <pre><code>##   mean_same_class sum_same_class
 ## 1       0.8445513            527</code></pre>
-<p>This is actually slightly better accuracy compared to the model last time, about xxx compared to about xxx prediction accuracy. But, let’s test the model out on the test data to see the prediction accuracy for the test data, the real test.</p>
+<p>This is actually slightly better accuracy compared to the model last time, about xxx compared to about xxx prediction accuracy. But, let's test the model out on the test data to see the prediction accuracy for the test data, the real test.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict_test &lt;-<span class="st"> </span>titanic_test <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tree_predict =</span> <span class="kw">predict</span>(prune_class_tree, <span class="dt">newdata =</span> titanic_test, <span class="dt">type =</span> <span class="st">&#39;class&#39;</span>))
 titanic_predict_test <span class="op">%&gt;%</span>
@@ -467,13 +466,13 @@ titanic_predict_test <span class="op">%&gt;%</span>
 <div id="introduction-to-resamplingbootstrap" class="section level3">
 <h3><span class="header-section-number">5.1.6</span> Introduction to resampling/bootstrap</h3>
 <p>To explore these ideas in more detail, it will be helpful to use a statistical technique called resampling or the bootstrap. We will use these ideas a lot going forward in this course. In very simple terminology, resampling or the bootstrap can help us understand uncertainty in our estimates and also allow us to be more flexible in the statistics that we run. The main drawback of resampling and bootstrap methods is that they can be computationally heavy, therefore depending on the situation, more time is needed to come to the conclusion desired.</p>
-<p>Resampling and bootstrap methods use the sample data we have and perform the sampling procedure again treating the sample we have data for as the population. Generating the new samples is done with replacement (more on this later). This resampling is done many times (100, 500, 1000, etc.) with more in general being better. As an example with the titanic data, let’s take the titanic data, assume this is the population of interest, and resample from this population 1000 times (with replacement) and each time we will calculate the proportion that survived the disaster in each sample. Before we write the code for this, a few questions to consider.</p>
+<p>Resampling and bootstrap methods use the sample data we have and perform the sampling procedure again treating the sample we have data for as the population. Generating the new samples is done with replacement (more on this later). This resampling is done many times (100, 500, 1000, etc.) with more in general being better. As an example with the titanic data, let's take the titanic data, assume this is the population of interest, and resample from this population 1000 times (with replacement) and each time we will calculate the proportion that survived the disaster in each sample. Before we write the code for this, a few questions to consider.</p>
 <ol style="list-style-type: decimal">
 <li>Would you expect the proportion that survived to be the same in each new sample? Why or why not?</li>
 <li>Sampling with replacement keeps coming up, what do you think this means?</li>
 <li>Hypothesize why sampling with replacement would be a good idea?</li>
 </ol>
-<p>Let’s now try the resampling with the calculation of the proportion that survived. We will then save these 1000 survival proportions and create a visualization.</p>
+<p>Let's now try the resampling with the calculation of the proportion that survived. We will then save these 1000 survival proportions and create a visualization.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_titanic &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
     titanic <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(titanic), <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
@@ -488,7 +487,7 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <div id="bootstrap-variation-in-prediction-accuracy" class="section level4">
 <h4><span class="header-section-number">5.1.6.1</span> Bootstrap variation in prediction accuracy</h4>
 <p>We can apply these same methods to evaluate the prediction accuracy based on the classification model above. When using the bootstrap, we can get an estimate for how much variation there is in the classification accuracy based on the sample that we have. In addition, we can explore how different the prediction accuracy would be for many samples when using all the data and by splitting the data into training and test sets. Bootstrap full data.</p>
-<p>Let’s first explore the full data to see how much variation there is in the prediction accuracy using all of the data. Here we will again use the sample_n() function to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I’m going to write a function to do all of these steps one time.</p>
+<p>Let's first explore the full data to see how much variation there is in the prediction accuracy using all of the data. Here we will again use the sample_n() function to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I'm going to write a function to do all of these steps one time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_predict_acc &lt;-<span class="st"> </span><span class="cf">function</span>(data) {
   rsamp_titanic &lt;-<span class="st"> </span>titanic <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(titanic), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
@@ -506,7 +505,7 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <span class="kw">calc_predict_acc</span>()</code></pre></div>
 <pre><code>##   mean_same_class sum_same_class
 ## 1       0.8451178            753</code></pre>
-<p>To do the bootstrap, this process can be replicated many times. In this case, I’m going to do 500. In practice, we would likely want to do a few more.</p>
+<p>To do the bootstrap, this process can be replicated many times. In this case, I'm going to do 500. In practice, we would likely want to do a few more.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">predict_accuracy_fulldata &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2000</span>, calc_predict_acc) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 

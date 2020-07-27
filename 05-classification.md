@@ -48,11 +48,17 @@ count(titanic, survived)
 ```
 
 ```
-## # A tibble: 2 x 2
-##   survived     n
-##   <chr>    <int>
-## 1 Died       549
-## 2 Survived   342
+## Warning: `count_()` is deprecated as of dplyr 0.7.0.
+## Please use `count()` instead.
+## See vignette('programming') for more help
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```
+##   survived   n
+## 1     Died 549
+## 2 Survived 342
 ```
 
 
@@ -122,10 +128,10 @@ printcp(class_tree)
 ##         CP nsplit rel error  xerror     xstd
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
-## 3 0.023392      3   0.49415 0.54094 0.035402
-## 4 0.020468      4   0.47076 0.52047 0.034897
-## 5 0.010234      5   0.45029 0.51462 0.034749
-## 6 0.010000      8   0.41813 0.52632 0.035043
+## 3 0.023392      3   0.49415 0.49415 0.034217
+## 4 0.020468      4   0.47076 0.49123 0.034140
+## 5 0.010234      5   0.45029 0.50000 0.034372
+## 6 0.010000      8   0.41813 0.48830 0.034061
 ```
 
 ```r
@@ -225,13 +231,11 @@ titanic_predict %>%
 ```
 
 ```
-## # A tibble: 4 x 3
-##   survived tree_predict     n
-##   <chr>    <fct>        <int>
-## 1 Died     Died           492
-## 2 Died     Survived        57
-## 3 Survived Died            97
-## 4 Survived Survived       245
+##   survived tree_predict   n
+## 1     Died         Died 492
+## 2     Died     Survived  57
+## 3 Survived         Died  97
+## 4 Survived     Survived 245
 ```
 
 
@@ -276,13 +280,11 @@ titanic_predict %>%
 ```
 
 ```
-## # A tibble: 4 x 3
-##   survived tree_predict_full     n
-##   <chr>    <fct>             <int>
-## 1 Died     Died                521
-## 2 Died     Survived             28
-## 3 Survived Died                115
-## 4 Survived Survived            227
+##   survived tree_predict_full   n
+## 1     Died              Died 521
+## 2     Died          Survived  28
+## 3 Survived              Died 115
+## 4 Survived          Survived 227
 ```
 
 

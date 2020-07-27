@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Multivariate Visualization | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 4 Multivariate Visualization | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Multivariate Visualization | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-01-13" />
+<meta name="date" content="2020-07-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
 <li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
 <li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother’s smoking</a></li>
+<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
 <li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
 </ul></li>
@@ -222,89 +222,109 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())
 
 <span class="co"># Import data</span>
-<span class="kw">head</span>(nice_ride)</code></pre></div>
-<pre><code>## # A tibble: 6 x 17
-##   tripduration start_station start_station_n… end_station end_station_name
-##          &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;       &lt;chr&gt;           
-## 1         3290 36            South 2nd Stree… 36          South 2nd Stree…
-## 2         2413 NULL          NULL             NULL        NULL            
-## 3         1505 154           Lake Harriet Ba… 180         Lake Street &amp; K…
-## 4         1416 180           Lake Street &amp; K… 180         Lake Street &amp; K…
-## 5          915 8             YWCA Downtown    48          26th Street &amp; H…
-## 6         3841 39            Loring Park      39          Loring Park     
-## # … with 12 more variables: bikeid &lt;dbl&gt;, usertype &lt;chr&gt;, birth_year &lt;dbl&gt;,
-## #   sex &lt;dbl&gt;, bike_type &lt;chr&gt;, month &lt;dbl&gt;, year &lt;dbl&gt;, day &lt;int&gt;, hour &lt;int&gt;,
-## #   minute &lt;int&gt;, morning &lt;chr&gt;, tripduration_minutes &lt;dbl&gt;</code></pre>
-<p>Real world data are never as simple exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>tripduration_minutes, <span class="dt">data =</span> nice_ride, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Trip Duration (in minutes)&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Univariate distribution of trip duration&quot;</span>)</code></pre></div>
+<span class="kw">head</span>(us_weather)</code></pre></div>
+<pre><code>## # A tibble: 6 x 34
+##   station date                dewpoint_avg drybulbtemp_avg relativehumidit…
+##     &lt;dbl&gt; &lt;dttm&gt;                     &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
+## 1 7.25e10 2018-10-01 23:59:00           51              52               95
+## 2 7.25e10 2018-10-02 23:59:00           59              60               96
+## 3 7.25e10 2018-10-03 23:59:00           55              62               86
+## 4 7.25e10 2018-10-04 23:59:00           56              60               77
+## 5 7.25e10 2018-10-05 23:59:00           43              51               75
+## 6 7.25e10 2018-10-06 23:59:00           62              63               90
+## # … with 29 more variables: sealevelpressure_avg &lt;dbl&gt;,
+## #   stationpressure_avg &lt;dbl&gt;, wetbulbtemp_avg &lt;dbl&gt;, windspeed_avg &lt;dbl&gt;,
+## #   cooling_degree_days &lt;dbl&gt;, departure_from_normal_temperature &lt;dbl&gt;,
+## #   heating_degree_days &lt;dbl&gt;, drybulbtemp_max &lt;dbl&gt;, drybulbtemp_min &lt;dbl&gt;,
+## #   peak_wind_direction &lt;dbl&gt;, peak_wind_speed &lt;dbl&gt;, precipitation &lt;dbl&gt;,
+## #   snow_depth &lt;dbl&gt;, snowfall &lt;dbl&gt;, wind_direction &lt;dbl&gt;, wind_speed &lt;dbl&gt;,
+## #   weather_occurances &lt;chr&gt;, sunrise &lt;dbl&gt;, sunset &lt;dbl&gt;, month &lt;dbl&gt;,
+## #   year &lt;dbl&gt;, day &lt;int&gt;, winter_group &lt;chr&gt;, location &lt;chr&gt;, fog &lt;dbl&gt;,
+## #   mist &lt;dbl&gt;, drizzle &lt;dbl&gt;, rain &lt;dbl&gt;, snow &lt;dbl&gt;</code></pre>
+<p>Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
+          <span class="dt">title =</span> <span class="st">&quot;Univariate distribution of average daily temperature&quot;</span>)</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>tripduration_minutes, <span class="dt">data =</span> nice_ride, <span class="dt">bins =</span> <span class="dv">30</span>, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(month)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Trip Duration (in minutes)&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of trip duration by time of day bike was rented&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>, 
+             <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
+          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
           <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Often density plots are easier to visualize when there are more than one group. To plot more than one density curve, we need to specify the color argument instead of fill.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>tripduration_minutes, <span class="dt">data =</span> nice_ride, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>morning, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Trip Duration (in minutes)&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of trip duration by time of day bike was rented&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">1</span>,
+             <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
+          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
           <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>tripduration_minutes, <span class="dt">data =</span> nice_ride, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>morning, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Trip Duration (in minutes)&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of trip duration by time of day bike was rented&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">1</span>,
+             <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
+          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
           <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>tripduration_minutes, <span class="dt">data =</span> nice_ride, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>morning, 
-           <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>morning, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Trip Duration (in minutes)&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of trip duration by time of day bike was rented&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), 
+           <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
+          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
           <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>,
           <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>tripduration_minutes, <span class="dt">data =</span> nice_ride, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(month), 
-           <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Trip Duration (in minutes)&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of trip duration by time of day bike was rented&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), 
+           <span class="dt">fill =</span> <span class="st">&#39;gray75&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
+          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
           <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-6-1.png" width="672" /> ## Violin Plots</p>
-<p>Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.ArithmeticError</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> colleges) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Primary Deg&quot;</span>)</code></pre></div>
+<p>Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
+          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,
+          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>)</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the <code>fill =</code> argument.ArithmeticError</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> colleges, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Primary Deg&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
+          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,
+          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the <code>fill =</code> argument.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
+          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>, 
+          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
+<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>Adding quantiles are useful to aid in the comparison with the violin plots. These can be added with the <code>draw_quantiles</code> argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> colleges, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Primary Deg&quot;</span>)</code></pre></div>
-<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" /> ### Violin Plots with many groups</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, 
+          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
+          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,
+          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
+<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" /> ### Violin Plots with many groups</p>
 <p>Many groups are more easily shown in the violin plot framework.</p>
 <p>With many groups, it is often of interest to put the long x-axis labels representing each group on the y-axis so that it reads the correct direction and the labels do not run into each other. This can be done with the <code>gf_refine()</code> function with <code>coord_flip()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>region, <span class="dt">data =</span> colleges, <span class="dt">fill =</span> <span class="st">&#39;gray80&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;US Region&quot;</span>) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>location, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, 
+          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
+          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by location&#39;</span>,
+          <span class="dt">x =</span> <span class="st">&quot;Location&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
-<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <div id="facetting" class="section level2">
 <h2><span class="header-section-number">4.1</span> Facetting</h2>
 <p>Facetting is another way to explore distributions of two or more variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>region, <span class="dt">data =</span> colleges, <span class="dt">fill =</span> <span class="st">&#39;gray80&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Admission Rate (in %)&#39;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of higher education admission rates by degree type&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;US Region&quot;</span>) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>location, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, 
+          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
+          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by location&#39;</span>,
+          <span class="dt">x =</span> <span class="st">&quot;Location&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>()) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>preddeg)</code></pre></div>
-<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>snow)</code></pre></div>
+<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <!-- ## Considering Groups -->
 <!-- We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful. -->
 <!-- Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly. -->

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Estimation / Bootstrap / Uncertainty | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 7 Estimation / Bootstrap / Uncertainty | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Estimation / Bootstrap / Uncertainty | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-01-13" />
+<meta name="date" content="2020-07-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
 <li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
 <li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother’s smoking</a></li>
+<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
 <li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
 </ul></li>
@@ -260,7 +260,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 
 <span class="kw">resample_baby</span>()</code></pre></div>
 <pre><code>##                          .
-## gestational_days 0.5269056</code></pre>
+## gestational_days 0.4722485</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -271,14 +271,14 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
 <pre><code>##          5%       50%       95%
-## 1 0.3963413 0.4685931 0.5439389</code></pre>
+## 1 0.3952682 0.4680952 0.5417259</code></pre>
 </div>
 <div id="categorical-predictors" class="section level2">
 <h2><span class="header-section-number">7.2</span> Categorical Predictor(s)</h2>
-<p>Before, linear regression has been ran with a continuous attribute. In both models, the baby’s birth weight was the outcome of interest and the predictor in one model was the number of gestational days and in the other was the age of the mother at time of birth. What happens when a categorical predictor is used instead of a continuous predictor? This section will introduce that idea with a categorical predictor that has two different levels.</p>
+<p>Before, linear regression has been ran with a continuous attribute. In both models, the baby's birth weight was the outcome of interest and the predictor in one model was the number of gestational days and in the other was the age of the mother at time of birth. What happens when a categorical predictor is used instead of a continuous predictor? This section will introduce that idea with a categorical predictor that has two different levels.</p>
 <div id="mothers-smoking" class="section level3">
-<h3><span class="header-section-number">7.2.1</span> Mother’s smoking</h3>
-<p>It is known that a mother smoking while pregnant can hamper the development of the unborn fetus. Will this transition into lower birth weight for baby’s born to mothers who smoked during the pregnancy? First, let’s explore the distribution and calculate descriptive statistics for birth weight across the two groups.</p>
+<h3><span class="header-section-number">7.2.1</span> Mother's smoking</h3>
+<p>It is known that a mother smoking while pregnant can hamper the development of the unborn fetus. Will this transition into lower birth weight for baby's born to mothers who smoked during the pregnancy? First, let's explore the distribution and calculate descriptive statistics for birth weight across the two groups.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>birth_weight, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">size =</span> <span class="fl">1.25</span>, <span class="dt">fill =</span> <span class="st">&#39;gray80&#39;</span>, <span class="dt">data =</span> baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Birth Weight (in oz)&#39;</span>,
           <span class="dt">color =</span> <span class="st">&#39;Smoked?&#39;</span>)</code></pre></div>
@@ -290,7 +290,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Birth Weight (in oz)&quot;</span>,
           <span class="dt">x =</span> <span class="st">&quot;Smoker?&quot;</span>)</code></pre></div>
 <p><img src="07-estimation_files/figure-html/violin-smoker-1.png" width="672" /></p>
-<p>Any additional information shown here that shows differences? To finish the descriptive exploration, let’s compute some descriptive statistics.</p>
+<p>Any additional information shown here that shows differences? To finish the descriptive exploration, let's compute some descriptive statistics.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, mean, sd, median, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), length)</code></pre></div>
 <pre><code>##   maternal_smoker mean_birth_weight sd_birth_weight median_birth_weight 25% 75%
@@ -307,7 +307,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <span class="kw">coef</span>(smoker_reg)</code></pre></div>
 <pre><code>##         (Intercept) maternal_smokerTRUE 
 ##          123.085315           -9.266143</code></pre>
-<p>To explore what these coefficients mean in a bit more detail, let’s look at the data a bit more.</p>
+<p>To explore what these coefficients mean in a bit more detail, let's look at the data a bit more.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">smoker =</span> <span class="kw">ifelse</span>(maternal_smoker, <span class="dv">1</span>, <span class="dv">0</span>))
 <span class="kw">head</span>(baby)</code></pre></div>
@@ -321,12 +321,12 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 ## 5          136              286           25              62               93
 ## 6          138              244           33              62              178
 ## # … with 2 more variables: maternal_smoker &lt;lgl&gt;, smoker &lt;dbl&gt;</code></pre>
-<p>Instead of using the <code>maternal_smoker</code> attribute, instead let’s run the model with the <code>smoker</code> attribute.</p>
+<p>Instead of using the <code>maternal_smoker</code> attribute, instead let's run the model with the <code>smoker</code> attribute.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">smoker_reg_new &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>smoker, <span class="dt">data =</span> baby)
 <span class="kw">coef</span>(smoker_reg_new)</code></pre></div>
 <pre><code>## (Intercept)      smoker 
 ##  123.085315   -9.266143</code></pre>
-<p>Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter “A”, meaning that the 0 is the first category in alphabetical order.</p>
+<p>Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter &quot;A&quot;, meaning that the 0 is the first category in alphabetical order.</p>
 <p>To again get a better grasp, the descriptive stats and the coefficients from the regression are shown together below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, mean, sd, median, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), length)</code></pre></div>
@@ -363,8 +363,8 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 }
 
 <span class="kw">resample_baby</span>()</code></pre></div>
-<pre><code>##                             .
-## maternal_smokerTRUE -11.30882</code></pre>
+<pre><code>##                            .
+## maternal_smokerTRUE -9.52569</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -374,8 +374,8 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <p><img src="07-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
-<pre><code>##          5%      50%       95%
-## 1 -11.06159 -9.28266 -7.495451</code></pre>
+<pre><code>##          5%       50%       95%
+## 1 -11.00007 -9.267034 -7.533942</code></pre>
 </div>
 </div>
 <div id="more-than-2-categorical-groups" class="section level2">
@@ -448,7 +448,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>maternal_smoker)</code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39;</code></pre>
 <p><img src="07-estimation_files/figure-html/scatter-smoker-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_reg_smoker &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">+</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)
 <span class="kw">coef</span>(baby_reg_smoker)</code></pre></div>
@@ -462,7 +462,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <span class="math display">\[\begin{equation}
 birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.17 maternal\_smoker + \epsilon
 \end{equation}\]</span>
-<p>Let’s explore how these are interpreted. ### Distribution of Effects Similar to before, the distribution of effects can be obtained with the following steps:</p>
+<p>Let's explore how these are interpreted. ### Distribution of Effects Similar to before, the distribution of effects can be obtained with the following steps:</p>
 <ol style="list-style-type: decimal">
 <li>Resample the observed data available, with replacement</li>
 <li>Estimate linear model coefficients.</li>
@@ -483,9 +483,9 @@ birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.1
 <pre><code>## # A tibble: 3 x 2
 ##   term                                         estimate
 ##   &lt;chr&gt;                                           &lt;dbl&gt;
-## 1 (Intercept)                                   124.   
-## 2 I(gestational_days - mean(gestational_days))    0.452
-## 3 maternal_smokerTRUE                           -10.2</code></pre>
+## 1 (Intercept)                                   123.   
+## 2 I(gestational_days - mean(gestational_days))    0.464
+## 3 maternal_smokerTRUE                            -9.54</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
@@ -499,7 +499,7 @@ coef_baby <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_smooth</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>maternal_smoker)</code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39;</code></pre>
 <p><img src="07-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_reg_int &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">*</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)
 <span class="kw">coef</span>(baby_reg_int)</code></pre></div>
@@ -525,9 +525,9 @@ coef_baby <span class="op">%&gt;%</span>
 ##   term                                                             estimate
 ##   &lt;chr&gt;                                                               &lt;dbl&gt;
 ## 1 (Intercept)                                                       124.   
-## 2 I(gestational_days - mean(gestational_days))                        0.323
-## 3 maternal_smokerTRUE                                                -9.42 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.306</code></pre>
+## 2 I(gestational_days - mean(gestational_days))                        0.420
+## 3 maternal_smokerTRUE                                                -8.39 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.137</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
@@ -538,7 +538,7 @@ coef_baby <span class="op">%&gt;%</span>
 </div>
 <div id="evaluating-model-fit" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Evaluating model fit</h3>
-<p>As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby’s birth weight.</p>
+<p>As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby's birth weight.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(baby_reg)<span class="op">$</span>r.square</code></pre></div>
 <pre><code>## [1] 0.1660911</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(smoker_reg)<span class="op">$</span>r.square</code></pre></div>

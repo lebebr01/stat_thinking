@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Prediction for individuals | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 8 Prediction for individuals | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Prediction for individuals | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-01-13" />
+<meta name="date" content="2020-07-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
 <li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
 <li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother’s smoking</a></li>
+<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
 <li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
 </ul></li>
@@ -264,9 +264,9 @@ college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<sp
 <pre><code>## # A tibble: 3 x 2
 ##   term                      estimate
 ##   &lt;chr&gt;                        &lt;dbl&gt;
-## 1 (Intercept)                0.745  
-## 2 preddegBachelor Degree    -0.0770 
-## 3 preddegCertificate Degree  0.00941</code></pre>
+## 1 (Intercept)                 0.726 
+## 2 preddegBachelor Degree     -0.0577
+## 3 preddegCertificate Degree   0.0293</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
@@ -306,12 +306,12 @@ admrate_coef <span class="op">%&gt;%</span>
 
 <span class="kw">resample_admrate_median</span>()</code></pre></div>
 <pre><code>##                    Term Median_Difference
-## 1             Associate           0.78960
-## 2              Bachelor           0.69110
-## 3           Certificate           0.81385
-## 4    bachelor_associate          -0.09850
-## 5 certificate_associate           0.02425
-## 6  bachelor_certificate          -0.12275</code></pre>
+## 1             Associate           0.78345
+## 2              Bachelor           0.70130
+## 3           Certificate           0.77140
+## 4    bachelor_associate          -0.08215
+## 5 certificate_associate          -0.01205
+## 6  bachelor_certificate          -0.07010</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 

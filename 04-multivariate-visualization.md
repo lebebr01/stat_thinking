@@ -10,31 +10,37 @@ library(statthink)
 theme_set(theme_statthinking())
 
 # Import data
-head(nice_ride)
+head(us_weather)
 ```
 
 ```
-## # A tibble: 6 x 17
-##   tripduration start_station start_station_n… end_station end_station_name
-##          <dbl> <chr>         <chr>            <chr>       <chr>           
-## 1         3290 36            South 2nd Stree… 36          South 2nd Stree…
-## 2         2413 NULL          NULL             NULL        NULL            
-## 3         1505 154           Lake Harriet Ba… 180         Lake Street & K…
-## 4         1416 180           Lake Street & K… 180         Lake Street & K…
-## 5          915 8             YWCA Downtown    48          26th Street & H…
-## 6         3841 39            Loring Park      39          Loring Park     
-## # … with 12 more variables: bikeid <dbl>, usertype <chr>, birth_year <dbl>,
-## #   sex <dbl>, bike_type <chr>, month <dbl>, year <dbl>, day <int>, hour <int>,
-## #   minute <int>, morning <chr>, tripduration_minutes <dbl>
+## # A tibble: 6 x 34
+##   station date                dewpoint_avg drybulbtemp_avg relativehumidit…
+##     <dbl> <dttm>                     <dbl>           <dbl>            <dbl>
+## 1 7.25e10 2018-10-01 23:59:00           51              52               95
+## 2 7.25e10 2018-10-02 23:59:00           59              60               96
+## 3 7.25e10 2018-10-03 23:59:00           55              62               86
+## 4 7.25e10 2018-10-04 23:59:00           56              60               77
+## 5 7.25e10 2018-10-05 23:59:00           43              51               75
+## 6 7.25e10 2018-10-06 23:59:00           62              63               90
+## # … with 29 more variables: sealevelpressure_avg <dbl>,
+## #   stationpressure_avg <dbl>, wetbulbtemp_avg <dbl>, windspeed_avg <dbl>,
+## #   cooling_degree_days <dbl>, departure_from_normal_temperature <dbl>,
+## #   heating_degree_days <dbl>, drybulbtemp_max <dbl>, drybulbtemp_min <dbl>,
+## #   peak_wind_direction <dbl>, peak_wind_speed <dbl>, precipitation <dbl>,
+## #   snow_depth <dbl>, snowfall <dbl>, wind_direction <dbl>, wind_speed <dbl>,
+## #   weather_occurances <chr>, sunrise <dbl>, sunset <dbl>, month <dbl>,
+## #   year <dbl>, day <int>, winter_group <chr>, location <chr>, fog <dbl>,
+## #   mist <dbl>, drizzle <dbl>, rain <dbl>, snow <dbl>
 ```
 
-Real world data are never as simple exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.
+Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.
 
 
 ```r
-gf_histogram(~ tripduration_minutes, data = nice_ride, bins = 30) %>% 
-  gf_labs(x = "Trip Duration (in minutes)", 
-          title = "Univariate distribution of trip duration")
+gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30) %>% 
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Univariate distribution of average daily temperature")
 ```
 
 <img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-1-1.png" width="672" />
@@ -43,9 +49,10 @@ gf_histogram(~ tripduration_minutes, data = nice_ride, bins = 30) %>%
 
 
 ```r
-gf_histogram(~ tripduration_minutes, data = nice_ride, bins = 30, fill = ~ factor(month)) %>%
-  gf_labs(x = "Trip Duration (in minutes)", 
-          title = "Multivariate distribution of trip duration by time of day bike was rented",
+gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30, 
+             fill = ~ factor(snow)) %>%
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           fill = "")
 ```
 
@@ -55,9 +62,10 @@ Often density plots are easier to visualize when there are more than one group. 
 
 
 ```r
-gf_density(~ tripduration_minutes, data = nice_ride, color = ~ morning, size = 1) %>%
-  gf_labs(x = "Trip Duration (in minutes)", 
-          title = "Multivariate distribution of trip duration by time of day bike was rented",
+gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
+             color = ~ factor(snow)) %>%
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           color = "")
 ```
 
@@ -65,9 +73,10 @@ gf_density(~ tripduration_minutes, data = nice_ride, color = ~ morning, size = 1
 
 
 ```r
-gf_density(~ tripduration_minutes, data = nice_ride, fill = ~ morning, size = 1) %>%
-  gf_labs(x = "Trip Duration (in minutes)", 
-          title = "Multivariate distribution of trip duration by time of day bike was rented",
+gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
+             fill = ~ factor(snow)) %>%
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           fill = "")
 ```
 
@@ -75,10 +84,10 @@ gf_density(~ tripduration_minutes, data = nice_ride, fill = ~ morning, size = 1)
 
 
 ```r
-gf_density(~ tripduration_minutes, data = nice_ride, color = ~ morning, 
-           fill = ~ morning, size = 1) %>%
-  gf_labs(x = "Trip Duration (in minutes)", 
-          title = "Multivariate distribution of trip duration by time of day bike was rented",
+gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ factor(snow), 
+           fill = ~ factor(snow), size = 1) %>%
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           fill = "",
           color = "")
 ```
@@ -87,51 +96,65 @@ gf_density(~ tripduration_minutes, data = nice_ride, color = ~ morning,
 
 
 ```r
-gf_density(~ tripduration_minutes, data = nice_ride, color = ~ factor(month), 
-           fill = 'gray85', size = 1) %>%
-  gf_labs(x = "Trip Duration (in minutes)", 
-          title = "Multivariate distribution of trip duration by time of day bike was rented",
+gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ factor(snow), 
+           fill = 'gray75', size = 1) %>%
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           color = "")
 ```
 
 <img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 ## Violin Plots
  
-Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.ArithmeticError
+Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.
 
 
 ```r
-gf_violin(adm_rate ~ preddeg, data = colleges) %>%
-  gf_labs(y = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          x = "Primary Deg")
+gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          title = 'Multivariate distribution of average daily temperature by whether it snowed that day',
+          x = "Snow?")
 ```
 
 <img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
-Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the `fill = ` argument.ArithmeticError
-
 
 ```r
-gf_violin(adm_rate ~ preddeg, data = colleges, fill = 'gray85') %>%
-  gf_labs(y = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          x = "Primary Deg")
+gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          title = 'Multivariate distribution of average daily temperature by whether it snowed that day',
+          x = "Snow?") %>%
+  gf_refine(coord_flip())
 ```
 
 <img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+
+Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the `fill = ` argument.
+
+
+```r
+gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85') %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          title = 'Multivariate distribution of average daily temperature by whether it snowed that day', 
+          x = "Snow?") %>%
+  gf_refine(coord_flip())
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 Adding quantiles are useful to aid in the comparison with the violin plots. These can be added with the `draw_quantiles` argument.
 
 
 ```r
-gf_violin(adm_rate ~ preddeg, data = colleges, fill = 'gray85', draw_quantiles = c(.1, .5, .9)) %>%
-  gf_labs(y = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          x = "Primary Deg")
+gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85', 
+          draw_quantiles = c(0.1, 0.5, 0.9)) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          title = 'Multivariate distribution of average daily temperature by whether it snowed that day',
+          x = "Snow?") %>%
+  gf_refine(coord_flip())
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 ### Violin Plots with many groups
  
 Many groups are more easily shown in the violin plot framework.
@@ -140,14 +163,15 @@ With many groups, it is often of interest to put the long x-axis labels represen
 
 
 ```r
-gf_violin(adm_rate ~ region, data = colleges, fill = 'gray80', draw_quantiles = c(.1, .5, .9)) %>%
-  gf_labs(y = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          x = "US Region") %>%
+gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
+          draw_quantiles = c(.1, .5, .9)) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          title = 'Multivariate distribution of average daily temperature by location',
+          x = "Location") %>%
   gf_refine(coord_flip())
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 ## Facetting
  
@@ -155,15 +179,16 @@ Facetting is another way to explore distributions of two or more variables.
 
 
 ```r
-gf_violin(adm_rate ~ region, data = colleges, fill = 'gray80', draw_quantiles = c(.1, .5, .9)) %>%
-  gf_labs(y = 'Admission Rate (in %)',
-          title = 'Multivariate distribution of higher education admission rates by degree type',
-          x = "US Region") %>%
+gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
+          draw_quantiles = c(.1, .5, .9)) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          title = 'Multivariate distribution of average daily temperature by location',
+          x = "Location") %>%
   gf_refine(coord_flip()) %>%
-  gf_facet_wrap(~ preddeg)
+  gf_facet_wrap(~ snow)
 ```
 
-<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 
 
