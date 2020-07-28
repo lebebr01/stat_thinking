@@ -54,9 +54,8 @@ jobs:
    needs: bookdown
    steps:
      - name: Checkout
-       uses: actions/checkout@v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
-        with:
-          persist-credentials: false
+       uses: actions/checkout@v2
+
      - name: Download artifact
        uses: actions/download-artifact@v1.0.0
        with:
