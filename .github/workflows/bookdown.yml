@@ -65,7 +65,7 @@ jobs:
          path: _book # optional
      - name: Deploy to GitHub Pages
        uses: JamesIves/github-pages-deploy-action@3.5.9
-        with:
-          GITHUB_TOKEN: ${{ secrets.BOOKDOWN_DEPLOY }}
-          BRANCH: gh-pages
-          FOLDER: _book/
+       with:
+         GITHUB_TOKEN: ${{ secrets.BOOKDOWN_DEPLOY }}
+         BRANCH: gh-pages
+         FOLDER: _book/
