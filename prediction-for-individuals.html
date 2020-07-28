@@ -272,9 +272,9 @@ college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<sp
 <pre><code>## # A tibble: 3 x 2
 ##   term                      estimate
 ##   &lt;chr&gt;                        &lt;dbl&gt;
-## 1 (Intercept)                 0.742 
-## 2 preddegBachelor Degree     -0.0667
-## 3 preddegCertificate Degree   0.0158</code></pre>
+## 1 (Intercept)                 0.724 
+## 2 preddegBachelor Degree     -0.0463
+## 3 preddegCertificate Degree   0.0449</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
@@ -314,12 +314,12 @@ admrate_coef <span class="op">%&gt;%</span>
 
 <span class="kw">resample_admrate_median</span>()</code></pre></div>
 <pre><code>##                    Term Median_Difference
-## 1             Associate            0.7826
-## 2              Bachelor            0.6953
-## 3           Certificate            0.8055
-## 4    bachelor_associate           -0.0873
-## 5 certificate_associate            0.0229
-## 6  bachelor_certificate           -0.1102</code></pre>
+## 1             Associate            0.7720
+## 2              Bachelor            0.7036
+## 3           Certificate            0.8000
+## 4    bachelor_associate           -0.0684
+## 5 certificate_associate            0.0280
+## 6  bachelor_certificate           -0.0964</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 

@@ -268,7 +268,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 
 <span class="kw">resample_baby</span>()</code></pre></div>
 <pre><code>##                          .
-## gestational_days 0.5076693</code></pre>
+## gestational_days 0.4295055</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -279,7 +279,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
 <pre><code>##          5%       50%       95%
-## 1 0.3947434 0.4674464 0.5432524</code></pre>
+## 1 0.3945199 0.4694316 0.5439015</code></pre>
 </div>
 <div id="categorical-predictors" class="section level2">
 <h2><span class="header-section-number">7.2</span> Categorical Predictor(s)</h2>
@@ -372,7 +372,7 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 
 <span class="kw">resample_baby</span>()</code></pre></div>
 <pre><code>##                             .
-## maternal_smokerTRUE -11.17084</code></pre>
+## maternal_smokerTRUE -8.474204</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
@@ -382,8 +382,8 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <p><img src="07-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
-<pre><code>##          5%       50%       95%
-## 1 -11.00104 -9.253011 -7.514545</code></pre>
+<pre><code>##          5%       50%      95%
+## 1 -11.03186 -9.276731 -7.50778</code></pre>
 </div>
 </div>
 <div id="more-than-2-categorical-groups" class="section level2">
@@ -491,9 +491,9 @@ birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.1
 <pre><code>## # A tibble: 3 x 2
 ##   term                                         estimate
 ##   &lt;chr&gt;                                           &lt;dbl&gt;
-## 1 (Intercept)                                   124.   
-## 2 I(gestational_days - mean(gestational_days))    0.451
-## 3 maternal_smokerTRUE                            -9.21</code></pre>
+## 1 (Intercept)                                   122.   
+## 2 I(gestational_days - mean(gestational_days))    0.537
+## 3 maternal_smokerTRUE                            -7.75</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
@@ -532,10 +532,10 @@ coef_baby <span class="op">%&gt;%</span>
 <pre><code>## # A tibble: 4 x 2
 ##   term                                                             estimate
 ##   &lt;chr&gt;                                                               &lt;dbl&gt;
-## 1 (Intercept)                                                       123.   
-## 2 I(gestational_days - mean(gestational_days))                        0.417
-## 3 maternal_smokerTRUE                                                -8.35 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.121</code></pre>
+## 1 (Intercept)                                                       122.   
+## 2 I(gestational_days - mean(gestational_days))                        0.300
+## 3 maternal_smokerTRUE                                                -7.38 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.322</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 

@@ -231,7 +231,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <span class="co"># Import data</span>
 <span class="kw">head</span>(us_weather)</code></pre></div>
-<pre><code>## # A tibble: 6 x 34
+<pre><code>## # A tibble: 6 x 35
 ##   station date                dewpoint_avg drybulbtemp_avg relativehumidit…
 ##     &lt;dbl&gt; &lt;dttm&gt;                     &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
 ## 1 7.25e10 2018-10-01 23:59:00           51              52               95
@@ -240,15 +240,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 4 7.25e10 2018-10-04 23:59:00           56              60               77
 ## 5 7.25e10 2018-10-05 23:59:00           43              51               75
 ## 6 7.25e10 2018-10-06 23:59:00           62              63               90
-## # … with 29 more variables: sealevelpressure_avg &lt;dbl&gt;,
+## # … with 30 more variables: sealevelpressure_avg &lt;dbl&gt;,
 ## #   stationpressure_avg &lt;dbl&gt;, wetbulbtemp_avg &lt;dbl&gt;, windspeed_avg &lt;dbl&gt;,
 ## #   cooling_degree_days &lt;dbl&gt;, departure_from_normal_temperature &lt;dbl&gt;,
 ## #   heating_degree_days &lt;dbl&gt;, drybulbtemp_max &lt;dbl&gt;, drybulbtemp_min &lt;dbl&gt;,
 ## #   peak_wind_direction &lt;dbl&gt;, peak_wind_speed &lt;dbl&gt;, precipitation &lt;dbl&gt;,
 ## #   snow_depth &lt;dbl&gt;, snowfall &lt;dbl&gt;, wind_direction &lt;dbl&gt;, wind_speed &lt;dbl&gt;,
-## #   weather_occurances &lt;chr&gt;, sunrise &lt;dbl&gt;, sunset &lt;dbl&gt;, month &lt;dbl&gt;,
-## #   year &lt;dbl&gt;, day &lt;int&gt;, winter_group &lt;chr&gt;, location &lt;chr&gt;, fog &lt;dbl&gt;,
-## #   mist &lt;dbl&gt;, drizzle &lt;dbl&gt;, rain &lt;dbl&gt;, snow &lt;dbl&gt;</code></pre>
+## #   weather_occurances &lt;chr&gt;, sunrise &lt;dbl&gt;, sunset &lt;dbl&gt;, month &lt;ord&gt;,
+## #   month_numeric &lt;dbl&gt;, year &lt;dbl&gt;, day &lt;int&gt;, winter_group &lt;chr&gt;,
+## #   location &lt;chr&gt;, fog &lt;chr&gt;, mist &lt;chr&gt;, drizzle &lt;chr&gt;, rain &lt;chr&gt;,
+## #   snow &lt;chr&gt;</code></pre>
 <p>Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
@@ -370,62 +371,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">us_weather <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">   </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location <span class="op">+</span><span class="st"> </span>month, median, length) </code></pre></div>
 <pre><code>##           location month median_drybulbtemp_max length_drybulbtemp_max
-## 1       Boston, MA     1                   42.0                     62
-## 2      Buffalo, NY     1                   35.0                     62
-## 3      Chicago, IL     1                   33.5                     62
-## 4      Detroit, MI     1                   35.0                     62
-## 5       Duluth, MN     1                   21.0                     62
-## 6    Iowa City, IA     1                   32.0                     62
-## 7  Minneapolis, MN     1                   25.5                     62
-## 8     Portland, ME     1                   35.5                     62
-## 9       Boston, MA     2                   42.0                     57
-## 10     Buffalo, NY     2                   35.0                     57
-## 11     Chicago, IL     2                   35.0                     57
-## 12     Detroit, MI     2                   35.0                     57
-## 13      Duluth, MN     2                   23.0                     57
-## 14   Iowa City, IA     2                   34.0                     57
-## 15 Minneapolis, MN     2                   26.0                     57
-## 16    Portland, ME     2                   37.0                     57
-## 17      Boston, MA     3                   46.0                     62
-## 18     Buffalo, NY     3                   43.5                     62
-## 19     Chicago, IL     3                   47.0                     62
-## 20     Detroit, MI     3                   46.0                     62
-## 21      Duluth, MN     3                   37.0                     62
-## 22   Iowa City, IA     3                   50.0                     62
-## 23 Minneapolis, MN     3                   43.0                     62
-## 24    Portland, ME     3                   44.0                     62
-## 25      Boston, MA     4                   54.0                     60
-## 26     Buffalo, NY     4                   50.0                     60
-## 27     Chicago, IL     4                   57.5                     60
-## 28     Detroit, MI     4                   58.0                     60
-## 29      Duluth, MN     4                   46.0                     60
-## 30   Iowa City, IA     4                   61.0                     60
-## 31 Minneapolis, MN     4                   54.5                     60
-## 32    Portland, ME     4                   52.5                     60
-## 33      Boston, MA    10                   62.5                     62
-## 34     Buffalo, NY    10                   58.0                     62
-## 35     Chicago, IL    10                   58.0                     62
-## 36     Detroit, MI    10                   60.5                     62
-## 37      Duluth, MN    10                   47.5                     62
-## 38   Iowa City, IA    10                   60.0                     62
-## 39 Minneapolis, MN    10                   52.0                     62
-## 40    Portland, ME    10                   58.5                     62
-## 41      Boston, MA    11                   49.0                     60
-## 42     Buffalo, NY    11                   41.5                     60
-## 43     Chicago, IL    11                   40.0                     60
-## 44     Detroit, MI    11                   41.0                     60
-## 45      Duluth, MN    11                   30.0                     60
-## 46   Iowa City, IA    11                   42.5                     60
-## 47 Minneapolis, MN    11                   33.5                     60
-## 48    Portland, ME    11                   42.5                     60
-## 49      Boston, MA    12                   42.0                     62
-## 50     Buffalo, NY    12                   37.5                     62
-## 51     Chicago, IL    12                   41.0                     62
-## 52     Detroit, MI    12                   41.0                     62
-## 53      Duluth, MN    12                   28.0                     62
-## 54   Iowa City, IA    12                   41.0                     62
-## 55 Minneapolis, MN    12                   32.0                     62
-## 56    Portland, ME    12                   36.0                     62</code></pre>
+## 1       Boston, MA   Jan                   42.0                     62
+## 2      Buffalo, NY   Jan                   35.0                     62
+## 3      Chicago, IL   Jan                   33.5                     62
+## 4      Detroit, MI   Jan                   35.0                     62
+## 5       Duluth, MN   Jan                   21.0                     62
+## 6    Iowa City, IA   Jan                   32.0                     62
+## 7  Minneapolis, MN   Jan                   25.5                     62
+## 8     Portland, ME   Jan                   35.5                     62
+## 9       Boston, MA   Feb                   42.0                     57
+## 10     Buffalo, NY   Feb                   35.0                     57
+## 11     Chicago, IL   Feb                   35.0                     57
+## 12     Detroit, MI   Feb                   35.0                     57
+## 13      Duluth, MN   Feb                   23.0                     57
+## 14   Iowa City, IA   Feb                   34.0                     57
+## 15 Minneapolis, MN   Feb                   26.0                     57
+## 16    Portland, ME   Feb                   37.0                     57
+## 17      Boston, MA   Mar                   46.0                     62
+## 18     Buffalo, NY   Mar                   43.5                     62
+## 19     Chicago, IL   Mar                   47.0                     62
+## 20     Detroit, MI   Mar                   46.0                     62
+## 21      Duluth, MN   Mar                   37.0                     62
+## 22   Iowa City, IA   Mar                   50.0                     62
+## 23 Minneapolis, MN   Mar                   43.0                     62
+## 24    Portland, ME   Mar                   44.0                     62
+## 25      Boston, MA   Apr                   54.0                     60
+## 26     Buffalo, NY   Apr                   50.0                     60
+## 27     Chicago, IL   Apr                   57.5                     60
+## 28     Detroit, MI   Apr                   58.0                     60
+## 29      Duluth, MN   Apr                   46.0                     60
+## 30   Iowa City, IA   Apr                   61.0                     60
+## 31 Minneapolis, MN   Apr                   54.5                     60
+## 32    Portland, ME   Apr                   52.5                     60
+## 33      Boston, MA   Oct                   62.5                     62
+## 34     Buffalo, NY   Oct                   58.0                     62
+## 35     Chicago, IL   Oct                   58.0                     62
+## 36     Detroit, MI   Oct                   60.5                     62
+## 37      Duluth, MN   Oct                   47.5                     62
+## 38   Iowa City, IA   Oct                   60.0                     62
+## 39 Minneapolis, MN   Oct                   52.0                     62
+## 40    Portland, ME   Oct                   58.5                     62
+## 41      Boston, MA   Nov                   49.0                     60
+## 42     Buffalo, NY   Nov                   41.5                     60
+## 43     Chicago, IL   Nov                   40.0                     60
+## 44     Detroit, MI   Nov                   41.0                     60
+## 45      Duluth, MN   Nov                   30.0                     60
+## 46   Iowa City, IA   Nov                   42.5                     60
+## 47 Minneapolis, MN   Nov                   33.5                     60
+## 48    Portland, ME   Nov                   42.5                     60
+## 49      Boston, MA   Dec                   42.0                     62
+## 50     Buffalo, NY   Dec                   37.5                     62
+## 51     Chicago, IL   Dec                   41.0                     62
+## 52     Detroit, MI   Dec                   41.0                     62
+## 53      Duluth, MN   Dec                   28.0                     62
+## 54   Iowa City, IA   Dec                   41.0                     62
+## 55 Minneapolis, MN   Dec                   32.0                     62
+## 56    Portland, ME   Dec                   36.0                     62</code></pre>
 </div>
 </div>
 <div id="other-statistics-of-center" class="section level2">
