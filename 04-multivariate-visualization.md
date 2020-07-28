@@ -192,111 +192,277 @@ gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85',
 
 
 
-<!-- ## Considering Groups -->
-<!-- We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful. -->
+## Considering Groups
+We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful.
 
-<!-- Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median) -->
-<!-- ``` -->
-
-<!-- Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now `outcome ~ grouping` where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the `~` is the grouping variable. This syntax is similar to the violin plots that were created earlier. -->
-
-<!-- Can you see differences in the admission rates across the regions? -->
-
-<!-- One thing that is useful to add in when computing conditional statisics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which is common. To do this, we can add another function to the `df_stats()` function. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median, length) -->
-<!-- ``` -->
-
-<!-- This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on. -->
-
-<!-- ### Adding additional groups -->
-<!-- What if we thought more than one variable was important in explaining variation in the outcome variable? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another variable to the right-hand side of the formula argument. More than one variable are separated with a `+` symbol. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(adm_rate ~ region + preddeg, median, length) -->
-<!-- ``` -->
-
-<!-- ## Other statistics of center -->
-<!-- So far we have been discussing the median. The median attempts to provide a single number summary for the center of the distribution. It is a robust statistic, but likely isn't the most popular statistic to provide a location for the center of a distribution. The mean is often more commonly used as a measure of the center of a distribution. Part of this is due to the usage of the mean in common statistical methods and the mean also uses the values of all the data in the calculation. The median only considers the values of the middle score or scores, therefore this statistic is less sensitive to extreme values than the mean. I like to look at both statistics and this can provide some insight into the distribution of interest. We can add the mean using the `df_stats()` function by adding the function `mean`. -->
-
-<!-- ```{r} -->
-<!-- stats_compute <- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, median, mean, length) -->
-<!-- stats_compute -->
-<!-- ``` -->
-
-<!-- Do you notice any trends in the direction the mean and median typically follow? More specifically, is the mean typically larger than the median or vice versa? -->
-
-<!-- Let's visualize them. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30) %>% -->
-<!--   gf_facet_wrap(~ region) %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ median_adm_rate, data = stats_compute, size = 1) %>% -->
-<!--   gf_vline(color = 'lightblue', xintercept = ~ mean_adm_rate, data = stats_compute, size = 1) -->
-<!-- ``` -->
-
-<!-- What is different about the distributions that have larger differences in the mean and median? -->
-
-<!-- ## Measures of Variation -->
-
-<!-- So far we have focused primarily on applying functions to columns of data to provide a single numeric summary for where the center of the distribution may lie. The center of the distribution is important, however the primary goal in research and with statistics is to try to understand the variation in the distribution. -->
-
-<!-- One crude measure of variation that is intuitive is the range of a variable. The range is the difference between the smallest and the largest number in the data. We can compute this with the `df_stats()` function. -->
-
-<!-- ```{r} -->
-<!-- colleges %>% -->
-<!--   df_stats(~ adm_rate, range) -->
-<!-- ``` -->
-
-<!-- The details of the `df_stats()` function are in the previous course notes. The output for this computation returns two values, the minimum and maximum value in the data and unsurprisingly, is 0 and 1 respectively.  -->
-
-<!-- ### Robust measure of variation -->
-<!-- The idea behind the IQR representing differences in percentiles allows us to extend this to different percentiles that may be more directly interpretable for a given situation. For example, suppose we wanted to know how spread out the middle 80% of the distribution is. We can do this directly by computing the 90th and 10th percentiles and finding the difference between the two. -->
-
-<!-- ```{r} -->
-<!-- mid_80 <- colleges %>% -->
-<!--   df_stats(~ adm_rate, quantile(c(0.1, 0.9)), nice_names = TRUE) -->
-<!-- mid_80 -->
-<!-- ``` -->
-
-<!-- As you can see, once you extend the amount of the distribution contained, the distance increases, now to 0.555 or 55.5% the the range of the middle 80% of the admission rate distribution. We can also visualize what this looks like. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
-<!-- ``` -->
-
-<!-- We can also view the exact percentages using the empirical cumulative density function. -->
-
-<!-- ```{r} -->
-<!-- gf_ecdf(~ adm_rate, data = colleges) %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) -->
-<!-- ``` -->
-
-<!-- ### Variation by Group -->
-<!-- These statistics can also be calculated by different grouping variables similar to what was done with statisitcs of center. Now the variable of interest is on the left-hand side of the equation and the grouping variable is on the right hand side. -->
-
-<!-- ```{r} -->
-<!-- iqr_groups <- colleges %>% -->
-<!--   df_stats(adm_rate ~ region, IQR, quantile(c(0.25, 0.75)), nice_names = TRUE) -->
-<!-- iqr_groups -->
-<!-- ``` -->
-
-<!-- This can also be visualized to see how these statistics vary across the groups. -->
-
-<!-- ```{r} -->
-<!-- gf_histogram(~ adm_rate, data = colleges, bins = 30, color = 'black') %>% -->
-<!--   gf_vline(color = 'blue', xintercept = ~ value,  -->
-<!--      data = filter(pivot_longer(iqr_groups, IQR_adm_rate:'X75.'), name %in% c('X25.', 'X75.')), size = 1) %>% -->
-<!--   gf_facet_wrap(~ region) -->
-<!-- ``` -->
+Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly. 
 
 
+```r
+us_weather %>% 
+  df_stats(drybulbtemp_max ~ location, median) 
+```
+
+```
+##          location median_drybulbtemp_max
+## 1      Boston, MA                     48
+## 2     Buffalo, NY                     42
+## 3     Chicago, IL                     43
+## 4     Detroit, MI                     45
+## 5      Duluth, MN                     33
+## 6   Iowa City, IA                     46
+## 7 Minneapolis, MN                     38
+## 8    Portland, ME                     43
+```
+
+Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now `outcome ~ grouping` where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the `~` is the grouping variable. This syntax is similar to the violin plots that were created earlier. 
+
+Can you see differences in the admission rates across the regions? 
+
+One thing that is useful to add in when computing conditional statisics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which is common. To do this, we can add another function to the `df_stats()` function. 
+
+
+```r
+us_weather %>% 
+ df_stats(drybulbtemp_max ~ location, median, length) 
+```
+
+```
+##          location median_drybulbtemp_max length_drybulbtemp_max
+## 1      Boston, MA                     48                    425
+## 2     Buffalo, NY                     42                    425
+## 3     Chicago, IL                     43                    425
+## 4     Detroit, MI                     45                    425
+## 5      Duluth, MN                     33                    425
+## 6   Iowa City, IA                     46                    425
+## 7 Minneapolis, MN                     38                    425
+## 8    Portland, ME                     43                    425
+```
+
+This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on. 
+
+### Adding additional groups 
+What if we thought more than one variable was important in explaining variation in the outcome variable? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another variable to the right-hand side of the formula argument. More than one variable are separated with a `+` symbol. 
+
+
+```r
+us_weather %>% 
+   df_stats(drybulbtemp_max ~ location + month, median, length) 
+```
+
+```
+##           location month median_drybulbtemp_max length_drybulbtemp_max
+## 1       Boston, MA     1                   42.0                     62
+## 2      Buffalo, NY     1                   35.0                     62
+## 3      Chicago, IL     1                   33.5                     62
+## 4      Detroit, MI     1                   35.0                     62
+## 5       Duluth, MN     1                   21.0                     62
+## 6    Iowa City, IA     1                   32.0                     62
+## 7  Minneapolis, MN     1                   25.5                     62
+## 8     Portland, ME     1                   35.5                     62
+## 9       Boston, MA     2                   42.0                     57
+## 10     Buffalo, NY     2                   35.0                     57
+## 11     Chicago, IL     2                   35.0                     57
+## 12     Detroit, MI     2                   35.0                     57
+## 13      Duluth, MN     2                   23.0                     57
+## 14   Iowa City, IA     2                   34.0                     57
+## 15 Minneapolis, MN     2                   26.0                     57
+## 16    Portland, ME     2                   37.0                     57
+## 17      Boston, MA     3                   46.0                     62
+## 18     Buffalo, NY     3                   43.5                     62
+## 19     Chicago, IL     3                   47.0                     62
+## 20     Detroit, MI     3                   46.0                     62
+## 21      Duluth, MN     3                   37.0                     62
+## 22   Iowa City, IA     3                   50.0                     62
+## 23 Minneapolis, MN     3                   43.0                     62
+## 24    Portland, ME     3                   44.0                     62
+## 25      Boston, MA     4                   54.0                     60
+## 26     Buffalo, NY     4                   50.0                     60
+## 27     Chicago, IL     4                   57.5                     60
+## 28     Detroit, MI     4                   58.0                     60
+## 29      Duluth, MN     4                   46.0                     60
+## 30   Iowa City, IA     4                   61.0                     60
+## 31 Minneapolis, MN     4                   54.5                     60
+## 32    Portland, ME     4                   52.5                     60
+## 33      Boston, MA    10                   62.5                     62
+## 34     Buffalo, NY    10                   58.0                     62
+## 35     Chicago, IL    10                   58.0                     62
+## 36     Detroit, MI    10                   60.5                     62
+## 37      Duluth, MN    10                   47.5                     62
+## 38   Iowa City, IA    10                   60.0                     62
+## 39 Minneapolis, MN    10                   52.0                     62
+## 40    Portland, ME    10                   58.5                     62
+## 41      Boston, MA    11                   49.0                     60
+## 42     Buffalo, NY    11                   41.5                     60
+## 43     Chicago, IL    11                   40.0                     60
+## 44     Detroit, MI    11                   41.0                     60
+## 45      Duluth, MN    11                   30.0                     60
+## 46   Iowa City, IA    11                   42.5                     60
+## 47 Minneapolis, MN    11                   33.5                     60
+## 48    Portland, ME    11                   42.5                     60
+## 49      Boston, MA    12                   42.0                     62
+## 50     Buffalo, NY    12                   37.5                     62
+## 51     Chicago, IL    12                   41.0                     62
+## 52     Detroit, MI    12                   41.0                     62
+## 53      Duluth, MN    12                   28.0                     62
+## 54   Iowa City, IA    12                   41.0                     62
+## 55 Minneapolis, MN    12                   32.0                     62
+## 56    Portland, ME    12                   36.0                     62
+```
+
+## Other statistics of center 
+So far we have been discussing the median. The median attempts to provide a single number summary for the center of the distribution. It is a robust statistic, but likely isn't the most popular statistic to provide a location for the center of a distribution. The mean is often more commonly used as a measure of the center of a distribution. Part of this is due to the usage of the mean in common statistical methods and the mean also uses the values of all the data in the calculation. The median only considers the values of the middle score or scores, therefore this statistic is less sensitive to extreme values than the mean. I like to look at both statistics and this can provide some insight into the distribution of interest. We can add the mean using the `df_stats()` function by adding the function `mean`. 
+
+
+```r
+stats_compute <- us_weather %>% 
+ df_stats(drybulbtemp_max ~ location, median, mean, length) 
+stats_compute 
+```
+
+```
+##          location median_drybulbtemp_max mean_drybulbtemp_max
+## 1      Boston, MA                     48             49.11294
+## 2     Buffalo, NY                     42             43.77176
+## 3     Chicago, IL                     43             44.84706
+## 4     Detroit, MI                     45             45.63529
+## 5      Duluth, MN                     33             33.23765
+## 6   Iowa City, IA                     46             45.40471
+## 7 Minneapolis, MN                     38             38.08471
+## 8    Portland, ME                     43             43.96000
+##   length_drybulbtemp_max
+## 1                    425
+## 2                    425
+## 3                    425
+## 4                    425
+## 5                    425
+## 6                    425
+## 7                    425
+## 8                    425
+```
+
+Do you notice any trends in the direction the mean and median typically follow? More specifically, is the mean typically larger than the median or vice versa? 
+
+Let's visualize them. 
+
+
+```r
+gf_histogram(~ drybulbtemp_max, data = us_weather, bins = 30) %>% 
+  gf_facet_wrap(~ location) %>% 
+  gf_vline(color = 'blue', xintercept = ~ median_drybulbtemp_max, 
+           data = stats_compute, size = 1) %>% 
+  gf_vline(color = 'lightblue', xintercept = ~ mean_drybulbtemp_max, 
+           data = stats_compute, size = 1) %>%
+  gf_labs(x = 'Maxmimum daily temperature')
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+
+What is different about the distributions that have larger differences in the mean and median? 
+
+## Measures of Variation 
+
+So far we have focused primarily on applying functions to columns of data to provide a single numeric summary for where the center of the distribution may lie. The center of the distribution is important, however the primary goal in research and with statistics is to try to understand the variation in the distribution. 
+
+One crude measure of variation that is intuitive is the range of a variable. The range is the difference between the smallest and the largest number in the data. We can compute this with the `df_stats()` function. 
+
+
+```r
+ us_weather %>% 
+   df_stats(~ drybulbtemp_max, range) 
+```
+
+```
+##   range_drybulbtemp_max_1 range_drybulbtemp_max_2
+## 1                     -14                      89
+```
+
+The details of the `df_stats()` function are in the previous course notes. The output for this computation returns two values, the minimum and maximum value in the data and unsurprisingly, is 0 and 1 respectively.  
+
+### Robust measure of variation 
+The idea behind the IQR representing differences in percentiles allows us to extend this to different percentiles that may be more directly interpretable for a given situation. For example, suppose we wanted to know how spread out the middle 80% of the distribution is. We can do this directly by computing the 90th and 10th percentiles and finding the difference between the two. 
+
+
+```r
+ mid_80 <- us_weather %>% 
+   df_stats(~ drybulbtemp_max, quantile(c(0.1, 0.9)), nice_names = TRUE) 
+ mid_80 
+```
+
+```
+##   X10. X90.
+## 1   25   62
+```
+
+As you can see, once you extend the amount of the distribution contained, the distance increases, now to 0.555 or 55.5% the the range of the middle 80% of the admission rate distribution. We can also visualize what this looks like. 
+
+
+```r
+ gf_histogram(~ drybulbtemp_max, data = us_weather, 
+              bins = 30, color = 'black') %>% 
+   gf_vline(color = 'blue', xintercept = ~ value, 
+            data = gather(mid_80), size = 1) %>%
+  gf_labs(x = 'Maxmimum daily temperature')
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+
+We can also view the exact percentages using the empirical cumulative density function. 
+
+
+```r
+ gf_ecdf(~ drybulbtemp_max, data = us_weather) %>% 
+   gf_vline(color = 'blue', xintercept = ~ value, data = gather(mid_80), size = 1) %>%
+  gf_labs(x = 'Maxmimum daily temperature')
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+
+### Variation by Group 
+These statistics can also be calculated by different grouping variables similar to what was done with statisitcs of center. Now the variable of interest is on the left-hand side of the equation and the grouping variable is on the right hand side. 
+
+
+```r
+ iqr_groups <- us_weather %>% 
+   df_stats(drybulbtemp_max ~ location, IQR, quantile(c(0.25, 0.75)), 
+            nice_names = TRUE) 
+ iqr_groups 
+```
+
+```
+##          location IQR_drybulbtemp_max X25. X75.
+## 1      Boston, MA                  16   41   57
+## 2     Buffalo, NY                  17   35   52
+## 3     Chicago, IL                  18   35   53
+## 4     Detroit, MI                  18   36   54
+## 5      Duluth, MN                  18   24   42
+## 6   Iowa City, IA                  22   34   56
+## 7 Minneapolis, MN                  21   28   49
+## 8    Portland, ME                  16   36   52
+```
+
+This can also be visualized to see how these statistics vary across the groups. 
+
+
+```r
+ gf_histogram(~ drybulbtemp_max, data = us_weather, bins = 30, color = 'black') %>% 
+   gf_vline(color = 'blue', xintercept = ~ value,  
+      data = filter(pivot_longer(iqr_groups, IQR_drybulbtemp_max:'X75.'), 
+                    name %in% c('X25.', 'X75.')), size = 1) %>% 
+   gf_facet_wrap(~ location) %>%
+  gf_labs(x = 'Maxmimum daily temperature')
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+
+
+```r
+ gf_ecdf(~ drybulbtemp_max, data = us_weather) %>% 
+   gf_vline(color = 'blue', xintercept = ~ value,  
+      data = filter(pivot_longer(iqr_groups, IQR_drybulbtemp_max:'X75.'), 
+                    name %in% c('X25.', 'X75.')), size = 1) %>% 
+   gf_facet_wrap(~ location) %>%
+  gf_labs(x = 'Maxmimum daily temperature')
+```
+
+<img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-24-1.png" width="672" />
