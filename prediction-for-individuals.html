@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-07-28" />
+<meta name="date" content="2020-07-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +33,7 @@
   
 <link rel="prev" href="estimation-bootstrap-uncertainty.html"/>
 
+<script src="libs/header-attrs-2.3/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -53,41 +54,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -107,31 +134,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
 <li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a></li>
 <li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a><ul>
+<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a>
+<ul>
 <li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
 <li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
-<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a><ul>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a>
+<ul>
 <li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
 <li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a><ul>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
 <li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
 <li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
+<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
+<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#range"><i class="fa fa-check"></i><b>3.3.1</b> Range</a></li>
 <li class="chapter" data-level="3.3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#percentile-range"><i class="fa fa-check"></i><b>3.3.2</b> Percentile Range</a></li>
 <li class="chapter" data-level="3.3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#interquartile-range-iqr"><i class="fa fa-check"></i><b>3.3.3</b> Interquartile Range (IQR)</a></li>
@@ -141,19 +175,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-categorical-attributes"><i class="fa fa-check"></i><b>3.4</b> Summarizing Categorical Attributes</a></li>
 <li class="chapter" data-level="3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#advanced-extension-computing-your-own-measure-of-variation"><i class="fa fa-check"></i><b>3.5</b> Advanced Extension: Computing Your Own Measure of Variation</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
-<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a><ul>
+<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.2.1</b> Adding additional groups</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#other-statistics-of-center"><i class="fa fa-check"></i><b>4.3</b> Other statistics of center</a></li>
-<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a><ul>
+<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#robust-measure-of-variation"><i class="fa fa-check"></i><b>4.4.1</b> Robust measure of variation</a></li>
 <li class="chapter" data-level="4.4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#variation-by-group"><i class="fa fa-check"></i><b>4.4.2</b> Variation by Group</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#pruning-trees"><i class="fa fa-check"></i><b>5.1.2</b> Pruning Trees</a></li>
 <li class="chapter" data-level="5.1.3" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.3</b> Accuracy</a></li>
@@ -163,13 +202,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1.7" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>5.1.7</b> Cross-validation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a><ul>
+<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="linear-model.html"><a href="linear-model.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Visualize distributions</a></li>
 <li class="chapter" data-level="6.1.2" data-path="linear-model.html"><a href="linear-model.html#decision-tree---regression-tree"><i class="fa fa-check"></i><b>6.1.2</b> Decision Tree - Regression Tree</a></li>
 <li class="chapter" data-level="6.1.3" data-path="linear-model.html"><a href="linear-model.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.1.3</b> Evaluating accuracy</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a><ul>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a>
+<ul>
 <li class="chapter" data-level="6.2.1" data-path="linear-model.html"><a href="linear-model.html#description-of-the-data"><i class="fa fa-check"></i><b>6.2.1</b> Description of the Data</a></li>
 <li class="chapter" data-level="6.2.2" data-path="linear-model.html"><a href="linear-model.html#scatterplots"><i class="fa fa-check"></i><b>6.2.2</b> Scatterplots</a></li>
 <li class="chapter" data-level="6.2.3" data-path="linear-model.html"><a href="linear-model.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>6.2.3</b> Fitting a linear regression model</a></li>
@@ -177,25 +219,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.3</b> Conditional Means</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
+<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
-<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
+<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother’s smoking</a></li>
 <li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a><ul>
+<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a>
+<ul>
 <li class="chapter" data-level="7.3.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>7.3.1</b> Explore distribution 3 groups</a></li>
 <li class="chapter" data-level="7.3.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#overall-model-fit"><i class="fa fa-check"></i><b>7.3.2</b> Overall model fit</a></li>
 </ul></li>
-<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a><ul>
+<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a>
+<ul>
 <li class="chapter" data-level="7.4.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#interactions"><i class="fa fa-check"></i><b>7.4.1</b> Interactions</a></li>
 <li class="chapter" data-level="7.4.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#evaluating-model-fit"><i class="fa fa-check"></i><b>7.4.2</b> Evaluating model fit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
+<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>8.1</b> Comparison of classification / linear model</a></li>
-<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a><ul>
+<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>8.2.1</b> Skewed Data - Inference</a></li>
 <li class="chapter" data-level="8.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>8.2.2</b> Bootstrap Median</a></li>
 </ul></li>
@@ -220,70 +268,70 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="prediction-for-individuals" class="section level1">
+<div id="prediction-for-individuals" class="section level1" number="8">
 <h1><span class="header-section-number">Chapter 8</span> Prediction for individuals</h1>
-<div id="comparison-of-classification-linear-model" class="section level2">
+<div id="comparison-of-classification-linear-model" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> Comparison of classification / linear model</h2>
 </div>
-<div id="compared-linear-model-with-median" class="section level2">
+<div id="compared-linear-model-with-median" class="section level2" number="8.2">
 <h2><span class="header-section-number">8.2</span> Compared linear model with median</h2>
-<div id="skewed-data---inference" class="section level3">
+<div id="skewed-data---inference" class="section level3" number="8.2.1">
 <h3><span class="header-section-number">8.2.1</span> Skewed Data - Inference</h3>
 <p>In one example, a skewed distribution was transformed prior to conducting the analysis with a regression tree. Another approach could be to use a more robust statistic such as the median. One limitation of the median, is that a linear regression model as we have covered so far, does not allow you to fit the model while using the median.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(ggformula)
-<span class="kw">library</span>(mosaic)
-<span class="kw">library</span>(broom)
-<span class="kw">library</span>(statthink)
-
-<span class="co"># Set theme for plots</span>
-<span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())
-
-college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="dt">guess_max =</span> <span class="dv">10000</span>)
-<span class="kw">head</span>(college_score)</code></pre></div>
-<pre><code>## # A tibble: 6 x 17
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="prediction-for-individuals.html#cb258-1" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb258-2"><a href="prediction-for-individuals.html#cb258-2" aria-hidden="true"></a><span class="kw">library</span>(ggformula)</span>
+<span id="cb258-3"><a href="prediction-for-individuals.html#cb258-3" aria-hidden="true"></a><span class="kw">library</span>(mosaic)</span>
+<span id="cb258-4"><a href="prediction-for-individuals.html#cb258-4" aria-hidden="true"></a><span class="kw">library</span>(broom)</span>
+<span id="cb258-5"><a href="prediction-for-individuals.html#cb258-5" aria-hidden="true"></a><span class="kw">library</span>(statthink)</span>
+<span id="cb258-6"><a href="prediction-for-individuals.html#cb258-6" aria-hidden="true"></a></span>
+<span id="cb258-7"><a href="prediction-for-individuals.html#cb258-7" aria-hidden="true"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb258-8"><a href="prediction-for-individuals.html#cb258-8" aria-hidden="true"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())</span>
+<span id="cb258-9"><a href="prediction-for-individuals.html#cb258-9" aria-hidden="true"></a></span>
+<span id="cb258-10"><a href="prediction-for-individuals.html#cb258-10" aria-hidden="true"></a>college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="dt">guess_max =</span> <span class="dv">10000</span>)</span>
+<span id="cb258-11"><a href="prediction-for-individuals.html#cb258-11" aria-hidden="true"></a><span class="kw">head</span>(college_score)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 6 x 17[39m
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
-## # … with 7 more variables: costt4_p &lt;dbl&gt;, tuitionfee_in &lt;dbl&gt;,
-## #   tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;, grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;,
-## #   bachelor_degree &lt;dbl&gt;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adm_model &lt;-<span class="st"> </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score)
-<span class="kw">coef</span>(adm_model)</code></pre></div>
+##   [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m   [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m Alaba… Norm… AL     Bachel… South… City:…    0.903       18  [4m4[24m824    [4m2[24m[4m2[24m886
+## [90m2[39m Unive… Birm… AL     Bachel… South… City:…    0.918       25 [4m1[24m[4m2[24m866    [4m2[24m[4m4[24m129
+## [90m3[39m Unive… Hunt… AL     Bachel… South… City:…    0.812       28  [4m6[24m917    [4m2[24m[4m2[24m108
+## [90m4[39m Alaba… Mont… AL     Bachel… South… City:…    0.979       18  [4m4[24m189    [4m1[24m[4m9[24m413
+## [90m5[39m The U… Tusc… AL     Bachel… South… City:…    0.533       28 [4m3[24m[4m2[24m387    [4m2[24m[4m8[24m836
+## [90m6[39m Aubur… Mont… AL     Bachel… South… City:…    0.825       22  [4m4[24m211    [4m1[24m[4m9[24m892
+## [90m# … with 7 more variables: costt4_p [3m[90m&lt;dbl&gt;[90m[23m, tuitionfee_in [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   tuitionfee_out [3m[90m&lt;dbl&gt;[90m[23m, debt_mdn [3m[90m&lt;dbl&gt;[90m[23m, grad_debt_mdn [3m[90m&lt;dbl&gt;[90m[23m, female [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   bachelor_degree [3m[90m&lt;dbl&gt;[90m[23m[39m</code></pre>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="prediction-for-individuals.html#cb260-1" aria-hidden="true"></a>adm_model &lt;-<span class="st"> </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score)</span>
+<span id="cb260-2"><a href="prediction-for-individuals.html#cb260-2" aria-hidden="true"></a><span class="kw">coef</span>(adm_model)</span></code></pre></div>
 <pre><code>##               (Intercept)    preddegBachelor Degree preddegCertificate Degree 
 ##                0.72296993               -0.05170254                0.02193828</code></pre>
 <p>Prior to doing the median, we can bootstrap the mean difference from the model above.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_admrate &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
-  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
-
-  college_resample <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">select</span>(term, estimate)
-}
-
-<span class="kw">resample_admrate</span>()</code></pre></div>
-<pre><code>## # A tibble: 3 x 2
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="prediction-for-individuals.html#cb262-1" aria-hidden="true"></a>resample_admrate &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb262-2"><a href="prediction-for-individuals.html#cb262-2" aria-hidden="true"></a>  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span></span>
+<span id="cb262-3"><a href="prediction-for-individuals.html#cb262-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb262-4"><a href="prediction-for-individuals.html#cb262-4" aria-hidden="true"></a></span>
+<span id="cb262-5"><a href="prediction-for-individuals.html#cb262-5" aria-hidden="true"></a>  college_resample <span class="op">%&gt;%</span></span>
+<span id="cb262-6"><a href="prediction-for-individuals.html#cb262-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb262-7"><a href="prediction-for-individuals.html#cb262-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb262-8"><a href="prediction-for-individuals.html#cb262-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">select</span>(term, estimate)</span>
+<span id="cb262-9"><a href="prediction-for-individuals.html#cb262-9" aria-hidden="true"></a>}</span>
+<span id="cb262-10"><a href="prediction-for-individuals.html#cb262-10" aria-hidden="true"></a></span>
+<span id="cb262-11"><a href="prediction-for-individuals.html#cb262-11" aria-hidden="true"></a><span class="kw">resample_admrate</span>()</span></code></pre></div>
+<pre><code>## [90m# A tibble: 3 x 2[39m
 ##   term                      estimate
-##   &lt;chr&gt;                        &lt;dbl&gt;
-## 1 (Intercept)                 0.724 
-## 2 preddegBachelor Degree     -0.0463
-## 3 preddegCertificate Degree   0.0449</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_rows</span>()
-
-admrate_coef <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</code></pre></div>
+##   [3m[90m&lt;chr&gt;[39m[23m                        [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m (Intercept)                 0.696 
+## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m20[4m4[24m[39m
+## [90m3[39m preddegCertificate Degree   0.059[4m9[24m</code></pre>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="prediction-for-individuals.html#cb264-1" aria-hidden="true"></a>admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span></span>
+<span id="cb264-2"><a href="prediction-for-individuals.html#cb264-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb264-3"><a href="prediction-for-individuals.html#cb264-3" aria-hidden="true"></a></span>
+<span id="cb264-4"><a href="prediction-for-individuals.html#cb264-4" aria-hidden="true"></a>admrate_coef <span class="op">%&gt;%</span></span>
+<span id="cb264-5"><a href="prediction-for-individuals.html#cb264-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb264-6"><a href="prediction-for-individuals.html#cb264-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
 <p><img src="08-prediction_files/figure-html/replicate-adm-rate-1.png" width="672" /></p>
 </div>
-<div id="bootstrap-median" class="section level3">
+<div id="bootstrap-median" class="section level3" number="8.2.2">
 <h3><span class="header-section-number">8.2.2</span> Bootstrap Median</h3>
 <p>he bootstrap for the median will take much of a similar process as before, the major difference being that a model will not be fitted. Instead, we will compute statistics for the median of each group, take differences of the median to represent the median difference between the groups and then replicate.</p>
 <ol style="list-style-type: decimal">
@@ -293,40 +341,40 @@ admrate_coef <span class="op">%&gt;%</span>
 <li>Repeat steps 1 - 3 many times</li>
 <li>Explore the distribution of median differences from the many resampled data sets.</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_admrate_median &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
-  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
-
-  med_est &lt;-<span class="st"> </span>college_resample <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">df_stats</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, median) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">spread</span>(preddeg, median_adm_rate)
-
-  <span class="kw">names</span>(med_est) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Associate&quot;</span>, <span class="st">&quot;Bachelor&quot;</span>, <span class="st">&quot;Certificate&quot;</span>)
-  
-  med_est <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">bachelor_associate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Associate,
-           <span class="dt">certificate_associate =</span> Certificate <span class="op">-</span><span class="st"> </span>Associate,
-           <span class="dt">bachelor_certificate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Certificate) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">gather</span>(Associate<span class="op">:</span>bachelor_certificate, 
-                 <span class="dt">key =</span> <span class="st">&quot;Term&quot;</span>, 
-                 <span class="dt">value =</span> <span class="st">&quot;Median_Difference&quot;</span>)
-}
-
-<span class="kw">resample_admrate_median</span>()</code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="prediction-for-individuals.html#cb265-1" aria-hidden="true"></a>resample_admrate_median &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb265-2"><a href="prediction-for-individuals.html#cb265-2" aria-hidden="true"></a>  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span></span>
+<span id="cb265-3"><a href="prediction-for-individuals.html#cb265-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb265-4"><a href="prediction-for-individuals.html#cb265-4" aria-hidden="true"></a></span>
+<span id="cb265-5"><a href="prediction-for-individuals.html#cb265-5" aria-hidden="true"></a>  med_est &lt;-<span class="st"> </span>college_resample <span class="op">%&gt;%</span></span>
+<span id="cb265-6"><a href="prediction-for-individuals.html#cb265-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">df_stats</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, median) <span class="op">%&gt;%</span></span>
+<span id="cb265-7"><a href="prediction-for-individuals.html#cb265-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">spread</span>(preddeg, median_adm_rate)</span>
+<span id="cb265-8"><a href="prediction-for-individuals.html#cb265-8" aria-hidden="true"></a></span>
+<span id="cb265-9"><a href="prediction-for-individuals.html#cb265-9" aria-hidden="true"></a>  <span class="kw">names</span>(med_est) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Associate&quot;</span>, <span class="st">&quot;Bachelor&quot;</span>, <span class="st">&quot;Certificate&quot;</span>)</span>
+<span id="cb265-10"><a href="prediction-for-individuals.html#cb265-10" aria-hidden="true"></a>  </span>
+<span id="cb265-11"><a href="prediction-for-individuals.html#cb265-11" aria-hidden="true"></a>  med_est <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-12"><a href="prediction-for-individuals.html#cb265-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">bachelor_associate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Associate,</span>
+<span id="cb265-13"><a href="prediction-for-individuals.html#cb265-13" aria-hidden="true"></a>           <span class="dt">certificate_associate =</span> Certificate <span class="op">-</span><span class="st"> </span>Associate,</span>
+<span id="cb265-14"><a href="prediction-for-individuals.html#cb265-14" aria-hidden="true"></a>           <span class="dt">bachelor_certificate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Certificate) <span class="op">%&gt;%</span></span>
+<span id="cb265-15"><a href="prediction-for-individuals.html#cb265-15" aria-hidden="true"></a><span class="st">    </span><span class="kw">gather</span>(Associate<span class="op">:</span>bachelor_certificate, </span>
+<span id="cb265-16"><a href="prediction-for-individuals.html#cb265-16" aria-hidden="true"></a>                 <span class="dt">key =</span> <span class="st">&quot;Term&quot;</span>, </span>
+<span id="cb265-17"><a href="prediction-for-individuals.html#cb265-17" aria-hidden="true"></a>                 <span class="dt">value =</span> <span class="st">&quot;Median_Difference&quot;</span>)</span>
+<span id="cb265-18"><a href="prediction-for-individuals.html#cb265-18" aria-hidden="true"></a>}</span>
+<span id="cb265-19"><a href="prediction-for-individuals.html#cb265-19" aria-hidden="true"></a></span>
+<span id="cb265-20"><a href="prediction-for-individuals.html#cb265-20" aria-hidden="true"></a><span class="kw">resample_admrate_median</span>()</span></code></pre></div>
 <pre><code>##                    Term Median_Difference
-## 1             Associate            0.7720
-## 2              Bachelor            0.7036
-## 3           Certificate            0.8000
-## 4    bachelor_associate           -0.0684
-## 5 certificate_associate            0.0280
-## 6  bachelor_certificate           -0.0964</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_rows</span>()
-
-admrate_median <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">filter</span>(Term <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;bachelor_associate&#39;</span>, <span class="st">&#39;certificate_associate&#39;</span>, <span class="st">&#39;bachelor_certificate&#39;</span>)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>Median_Difference) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>Term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</code></pre></div>
+## 1             Associate           0.78925
+## 2              Bachelor           0.69510
+## 3           Certificate           0.76000
+## 4    bachelor_associate          -0.09415
+## 5 certificate_associate          -0.02925
+## 6  bachelor_certificate          -0.06490</code></pre>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="prediction-for-individuals.html#cb267-1" aria-hidden="true"></a>admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span></span>
+<span id="cb267-2"><a href="prediction-for-individuals.html#cb267-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb267-3"><a href="prediction-for-individuals.html#cb267-3" aria-hidden="true"></a></span>
+<span id="cb267-4"><a href="prediction-for-individuals.html#cb267-4" aria-hidden="true"></a>admrate_median <span class="op">%&gt;%</span></span>
+<span id="cb267-5"><a href="prediction-for-individuals.html#cb267-5" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(Term <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;bachelor_associate&#39;</span>, <span class="st">&#39;certificate_associate&#39;</span>, <span class="st">&#39;bachelor_certificate&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb267-6"><a href="prediction-for-individuals.html#cb267-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>Median_Difference) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb267-7"><a href="prediction-for-individuals.html#cb267-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>Term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
 <p><img src="08-prediction_files/figure-html/replicate-adm-median-1.png" width="672" /></p>
 
 </div>
@@ -408,7 +456,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))

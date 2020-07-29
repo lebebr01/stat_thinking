@@ -7,8 +7,135 @@ In this example, we will explore data from the titanic that comes from Kaggle (h
 
 ```r
 library(tidyverse)
+```
+
+```
+## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
 library(ggformula)
+```
+
+```
+## Loading required package: ggstance
+```
+
+```
+## 
+## Attaching package: 'ggstance'
+```
+
+```
+## The following objects are masked from 'package:ggplot2':
+## 
+##     geom_errorbarh, GeomErrorbarh
+```
+
+```
+## 
+## New to ggformula?  Try the tutorials: 
+## 	learnr::run_tutorial("introduction", package = "ggformula")
+## 	learnr::run_tutorial("refining", package = "ggformula")
+```
+
+```r
 library(mosaic)
+```
+
+```
+## Loading required package: lattice
+```
+
+```
+## Loading required package: mosaicData
+```
+
+```
+## Loading required package: Matrix
+```
+
+```
+## 
+## Attaching package: 'Matrix'
+```
+
+```
+## The following objects are masked from 'package:tidyr':
+## 
+##     expand, pack, unpack
+```
+
+```
+## Registered S3 method overwritten by 'mosaic':
+##   method                           from   
+##   fortify.SpatialPolygonsDataFrame ggplot2
+```
+
+```
+## 
+## The 'mosaic' package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.
+## 
+## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.
+```
+
+```
+## 
+## Attaching package: 'mosaic'
+```
+
+```
+## The following object is masked from 'package:Matrix':
+## 
+##     mean
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     count, do, tally
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     cross
+```
+
+```
+## The following object is masked from 'package:ggplot2':
+## 
+##     stat
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
+##     prop.test, quantile, sd, t.test, var
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     max, mean, min, prod, range, sample, sum
+```
+
+```r
 library(titanic)
 library(rpart)
 library(rsample)
@@ -26,20 +153,20 @@ head(titanic)
 ```
 
 ```
-##   PassengerId Pclass                                                Name    Sex
-## 1           1      3                             Braund, Mr. Owen Harris   male
-## 2           2      1 Cumings, Mrs. John Bradley (Florence Briggs Thayer) female
-## 3           3      3                              Heikkinen, Miss. Laina female
-## 4           4      1        Futrelle, Mrs. Jacques Heath (Lily May Peel) female
-## 5           5      3                            Allen, Mr. William Henry   male
-## 6           6      3                                    Moran, Mr. James   male
-##   Age SibSp Parch           Ticket    Fare Cabin Embarked survived
-## 1  22     1     0        A/5 21171  7.2500              S     Died
-## 2  38     1     0         PC 17599 71.2833   C85        C Survived
-## 3  26     0     0 STON/O2. 3101282  7.9250              S Survived
-## 4  35     1     0           113803 53.1000  C123        S Survived
-## 5  35     0     0           373450  8.0500              S     Died
-## 6  NA     0     0           330877  8.4583              Q     Died
+##   PassengerId Pclass                                                Name
+## 1           1      3                             Braund, Mr. Owen Harris
+## 2           2      1 Cumings, Mrs. John Bradley (Florence Briggs Thayer)
+## 3           3      3                              Heikkinen, Miss. Laina
+## 4           4      1        Futrelle, Mrs. Jacques Heath (Lily May Peel)
+## 5           5      3                            Allen, Mr. William Henry
+## 6           6      3                                    Moran, Mr. James
+##      Sex Age SibSp Parch           Ticket    Fare Cabin Embarked survived
+## 1   male  22     1     0        A/5 21171  7.2500              S     Died
+## 2 female  38     1     0         PC 17599 71.2833   C85        C Survived
+## 3 female  26     0     0 STON/O2. 3101282  7.9250              S Survived
+## 4 female  35     1     0           113803 53.1000  C123        S Survived
+## 5   male  35     0     0           373450  8.0500              S     Died
+## 6   male  NA     0     0           330877  8.4583              Q     Died
 ```
 
 
@@ -48,17 +175,11 @@ count(titanic, survived)
 ```
 
 ```
-## Warning: `count_()` is deprecated as of dplyr 0.7.0.
-## Please use `count()` instead.
-## See vignette('programming') for more help
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
-```
-
-```
-##   survived   n
-## 1     Died 549
-## 2 Survived 342
+## # A tibble: 2 x 2
+##   survived     n
+##   <chr>    <int>
+## 1 Died       549
+## 2 Survived   342
 ```
 
 
@@ -66,7 +187,7 @@ count(titanic, survived)
 gf_bar(~ survived,  data = titanic)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 ### Fitting a Classification Tree
@@ -83,7 +204,7 @@ class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Pa
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 
 ```r
@@ -128,17 +249,17 @@ printcp(class_tree)
 ##         CP nsplit rel error  xerror     xstd
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
-## 3 0.023392      3   0.49415 0.50585 0.034524
-## 4 0.020468      4   0.47076 0.49415 0.034217
-## 5 0.010234      5   0.45029 0.50585 0.034524
-## 6 0.010000      8   0.41813 0.48830 0.034061
+## 3 0.023392      3   0.49415 0.51754 0.034823
+## 4 0.020468      4   0.47076 0.51462 0.034749
+## 5 0.010234      5   0.45029 0.49415 0.034217
+## 6 0.010000      8   0.41813 0.49708 0.034295
 ```
 
 ```r
 plotcp(class_tree)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 
 ```r
@@ -146,7 +267,7 @@ prune_class_tree <- prune(class_tree, cp = .02)
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
 ### Accuracy
 
@@ -159,48 +280,69 @@ head(titanic_predict, n = 20)
 ```
 
 ```
-##    PassengerId Pclass                                                    Name
-## 1            1      3                                 Braund, Mr. Owen Harris
-## 2            2      1     Cumings, Mrs. John Bradley (Florence Briggs Thayer)
-## 3            3      3                                  Heikkinen, Miss. Laina
-## 4            4      1            Futrelle, Mrs. Jacques Heath (Lily May Peel)
-## 5            5      3                                Allen, Mr. William Henry
-## 6            6      3                                        Moran, Mr. James
-## 7            7      1                                 McCarthy, Mr. Timothy J
-## 8            8      3                          Palsson, Master. Gosta Leonard
-## 9            9      3       Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)
-## 10          10      2                     Nasser, Mrs. Nicholas (Adele Achem)
-## 11          11      3                         Sandstrom, Miss. Marguerite Rut
-## 12          12      1                                Bonnell, Miss. Elizabeth
-## 13          13      3                          Saundercock, Mr. William Henry
-## 14          14      3                             Andersson, Mr. Anders Johan
-## 15          15      3                    Vestrom, Miss. Hulda Amanda Adolfina
-## 16          16      2                        Hewlett, Mrs. (Mary D Kingcome) 
-## 17          17      3                                    Rice, Master. Eugene
-## 18          18      2                            Williams, Mr. Charles Eugene
-## 19          19      3 Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele)
-## 20          20      3                                 Masselmani, Mrs. Fatima
-##       Sex Age SibSp Parch           Ticket    Fare Cabin Embarked survived
-## 1    male  22     1     0        A/5 21171  7.2500              S     Died
-## 2  female  38     1     0         PC 17599 71.2833   C85        C Survived
-## 3  female  26     0     0 STON/O2. 3101282  7.9250              S Survived
-## 4  female  35     1     0           113803 53.1000  C123        S Survived
-## 5    male  35     0     0           373450  8.0500              S     Died
-## 6    male  NA     0     0           330877  8.4583              Q     Died
-## 7    male  54     0     0            17463 51.8625   E46        S     Died
-## 8    male   2     3     1           349909 21.0750              S     Died
-## 9  female  27     0     2           347742 11.1333              S Survived
-## 10 female  14     1     0           237736 30.0708              C Survived
-## 11 female   4     1     1          PP 9549 16.7000    G6        S Survived
-## 12 female  58     0     0           113783 26.5500  C103        S Survived
-## 13   male  20     0     0        A/5. 2151  8.0500              S     Died
-## 14   male  39     1     5           347082 31.2750              S     Died
-## 15 female  14     0     0           350406  7.8542              S     Died
-## 16 female  55     0     0           248706 16.0000              S Survived
-## 17   male   2     4     1           382652 29.1250              Q     Died
-## 18   male  NA     0     0           244373 13.0000              S Survived
-## 19 female  31     1     0           345763 18.0000              S     Died
-## 20 female  NA     0     0             2649  7.2250              C Survived
+##    PassengerId Pclass
+## 1            1      3
+## 2            2      1
+## 3            3      3
+## 4            4      1
+## 5            5      3
+## 6            6      3
+## 7            7      1
+## 8            8      3
+## 9            9      3
+## 10          10      2
+## 11          11      3
+## 12          12      1
+## 13          13      3
+## 14          14      3
+## 15          15      3
+## 16          16      2
+## 17          17      3
+## 18          18      2
+## 19          19      3
+## 20          20      3
+##                                                       Name    Sex Age
+## 1                                  Braund, Mr. Owen Harris   male  22
+## 2      Cumings, Mrs. John Bradley (Florence Briggs Thayer) female  38
+## 3                                   Heikkinen, Miss. Laina female  26
+## 4             Futrelle, Mrs. Jacques Heath (Lily May Peel) female  35
+## 5                                 Allen, Mr. William Henry   male  35
+## 6                                         Moran, Mr. James   male  NA
+## 7                                  McCarthy, Mr. Timothy J   male  54
+## 8                           Palsson, Master. Gosta Leonard   male   2
+## 9        Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg) female  27
+## 10                     Nasser, Mrs. Nicholas (Adele Achem) female  14
+## 11                         Sandstrom, Miss. Marguerite Rut female   4
+## 12                                Bonnell, Miss. Elizabeth female  58
+## 13                          Saundercock, Mr. William Henry   male  20
+## 14                             Andersson, Mr. Anders Johan   male  39
+## 15                    Vestrom, Miss. Hulda Amanda Adolfina female  14
+## 16                        Hewlett, Mrs. (Mary D Kingcome)  female  55
+## 17                                    Rice, Master. Eugene   male   2
+## 18                            Williams, Mr. Charles Eugene   male  NA
+## 19 Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele) female  31
+## 20                                 Masselmani, Mrs. Fatima female  NA
+##    SibSp Parch           Ticket    Fare Cabin Embarked survived
+## 1      1     0        A/5 21171  7.2500              S     Died
+## 2      1     0         PC 17599 71.2833   C85        C Survived
+## 3      0     0 STON/O2. 3101282  7.9250              S Survived
+## 4      1     0           113803 53.1000  C123        S Survived
+## 5      0     0           373450  8.0500              S     Died
+## 6      0     0           330877  8.4583              Q     Died
+## 7      0     0            17463 51.8625   E46        S     Died
+## 8      3     1           349909 21.0750              S     Died
+## 9      0     2           347742 11.1333              S Survived
+## 10     1     0           237736 30.0708              C Survived
+## 11     1     1          PP 9549 16.7000    G6        S Survived
+## 12     0     0           113783 26.5500  C103        S Survived
+## 13     0     0        A/5. 2151  8.0500              S     Died
+## 14     1     5           347082 31.2750              S     Died
+## 15     0     0           350406  7.8542              S     Died
+## 16     0     0           248706 16.0000              S Survived
+## 17     4     1           382652 29.1250              Q     Died
+## 18     0     0           244373 13.0000              S Survived
+## 19     1     0           345763 18.0000              S     Died
+## 20     0     0             2649  7.2250              C Survived
 ##    tree_predict       Died  Survived
 ## 1          Died 0.83182640 0.1681736
 ## 2      Survived 0.05294118 0.9470588
@@ -231,11 +373,13 @@ titanic_predict %>%
 ```
 
 ```
-##   survived tree_predict   n
-## 1     Died         Died 492
-## 2     Died     Survived  57
-## 3 Survived         Died  97
-## 4 Survived     Survived 245
+## # A tibble: 4 x 3
+##   survived tree_predict     n
+##   <chr>    <fct>        <int>
+## 1 Died     Died           492
+## 2 Died     Survived        57
+## 3 Survived Died            97
+## 4 Survived Survived       245
 ```
 
 
@@ -243,7 +387,7 @@ titanic_predict %>%
 gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 
 ```r
@@ -252,7 +396,7 @@ gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict, position = "fil
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 
 ```r
@@ -280,11 +424,13 @@ titanic_predict %>%
 ```
 
 ```
-##   survived tree_predict_full   n
-## 1     Died              Died 521
-## 2     Died          Survived  28
-## 3 Survived              Died 115
-## 4 Survived          Survived 227
+## # A tibble: 4 x 3
+##   survived tree_predict_full     n
+##   <chr>    <fct>             <int>
+## 1 Died     Died                521
+## 2 Died     Survived             28
+## 3 Survived Died                115
+## 4 Survived Survived            227
 ```
 
 
@@ -294,7 +440,7 @@ gf_bar(~ survived, fill = ~tree_predict_full, data = titanic_predict, position =
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 
 ```r
@@ -342,7 +488,7 @@ class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Pa
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 
 ```r
@@ -351,7 +497,7 @@ prune_class_tree <- prune(class_tree, cp = .02)
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 
 This seems like a reasonable model. Let's check the model accuracy.
 
@@ -414,7 +560,7 @@ survival_prop <- map(1:1000, resample_titanic) %>%
 gf_density(~ mean_Survived, data = survival_prop)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
 #### Bootstrap variation in prediction accuracy
 
@@ -459,7 +605,7 @@ predict_accuracy_fulldata <- map(1:2000, calc_predict_acc) %>%
 gf_density(~ mean_same_class, data = predict_accuracy_fulldata)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-23-1.png" width="672" />
 
 
 ```r
@@ -494,7 +640,7 @@ predict_accuracy_traintest <- map(1:2000, calc_predict_acc_split) %>%
 gf_density(~ mean_same_class, data = predict_accuracy_traintest)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" />
 
 
 ```r
@@ -505,7 +651,7 @@ bind_rows(
   gf_density(~ mean_same_class, color = ~ type, fill = NA, size = 1.25)
 ```
 
-<img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="05-classification_files/figure-html/unnamed-chunk-26-1.png" width="672" />
 
 
 ### Cross-validation

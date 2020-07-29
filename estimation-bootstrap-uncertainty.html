@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-07-28" />
+<meta name="date" content="2020-07-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +33,7 @@
   
 <link rel="prev" href="linear-model.html"/>
 <link rel="next" href="prediction-for-individuals.html"/>
+<script src="libs/header-attrs-2.3/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -53,41 +54,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -107,31 +134,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
 <li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a></li>
 <li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a><ul>
+<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a>
+<ul>
 <li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
 <li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
-<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a><ul>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a>
+<ul>
 <li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
 <li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a><ul>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
 <li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
 <li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
+<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
+<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#range"><i class="fa fa-check"></i><b>3.3.1</b> Range</a></li>
 <li class="chapter" data-level="3.3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#percentile-range"><i class="fa fa-check"></i><b>3.3.2</b> Percentile Range</a></li>
 <li class="chapter" data-level="3.3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#interquartile-range-iqr"><i class="fa fa-check"></i><b>3.3.3</b> Interquartile Range (IQR)</a></li>
@@ -141,19 +175,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-categorical-attributes"><i class="fa fa-check"></i><b>3.4</b> Summarizing Categorical Attributes</a></li>
 <li class="chapter" data-level="3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#advanced-extension-computing-your-own-measure-of-variation"><i class="fa fa-check"></i><b>3.5</b> Advanced Extension: Computing Your Own Measure of Variation</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
-<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a><ul>
+<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.2.1</b> Adding additional groups</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#other-statistics-of-center"><i class="fa fa-check"></i><b>4.3</b> Other statistics of center</a></li>
-<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a><ul>
+<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#robust-measure-of-variation"><i class="fa fa-check"></i><b>4.4.1</b> Robust measure of variation</a></li>
 <li class="chapter" data-level="4.4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#variation-by-group"><i class="fa fa-check"></i><b>4.4.2</b> Variation by Group</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#pruning-trees"><i class="fa fa-check"></i><b>5.1.2</b> Pruning Trees</a></li>
 <li class="chapter" data-level="5.1.3" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.3</b> Accuracy</a></li>
@@ -163,13 +202,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1.7" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>5.1.7</b> Cross-validation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a><ul>
+<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="linear-model.html"><a href="linear-model.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Visualize distributions</a></li>
 <li class="chapter" data-level="6.1.2" data-path="linear-model.html"><a href="linear-model.html#decision-tree---regression-tree"><i class="fa fa-check"></i><b>6.1.2</b> Decision Tree - Regression Tree</a></li>
 <li class="chapter" data-level="6.1.3" data-path="linear-model.html"><a href="linear-model.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.1.3</b> Evaluating accuracy</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a><ul>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a>
+<ul>
 <li class="chapter" data-level="6.2.1" data-path="linear-model.html"><a href="linear-model.html#description-of-the-data"><i class="fa fa-check"></i><b>6.2.1</b> Description of the Data</a></li>
 <li class="chapter" data-level="6.2.2" data-path="linear-model.html"><a href="linear-model.html#scatterplots"><i class="fa fa-check"></i><b>6.2.2</b> Scatterplots</a></li>
 <li class="chapter" data-level="6.2.3" data-path="linear-model.html"><a href="linear-model.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>6.2.3</b> Fitting a linear regression model</a></li>
@@ -177,25 +219,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.3</b> Conditional Means</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
+<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
-<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
+<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother’s smoking</a></li>
 <li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a><ul>
+<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a>
+<ul>
 <li class="chapter" data-level="7.3.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>7.3.1</b> Explore distribution 3 groups</a></li>
 <li class="chapter" data-level="7.3.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#overall-model-fit"><i class="fa fa-check"></i><b>7.3.2</b> Overall model fit</a></li>
 </ul></li>
-<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a><ul>
+<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a>
+<ul>
 <li class="chapter" data-level="7.4.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#interactions"><i class="fa fa-check"></i><b>7.4.1</b> Interactions</a></li>
 <li class="chapter" data-level="7.4.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#evaluating-model-fit"><i class="fa fa-check"></i><b>7.4.2</b> Evaluating model fit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
+<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>8.1</b> Comparison of classification / linear model</a></li>
-<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a><ul>
+<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>8.2.1</b> Skewed Data - Inference</a></li>
 <li class="chapter" data-level="8.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>8.2.2</b> Bootstrap Median</a></li>
 </ul></li>
@@ -220,31 +268,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="estimation-bootstrap-uncertainty" class="section level1">
+<div id="estimation-bootstrap-uncertainty" class="section level1" number="7">
 <h1><span class="header-section-number">Chapter 7</span> Estimation / Bootstrap / Uncertainty</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(ggformula)
-<span class="kw">library</span>(mosaic)
-<span class="kw">library</span>(broom)
-<span class="kw">library</span>(statthink)
-
-<span class="co"># Set theme for plots</span>
-<span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())
-
-baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv&quot;</span>)
-<span class="kw">head</span>(baby)</code></pre></div>
-<pre><code>## # A tibble: 6 x 6
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="estimation-bootstrap-uncertainty.html#cb197-1" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb197-2"><a href="estimation-bootstrap-uncertainty.html#cb197-2" aria-hidden="true"></a><span class="kw">library</span>(ggformula)</span>
+<span id="cb197-3"><a href="estimation-bootstrap-uncertainty.html#cb197-3" aria-hidden="true"></a><span class="kw">library</span>(mosaic)</span>
+<span id="cb197-4"><a href="estimation-bootstrap-uncertainty.html#cb197-4" aria-hidden="true"></a><span class="kw">library</span>(broom)</span>
+<span id="cb197-5"><a href="estimation-bootstrap-uncertainty.html#cb197-5" aria-hidden="true"></a><span class="kw">library</span>(statthink)</span>
+<span id="cb197-6"><a href="estimation-bootstrap-uncertainty.html#cb197-6" aria-hidden="true"></a></span>
+<span id="cb197-7"><a href="estimation-bootstrap-uncertainty.html#cb197-7" aria-hidden="true"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb197-8"><a href="estimation-bootstrap-uncertainty.html#cb197-8" aria-hidden="true"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())</span>
+<span id="cb197-9"><a href="estimation-bootstrap-uncertainty.html#cb197-9" aria-hidden="true"></a></span>
+<span id="cb197-10"><a href="estimation-bootstrap-uncertainty.html#cb197-10" aria-hidden="true"></a>baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv&quot;</span>)</span>
+<span id="cb197-11"><a href="estimation-bootstrap-uncertainty.html#cb197-11" aria-hidden="true"></a><span class="kw">head</span>(baby)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 6 x 6[39m
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
-## 1          120              284           27              62              100
-## 2          113              282           33              64              135
-## 3          128              279           28              64              115
-## 4          108              282           23              67              125
-## 5          136              286           25              62               93
-## 6          138              244           33              62              178
-## # … with 1 more variable: maternal_smoker &lt;lgl&gt;</code></pre>
+##          [3m[90m&lt;dbl&gt;[39m[23m            [3m[90m&lt;dbl&gt;[39m[23m        [3m[90m&lt;dbl&gt;[39m[23m           [3m[90m&lt;dbl&gt;[39m[23m            [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m          120              284           27              62              100
+## [90m2[39m          113              282           33              64              135
+## [90m3[39m          128              279           28              64              115
+## [90m4[39m          108              282           23              67              125
+## [90m5[39m          136              286           25              62               93
+## [90m6[39m          138              244           33              62              178
+## [90m# … with 1 more variable: maternal_smoker [3m[90m&lt;lgl&gt;[90m[23m[39m</code></pre>
 <p>Bootstrap and resampling methods can be used to estimate the variability in the estimated effects.</p>
-<div id="estimating-error" class="section level2">
+<div id="estimating-error" class="section level2" number="7.1">
 <h2><span class="header-section-number">7.1</span> Estimating Error</h2>
 <p>To get some sense of the amount of error in the estimate of the linear slope here, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:</p>
 <ol style="list-style-type: decimal">
@@ -255,52 +303,52 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <li>Explore the distribution of slope estimates from the many resampled data sets.</li>
 </ol>
 <p>When this was done with the classification tree, a function was used to do these steps once, then these were repeated many times. Below is a function that does the steps 1 - 3 above a single time.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
-  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
-
-  baby_resample <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">coef</span>(.) <span class="op">%&gt;%</span>
-<span class="st">    </span>.[<span class="dv">2</span>] <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">data.frame</span>()
-}
-
-<span class="kw">resample_baby</span>()</code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="estimation-bootstrap-uncertainty.html#cb199-1" aria-hidden="true"></a>resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb199-2"><a href="estimation-bootstrap-uncertainty.html#cb199-2" aria-hidden="true"></a>  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span></span>
+<span id="cb199-3"><a href="estimation-bootstrap-uncertainty.html#cb199-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb199-4"><a href="estimation-bootstrap-uncertainty.html#cb199-4" aria-hidden="true"></a></span>
+<span id="cb199-5"><a href="estimation-bootstrap-uncertainty.html#cb199-5" aria-hidden="true"></a>  baby_resample <span class="op">%&gt;%</span></span>
+<span id="cb199-6"><a href="estimation-bootstrap-uncertainty.html#cb199-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb199-7"><a href="estimation-bootstrap-uncertainty.html#cb199-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">coef</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb199-8"><a href="estimation-bootstrap-uncertainty.html#cb199-8" aria-hidden="true"></a><span class="st">    </span>.[<span class="dv">2</span>] <span class="op">%&gt;%</span></span>
+<span id="cb199-9"><a href="estimation-bootstrap-uncertainty.html#cb199-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">data.frame</span>()</span>
+<span id="cb199-10"><a href="estimation-bootstrap-uncertainty.html#cb199-10" aria-hidden="true"></a>}</span>
+<span id="cb199-11"><a href="estimation-bootstrap-uncertainty.html#cb199-11" aria-hidden="true"></a></span>
+<span id="cb199-12"><a href="estimation-bootstrap-uncertainty.html#cb199-12" aria-hidden="true"></a><span class="kw">resample_baby</span>()</span></code></pre></div>
 <pre><code>##                          .
-## gestational_days 0.4295055</code></pre>
+## gestational_days 0.5079986</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_rows</span>()
-<span class="kw">names</span>(baby_coef) &lt;-<span class="st"> &#39;slope&#39;</span>
-
-<span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="dt">data =</span> baby_coef)</code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="estimation-bootstrap-uncertainty.html#cb201-1" aria-hidden="true"></a>baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
+<span id="cb201-2"><a href="estimation-bootstrap-uncertainty.html#cb201-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb201-3"><a href="estimation-bootstrap-uncertainty.html#cb201-3" aria-hidden="true"></a><span class="kw">names</span>(baby_coef) &lt;-<span class="st"> &#39;slope&#39;</span></span>
+<span id="cb201-4"><a href="estimation-bootstrap-uncertainty.html#cb201-4" aria-hidden="true"></a></span>
+<span id="cb201-5"><a href="estimation-bootstrap-uncertainty.html#cb201-5" aria-hidden="true"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="dt">data =</span> baby_coef)</span></code></pre></div>
 <p><img src="07-estimation_files/figure-html/resample-10k-density-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="estimation-bootstrap-uncertainty.html#cb202-1" aria-hidden="true"></a>baby_coef <span class="op">%&gt;%</span></span>
+<span id="cb202-2"><a href="estimation-bootstrap-uncertainty.html#cb202-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
 <pre><code>##          5%       50%       95%
-## 1 0.3945199 0.4694316 0.5439015</code></pre>
+## 1 0.3942673 0.4681106 0.5435451</code></pre>
 </div>
-<div id="categorical-predictors" class="section level2">
+<div id="categorical-predictors" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> Categorical Predictor(s)</h2>
-<p>Before, linear regression has been ran with a continuous attribute. In both models, the baby's birth weight was the outcome of interest and the predictor in one model was the number of gestational days and in the other was the age of the mother at time of birth. What happens when a categorical predictor is used instead of a continuous predictor? This section will introduce that idea with a categorical predictor that has two different levels.</p>
-<div id="mothers-smoking" class="section level3">
-<h3><span class="header-section-number">7.2.1</span> Mother's smoking</h3>
-<p>It is known that a mother smoking while pregnant can hamper the development of the unborn fetus. Will this transition into lower birth weight for baby's born to mothers who smoked during the pregnancy? First, let's explore the distribution and calculate descriptive statistics for birth weight across the two groups.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>birth_weight, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">size =</span> <span class="fl">1.25</span>, <span class="dt">fill =</span> <span class="st">&#39;gray80&#39;</span>, <span class="dt">data =</span> baby) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Birth Weight (in oz)&#39;</span>,
-          <span class="dt">color =</span> <span class="st">&#39;Smoked?&#39;</span>)</code></pre></div>
+<p>Before, linear regression has been ran with a continuous attribute. In both models, the baby’s birth weight was the outcome of interest and the predictor in one model was the number of gestational days and in the other was the age of the mother at time of birth. What happens when a categorical predictor is used instead of a continuous predictor? This section will introduce that idea with a categorical predictor that has two different levels.</p>
+<div id="mothers-smoking" class="section level3" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Mother’s smoking</h3>
+<p>It is known that a mother smoking while pregnant can hamper the development of the unborn fetus. Will this transition into lower birth weight for baby’s born to mothers who smoked during the pregnancy? First, let’s explore the distribution and calculate descriptive statistics for birth weight across the two groups.</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="estimation-bootstrap-uncertainty.html#cb204-1" aria-hidden="true"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>birth_weight, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">size =</span> <span class="fl">1.25</span>, <span class="dt">fill =</span> <span class="st">&#39;gray80&#39;</span>, <span class="dt">data =</span> baby) <span class="op">%&gt;%</span></span>
+<span id="cb204-2"><a href="estimation-bootstrap-uncertainty.html#cb204-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Birth Weight (in oz)&#39;</span>,</span>
+<span id="cb204-3"><a href="estimation-bootstrap-uncertainty.html#cb204-3" aria-hidden="true"></a>          <span class="dt">color =</span> <span class="st">&#39;Smoked?&#39;</span>)</span></code></pre></div>
 <p><img src="07-estimation_files/figure-html/density-smoker-1.png" width="672" /></p>
 <p>What are the general take-aways from the distributions above? To give some additional information, a violin plot may be helpful.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>), 
-           <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>()) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Birth Weight (in oz)&quot;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Smoker?&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="estimation-bootstrap-uncertainty.html#cb205-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>), </span>
+<span id="cb205-2"><a href="estimation-bootstrap-uncertainty.html#cb205-2" aria-hidden="true"></a>           <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb205-3"><a href="estimation-bootstrap-uncertainty.html#cb205-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb205-4"><a href="estimation-bootstrap-uncertainty.html#cb205-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Birth Weight (in oz)&quot;</span>,</span>
+<span id="cb205-5"><a href="estimation-bootstrap-uncertainty.html#cb205-5" aria-hidden="true"></a>          <span class="dt">x =</span> <span class="st">&quot;Smoker?&quot;</span>)</span></code></pre></div>
 <p><img src="07-estimation_files/figure-html/violin-smoker-1.png" width="672" /></p>
-<p>Any additional information shown here that shows differences? To finish the descriptive exploration, let's compute some descriptive statistics.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">df_stats</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, mean, sd, median, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), length)</code></pre></div>
+<p>Any additional information shown here that shows differences? To finish the descriptive exploration, let’s compute some descriptive statistics.</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="estimation-bootstrap-uncertainty.html#cb206-1" aria-hidden="true"></a>baby <span class="op">%&gt;%</span></span>
+<span id="cb206-2"><a href="estimation-bootstrap-uncertainty.html#cb206-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, mean, sd, median, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), length)</span></code></pre></div>
 <pre><code>##   maternal_smoker mean_birth_weight sd_birth_weight median_birth_weight 25% 75%
 ## 1           FALSE          123.0853        17.42370                 123 113 134
 ## 2            TRUE          113.8192        18.29501                 115 101 126
@@ -308,47 +356,47 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 ## 1                 715
 ## 2                 459</code></pre>
 </div>
-<div id="linear-regression---categorical-predictor" class="section level3">
+<div id="linear-regression---categorical-predictor" class="section level3" number="7.2.2">
 <h3><span class="header-section-number">7.2.2</span> Linear Regression - Categorical Predictor</h3>
 <p>Now it is time to fit a model to the data here to explore if there indeed is a difference in the population. We know descriptively there is a difference in the two group means and medians, but is this difference large enough to be practical? The model is fitted similar to before with the <code>lm()</code> function and a similar formula as before. The outcome (birth weight) is to the left of the <code>~</code> and the predictor (maternal smoking status) is to the right.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">smoker_reg &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)
-<span class="kw">coef</span>(smoker_reg)</code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="estimation-bootstrap-uncertainty.html#cb208-1" aria-hidden="true"></a>smoker_reg &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)</span>
+<span id="cb208-2"><a href="estimation-bootstrap-uncertainty.html#cb208-2" aria-hidden="true"></a><span class="kw">coef</span>(smoker_reg)</span></code></pre></div>
 <pre><code>##         (Intercept) maternal_smokerTRUE 
 ##          123.085315           -9.266143</code></pre>
-<p>To explore what these coefficients mean in a bit more detail, let's look at the data a bit more.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">smoker =</span> <span class="kw">ifelse</span>(maternal_smoker, <span class="dv">1</span>, <span class="dv">0</span>))
-<span class="kw">head</span>(baby)</code></pre></div>
-<pre><code>## # A tibble: 6 x 7
+<p>To explore what these coefficients mean in a bit more detail, let’s look at the data a bit more.</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="estimation-bootstrap-uncertainty.html#cb210-1" aria-hidden="true"></a>baby &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span></span>
+<span id="cb210-2"><a href="estimation-bootstrap-uncertainty.html#cb210-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">smoker =</span> <span class="kw">ifelse</span>(maternal_smoker, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb210-3"><a href="estimation-bootstrap-uncertainty.html#cb210-3" aria-hidden="true"></a><span class="kw">head</span>(baby)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 6 x 7[39m
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
-## 1          120              284           27              62              100
-## 2          113              282           33              64              135
-## 3          128              279           28              64              115
-## 4          108              282           23              67              125
-## 5          136              286           25              62               93
-## 6          138              244           33              62              178
-## # … with 2 more variables: maternal_smoker &lt;lgl&gt;, smoker &lt;dbl&gt;</code></pre>
-<p>Instead of using the <code>maternal_smoker</code> attribute, instead let's run the model with the <code>smoker</code> attribute.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">smoker_reg_new &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>smoker, <span class="dt">data =</span> baby)
-<span class="kw">coef</span>(smoker_reg_new)</code></pre></div>
+##          [3m[90m&lt;dbl&gt;[39m[23m            [3m[90m&lt;dbl&gt;[39m[23m        [3m[90m&lt;dbl&gt;[39m[23m           [3m[90m&lt;dbl&gt;[39m[23m            [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m          120              284           27              62              100
+## [90m2[39m          113              282           33              64              135
+## [90m3[39m          128              279           28              64              115
+## [90m4[39m          108              282           23              67              125
+## [90m5[39m          136              286           25              62               93
+## [90m6[39m          138              244           33              62              178
+## [90m# … with 2 more variables: maternal_smoker [3m[90m&lt;lgl&gt;[90m[23m, smoker [3m[90m&lt;dbl&gt;[90m[23m[39m</code></pre>
+<p>Instead of using the <code>maternal_smoker</code> attribute, instead let’s run the model with the <code>smoker</code> attribute.</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="estimation-bootstrap-uncertainty.html#cb212-1" aria-hidden="true"></a>smoker_reg_new &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>smoker, <span class="dt">data =</span> baby)</span>
+<span id="cb212-2"><a href="estimation-bootstrap-uncertainty.html#cb212-2" aria-hidden="true"></a><span class="kw">coef</span>(smoker_reg_new)</span></code></pre></div>
 <pre><code>## (Intercept)      smoker 
 ##  123.085315   -9.266143</code></pre>
-<p>Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter &quot;A&quot;, meaning that the 0 is the first category in alphabetical order.</p>
+<p>Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter “A”, meaning that the 0 is the first category in alphabetical order.</p>
 <p>To again get a better grasp, the descriptive stats and the coefficients from the regression are shown together below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">df_stats</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, mean, sd, median, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), length)</code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="estimation-bootstrap-uncertainty.html#cb214-1" aria-hidden="true"></a>baby <span class="op">%&gt;%</span></span>
+<span id="cb214-2"><a href="estimation-bootstrap-uncertainty.html#cb214-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, mean, sd, median, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), length)</span></code></pre></div>
 <pre><code>##   maternal_smoker mean_birth_weight sd_birth_weight median_birth_weight 25% 75%
 ## 1           FALSE          123.0853        17.42370                 123 113 134
 ## 2            TRUE          113.8192        18.29501                 115 101 126
 ##   length_birth_weight
 ## 1                 715
 ## 2                 459</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(smoker_reg)</code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="estimation-bootstrap-uncertainty.html#cb216-1" aria-hidden="true"></a><span class="kw">coef</span>(smoker_reg)</span></code></pre></div>
 <pre><code>##         (Intercept) maternal_smokerTRUE 
 ##          123.085315           -9.266143</code></pre>
 </div>
-<div id="inference" class="section level3">
+<div id="inference" class="section level3" number="7.2.3">
 <h3><span class="header-section-number">7.2.3</span> Inference</h3>
 <p>Similar to the continuous predictor, resampling/bootstrap takes a similar method in the case with a single categorical predictor.</p>
 <p>In order to get some sense of the amount of error in the estimate of the linear slope here, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:</p>
@@ -359,107 +407,107 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 <li>Repeat steps 1 - 3 many times</li>
 <li>Explore the distribution of slope estimates from the many resampled data sets.</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
-  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
-
-  baby_resample <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">coef</span>(.) <span class="op">%&gt;%</span>
-<span class="st">    </span>.[<span class="dv">2</span>] <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">data.frame</span>()
-}
-
-<span class="kw">resample_baby</span>()</code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="estimation-bootstrap-uncertainty.html#cb218-1" aria-hidden="true"></a>resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb218-2"><a href="estimation-bootstrap-uncertainty.html#cb218-2" aria-hidden="true"></a>  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span></span>
+<span id="cb218-3"><a href="estimation-bootstrap-uncertainty.html#cb218-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb218-4"><a href="estimation-bootstrap-uncertainty.html#cb218-4" aria-hidden="true"></a></span>
+<span id="cb218-5"><a href="estimation-bootstrap-uncertainty.html#cb218-5" aria-hidden="true"></a>  baby_resample <span class="op">%&gt;%</span></span>
+<span id="cb218-6"><a href="estimation-bootstrap-uncertainty.html#cb218-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb218-7"><a href="estimation-bootstrap-uncertainty.html#cb218-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">coef</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb218-8"><a href="estimation-bootstrap-uncertainty.html#cb218-8" aria-hidden="true"></a><span class="st">    </span>.[<span class="dv">2</span>] <span class="op">%&gt;%</span></span>
+<span id="cb218-9"><a href="estimation-bootstrap-uncertainty.html#cb218-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">data.frame</span>()</span>
+<span id="cb218-10"><a href="estimation-bootstrap-uncertainty.html#cb218-10" aria-hidden="true"></a>}</span>
+<span id="cb218-11"><a href="estimation-bootstrap-uncertainty.html#cb218-11" aria-hidden="true"></a></span>
+<span id="cb218-12"><a href="estimation-bootstrap-uncertainty.html#cb218-12" aria-hidden="true"></a><span class="kw">resample_baby</span>()</span></code></pre></div>
 <pre><code>##                             .
-## maternal_smokerTRUE -8.474204</code></pre>
+## maternal_smokerTRUE -7.638153</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_rows</span>()
-<span class="kw">names</span>(baby_coef) &lt;-<span class="st"> &#39;slope&#39;</span>
-
-<span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="dt">data =</span> baby_coef)</code></pre></div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="estimation-bootstrap-uncertainty.html#cb220-1" aria-hidden="true"></a>baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
+<span id="cb220-2"><a href="estimation-bootstrap-uncertainty.html#cb220-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb220-3"><a href="estimation-bootstrap-uncertainty.html#cb220-3" aria-hidden="true"></a><span class="kw">names</span>(baby_coef) &lt;-<span class="st"> &#39;slope&#39;</span></span>
+<span id="cb220-4"><a href="estimation-bootstrap-uncertainty.html#cb220-4" aria-hidden="true"></a></span>
+<span id="cb220-5"><a href="estimation-bootstrap-uncertainty.html#cb220-5" aria-hidden="true"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="dt">data =</span> baby_coef)</span></code></pre></div>
 <p><img src="07-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_coef <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</code></pre></div>
-<pre><code>##          5%       50%      95%
-## 1 -11.03186 -9.276731 -7.50778</code></pre>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="estimation-bootstrap-uncertainty.html#cb221-1" aria-hidden="true"></a>baby_coef <span class="op">%&gt;%</span></span>
+<span id="cb221-2"><a href="estimation-bootstrap-uncertainty.html#cb221-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
+<pre><code>##          5%       50%       95%
+## 1 -11.05229 -9.263956 -7.514887</code></pre>
 </div>
 </div>
-<div id="more-than-2-categorical-groups" class="section level2">
+<div id="more-than-2-categorical-groups" class="section level2" number="7.3">
 <h2><span class="header-section-number">7.3</span> More than 2 categorical groups</h2>
 <p>Before the model contained one attribute that represented two groups. What happens when there are more than two groups for an attribute? To explore this, the college scorecard data will be used again.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="dt">guess_max =</span> <span class="dv">10000</span>)</code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="estimation-bootstrap-uncertainty.html#cb223-1" aria-hidden="true"></a>college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="dt">guess_max =</span> <span class="dv">10000</span>)</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   instnm = col_character(),
-##   city = col_character(),
-##   stabbr = col_character(),
-##   preddeg = col_character(),
-##   region = col_character(),
-##   locale = col_character(),
-##   adm_rate = col_double(),
-##   actcmmid = col_double(),
-##   ugds = col_double(),
-##   costt4_a = col_double(),
-##   costt4_p = col_double(),
-##   tuitionfee_in = col_double(),
-##   tuitionfee_out = col_double(),
-##   debt_mdn = col_double(),
-##   grad_debt_mdn = col_double(),
-##   female = col_double(),
-##   bachelor_degree = col_double()
+##   instnm = [31mcol_character()[39m,
+##   city = [31mcol_character()[39m,
+##   stabbr = [31mcol_character()[39m,
+##   preddeg = [31mcol_character()[39m,
+##   region = [31mcol_character()[39m,
+##   locale = [31mcol_character()[39m,
+##   adm_rate = [32mcol_double()[39m,
+##   actcmmid = [32mcol_double()[39m,
+##   ugds = [32mcol_double()[39m,
+##   costt4_a = [32mcol_double()[39m,
+##   costt4_p = [32mcol_double()[39m,
+##   tuitionfee_in = [32mcol_double()[39m,
+##   tuitionfee_out = [32mcol_double()[39m,
+##   debt_mdn = [32mcol_double()[39m,
+##   grad_debt_mdn = [32mcol_double()[39m,
+##   female = [32mcol_double()[39m,
+##   bachelor_degree = [32mcol_double()[39m
 ## )</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(college_score)</code></pre></div>
-<pre><code>## # A tibble: 6 x 17
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="estimation-bootstrap-uncertainty.html#cb225-1" aria-hidden="true"></a><span class="kw">head</span>(college_score)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 6 x 17[39m
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
-## # … with 7 more variables: costt4_p &lt;dbl&gt;, tuitionfee_in &lt;dbl&gt;,
-## #   tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;, grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;,
-## #   bachelor_degree &lt;dbl&gt;</code></pre>
-<div id="explore-distribution-3-groups" class="section level3">
+##   [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m   [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m Alaba… Norm… AL     Bachel… South… City:…    0.903       18  [4m4[24m824    [4m2[24m[4m2[24m886
+## [90m2[39m Unive… Birm… AL     Bachel… South… City:…    0.918       25 [4m1[24m[4m2[24m866    [4m2[24m[4m4[24m129
+## [90m3[39m Unive… Hunt… AL     Bachel… South… City:…    0.812       28  [4m6[24m917    [4m2[24m[4m2[24m108
+## [90m4[39m Alaba… Mont… AL     Bachel… South… City:…    0.979       18  [4m4[24m189    [4m1[24m[4m9[24m413
+## [90m5[39m The U… Tusc… AL     Bachel… South… City:…    0.533       28 [4m3[24m[4m2[24m387    [4m2[24m[4m8[24m836
+## [90m6[39m Aubur… Mont… AL     Bachel… South… City:…    0.825       22  [4m4[24m211    [4m1[24m[4m9[24m892
+## [90m# … with 7 more variables: costt4_p [3m[90m&lt;dbl&gt;[90m[23m, tuitionfee_in [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   tuitionfee_out [3m[90m&lt;dbl&gt;[90m[23m, debt_mdn [3m[90m&lt;dbl&gt;[90m[23m, grad_debt_mdn [3m[90m&lt;dbl&gt;[90m[23m, female [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   bachelor_degree [3m[90m&lt;dbl&gt;[90m[23m[39m</code></pre>
+<div id="explore-distribution-3-groups" class="section level3" number="7.3.1">
 <h3><span class="header-section-number">7.3.1</span> Explore distribution 3 groups</h3>
 <p>Early in the course, the distribution of admission rates by the primary degree that the institution grants was explored. Below is a violin plot that shows these three distributions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, 
-          <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>))</code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="estimation-bootstrap-uncertainty.html#cb227-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, </span>
+<span id="cb227-2"><a href="estimation-bootstrap-uncertainty.html#cb227-2" aria-hidden="true"></a>          <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>))</span></code></pre></div>
 <p><img src="07-estimation_files/figure-html/violin-preddeg-1.png" width="672" /></p>
 <p>There may be some small differences between these groups, but more formally we can test this to understand the amount of uncertainty in the average of the distributions. This again will make use of the <code>lm()</code> function in R and the formula is very similar to what was done before and mimics the formula from the violin plot above.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adm_model &lt;-<span class="st"> </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score)
-<span class="kw">coef</span>(adm_model)</code></pre></div>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="estimation-bootstrap-uncertainty.html#cb228-1" aria-hidden="true"></a>adm_model &lt;-<span class="st"> </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score)</span>
+<span id="cb228-2"><a href="estimation-bootstrap-uncertainty.html#cb228-2" aria-hidden="true"></a><span class="kw">coef</span>(adm_model)</span></code></pre></div>
 <pre><code>##               (Intercept)    preddegBachelor Degree preddegCertificate Degree 
 ##                0.72296993               -0.05170254                0.02193828</code></pre>
 <p>Guesses as to what these coefficients represent? How were the categorical groups turned into the different elements in the model?</p>
 </div>
-<div id="overall-model-fit" class="section level3">
+<div id="overall-model-fit" class="section level3" number="7.3.2">
 <h3><span class="header-section-number">7.3.2</span> Overall model fit</h3>
 <p>There is a measure of overall model fit that is commonly used in the research literature for linear regression models, called R-squared. R-squared represents the proportion of variation in the outcome that is explained by the attributes in the model. The statistic ranges from 0 to 1 where values closer to 1 indicate larger percentages of variation explained. This can be extracted from the model directly.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(adm_model)<span class="op">$</span>r.squared</code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="estimation-bootstrap-uncertainty.html#cb230-1" aria-hidden="true"></a><span class="kw">summary</span>(adm_model)<span class="op">$</span>r.squared</span></code></pre></div>
 <pre><code>## [1] 0.01404376</code></pre>
 <p>Another one can be computed from the baby data where the birth weight was the outcome and gestational days was the primary attribute used as a predictor.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_reg &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby)
-<span class="kw">summary</span>(baby_reg)<span class="op">$</span>r.squared</code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="estimation-bootstrap-uncertainty.html#cb232-1" aria-hidden="true"></a>baby_reg &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby)</span>
+<span id="cb232-2"><a href="estimation-bootstrap-uncertainty.html#cb232-2" aria-hidden="true"></a><span class="kw">summary</span>(baby_reg)<span class="op">$</span>r.squared</span></code></pre></div>
 <pre><code>## [1] 0.1660911</code></pre>
 <p>For models with a single predictor variable, R-squared is the correlation coefficient squared. For example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="estimation-bootstrap-uncertainty.html#cb234-1" aria-hidden="true"></a><span class="kw">cor</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] 0.1660911</code></pre>
 </div>
 </div>
-<div id="multiple-regression" class="section level2">
+<div id="multiple-regression" class="section level2" number="7.4">
 <h2><span class="header-section-number">7.4</span> Multiple Regression</h2>
 <p>What happens if we would like to combine the two predictors? Shown above is that the number of gestational days has a moderate relationship to the baby weight, therefore exploring the effects of smoking, it would be nice to remove the effect of gestational days from the baby weight. More specifically, this essentially allows us to make comparisons on the effect of smoking for the <strong>same</strong> gestational days. One way to think about this is through conditional means. Exploration of these visually first can be particularly helpful.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_smooth</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>maternal_smoker)</code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="estimation-bootstrap-uncertainty.html#cb236-1" aria-hidden="true"></a><span class="kw">gf_point</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></span>
+<span id="cb236-2"><a href="estimation-bootstrap-uncertainty.html#cb236-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_smooth</span>() <span class="op">%&gt;%</span></span>
+<span id="cb236-3"><a href="estimation-bootstrap-uncertainty.html#cb236-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>maternal_smoker)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39;</code></pre>
 <p><img src="07-estimation_files/figure-html/scatter-smoker-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_reg_smoker &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">+</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)
-<span class="kw">coef</span>(baby_reg_smoker)</code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="estimation-bootstrap-uncertainty.html#cb238-1" aria-hidden="true"></a>baby_reg_smoker &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">+</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)</span>
+<span id="cb238-2"><a href="estimation-bootstrap-uncertainty.html#cb238-2" aria-hidden="true"></a><span class="kw">coef</span>(baby_reg_smoker)</span></code></pre></div>
 <pre><code>##                                  (Intercept) 
 ##                                  122.7366688 
 ## I(gestational_days - mean(gestational_days)) 
@@ -467,10 +515,12 @@ baby &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class=
 ##                          maternal_smokerTRUE 
 ##                                   -8.3743990</code></pre>
 <p>We can write out the regression equation similar to before:</p>
-<span class="math display">\[\begin{equation}
+<p><span class="math display">\[\begin{equation}
 birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.17 maternal\_smoker + \epsilon
-\end{equation}\]</span>
-<p>Let's explore how these are interpreted. ### Distribution of Effects Similar to before, the distribution of effects can be obtained with the following steps:</p>
+\end{equation}\]</span></p>
+<p>Let’s explore how these are interpreted.
+### Distribution of Effects
+Similar to before, the distribution of effects can be obtained with the following steps:</p>
 <ol style="list-style-type: decimal">
 <li>Resample the observed data available, with replacement</li>
 <li>Estimate linear model coefficients.</li>
@@ -478,39 +528,39 @@ birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.1
 <li>Repeat steps 1 - 3 many times</li>
 <li>Explore the distribution of median differences from the many resampled data sets.</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
-  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
-
-  baby_resample <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">+</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">select</span>(term, estimate)
-}
-<span class="kw">resample_baby</span>()</code></pre></div>
-<pre><code>## # A tibble: 3 x 2
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="estimation-bootstrap-uncertainty.html#cb240-1" aria-hidden="true"></a>resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb240-2"><a href="estimation-bootstrap-uncertainty.html#cb240-2" aria-hidden="true"></a>  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span></span>
+<span id="cb240-3"><a href="estimation-bootstrap-uncertainty.html#cb240-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb240-4"><a href="estimation-bootstrap-uncertainty.html#cb240-4" aria-hidden="true"></a></span>
+<span id="cb240-5"><a href="estimation-bootstrap-uncertainty.html#cb240-5" aria-hidden="true"></a>  baby_resample <span class="op">%&gt;%</span></span>
+<span id="cb240-6"><a href="estimation-bootstrap-uncertainty.html#cb240-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">+</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb240-7"><a href="estimation-bootstrap-uncertainty.html#cb240-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb240-8"><a href="estimation-bootstrap-uncertainty.html#cb240-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">select</span>(term, estimate)</span>
+<span id="cb240-9"><a href="estimation-bootstrap-uncertainty.html#cb240-9" aria-hidden="true"></a>}</span>
+<span id="cb240-10"><a href="estimation-bootstrap-uncertainty.html#cb240-10" aria-hidden="true"></a><span class="kw">resample_baby</span>()</span></code></pre></div>
+<pre><code>## [90m# A tibble: 3 x 2[39m
 ##   term                                         estimate
-##   &lt;chr&gt;                                           &lt;dbl&gt;
-## 1 (Intercept)                                   122.   
-## 2 I(gestational_days - mean(gestational_days))    0.537
-## 3 maternal_smokerTRUE                            -7.75</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_rows</span>()
-
-coef_baby <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>)</code></pre></div>
+##   [3m[90m&lt;chr&gt;[39m[23m                                           [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m (Intercept)                                   122.   
+## [90m2[39m I(gestational_days - mean(gestational_days))    0.470
+## [90m3[39m maternal_smokerTRUE                            -[31m7[39m[31m.[39m[31m80[39m</code></pre>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="estimation-bootstrap-uncertainty.html#cb242-1" aria-hidden="true"></a>coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
+<span id="cb242-2"><a href="estimation-bootstrap-uncertainty.html#cb242-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb242-3"><a href="estimation-bootstrap-uncertainty.html#cb242-3" aria-hidden="true"></a></span>
+<span id="cb242-4"><a href="estimation-bootstrap-uncertainty.html#cb242-4" aria-hidden="true"></a>coef_baby <span class="op">%&gt;%</span></span>
+<span id="cb242-5"><a href="estimation-bootstrap-uncertainty.html#cb242-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb242-6"><a href="estimation-bootstrap-uncertainty.html#cb242-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>)</span></code></pre></div>
 <p><img src="07-estimation_files/figure-html/mult-reg-dist-1.png" width="672" /></p>
-<div id="interactions" class="section level3">
+<div id="interactions" class="section level3" number="7.4.1">
 <h3><span class="header-section-number">7.4.1</span> Interactions</h3>
 <p>One additional idea that can be quite powerful is the idea of interactions. This was indirectly shown earlier in the course with classification and regression trees, where the models after each split re-evaluated which attributes were most helpful. In this way, the same attribute could be used in different places with different scores identifying the split. A similar idea can be explored in the regression framework, where the idea is that there are differential effects for different groups. This can be shown visually:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_smooth</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>maternal_smoker)</code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="estimation-bootstrap-uncertainty.html#cb243-1" aria-hidden="true"></a><span class="kw">gf_point</span>(birth_weight <span class="op">~</span><span class="st"> </span>gestational_days, <span class="dt">data =</span> baby, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></span>
+<span id="cb243-2"><a href="estimation-bootstrap-uncertainty.html#cb243-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_smooth</span>() <span class="op">%&gt;%</span></span>
+<span id="cb243-3"><a href="estimation-bootstrap-uncertainty.html#cb243-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>maternal_smoker)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39;</code></pre>
 <p><img src="07-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baby_reg_int &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">*</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)
-<span class="kw">coef</span>(baby_reg_int)</code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="estimation-bootstrap-uncertainty.html#cb245-1" aria-hidden="true"></a>baby_reg_int &lt;-<span class="st"> </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">*</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> baby)</span>
+<span id="cb245-2"><a href="estimation-bootstrap-uncertainty.html#cb245-2" aria-hidden="true"></a><span class="kw">coef</span>(baby_reg_int)</span></code></pre></div>
 <pre><code>##                                                      (Intercept) 
 ##                                                       122.799690 
 ##                     I(gestational_days - mean(gestational_days)) 
@@ -519,41 +569,41 @@ coef_baby <span class="op">%&gt;%</span>
 ##                                                        -8.257707 
 ## I(gestational_days - mean(gestational_days)):maternal_smokerTRUE 
 ##                                                         0.230846</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
-  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
-
-  baby_resample <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">*</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">select</span>(term, estimate)
-}
-<span class="kw">resample_baby</span>()</code></pre></div>
-<pre><code>## # A tibble: 4 x 2
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="estimation-bootstrap-uncertainty.html#cb247-1" aria-hidden="true"></a>resample_baby &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb247-2"><a href="estimation-bootstrap-uncertainty.html#cb247-2" aria-hidden="true"></a>  baby_resample &lt;-<span class="st"> </span>baby <span class="op">%&gt;%</span></span>
+<span id="cb247-3"><a href="estimation-bootstrap-uncertainty.html#cb247-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(baby), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb247-4"><a href="estimation-bootstrap-uncertainty.html#cb247-4" aria-hidden="true"></a></span>
+<span id="cb247-5"><a href="estimation-bootstrap-uncertainty.html#cb247-5" aria-hidden="true"></a>  baby_resample <span class="op">%&gt;%</span></span>
+<span id="cb247-6"><a href="estimation-bootstrap-uncertainty.html#cb247-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">lm</span>(birth_weight <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(gestational_days <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(gestational_days)) <span class="op">*</span><span class="st"> </span>maternal_smoker, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb247-7"><a href="estimation-bootstrap-uncertainty.html#cb247-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb247-8"><a href="estimation-bootstrap-uncertainty.html#cb247-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">select</span>(term, estimate)</span>
+<span id="cb247-9"><a href="estimation-bootstrap-uncertainty.html#cb247-9" aria-hidden="true"></a>}</span>
+<span id="cb247-10"><a href="estimation-bootstrap-uncertainty.html#cb247-10" aria-hidden="true"></a><span class="kw">resample_baby</span>()</span></code></pre></div>
+<pre><code>## [90m# A tibble: 4 x 2[39m
 ##   term                                                             estimate
-##   &lt;chr&gt;                                                               &lt;dbl&gt;
-## 1 (Intercept)                                                       122.   
-## 2 I(gestational_days - mean(gestational_days))                        0.300
-## 3 maternal_smokerTRUE                                                -7.38 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.322</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_rows</span>()
-
-coef_baby <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>)</code></pre></div>
+##   [3m[90m&lt;chr&gt;[39m[23m                                                               [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m (Intercept)                                                       123.   
+## [90m2[39m I(gestational_days - mean(gestational_days))                        0.371
+## [90m3[39m maternal_smokerTRUE                                                -[31m9[39m[31m.[39m[31m0[39m[31m3[39m 
+## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.198</code></pre>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="estimation-bootstrap-uncertainty.html#cb249-1" aria-hidden="true"></a>coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
+<span id="cb249-2"><a href="estimation-bootstrap-uncertainty.html#cb249-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb249-3"><a href="estimation-bootstrap-uncertainty.html#cb249-3" aria-hidden="true"></a></span>
+<span id="cb249-4"><a href="estimation-bootstrap-uncertainty.html#cb249-4" aria-hidden="true"></a>coef_baby <span class="op">%&gt;%</span></span>
+<span id="cb249-5"><a href="estimation-bootstrap-uncertainty.html#cb249-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb249-6"><a href="estimation-bootstrap-uncertainty.html#cb249-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>)</span></code></pre></div>
 <p><img src="07-estimation_files/figure-html/interaction-distribution-1.png" width="672" /></p>
 </div>
-<div id="evaluating-model-fit" class="section level3">
+<div id="evaluating-model-fit" class="section level3" number="7.4.2">
 <h3><span class="header-section-number">7.4.2</span> Evaluating model fit</h3>
-<p>As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby's birth weight.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(baby_reg)<span class="op">$</span>r.square</code></pre></div>
+<p>As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby’s birth weight.</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="estimation-bootstrap-uncertainty.html#cb250-1" aria-hidden="true"></a><span class="kw">summary</span>(baby_reg)<span class="op">$</span>r.square</span></code></pre></div>
 <pre><code>## [1] 0.1660911</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(smoker_reg)<span class="op">$</span>r.square</code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="estimation-bootstrap-uncertainty.html#cb252-1" aria-hidden="true"></a><span class="kw">summary</span>(smoker_reg)<span class="op">$</span>r.square</span></code></pre></div>
 <pre><code>## [1] 0.06091</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(baby_reg_smoker)<span class="op">$</span>r.square</code></pre></div>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="estimation-bootstrap-uncertainty.html#cb254-1" aria-hidden="true"></a><span class="kw">summary</span>(baby_reg_smoker)<span class="op">$</span>r.square</span></code></pre></div>
 <pre><code>## [1] 0.215661</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(baby_reg_int)<span class="op">$</span>r.square</code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="estimation-bootstrap-uncertainty.html#cb256-1" aria-hidden="true"></a><span class="kw">summary</span>(baby_reg_int)<span class="op">$</span>r.square</span></code></pre></div>
 <pre><code>## [1] 0.2249173</code></pre>
 
 </div>
@@ -620,7 +670,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))

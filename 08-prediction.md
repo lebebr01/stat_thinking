@@ -24,18 +24,18 @@ head(college_score)
 ```
 
 ```
-## # A tibble: 6 x 17
+## [90m# A tibble: 6 x 17[39m
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
-## # … with 7 more variables: costt4_p <dbl>, tuitionfee_in <dbl>,
-## #   tuitionfee_out <dbl>, debt_mdn <dbl>, grad_debt_mdn <dbl>, female <dbl>,
-## #   bachelor_degree <dbl>
+##   [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m   [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m     [3m[90m<dbl>[39m[23m    [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m    [3m[90m<dbl>[39m[23m
+## [90m1[39m Alaba… Norm… AL     Bachel… South… City:…    0.903       18  [4m4[24m824    [4m2[24m[4m2[24m886
+## [90m2[39m Unive… Birm… AL     Bachel… South… City:…    0.918       25 [4m1[24m[4m2[24m866    [4m2[24m[4m4[24m129
+## [90m3[39m Unive… Hunt… AL     Bachel… South… City:…    0.812       28  [4m6[24m917    [4m2[24m[4m2[24m108
+## [90m4[39m Alaba… Mont… AL     Bachel… South… City:…    0.979       18  [4m4[24m189    [4m1[24m[4m9[24m413
+## [90m5[39m The U… Tusc… AL     Bachel… South… City:…    0.533       28 [4m3[24m[4m2[24m387    [4m2[24m[4m8[24m836
+## [90m6[39m Aubur… Mont… AL     Bachel… South… City:…    0.825       22  [4m4[24m211    [4m1[24m[4m9[24m892
+## [90m# … with 7 more variables: costt4_p [3m[90m<dbl>[90m[23m, tuitionfee_in [3m[90m<dbl>[90m[23m,[39m
+## [90m#   tuitionfee_out [3m[90m<dbl>[90m[23m, debt_mdn [3m[90m<dbl>[90m[23m, grad_debt_mdn [3m[90m<dbl>[90m[23m, female [3m[90m<dbl>[90m[23m,[39m
+## [90m#   bachelor_degree [3m[90m<dbl>[90m[23m[39m
 ```
 
 
@@ -67,12 +67,12 @@ resample_admrate()
 ```
 
 ```
-## # A tibble: 3 x 2
+## [90m# A tibble: 3 x 2[39m
 ##   term                      estimate
-##   <chr>                        <dbl>
-## 1 (Intercept)                 0.724 
-## 2 preddegBachelor Degree     -0.0463
-## 3 preddegCertificate Degree   0.0449
+##   [3m[90m<chr>[39m[23m                        [3m[90m<dbl>[39m[23m
+## [90m1[39m (Intercept)                 0.696 
+## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m20[4m4[24m[39m
+## [90m3[39m preddegCertificate Degree   0.059[4m9[24m
 ```
 
 
@@ -122,12 +122,12 @@ resample_admrate_median()
 
 ```
 ##                    Term Median_Difference
-## 1             Associate            0.7720
-## 2              Bachelor            0.7036
-## 3           Certificate            0.8000
-## 4    bachelor_associate           -0.0684
-## 5 certificate_associate            0.0280
-## 6  bachelor_certificate           -0.0964
+## 1             Associate           0.78925
+## 2              Bachelor           0.69510
+## 3           Certificate           0.76000
+## 4    bachelor_associate          -0.09415
+## 5 certificate_associate          -0.02925
+## 6  bachelor_certificate          -0.06490
 ```
 
 

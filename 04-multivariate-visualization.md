@@ -14,25 +14,25 @@ head(us_weather)
 ```
 
 ```
-## # A tibble: 6 x 35
+## [90m# A tibble: 6 x 35[39m
 ##   station date                dewpoint_avg drybulbtemp_avg relativehumidit…
-##     <dbl> <dttm>                     <dbl>           <dbl>            <dbl>
-## 1 7.25e10 2018-10-01 23:59:00           51              52               95
-## 2 7.25e10 2018-10-02 23:59:00           59              60               96
-## 3 7.25e10 2018-10-03 23:59:00           55              62               86
-## 4 7.25e10 2018-10-04 23:59:00           56              60               77
-## 5 7.25e10 2018-10-05 23:59:00           43              51               75
-## 6 7.25e10 2018-10-06 23:59:00           62              63               90
-## # … with 30 more variables: sealevelpressure_avg <dbl>,
-## #   stationpressure_avg <dbl>, wetbulbtemp_avg <dbl>, windspeed_avg <dbl>,
-## #   cooling_degree_days <dbl>, departure_from_normal_temperature <dbl>,
-## #   heating_degree_days <dbl>, drybulbtemp_max <dbl>, drybulbtemp_min <dbl>,
-## #   peak_wind_direction <dbl>, peak_wind_speed <dbl>, precipitation <dbl>,
-## #   snow_depth <dbl>, snowfall <dbl>, wind_direction <dbl>, wind_speed <dbl>,
-## #   weather_occurances <chr>, sunrise <dbl>, sunset <dbl>, month <ord>,
-## #   month_numeric <dbl>, year <dbl>, day <int>, winter_group <chr>,
-## #   location <chr>, fog <chr>, mist <chr>, drizzle <chr>, rain <chr>,
-## #   snow <chr>
+##     [3m[90m<dbl>[39m[23m [3m[90m<dttm>[39m[23m                     [3m[90m<dbl>[39m[23m           [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m
+## [90m1[39m 7.25[90me[39m10 2018-10-01 [90m23:59:00[39m           51              52               95
+## [90m2[39m 7.25[90me[39m10 2018-10-02 [90m23:59:00[39m           59              60               96
+## [90m3[39m 7.25[90me[39m10 2018-10-03 [90m23:59:00[39m           55              62               86
+## [90m4[39m 7.25[90me[39m10 2018-10-04 [90m23:59:00[39m           56              60               77
+## [90m5[39m 7.25[90me[39m10 2018-10-05 [90m23:59:00[39m           43              51               75
+## [90m6[39m 7.25[90me[39m10 2018-10-06 [90m23:59:00[39m           62              63               90
+## [90m# … with 30 more variables: sealevelpressure_avg [3m[90m<dbl>[90m[23m,[39m
+## [90m#   stationpressure_avg [3m[90m<dbl>[90m[23m, wetbulbtemp_avg [3m[90m<dbl>[90m[23m, windspeed_avg [3m[90m<dbl>[90m[23m,[39m
+## [90m#   cooling_degree_days [3m[90m<dbl>[90m[23m, departure_from_normal_temperature [3m[90m<dbl>[90m[23m,[39m
+## [90m#   heating_degree_days [3m[90m<dbl>[90m[23m, drybulbtemp_max [3m[90m<dbl>[90m[23m, drybulbtemp_min [3m[90m<dbl>[90m[23m,[39m
+## [90m#   peak_wind_direction [3m[90m<dbl>[90m[23m, peak_wind_speed [3m[90m<dbl>[90m[23m, precipitation [3m[90m<dbl>[90m[23m,[39m
+## [90m#   snow_depth [3m[90m<dbl>[90m[23m, snowfall [3m[90m<dbl>[90m[23m, wind_direction [3m[90m<dbl>[90m[23m, wind_speed [3m[90m<dbl>[90m[23m,[39m
+## [90m#   weather_occurances [3m[90m<chr>[90m[23m, sunrise [3m[90m<dbl>[90m[23m, sunset [3m[90m<dbl>[90m[23m, month [3m[90m<ord>[90m[23m,[39m
+## [90m#   month_numeric [3m[90m<dbl>[90m[23m, year [3m[90m<dbl>[90m[23m, day [3m[90m<int>[90m[23m, winter_group [3m[90m<chr>[90m[23m,[39m
+## [90m#   location [3m[90m<chr>[90m[23m, fog [3m[90m<chr>[90m[23m, mist [3m[90m<chr>[90m[23m, drizzle [3m[90m<chr>[90m[23m, rain [3m[90m<chr>[90m[23m,[39m
+## [90m#   snow [3m[90m<chr>[90m[23m[39m
 ```
 
 Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.

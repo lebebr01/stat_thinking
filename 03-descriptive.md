@@ -28,17 +28,17 @@ head(colleges)
 
 ```
 ## # A tibble: 6 x 17
-##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
-## # … with 7 more variables: costt4_p <dbl>, tuitionfee_in <dbl>,
-## #   tuitionfee_out <dbl>, debt_mdn <dbl>, grad_debt_mdn <dbl>, female <dbl>,
-## #   bachelor_degree <dbl>
+##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds
+##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>
+## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824
+## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866
+## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917
+## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189
+## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387
+## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211
+## # … with 8 more variables: costt4_a <dbl>, costt4_p <dbl>,
+## #   tuitionfee_in <dbl>, tuitionfee_out <dbl>, debt_mdn <dbl>,
+## #   grad_debt_mdn <dbl>, female <dbl>, bachelor_degree <dbl>
 ```
 
 ## Summarizing Attributes
@@ -77,7 +77,7 @@ df_stats(~ adm_rate, data = colleges, mean)
 The mean (or average) admission rate for the 2,019 institutions of higher education is 68.3%. 
 
 
-## Understanding the Median and Mean
+## Visualizing the Median and Mean
 
 In your previous educational experiences with the mean and median, you may have learned the formulas or algorithms that produce these values. For example:
 
@@ -86,6 +86,10 @@ In your previous educational experiences with the mean and median, you may have 
 
 To better understand these summaries, we will visualize them on the distirbution of admission rates. 
 
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
 
 <div class="figure">
 <img src="03-descriptive_files/figure-html/hist-1.png" alt="Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line." width="672" />
@@ -115,6 +119,16 @@ The median does not balance the deviations; the sum is not zero (it is $+20$). T
 
 What about the median?
 
+
+```r
+gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
+  gf_vline(color = 'blue', xintercept = 0.708, size = 1)
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
 <img src="03-descriptive_files/figure-html/hist-median-1.png" width="672" />
 
 In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the $x$-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.
@@ -125,6 +139,14 @@ In the figure, half of the observations in the histogram have an admission rate 
 The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is "closest" (at least on average) to all of the observations. (It is the value that produces the smallest *average deviation*---since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?
 
 
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
 
 <div class="figure">
 <img src="03-descriptive_files/figure-html/hist-mean-median-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
@@ -223,6 +245,14 @@ colleges %>%
 The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.
 
 
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
 <div class="figure">
 <img src="03-descriptive_files/figure-html/hist-percentiles-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
 <p class="caption">(\#fig:hist-percentiles)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.</p>
@@ -255,6 +285,14 @@ colleges %>%
 
 The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
 
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
 
 <div class="figure">
 <img src="03-descriptive_files/figure-html/hist-iqr-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
@@ -294,6 +332,22 @@ colleges %>%
 ```
 
 
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
+```
+## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified
+```
+
 <div class="figure">
 <img src="03-descriptive_files/figure-html/hist-range-iqr-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively." width="672" />
 <p class="caption">(\#fig:hist-range-iqr)Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively.</p>
@@ -315,16 +369,6 @@ gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  %>%
 
 The "box", etxending from 0.55 to 0.84, depicts the interuartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The "whiskers" extend to either the end of the range, or the next closest observation that is not an extreme value. (There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates.) The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.
 
-We can also display both the histogram and the box-and-whiskers plot. In the syntax below, we center the box-and-whiskers plot at $y=170$. We also make the box slightly wider to display better in the plot.
-
-
-```r
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_boxploth(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10) %>%
-  gf_labs(x = "Admission rate", y = "Frequency")
-```
-
-<img src="03-descriptive_files/figure-html/hist-and-boxplot-1.png" width="672" />
 
 ### Empirical Cumulative Density
 
@@ -432,12 +476,14 @@ tally(~region, data = colleges)
 
 ```
 ## region
-##           Far West        Great Lakes           Mid East        New England 
-##                221                297                458                167 
-##     Outlying Areas             Plains    Rocky Mountains          Southeast 
-##                 35                200                 50                454 
-##          Southwest US Service Schools 
-##                133                  4
+##           Far West        Great Lakes           Mid East 
+##                221                297                458 
+##        New England     Outlying Areas             Plains 
+##                167                 35                200 
+##    Rocky Mountains          Southeast          Southwest 
+##                 50                454                133 
+## US Service Schools 
+##                  4
 ```
 
 
@@ -451,12 +497,14 @@ tally(~region, data = colleges) / 2019
 
 ```
 ## region
-##           Far West        Great Lakes           Mid East        New England 
-##        0.109460129        0.147102526        0.226844973        0.082714215 
-##     Outlying Areas             Plains    Rocky Mountains          Southeast 
-##        0.017335315        0.099058940        0.024764735        0.224863794 
-##          Southwest US Service Schools 
-##        0.065874195        0.001981179
+##           Far West        Great Lakes           Mid East 
+##        0.109460129        0.147102526        0.226844973 
+##        New England     Outlying Areas             Plains 
+##        0.082714215        0.017335315        0.099058940 
+##    Rocky Mountains          Southeast          Southwest 
+##        0.024764735        0.224863794        0.065874195 
+## US Service Schools 
+##        0.001981179
 ```
 
 
@@ -470,12 +518,14 @@ tally(~region, data = colleges, format = "proportion")
 
 ```
 ## region
-##           Far West        Great Lakes           Mid East        New England 
-##        0.109460129        0.147102526        0.226844973        0.082714215 
-##     Outlying Areas             Plains    Rocky Mountains          Southeast 
-##        0.017335315        0.099058940        0.024764735        0.224863794 
-##          Southwest US Service Schools 
-##        0.065874195        0.001981179
+##           Far West        Great Lakes           Mid East 
+##        0.109460129        0.147102526        0.226844973 
+##        New England     Outlying Areas             Plains 
+##        0.082714215        0.017335315        0.099058940 
+##    Rocky Mountains          Southeast          Southwest 
+##        0.024764735        0.224863794        0.065874195 
+## US Service Schools 
+##        0.001981179
 ```
 
 
@@ -505,4 +555,7 @@ colleges %>%
 ##   mae_adm_rate
 ## 1    0.1692953
 ```
+
+
+<!-- This is a test. -->
 

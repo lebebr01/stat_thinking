@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 Descriptive Statistics: Numerically Describing the Sample Data | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 3 Descriptive Statistics: Numerically Describing the Sample Data | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 Descriptive Statistics: Numerically Describing the Sample Data | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-07-28" />
+<meta name="date" content="2019-10-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -128,7 +128,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#visualizing-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Visualizing the Median and Mean</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
@@ -143,14 +143,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
-<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.2.1</b> Adding additional groups</a></li>
-</ul></li>
-<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#other-statistics-of-center"><i class="fa fa-check"></i><b>4.3</b> Other statistics of center</a></li>
-<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#robust-measure-of-variation"><i class="fa fa-check"></i><b>4.4.1</b> Robust measure of variation</a></li>
-<li class="chapter" data-level="4.4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#variation-by-group"><i class="fa fa-check"></i><b>4.4.2</b> Variation by Group</a></li>
-</ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
 <li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
@@ -164,41 +156,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="linear-model.html"><a href="linear-model.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Visualize distributions</a></li>
-<li class="chapter" data-level="6.1.2" data-path="linear-model.html"><a href="linear-model.html#decision-tree---regression-tree"><i class="fa fa-check"></i><b>6.1.2</b> Decision Tree - Regression Tree</a></li>
-<li class="chapter" data-level="6.1.3" data-path="linear-model.html"><a href="linear-model.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.1.3</b> Evaluating accuracy</a></li>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.1</b> Simple Regression continuous predictor</a></li>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.2</b> Conditional Means</a></li>
+<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#categorical-predictors"><i class="fa fa-check"></i><b>6.3</b> Categorical Predictor(s)</a></li>
+<li class="chapter" data-level="6.4" data-path="linear-model.html"><a href="linear-model.html#multiple-regression"><i class="fa fa-check"></i><b>6.4</b> Multiple Regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="linear-model.html"><a href="linear-model.html#description-of-the-data"><i class="fa fa-check"></i><b>6.2.1</b> Description of the Data</a></li>
-<li class="chapter" data-level="6.2.2" data-path="linear-model.html"><a href="linear-model.html#scatterplots"><i class="fa fa-check"></i><b>6.2.2</b> Scatterplots</a></li>
-<li class="chapter" data-level="6.2.3" data-path="linear-model.html"><a href="linear-model.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>6.2.3</b> Fitting a linear regression model</a></li>
-<li class="chapter" data-level="6.2.4" data-path="linear-model.html"><a href="linear-model.html#explore-the-y-intercept"><i class="fa fa-check"></i><b>6.2.4</b> Explore the y-intercept</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.3</b> Conditional Means</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
-<li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
-<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
-<li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
-<li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>7.3.1</b> Explore distribution 3 groups</a></li>
-<li class="chapter" data-level="7.3.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#overall-model-fit"><i class="fa fa-check"></i><b>7.3.2</b> Overall model fit</a></li>
-</ul></li>
-<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#interactions"><i class="fa fa-check"></i><b>7.4.1</b> Interactions</a></li>
-<li class="chapter" data-level="7.4.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#evaluating-model-fit"><i class="fa fa-check"></i><b>7.4.2</b> Evaluating model fit</a></li>
-</ul></li>
-</ul></li>
+<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a></li>
 <li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
 <li class="chapter" data-level="8.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>8.1</b> Comparison of classification / linear model</a></li>
-<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a><ul>
-<li class="chapter" data-level="8.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>8.2.1</b> Skewed Data - Inference</a></li>
-<li class="chapter" data-level="8.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>8.2.2</b> Bootstrap Median</a></li>
-</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -242,17 +207,17 @@ colleges &lt;-<span class="st"> </span><span class="kw">read_csv</span>(
 <span class="co"># View first six cases</span>
 <span class="kw">head</span>(colleges)</code></pre></div>
 <pre><code>## # A tibble: 6 x 17
-##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
-## # … with 7 more variables: costt4_p &lt;dbl&gt;, tuitionfee_in &lt;dbl&gt;,
-## #   tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;, grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;,
-## #   bachelor_degree &lt;dbl&gt;</code></pre>
+##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds
+##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824
+## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866
+## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917
+## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189
+## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387
+## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211
+## # … with 8 more variables: costt4_a &lt;dbl&gt;, costt4_p &lt;dbl&gt;,
+## #   tuitionfee_in &lt;dbl&gt;, tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;,
+## #   grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;, bachelor_degree &lt;dbl&gt;</code></pre>
 <div id="summarizing-attributes" class="section level2">
 <h2><span class="header-section-number">3.1</span> Summarizing Attributes</h2>
 <p>Data are often stored in a tabular format where the rows of the data are the <em>cases</em> and the columns are <em>attributes</em>. For example, in the college scorecard data (displayed above) the rows each represent a specific institution of higher education (cases) and the columns represent various attributes measured on those higher education institutions. This type of tabular representation is a common structure for storing and analyzing data.</p>
@@ -268,21 +233,22 @@ colleges &lt;-<span class="st"> </span><span class="kw">read_csv</span>(
 ## 1     0.6827355</code></pre>
 <p>The mean (or average) admission rate for the 2,019 institutions of higher education is 68.3%.</p>
 </div>
-<div id="understanding-the-median-and-mean" class="section level2">
-<h2><span class="header-section-number">3.2</span> Understanding the Median and Mean</h2>
+<div id="visualizing-the-median-and-mean" class="section level2">
+<h2><span class="header-section-number">3.2</span> Visualizing the Median and Mean</h2>
 <p>In your previous educational experiences with the mean and median, you may have learned the formulas or algorithms that produce these values. For example:</p>
 <ul>
 <li><strong>Mean:</strong> Add up all the values of the attribute and divide by the number of values;</li>
 <li><strong>Median:</strong> Order all the values of the attribute from smallest to largest and find the one in the middle. If there is an even number of observations, find the mean of the middle two values.</li>
 </ul>
 <p>To better understand these summaries, we will visualize them on the distirbution of admission rates.</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:hist"></span>
 <img src="03-descriptive_files/figure-html/hist-1.png" alt="Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line." width="672" />
 <p class="caption">
 Figure 3.1: Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.
 </p>
 </div>
-<p>The mean (displayed as a red, dashed line) represents the &quot;balance point&quot; of the distribution. If the distribution were a physical entity, it is the location where you would put you finger underneath the distribution to balance it. In a statistical sense, we balance the distribution by &quot;balancing&quot; the deviations. To explain this, let's examine a toy data set of five observations:</p>
+<p>The mean (displayed as a red, dashed line) represents the “balance point” of the distribution. If the distribution were a physical entity, it is the location where you would put you finger underneath the distribution to balance it. In a statistical sense, we balance the distribution by “balancing” the deviations. To explain this, let’s examine a toy data set of five observations:</p>
 <p><span class="math display">\[
 Y = \begin{pmatrix}10\\ 10\\ 20\\ 30\\ 50\end{pmatrix}
 \]</span></p>
@@ -290,17 +256,22 @@ Y = \begin{pmatrix}10\\ 10\\ 20\\ 30\\ 50\end{pmatrix}
 <p><span class="math display">\[
 Y = \begin{pmatrix}10 - 24\\ 10-24\\ 20-24\\ 30-24\\ 50-24\end{pmatrix} = \begin{pmatrix}-14\\ -14\\ -4\\ 6\\ 26\end{pmatrix}
 \]</span></p>
-<p>Notice that some of the deviations are negative (the observation was below the mean) and some are positive (the observation was above the mean). The mean &quot;balances&quot; these deviations since the sum of the deviations is 0. What if we had instead looked at the deviations from the median, which is 20?</p>
+<p>Notice that some of the deviations are negative (the observation was below the mean) and some are positive (the observation was above the mean). The mean “balances” these deviations since the sum of the deviations is 0. What if we had instead looked at the deviations from the median, which is 20?</p>
 <p><span class="math display">\[
 Y = \begin{pmatrix}10 - 20\\ 10-20\\ 20-20\\ 30-20\\ 50-20\end{pmatrix} = \begin{pmatrix}-10\\ -10\\ 0\\ 10\\ 30\end{pmatrix}
 \]</span></p>
-<p>The median does not balance the deviations; the sum is not zero (it is <span class="math inline">\(+20\)</span>). The mean is the only value we can use to &quot;balance&quot; the deviations.</p>
+<p>The median does not balance the deviations; the sum is not zero (it is <span class="math inline">\(+20\)</span>). The mean is the only value we can use to “balance” the deviations.</p>
 <p>What about the median?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="fl">0.708</span>, <span class="dt">size =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <p><img src="03-descriptive_files/figure-html/hist-median-1.png" width="672" /></p>
 <p>In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the <span class="math inline">\(x\)</span>-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.</p>
 <div id="summarize-with-the-mean-or-median" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> Summarize with the Mean or Median?</h3>
-<p>The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is &quot;closest&quot; (at least on average) to all of the observations. (It is the value that produces the smallest <em>average deviation</em>---since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?</p>
+<p>The goal of summarizing the distribution numerically is to provide a value that typifies or represents the observed values of the attribute. In our example, we need a value that summarizes the 2,019 admission rates. Since the mean balances the deviations, it is the representative because it is the value that is “closest” (at least on average) to all of the observations. (It is the value that produces the smallest <em>average deviation</em>—since the sum of deviations is 0, the average deviation is also 0.) The median is representative because half of the distribution is smaller than that value and the other half is larger. But, does one represent the distribution better than the other?</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:hist-mean-median"></span>
 <img src="03-descriptive_files/figure-html/hist-mean-median-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line." width="672" />
 <p class="caption">
@@ -308,14 +279,14 @@ Figure 3.2: Distribution of the admission rates for 2,019 institutions of higher
 </p>
 </div>
 <p>In this example, both values are quite similar, so either would send a simlar message about the distribution of admission rates, namely that a typical admission rate for these 2,019 institutions of higher education is around 70%.</p>
-<p>Looking at the plot, we see that the mean admission rate is lower than the median admission rate. In a left-skewed distribution this will often be the case. The mean is &quot;pulled toward the tail&quot; of the distribution. This is because the mean is influenced by extreme values (which in a skewed distribution are in the tail). The median is not influenced by extreme values; we say it is <em>robust</em> to these values. This is because in calculating the median, only the middle score (or middle two scores) are used, so its value is not informed by the extreme values in the distribution.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>Looking at the plot, we see that the mean admission rate is lower than the median admission rate. In a left-skewed distribution this will often be the case. The mean is “pulled toward the tail” of the distribution. This is because the mean is influenced by extreme values (which in a skewed distribution are in the tail). The median is not influenced by extreme values; we say it is <em>robust</em> to these values. This is because in calculating the median, only the middle score (or middle two scores) are used, so its value is not informed by the extreme values in the distribution.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
 <p>In practice, it is a good idea to compute both the mean and the median and explore whether one is more representative than the other (perhaps by plotting them on the distribution). The choice of one over the other should also be guided by substantive knowledge.</p>
 </div>
 </div>
 <div id="numerically-summarizing-variation" class="section level2">
 <h2><span class="header-section-number">3.3</span> Numerically Summarizing Variation</h2>
-<p>In the distribution of admission rates, both the mean and median seems to offer a representative admission rate since both are close to the modal clump of the distribution. (There are several colleges that have an admission rate close to 70%.) But, you will also notice that an admission rate of 70% does not do a great job representing all of the institutions' admissions rates. This is true for any single statistic we pick to summarize the distribution.</p>
-<p>To more fully summarize the distribution we need to summarize the variability in the distribution in addition to a &quot;typical&quot; or representative value. There are several summaries that statisticians and data scientists use to describe the variation in a distribution. And, like the representative summary measures, each of the summaries of variation provide slightly different information by highlighting different aspects of the variability. We will explore some of these measures below.</p>
+<p>In the distribution of admission rates, both the mean and median seems to offer a representative admission rate since both are close to the modal clump of the distribution. (There are several colleges that have an admission rate close to 70%.) But, you will also notice that an admission rate of 70% does not do a great job representing all of the institutions’ admissions rates. This is true for any single statistic we pick to summarize the distribution.</p>
+<p>To more fully summarize the distribution we need to summarize the variability in the distribution in addition to a “typical” or representative value. There are several summaries that statisticians and data scientists use to describe the variation in a distribution. And, like the representative summary measures, each of the summaries of variation provide slightly different information by highlighting different aspects of the variability. We will explore some of these measures below.</p>
 <div id="range" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> Range</h3>
 <p>One measure of variation that you have almost surely encountered before is the range. This numerical measure is the difference between the maximum and minimum values in the data. To compute this we provide the <code>df_stats()</code> function with two additional arguments, <code>min</code> and <code>max</code>. Then we can compute the difference between these values.</p>
@@ -326,13 +297,13 @@ Figure 3.2: Distribution of the admission rates for 2,019 institutions of higher
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute range</span>
 <span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="dv">0</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
-<p>The range of the admission rates is 1. When people colloquially describe the range, they typically provide the limits of the data rather than actually providing the range. For example, they may describe the range of the admission rates as: &quot;the admission rates range from 0 to 1&quot;. While this is technially not the range (which is a single number), it is probably more descriptive as it also gives a sense of the lower- and upper-limits for the observations.</p>
+<p>The range of the admission rates is 1. When people colloquially describe the range, they typically provide the limits of the data rather than actually providing the range. For example, they may describe the range of the admission rates as: “the admission rates range from 0 to 1”. While this is technially not the range (which is a single number), it is probably more descriptive as it also gives a sense of the lower- and upper-limits for the observations.</p>
 <p>One problem with the range is that if there are extreme values, the range will not give an accurate picture of the variation encompassing most observations. For example, consider the following five test scores:</p>
 <p><span class="math display">\[
 Y = \begin{pmatrix}30\\ 35\\ 36\\ 37\\ 100\end{pmatrix}
 \]</span></p>
 <p>The range of these data is 70, indicating that the variation between the lowest and highest score is 70 points, suggesting a lot of variation in the scores. The range, however, is clearly influenced by the score of 100. Were it not for that score, we would have a much different take on the score variability; the other scores are between 30 and 37 (a range of 7), suggesting that there is not a lot of differenes in the test scores.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
-<p>While the range is perhaps not the best measure of variation, it is quite useful as a validity check on the data to ensure that the attribute's values are theoretically possible. In this case the values are all between 0 and 1, which are values that are theoretically plausible for admission rate.</p>
+<p>While the range is perhaps not the best measure of variation, it is quite useful as a validity check on the data to ensure that the attribute’s values are theoretically possible. In this case the values are all between 0 and 1, which are values that are theoretically plausible for admission rate.</p>
 </div>
 <div id="percentile-range" class="section level3">
 <h3><span class="header-section-number">3.3.2</span> Percentile Range</h3>
@@ -352,6 +323,8 @@ colleges <span class="op">%&gt;%</span>
 <span class="fl">0.94706</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.39284</span></code></pre></div>
 <pre><code>## [1] 0.55422</code></pre>
 <p>The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:hist-percentiles"></span>
 <img src="03-descriptive_files/figure-html/hist-percentiles-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively." width="672" />
 <p class="caption">
@@ -370,7 +343,9 @@ colleges <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute the IQR</span>
 <span class="fl">0.83815</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.5524</span></code></pre></div>
 <pre><code>## [1] 0.28575</code></pre>
-<p>The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for &quot;most&quot; of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.</p>
+<p>The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for “most” of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions’ admission rates and can be useful for describing the variation.</p>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:hist-iqr"></span>
 <img src="03-descriptive_files/figure-html/hist-iqr-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively." width="672" />
 <p class="caption">
@@ -389,6 +364,10 @@ colleges <span class="op">%&gt;%</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute the range</span>
 <span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="dv">0</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
+<pre><code>## Warning in (function (mapping = NULL, data = NULL, ..., xintercept, na.rm = FALSE, : Using both `xintercept` and `mapping` may not have the desired result as mapping is overwritten if `xintercept` is specified</code></pre>
 <div class="figure"><span id="fig:hist-range-iqr"></span>
 <img src="03-descriptive_files/figure-html/hist-range-iqr-1.png" alt="Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively. The dashed, blue lines are placed at the minimum and maximum values, respectively." width="672" />
 <p class="caption">
@@ -401,12 +380,7 @@ Figure 3.5: Distribution of the admission rates for 2,019 institutions of higher
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_boxploth</span>(<span class="dv">0</span> <span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, <span class="dt">fill =</span> <span class="st">&quot;skyblue&quot;</span>)  <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Admission rate&quot;</span>)</code></pre></div>
 <p><img src="03-descriptive_files/figure-html/boxplot-1.png" width="672" /></p>
-<p>The &quot;box&quot;, etxending from 0.55 to 0.84, depicts the interuartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The &quot;whiskers&quot; extend to either the end of the range, or the next closest observation that is not an extreme value. (There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates.) The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.</p>
-<p>We can also display both the histogram and the box-and-whiskers plot. In the syntax below, we center the box-and-whiskers plot at <span class="math inline">\(y=170\)</span>. We also make the box slightly wider to display better in the plot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_boxploth</span>(<span class="dv">170</span> <span class="op">~</span><span class="st"> </span>adm_rate, <span class="dt">data =</span> colleges, <span class="dt">fill =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="dt">width =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Admission rate&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Frequency&quot;</span>)</code></pre></div>
-<p><img src="03-descriptive_files/figure-html/hist-and-boxplot-1.png" width="672" /></p>
+<p>The “box”, etxending from 0.55 to 0.84, depicts the interuartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The “whiskers” extend to either the end of the range, or the next closest observation that is not an extreme value. (There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates.) The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.</p>
 </div>
 <div id="empirical-cumulative-density" class="section level3">
 <h3><span class="header-section-number">3.3.4</span> Empirical Cumulative Density</h3>
@@ -459,38 +433,44 @@ Y = \begin{pmatrix}10 - 24\\ 10-24\\ 20-24\\ 30-24\\ 50-24\end{pmatrix} = \begin
 </div>
 <div id="summarizing-categorical-attributes" class="section level2">
 <h2><span class="header-section-number">3.4</span> Summarizing Categorical Attributes</h2>
-<p>Categorical attributes are attributes that have values that represent categories. For example, the attribute <code>region</code> indicates the region in the United States where the institution is located (e.g., Midwest). The attribute <code>bachelor_degree</code> is a categorical value indicating whether ir not the institution offers a Bachelor's degree. Sometimes statisticians anddata scientists use the terms dichotmous (two categories) and polychotomous (more than two categories) to further define categorical variables. Using this nomenclature, <code>region</code> is a polychotomous categorical variable and <code>bachelor_degree</code> is a dichotomous categorical variable.</p>
-<p>Sometimes analysts use numeric values to encode the categories of a categorical attribute. For example, the attribute <code>bachelor_degree</code> is encoded using the values of 0 and 1. It is important to note that these values just indicate whether the institution offers a Bachelor's degree (1) or not (0). The values are not necessarily ordinal in the sense that a 1 means more of the attribute than a 0. Since the values just refer to categories, an analyst might have reversed the coding and used 0 to encode institutions that offer a Bachelor's degree and 1 to encode those institutions that do not. Similarly, the values of 0 and 1 are not sancrosanct; any two numers could have been used to represent the categories.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
+<p>Categorical attributes are attributes that have values that represent categories. For example, the attribute <code>region</code> indicates the region in the United States where the institution is located (e.g., Midwest). The attribute <code>bachelor_degree</code> is a categorical value indicating whether ir not the institution offers a Bachelor’s degree. Sometimes statisticians anddata scientists use the terms dichotmous (two categories) and polychotomous (more than two categories) to further define categorical variables. Using this nomenclature, <code>region</code> is a polychotomous categorical variable and <code>bachelor_degree</code> is a dichotomous categorical variable.</p>
+<p>Sometimes analysts use numeric values to encode the categories of a categorical attribute. For example, the attribute <code>bachelor_degree</code> is encoded using the values of 0 and 1. It is important to note that these values just indicate whether the institution offers a Bachelor’s degree (1) or not (0). The values are not necessarily ordinal in the sense that a 1 means more of the attribute than a 0. Since the values just refer to categories, an analyst might have reversed the coding and used 0 to encode institutions that offer a Bachelor’s degree and 1 to encode those institutions that do not. Similarly, the values of 0 and 1 are not sancrosanct; any two numers could have been used to represent the categories.<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></p>
 <p>Most of the time, the numerical summaries we computed earlier in the chapter do not work so well for categorical attributes. For example, it would not make sense to compute the mean region for the institutions. In general, it suffices to compute counts and proportions for the categories included in these attributes. To compute the category counts we use the <code>tally()</code> function. This function takes a formula indicating the name of the categorical attribute and the name of the data object. To find the category counts for the <code>region</code> attribute:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute category counts</span>
 <span class="kw">tally</span>(<span class="op">~</span>region, <span class="dt">data =</span> colleges)</code></pre></div>
 <pre><code>## region
-##           Far West        Great Lakes           Mid East        New England 
-##                221                297                458                167 
-##     Outlying Areas             Plains    Rocky Mountains          Southeast 
-##                 35                200                 50                454 
-##          Southwest US Service Schools 
-##                133                  4</code></pre>
+##           Far West        Great Lakes           Mid East 
+##                221                297                458 
+##        New England     Outlying Areas             Plains 
+##                167                 35                200 
+##    Rocky Mountains          Southeast          Southwest 
+##                 50                454                133 
+## US Service Schools 
+##                  4</code></pre>
 <p>To find the proportion of institutions in each region, we can divide each of the counts by 2,019.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute category proportions</span>
 <span class="kw">tally</span>(<span class="op">~</span>region, <span class="dt">data =</span> colleges) <span class="op">/</span><span class="st"> </span><span class="dv">2019</span></code></pre></div>
 <pre><code>## region
-##           Far West        Great Lakes           Mid East        New England 
-##        0.109460129        0.147102526        0.226844973        0.082714215 
-##     Outlying Areas             Plains    Rocky Mountains          Southeast 
-##        0.017335315        0.099058940        0.024764735        0.224863794 
-##          Southwest US Service Schools 
-##        0.065874195        0.001981179</code></pre>
+##           Far West        Great Lakes           Mid East 
+##        0.109460129        0.147102526        0.226844973 
+##        New England     Outlying Areas             Plains 
+##        0.082714215        0.017335315        0.099058940 
+##    Rocky Mountains          Southeast          Southwest 
+##        0.024764735        0.224863794        0.065874195 
+## US Service Schools 
+##        0.001981179</code></pre>
 <p>You could also compute the proportions directly with the <code>tally()</code> function by specifying the argument <code>format = &quot;proportion&quot;</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute category proportions</span>
 <span class="kw">tally</span>(<span class="op">~</span>region, <span class="dt">data =</span> colleges, <span class="dt">format =</span> <span class="st">&quot;proportion&quot;</span>)</code></pre></div>
 <pre><code>## region
-##           Far West        Great Lakes           Mid East        New England 
-##        0.109460129        0.147102526        0.226844973        0.082714215 
-##     Outlying Areas             Plains    Rocky Mountains          Southeast 
-##        0.017335315        0.099058940        0.024764735        0.224863794 
-##          Southwest US Service Schools 
-##        0.065874195        0.001981179</code></pre>
+##           Far West        Great Lakes           Mid East 
+##        0.109460129        0.147102526        0.226844973 
+##        New England     Outlying Areas             Plains 
+##        0.082714215        0.017335315        0.099058940 
+##    Rocky Mountains          Southeast          Southwest 
+##        0.024764735        0.224863794        0.065874195 
+## US Service Schools 
+##        0.001981179</code></pre>
 </div>
 <div id="advanced-extension-computing-your-own-measure-of-variation" class="section level2">
 <h2><span class="header-section-number">3.5</span> Advanced Extension: Computing Your Own Measure of Variation</h2>
@@ -506,6 +486,7 @@ Y = \begin{pmatrix}10 - 24\\ 10-24\\ 20-24\\ 30-24\\ 50-24\end{pmatrix} = \begin
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>adm_rate, mae)</code></pre></div>
 <pre><code>##   mae_adm_rate
 ## 1    0.1692953</code></pre>
+<!-- This is a test. -->
 
 </div>
 </div>
@@ -518,7 +499,7 @@ Y = \begin{pmatrix}10 - 24\\ 10-24\\ 20-24\\ 30-24\\ 50-24\end{pmatrix} = \begin
 <li id="fn7"><p>The <code>gf_boxplot()</code> function creates vertical a box-and-whiskers plot, and the <code>gf_boxploth()</code> function creates a horizontal box-and-whiskers plot.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref7">↩</a></p></li>
 <li id="fn8"><p>Technically, after summing the squared deviations, we divide this sum by <span class="math inline">\(n-1\)</span> rather than <span class="math inline">\(n\)</span>. But, when the sample size is even somewhat large, this difference is trivial.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref8">↩</a></p></li>
 <li id="fn9"><p>If we know the exact shape of the distribution we can be more specific about the proportion of the distribution that fall within one standard deviation of the mean.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref9">↩</a></p></li>
-<li id="fn10"><p>Using 0's and 1's for the encoding does have some advantages over other coding schemes which we will explore later when fitting statistical models.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref10">↩</a></p></li>
+<li id="fn10"><p>Using 0’s and 1’s for the encoding does have some advantages over other coding schemes which we will explore later when fitting statistical models.<a href="descriptive-statistics-numerically-describing-the-sample-data.html#fnref10">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -546,11 +527,12 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
+"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -562,10 +544,6 @@ gitbook.start({
 "text": null
 },
 "history": {
-"link": null,
-"text": null
-},
-"view": {
 "link": null,
 "text": null
 },

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Classification | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 5 Classification | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Classification | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-07-28" />
+<meta name="date" content="2019-10-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -128,7 +128,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#visualizing-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Visualizing the Median and Mean</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
@@ -143,14 +143,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
-<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.2.1</b> Adding additional groups</a></li>
-</ul></li>
-<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#other-statistics-of-center"><i class="fa fa-check"></i><b>4.3</b> Other statistics of center</a></li>
-<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#robust-measure-of-variation"><i class="fa fa-check"></i><b>4.4.1</b> Robust measure of variation</a></li>
-<li class="chapter" data-level="4.4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#variation-by-group"><i class="fa fa-check"></i><b>4.4.2</b> Variation by Group</a></li>
-</ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
 <li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
@@ -164,41 +156,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="linear-model.html"><a href="linear-model.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Visualize distributions</a></li>
-<li class="chapter" data-level="6.1.2" data-path="linear-model.html"><a href="linear-model.html#decision-tree---regression-tree"><i class="fa fa-check"></i><b>6.1.2</b> Decision Tree - Regression Tree</a></li>
-<li class="chapter" data-level="6.1.3" data-path="linear-model.html"><a href="linear-model.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.1.3</b> Evaluating accuracy</a></li>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.1</b> Simple Regression continuous predictor</a></li>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.2</b> Conditional Means</a></li>
+<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#categorical-predictors"><i class="fa fa-check"></i><b>6.3</b> Categorical Predictor(s)</a></li>
+<li class="chapter" data-level="6.4" data-path="linear-model.html"><a href="linear-model.html#multiple-regression"><i class="fa fa-check"></i><b>6.4</b> Multiple Regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="linear-model.html"><a href="linear-model.html#description-of-the-data"><i class="fa fa-check"></i><b>6.2.1</b> Description of the Data</a></li>
-<li class="chapter" data-level="6.2.2" data-path="linear-model.html"><a href="linear-model.html#scatterplots"><i class="fa fa-check"></i><b>6.2.2</b> Scatterplots</a></li>
-<li class="chapter" data-level="6.2.3" data-path="linear-model.html"><a href="linear-model.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>6.2.3</b> Fitting a linear regression model</a></li>
-<li class="chapter" data-level="6.2.4" data-path="linear-model.html"><a href="linear-model.html#explore-the-y-intercept"><i class="fa fa-check"></i><b>6.2.4</b> Explore the y-intercept</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.3</b> Conditional Means</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
-<li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
-<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
-<li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
-<li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>7.3.1</b> Explore distribution 3 groups</a></li>
-<li class="chapter" data-level="7.3.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#overall-model-fit"><i class="fa fa-check"></i><b>7.3.2</b> Overall model fit</a></li>
-</ul></li>
-<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#interactions"><i class="fa fa-check"></i><b>7.4.1</b> Interactions</a></li>
-<li class="chapter" data-level="7.4.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#evaluating-model-fit"><i class="fa fa-check"></i><b>7.4.2</b> Evaluating model fit</a></li>
-</ul></li>
-</ul></li>
+<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a></li>
 <li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
 <li class="chapter" data-level="8.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>8.1</b> Comparison of classification / linear model</a></li>
-<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a><ul>
-<li class="chapter" data-level="8.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>8.2.1</b> Skewed Data - Inference</a></li>
-<li class="chapter" data-level="8.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>8.2.2</b> Bootstrap Median</a></li>
-</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -225,10 +190,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In this example, we will explore data from the titanic that comes from Kaggle (<a href="https://www.kaggle.com/c/titanic/data" class="uri">https://www.kaggle.com/c/titanic/data</a>). You can view the attributes in the data from the link previous. The following set of code will install a couple a new packages that we will utilize for this section of the course, the titanic package has the data we will use and the rpart package includes functions to perform the tree based models we will employ.</p>
 <div id="topic-decision-trees" class="section level2">
 <h2><span class="header-section-number">5.1</span> Topic: Decision Trees</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(ggformula)
-<span class="kw">library</span>(mosaic)
-<span class="kw">library</span>(titanic)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
+<pre><code>## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)</code></pre></div>
+<pre><code>## Loading required package: ggstance</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggstance&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
+## 
+##     geom_errorbarh, GeomErrorbarh</code></pre>
+<pre><code>## 
+## New to ggformula?  Try the tutorials: 
+##  learnr::run_tutorial(&quot;introduction&quot;, package = &quot;ggformula&quot;)
+##  learnr::run_tutorial(&quot;refining&quot;, package = &quot;ggformula&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mosaic)</code></pre></div>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: mosaicData</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;mosaic&#39;:
+##   method                           from   
+##   fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
+<pre><code>## 
+## The &#39;mosaic&#39; package masks several functions from core packages in order to add 
+## additional features.  The original behavior of these functions should not be affected by this.
+## 
+## Note: If you use the Matrix package, be sure to load it BEFORE loading mosaic.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;mosaic&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     mean</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     count, do, tally</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     cross</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     stat</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     binom.test, cor, cor.test, cov, fivenum, IQR, median,
+##     prop.test, quantile, sd, t.test, var</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     max, mean, min, prod, range, sample, sum</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(titanic)
 <span class="kw">library</span>(rpart)
 <span class="kw">library</span>(rsample)
 <span class="kw">library</span>(rpart.plot)
@@ -242,40 +262,37 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 <span class="st">  </span><span class="kw">drop_na</span>(survived)
 
 <span class="kw">head</span>(titanic)</code></pre></div>
-<pre><code>##   PassengerId Pclass                                                Name    Sex
-## 1           1      3                             Braund, Mr. Owen Harris   male
-## 2           2      1 Cumings, Mrs. John Bradley (Florence Briggs Thayer) female
-## 3           3      3                              Heikkinen, Miss. Laina female
-## 4           4      1        Futrelle, Mrs. Jacques Heath (Lily May Peel) female
-## 5           5      3                            Allen, Mr. William Henry   male
-## 6           6      3                                    Moran, Mr. James   male
-##   Age SibSp Parch           Ticket    Fare Cabin Embarked survived
-## 1  22     1     0        A/5 21171  7.2500              S     Died
-## 2  38     1     0         PC 17599 71.2833   C85        C Survived
-## 3  26     0     0 STON/O2. 3101282  7.9250              S Survived
-## 4  35     1     0           113803 53.1000  C123        S Survived
-## 5  35     0     0           373450  8.0500              S     Died
-## 6  NA     0     0           330877  8.4583              Q     Died</code></pre>
+<pre><code>##   PassengerId Pclass                                                Name
+## 1           1      3                             Braund, Mr. Owen Harris
+## 2           2      1 Cumings, Mrs. John Bradley (Florence Briggs Thayer)
+## 3           3      3                              Heikkinen, Miss. Laina
+## 4           4      1        Futrelle, Mrs. Jacques Heath (Lily May Peel)
+## 5           5      3                            Allen, Mr. William Henry
+## 6           6      3                                    Moran, Mr. James
+##      Sex Age SibSp Parch           Ticket    Fare Cabin Embarked survived
+## 1   male  22     1     0        A/5 21171  7.2500              S     Died
+## 2 female  38     1     0         PC 17599 71.2833   C85        C Survived
+## 3 female  26     0     0 STON/O2. 3101282  7.9250              S Survived
+## 4 female  35     1     0           113803 53.1000  C123        S Survived
+## 5   male  35     0     0           373450  8.0500              S     Died
+## 6   male  NA     0     0           330877  8.4583              Q     Died</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(titanic, survived)</code></pre></div>
-<pre><code>## Warning: `count_()` is deprecated as of dplyr 0.7.0.
-## Please use `count()` instead.
-## See vignette(&#39;programming&#39;) for more help
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
-<pre><code>##   survived   n
-## 1     Died 549
-## 2 Survived 342</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   survived     n
+##   &lt;chr&gt;    &lt;int&gt;
+## 1 Died       549
+## 2 Survived   342</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived,  <span class="dt">data =</span> titanic)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div id="fitting-a-classification-tree" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Fitting a Classification Tree</h3>
-<p>Let's class_tree our first classification tree to predict the dichotomous attribute, survival. For this, we will use the rpart() function from the rpart package. The first argument to the rpart() function is a formula where the outcome of interest is specified to the left of the ~ and the attributes that are predictive of the outcome are specified to the right of the ~ separated with + signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify individuals based on the values in the data, therefore we specify method = 'class'. The final argument is the data element, in this case titanic.</p>
+<p>Let’s class_tree our first classification tree to predict the dichotomous attribute, survival. For this, we will use the rpart() function from the rpart package. The first argument to the rpart() function is a formula where the outcome of interest is specified to the left of the ~ and the attributes that are predictive of the outcome are specified to the right of the ~ separated with + signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify individuals based on the values in the data, therefore we specify method = ‘class’. The final argument is the data element, in this case titanic.</p>
 <p>In this example, I picked a handful of attributes that would seem important. These can either be numeric or represent categories, the method does not care the type of attributes that are included in the analysis. Notice that I save the computation to the object, class_tree.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">class_tree &lt;-<span class="st"> </span><span class="kw">rpart</span>(survived <span class="op">~</span><span class="st"> </span>Pclass <span class="op">+</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Age <span class="op">+</span><span class="st"> </span>Fare <span class="op">+</span><span class="st"> </span>Embarked <span class="op">+</span><span class="st"> </span>SibSp <span class="op">+</span><span class="st"> </span>Parch, 
    <span class="dt">method =</span> <span class="st">&#39;class&#39;</span>, <span class="dt">data =</span> titanic)
 
 <span class="kw">rpart.plot</span>(class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rpart.rules</span>(class_tree, <span class="dt">cover =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>##  survived                                                                                                      cover
 ##      0.11 when Sex is   male                                                       &amp; Age &lt;  6.5 &amp; SibSp &gt;= 3      1%
@@ -307,15 +324,15 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ##         CP nsplit rel error  xerror     xstd
 ## 1 0.444444      0   1.00000 1.00000 0.042446
 ## 2 0.030702      1   0.55556 0.55556 0.035750
-## 3 0.023392      3   0.49415 0.50585 0.034524
-## 4 0.020468      4   0.47076 0.49415 0.034217
-## 5 0.010234      5   0.45029 0.50585 0.034524
-## 6 0.010000      8   0.41813 0.48830 0.034061</code></pre>
+## 3 0.023392      3   0.49415 0.51754 0.034823
+## 4 0.020468      4   0.47076 0.51462 0.034749
+## 5 0.010234      5   0.45029 0.49415 0.034217
+## 6 0.010000      8   0.41813 0.49708 0.034295</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotcp</span>(class_tree)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prune_class_tree &lt;-<span class="st"> </span><span class="kw">prune</span>(class_tree, <span class="dt">cp =</span> .<span class="dv">02</span>)
 <span class="kw">rpart.plot</span>(prune_class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="accuracy" class="section level3">
 <h3><span class="header-section-number">5.1.3</span> Accuracy</h3>
@@ -323,48 +340,69 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tree_predict =</span> <span class="kw">predict</span>(prune_class_tree, <span class="dt">type =</span> <span class="st">&#39;class&#39;</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">cbind</span>(<span class="kw">predict</span>(prune_class_tree, <span class="dt">type =</span> <span class="st">&#39;prob&#39;</span>))
 <span class="kw">head</span>(titanic_predict, <span class="dt">n =</span> <span class="dv">20</span>)</code></pre></div>
-<pre><code>##    PassengerId Pclass                                                    Name
-## 1            1      3                                 Braund, Mr. Owen Harris
-## 2            2      1     Cumings, Mrs. John Bradley (Florence Briggs Thayer)
-## 3            3      3                                  Heikkinen, Miss. Laina
-## 4            4      1            Futrelle, Mrs. Jacques Heath (Lily May Peel)
-## 5            5      3                                Allen, Mr. William Henry
-## 6            6      3                                        Moran, Mr. James
-## 7            7      1                                 McCarthy, Mr. Timothy J
-## 8            8      3                          Palsson, Master. Gosta Leonard
-## 9            9      3       Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)
-## 10          10      2                     Nasser, Mrs. Nicholas (Adele Achem)
-## 11          11      3                         Sandstrom, Miss. Marguerite Rut
-## 12          12      1                                Bonnell, Miss. Elizabeth
-## 13          13      3                          Saundercock, Mr. William Henry
-## 14          14      3                             Andersson, Mr. Anders Johan
-## 15          15      3                    Vestrom, Miss. Hulda Amanda Adolfina
-## 16          16      2                        Hewlett, Mrs. (Mary D Kingcome) 
-## 17          17      3                                    Rice, Master. Eugene
-## 18          18      2                            Williams, Mr. Charles Eugene
-## 19          19      3 Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele)
-## 20          20      3                                 Masselmani, Mrs. Fatima
-##       Sex Age SibSp Parch           Ticket    Fare Cabin Embarked survived
-## 1    male  22     1     0        A/5 21171  7.2500              S     Died
-## 2  female  38     1     0         PC 17599 71.2833   C85        C Survived
-## 3  female  26     0     0 STON/O2. 3101282  7.9250              S Survived
-## 4  female  35     1     0           113803 53.1000  C123        S Survived
-## 5    male  35     0     0           373450  8.0500              S     Died
-## 6    male  NA     0     0           330877  8.4583              Q     Died
-## 7    male  54     0     0            17463 51.8625   E46        S     Died
-## 8    male   2     3     1           349909 21.0750              S     Died
-## 9  female  27     0     2           347742 11.1333              S Survived
-## 10 female  14     1     0           237736 30.0708              C Survived
-## 11 female   4     1     1          PP 9549 16.7000    G6        S Survived
-## 12 female  58     0     0           113783 26.5500  C103        S Survived
-## 13   male  20     0     0        A/5. 2151  8.0500              S     Died
-## 14   male  39     1     5           347082 31.2750              S     Died
-## 15 female  14     0     0           350406  7.8542              S     Died
-## 16 female  55     0     0           248706 16.0000              S Survived
-## 17   male   2     4     1           382652 29.1250              Q     Died
-## 18   male  NA     0     0           244373 13.0000              S Survived
-## 19 female  31     1     0           345763 18.0000              S     Died
-## 20 female  NA     0     0             2649  7.2250              C Survived
+<pre><code>##    PassengerId Pclass
+## 1            1      3
+## 2            2      1
+## 3            3      3
+## 4            4      1
+## 5            5      3
+## 6            6      3
+## 7            7      1
+## 8            8      3
+## 9            9      3
+## 10          10      2
+## 11          11      3
+## 12          12      1
+## 13          13      3
+## 14          14      3
+## 15          15      3
+## 16          16      2
+## 17          17      3
+## 18          18      2
+## 19          19      3
+## 20          20      3
+##                                                       Name    Sex Age
+## 1                                  Braund, Mr. Owen Harris   male  22
+## 2      Cumings, Mrs. John Bradley (Florence Briggs Thayer) female  38
+## 3                                   Heikkinen, Miss. Laina female  26
+## 4             Futrelle, Mrs. Jacques Heath (Lily May Peel) female  35
+## 5                                 Allen, Mr. William Henry   male  35
+## 6                                         Moran, Mr. James   male  NA
+## 7                                  McCarthy, Mr. Timothy J   male  54
+## 8                           Palsson, Master. Gosta Leonard   male   2
+## 9        Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg) female  27
+## 10                     Nasser, Mrs. Nicholas (Adele Achem) female  14
+## 11                         Sandstrom, Miss. Marguerite Rut female   4
+## 12                                Bonnell, Miss. Elizabeth female  58
+## 13                          Saundercock, Mr. William Henry   male  20
+## 14                             Andersson, Mr. Anders Johan   male  39
+## 15                    Vestrom, Miss. Hulda Amanda Adolfina female  14
+## 16                        Hewlett, Mrs. (Mary D Kingcome)  female  55
+## 17                                    Rice, Master. Eugene   male   2
+## 18                            Williams, Mr. Charles Eugene   male  NA
+## 19 Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele) female  31
+## 20                                 Masselmani, Mrs. Fatima female  NA
+##    SibSp Parch           Ticket    Fare Cabin Embarked survived
+## 1      1     0        A/5 21171  7.2500              S     Died
+## 2      1     0         PC 17599 71.2833   C85        C Survived
+## 3      0     0 STON/O2. 3101282  7.9250              S Survived
+## 4      1     0           113803 53.1000  C123        S Survived
+## 5      0     0           373450  8.0500              S     Died
+## 6      0     0           330877  8.4583              Q     Died
+## 7      0     0            17463 51.8625   E46        S     Died
+## 8      3     1           349909 21.0750              S     Died
+## 9      0     2           347742 11.1333              S Survived
+## 10     1     0           237736 30.0708              C Survived
+## 11     1     1          PP 9549 16.7000    G6        S Survived
+## 12     0     0           113783 26.5500  C103        S Survived
+## 13     0     0        A/5. 2151  8.0500              S     Died
+## 14     1     5           347082 31.2750              S     Died
+## 15     0     0           350406  7.8542              S     Died
+## 16     0     0           248706 16.0000              S Survived
+## 17     4     1           382652 29.1250              Q     Died
+## 18     0     0           244373 13.0000              S Survived
+## 19     1     0           345763 18.0000              S     Died
+## 20     0     0             2649  7.2250              C Survived
 ##    tree_predict       Died  Survived
 ## 1          Died 0.83182640 0.1681736
 ## 2      Survived 0.05294118 0.9470588
@@ -388,17 +426,19 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 ## 20     Survived 0.41025641 0.5897436</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">count</span>(survived, tree_predict)</code></pre></div>
-<pre><code>##   survived tree_predict   n
-## 1     Died         Died 492
-## 2     Died     Survived  57
-## 3 Survived         Died  97
-## 4 Survived     Survived 245</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   survived tree_predict     n
+##   &lt;chr&gt;    &lt;fct&gt;        &lt;int&gt;
+## 1 Died     Died           492
+## 2 Died     Survived        57
+## 3 Survived Died            97
+## 4 Survived Survived       245</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict, <span class="dt">data =</span> titanic_predict)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict, <span class="dt">data =</span> titanic_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&#39;Proportion&#39;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">1</span>)))</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">same_class =</span> <span class="kw">ifelse</span>(survived <span class="op">==</span><span class="st"> </span>tree_predict, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>same_class, mean, sum)</code></pre></div>
@@ -412,15 +452,17 @@ titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_
 
 titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">count</span>(survived, tree_predict_full)</code></pre></div>
-<pre><code>##   survived tree_predict_full   n
-## 1     Died              Died 521
-## 2     Died          Survived  28
-## 3 Survived              Died 115
-## 4 Survived          Survived 227</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   survived tree_predict_full     n
+##   &lt;chr&gt;    &lt;fct&gt;             &lt;int&gt;
+## 1 Died     Died                521
+## 2 Died     Survived             28
+## 3 Survived Died                115
+## 4 Survived Survived            227</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>survived, <span class="dt">fill =</span> <span class="op">~</span>tree_predict_full, <span class="dt">data =</span> titanic_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;proportion&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">1</span>)))</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">same_class =</span> <span class="kw">ifelse</span>(survived <span class="op">==</span><span class="st"> </span>tree_predict_full, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>same_class, mean, sum)</code></pre></div>
@@ -433,9 +475,9 @@ titanic_predict <span class="op">%&gt;%</span>
 <div id="trainingtest-data" class="section level3">
 <h3><span class="header-section-number">5.1.5</span> Training/Test Data</h3>
 <p>So far we have used the entire data to make our classification. This is not best practice and we will explore this is a bit more detail. First, take a minute to hypothesize why using the entire data to make our classification prediction may not be the best?</p>
-<p>It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let's refit the classification tree to the titanic data by splitting the data into 70% training and 30% test data. Why 70% training and 30% test? This is a number that is sometimes used as the splitting, an 80/20 split is also common. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. Secondly, the test data does not need to be quite as large, but we would like it to be representative. Here, the data are not too large, about 1000 passengers with available survival data, therefore, withholding more data helps to ensure the test data is representative of the 1000 total passengers. Splitting the data into training/test</p>
+<p>It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let’s refit the classification tree to the titanic data by splitting the data into 70% training and 30% test data. Why 70% training and 30% test? This is a number that is sometimes used as the splitting, an 80/20 split is also common. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. Secondly, the test data does not need to be quite as large, but we would like it to be representative. Here, the data are not too large, about 1000 passengers with available survival data, therefore, withholding more data helps to ensure the test data is representative of the 1000 total passengers. Splitting the data into training/test</p>
 <p>This is done with the rsample package utilizing three functions, initial_split(), training(), and test(). The initial_split() function helps to take the initial random sample and the proportion of data to use for the training data is initially identified. The random sample is done without replacement meaning that the data are randomly selected, but can not show up in the data more than once. Then, after using the initial_split() function, the training() and test() functions are used on the resulting output from initial_split() to obtain the training and test data respectively. It is good practice to use the set.seed() function to save the seed that was used as this is a random process. Without using the set.seed() function, the same split of data would likely not be able to be recreated in the code was ran again.</p>
-<p>Let's do the data splitting.</p>
+<p>Let’s do the data splitting.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(titanic_train, titanic_test) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">survived =</span> <span class="kw">ifelse</span>(Survived <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&#39;Survived&#39;</span>, <span class="st">&#39;Died&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">drop_na</span>(survived)
@@ -448,12 +490,12 @@ titanic_test &lt;-<span class="st"> </span><span class="kw">testing</span>(titan
    <span class="dt">method =</span> <span class="st">&#39;class&#39;</span>, <span class="dt">data =</span> titanic_train)
 
 <span class="kw">rpart.plot</span>(class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prune_class_tree &lt;-<span class="st"> </span><span class="kw">prune</span>(class_tree, <span class="dt">cp =</span> .<span class="dv">02</span>)
 
 <span class="kw">rpart.plot</span>(prune_class_tree, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> .<span class="dv">3</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<p>This seems like a reasonable model. Let's check the model accuracy.</p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>This seems like a reasonable model. Let’s check the model accuracy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict &lt;-<span class="st"> </span>titanic_train <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tree_predict =</span> <span class="kw">predict</span>(prune_class_tree, <span class="dt">type =</span> <span class="st">&#39;class&#39;</span>))
 titanic_predict <span class="op">%&gt;%</span>
@@ -461,7 +503,7 @@ titanic_predict <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>same_class, mean, sum)</code></pre></div>
 <pre><code>##   mean_same_class sum_same_class
 ## 1       0.8445513            527</code></pre>
-<p>This is actually slightly better accuracy compared to the model last time, about xxx compared to about xxx prediction accuracy. But, let's test the model out on the test data to see the prediction accuracy for the test data, the real test.</p>
+<p>This is actually slightly better accuracy compared to the model last time, about xxx compared to about xxx prediction accuracy. But, let’s test the model out on the test data to see the prediction accuracy for the test data, the real test.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_predict_test &lt;-<span class="st"> </span>titanic_test <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tree_predict =</span> <span class="kw">predict</span>(prune_class_tree, <span class="dt">newdata =</span> titanic_test, <span class="dt">type =</span> <span class="st">&#39;class&#39;</span>))
 titanic_predict_test <span class="op">%&gt;%</span>
@@ -474,13 +516,13 @@ titanic_predict_test <span class="op">%&gt;%</span>
 <div id="introduction-to-resamplingbootstrap" class="section level3">
 <h3><span class="header-section-number">5.1.6</span> Introduction to resampling/bootstrap</h3>
 <p>To explore these ideas in more detail, it will be helpful to use a statistical technique called resampling or the bootstrap. We will use these ideas a lot going forward in this course. In very simple terminology, resampling or the bootstrap can help us understand uncertainty in our estimates and also allow us to be more flexible in the statistics that we run. The main drawback of resampling and bootstrap methods is that they can be computationally heavy, therefore depending on the situation, more time is needed to come to the conclusion desired.</p>
-<p>Resampling and bootstrap methods use the sample data we have and perform the sampling procedure again treating the sample we have data for as the population. Generating the new samples is done with replacement (more on this later). This resampling is done many times (100, 500, 1000, etc.) with more in general being better. As an example with the titanic data, let's take the titanic data, assume this is the population of interest, and resample from this population 1000 times (with replacement) and each time we will calculate the proportion that survived the disaster in each sample. Before we write the code for this, a few questions to consider.</p>
+<p>Resampling and bootstrap methods use the sample data we have and perform the sampling procedure again treating the sample we have data for as the population. Generating the new samples is done with replacement (more on this later). This resampling is done many times (100, 500, 1000, etc.) with more in general being better. As an example with the titanic data, let’s take the titanic data, assume this is the population of interest, and resample from this population 1000 times (with replacement) and each time we will calculate the proportion that survived the disaster in each sample. Before we write the code for this, a few questions to consider.</p>
 <ol style="list-style-type: decimal">
 <li>Would you expect the proportion that survived to be the same in each new sample? Why or why not?</li>
 <li>Sampling with replacement keeps coming up, what do you think this means?</li>
 <li>Hypothesize why sampling with replacement would be a good idea?</li>
 </ol>
-<p>Let's now try the resampling with the calculation of the proportion that survived. We will then save these 1000 survival proportions and create a visualization.</p>
+<p>Let’s now try the resampling with the calculation of the proportion that survived. We will then save these 1000 survival proportions and create a visualization.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resample_titanic &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
     titanic <span class="op">%&gt;%</span>
 <span class="st">        </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(titanic), <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
@@ -491,11 +533,11 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
 <span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_Survived, <span class="dt">data =</span> survival_prop)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 <div id="bootstrap-variation-in-prediction-accuracy" class="section level4">
 <h4><span class="header-section-number">5.1.6.1</span> Bootstrap variation in prediction accuracy</h4>
 <p>We can apply these same methods to evaluate the prediction accuracy based on the classification model above. When using the bootstrap, we can get an estimate for how much variation there is in the classification accuracy based on the sample that we have. In addition, we can explore how different the prediction accuracy would be for many samples when using all the data and by splitting the data into training and test sets. Bootstrap full data.</p>
-<p>Let's first explore the full data to see how much variation there is in the prediction accuracy using all of the data. Here we will again use the sample_n() function to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I'm going to write a function to do all of these steps one time.</p>
+<p>Let’s first explore the full data to see how much variation there is in the prediction accuracy using all of the data. Here we will again use the sample_n() function to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I’m going to write a function to do all of these steps one time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_predict_acc &lt;-<span class="st"> </span><span class="cf">function</span>(data) {
   rsamp_titanic &lt;-<span class="st"> </span>titanic <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(titanic), <span class="dt">replace =</span> <span class="ot">TRUE</span>)
@@ -513,12 +555,12 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <span class="kw">calc_predict_acc</span>()</code></pre></div>
 <pre><code>##   mean_same_class sum_same_class
 ## 1       0.8451178            753</code></pre>
-<p>To do the bootstrap, this process can be replicated many times. In this case, I'm going to do 500. In practice, we would likely want to do a few more.</p>
+<p>To do the bootstrap, this process can be replicated many times. In this case, I’m going to do 500. In practice, we would likely want to do a few more.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">predict_accuracy_fulldata &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2000</span>, calc_predict_acc) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
 <span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_same_class, <span class="dt">data =</span> predict_accuracy_fulldata)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_predict_acc_split &lt;-<span class="st"> </span><span class="cf">function</span>(data) {
   titanic_split &lt;-<span class="st"> </span><span class="kw">initial_split</span>(titanic, <span class="dt">prop =</span> .<span class="dv">7</span>)
   titanic_train &lt;-<span class="st"> </span><span class="kw">training</span>(titanic_split)
@@ -541,13 +583,13 @@ survival_prop &lt;-<span class="st"> </span><span class="kw">map</span>(<span cl
 <span class="st">  </span><span class="kw">bind_rows</span>()
 
 <span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_same_class, <span class="dt">data =</span> predict_accuracy_traintest)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(
   <span class="kw">mutate</span>(predict_accuracy_fulldata, <span class="dt">type =</span> <span class="st">&quot;Full Data&quot;</span>),
   <span class="kw">mutate</span>(predict_accuracy_traintest, <span class="dt">type =</span> <span class="st">&quot;Train/Test&quot;</span>)
 ) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean_same_class, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span>type, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">size =</span> <span class="fl">1.25</span>)</code></pre></div>
-<p><img src="05-classification_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="05-classification_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 </div>
 </div>
 <div id="cross-validation" class="section level3">
@@ -581,11 +623,12 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
+"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -597,10 +640,6 @@ gitbook.start({
 "text": null
 },
 "history": {
-"link": null,
-"text": null
-},
-"view": {
 "link": null,
 "text": null
 },

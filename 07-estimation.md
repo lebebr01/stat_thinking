@@ -16,16 +16,16 @@ head(baby)
 ```
 
 ```
-## # A tibble: 6 x 6
+## [90m# A tibble: 6 x 6[39m
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
-## 1          120              284           27              62              100
-## 2          113              282           33              64              135
-## 3          128              279           28              64              115
-## 4          108              282           23              67              125
-## 5          136              286           25              62               93
-## 6          138              244           33              62              178
-## # … with 1 more variable: maternal_smoker <lgl>
+##          [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m        [3m[90m<dbl>[39m[23m           [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m
+## [90m1[39m          120              284           27              62              100
+## [90m2[39m          113              282           33              64              135
+## [90m3[39m          128              279           28              64              115
+## [90m4[39m          108              282           23              67              125
+## [90m5[39m          136              286           25              62               93
+## [90m6[39m          138              244           33              62              178
+## [90m# … with 1 more variable: maternal_smoker [3m[90m<lgl>[90m[23m[39m
 ```
 
 
@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.4295055
+## gestational_days 0.5079986
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -84,7 +84,7 @@ baby_coef %>%
 
 ```
 ##          5%       50%       95%
-## 1 0.3945199 0.4694316 0.5439015
+## 1 0.3942673 0.4681106 0.5435451
 ```
 
 ## Categorical Predictor(s)
@@ -157,16 +157,16 @@ head(baby)
 ```
 
 ```
-## # A tibble: 6 x 7
+## [90m# A tibble: 6 x 7[39m
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
-## 1          120              284           27              62              100
-## 2          113              282           33              64              135
-## 3          128              279           28              64              115
-## 4          108              282           23              67              125
-## 5          136              286           25              62               93
-## 6          138              244           33              62              178
-## # … with 2 more variables: maternal_smoker <lgl>, smoker <dbl>
+##          [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m        [3m[90m<dbl>[39m[23m           [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m
+## [90m1[39m          120              284           27              62              100
+## [90m2[39m          113              282           33              64              135
+## [90m3[39m          128              279           28              64              115
+## [90m4[39m          108              282           23              67              125
+## [90m5[39m          136              286           25              62               93
+## [90m6[39m          138              244           33              62              178
+## [90m# … with 2 more variables: maternal_smoker [3m[90m<lgl>[90m[23m, smoker [3m[90m<dbl>[90m[23m[39m
 ```
 
 Instead of using the `maternal_smoker` attribute, instead let's run the model with the `smoker` attribute.
@@ -239,7 +239,7 @@ resample_baby()
 
 ```
 ##                             .
-## maternal_smokerTRUE -8.474204
+## maternal_smokerTRUE -7.638153
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -262,8 +262,8 @@ baby_coef %>%
 ```
 
 ```
-##          5%       50%      95%
-## 1 -11.03186 -9.276731 -7.50778
+##          5%       50%       95%
+## 1 -11.05229 -9.263956 -7.514887
 ```
 
 ## More than 2 categorical groups
@@ -277,23 +277,23 @@ college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/
 ```
 ## Parsed with column specification:
 ## cols(
-##   instnm = col_character(),
-##   city = col_character(),
-##   stabbr = col_character(),
-##   preddeg = col_character(),
-##   region = col_character(),
-##   locale = col_character(),
-##   adm_rate = col_double(),
-##   actcmmid = col_double(),
-##   ugds = col_double(),
-##   costt4_a = col_double(),
-##   costt4_p = col_double(),
-##   tuitionfee_in = col_double(),
-##   tuitionfee_out = col_double(),
-##   debt_mdn = col_double(),
-##   grad_debt_mdn = col_double(),
-##   female = col_double(),
-##   bachelor_degree = col_double()
+##   instnm = [31mcol_character()[39m,
+##   city = [31mcol_character()[39m,
+##   stabbr = [31mcol_character()[39m,
+##   preddeg = [31mcol_character()[39m,
+##   region = [31mcol_character()[39m,
+##   locale = [31mcol_character()[39m,
+##   adm_rate = [32mcol_double()[39m,
+##   actcmmid = [32mcol_double()[39m,
+##   ugds = [32mcol_double()[39m,
+##   costt4_a = [32mcol_double()[39m,
+##   costt4_p = [32mcol_double()[39m,
+##   tuitionfee_in = [32mcol_double()[39m,
+##   tuitionfee_out = [32mcol_double()[39m,
+##   debt_mdn = [32mcol_double()[39m,
+##   grad_debt_mdn = [32mcol_double()[39m,
+##   female = [32mcol_double()[39m,
+##   bachelor_degree = [32mcol_double()[39m
 ## )
 ```
 
@@ -302,18 +302,18 @@ head(college_score)
 ```
 
 ```
-## # A tibble: 6 x 17
+## [90m# A tibble: 6 x 17[39m
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
-## # … with 7 more variables: costt4_p <dbl>, tuitionfee_in <dbl>,
-## #   tuitionfee_out <dbl>, debt_mdn <dbl>, grad_debt_mdn <dbl>, female <dbl>,
-## #   bachelor_degree <dbl>
+##   [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m   [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m     [3m[90m<dbl>[39m[23m    [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m    [3m[90m<dbl>[39m[23m
+## [90m1[39m Alaba… Norm… AL     Bachel… South… City:…    0.903       18  [4m4[24m824    [4m2[24m[4m2[24m886
+## [90m2[39m Unive… Birm… AL     Bachel… South… City:…    0.918       25 [4m1[24m[4m2[24m866    [4m2[24m[4m4[24m129
+## [90m3[39m Unive… Hunt… AL     Bachel… South… City:…    0.812       28  [4m6[24m917    [4m2[24m[4m2[24m108
+## [90m4[39m Alaba… Mont… AL     Bachel… South… City:…    0.979       18  [4m4[24m189    [4m1[24m[4m9[24m413
+## [90m5[39m The U… Tusc… AL     Bachel… South… City:…    0.533       28 [4m3[24m[4m2[24m387    [4m2[24m[4m8[24m836
+## [90m6[39m Aubur… Mont… AL     Bachel… South… City:…    0.825       22  [4m4[24m211    [4m1[24m[4m9[24m892
+## [90m# … with 7 more variables: costt4_p [3m[90m<dbl>[90m[23m, tuitionfee_in [3m[90m<dbl>[90m[23m,[39m
+## [90m#   tuitionfee_out [3m[90m<dbl>[90m[23m, debt_mdn [3m[90m<dbl>[90m[23m, grad_debt_mdn [3m[90m<dbl>[90m[23m, female [3m[90m<dbl>[90m[23m,[39m
+## [90m#   bachelor_degree [3m[90m<dbl>[90m[23m[39m
 ```
 
 ### Explore distribution 3 groups
@@ -441,12 +441,12 @@ resample_baby()
 ```
 
 ```
-## # A tibble: 3 x 2
+## [90m# A tibble: 3 x 2[39m
 ##   term                                         estimate
-##   <chr>                                           <dbl>
-## 1 (Intercept)                                   122.   
-## 2 I(gestational_days - mean(gestational_days))    0.537
-## 3 maternal_smokerTRUE                            -7.75
+##   [3m[90m<chr>[39m[23m                                           [3m[90m<dbl>[39m[23m
+## [90m1[39m (Intercept)                                   122.   
+## [90m2[39m I(gestational_days - mean(gestational_days))    0.470
+## [90m3[39m maternal_smokerTRUE                            -[31m7[39m[31m.[39m[31m80[39m
 ```
 
 
@@ -509,13 +509,13 @@ resample_baby()
 ```
 
 ```
-## # A tibble: 4 x 2
+## [90m# A tibble: 4 x 2[39m
 ##   term                                                             estimate
-##   <chr>                                                               <dbl>
-## 1 (Intercept)                                                       122.   
-## 2 I(gestational_days - mean(gestational_days))                        0.300
-## 3 maternal_smokerTRUE                                                -7.38 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.322
+##   [3m[90m<chr>[39m[23m                                                               [3m[90m<dbl>[39m[23m
+## [90m1[39m (Intercept)                                                       123.   
+## [90m2[39m I(gestational_days - mean(gestational_days))                        0.371
+## [90m3[39m maternal_smokerTRUE                                                -[31m9[39m[31m.[39m[31m0[39m[31m3[39m 
+## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.198
 ```
 
 

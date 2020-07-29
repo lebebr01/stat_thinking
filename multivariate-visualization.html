@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-07-28" />
+<meta name="date" content="2020-07-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +33,7 @@
   
 <link rel="prev" href="descriptive-statistics-numerically-describing-the-sample-data.html"/>
 <link rel="next" href="classification.html"/>
+<script src="libs/header-attrs-2.3/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -53,41 +54,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -107,31 +134,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
 <li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a></li>
 <li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a><ul>
+<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a>
+<ul>
 <li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
 <li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
-<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a><ul>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a>
+<ul>
 <li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
 <li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a><ul>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
 <li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
 <li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
+<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
+<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#range"><i class="fa fa-check"></i><b>3.3.1</b> Range</a></li>
 <li class="chapter" data-level="3.3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#percentile-range"><i class="fa fa-check"></i><b>3.3.2</b> Percentile Range</a></li>
 <li class="chapter" data-level="3.3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#interquartile-range-iqr"><i class="fa fa-check"></i><b>3.3.3</b> Interquartile Range (IQR)</a></li>
@@ -141,19 +175,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-categorical-attributes"><i class="fa fa-check"></i><b>3.4</b> Summarizing Categorical Attributes</a></li>
 <li class="chapter" data-level="3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#advanced-extension-computing-your-own-measure-of-variation"><i class="fa fa-check"></i><b>3.5</b> Advanced Extension: Computing Your Own Measure of Variation</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#facetting"><i class="fa fa-check"></i><b>4.1</b> Facetting</a></li>
-<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a><ul>
+<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.2</b> Considering Groups</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.2.1</b> Adding additional groups</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#other-statistics-of-center"><i class="fa fa-check"></i><b>4.3</b> Other statistics of center</a></li>
-<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a><ul>
+<li class="chapter" data-level="4.4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#measures-of-variation"><i class="fa fa-check"></i><b>4.4</b> Measures of Variation</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#robust-measure-of-variation"><i class="fa fa-check"></i><b>4.4.1</b> Robust measure of variation</a></li>
 <li class="chapter" data-level="4.4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#variation-by-group"><i class="fa fa-check"></i><b>4.4.2</b> Variation by Group</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#pruning-trees"><i class="fa fa-check"></i><b>5.1.2</b> Pruning Trees</a></li>
 <li class="chapter" data-level="5.1.3" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.3</b> Accuracy</a></li>
@@ -163,13 +202,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1.7" data-path="classification.html"><a href="classification.html#cross-validation"><i class="fa fa-check"></i><b>5.1.7</b> Cross-validation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a><ul>
-<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a><ul>
+<li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="linear-model.html"><a href="linear-model.html#regression-trees"><i class="fa fa-check"></i><b>6.1</b> Regression Trees</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="linear-model.html"><a href="linear-model.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Visualize distributions</a></li>
 <li class="chapter" data-level="6.1.2" data-path="linear-model.html"><a href="linear-model.html#decision-tree---regression-tree"><i class="fa fa-check"></i><b>6.1.2</b> Decision Tree - Regression Tree</a></li>
 <li class="chapter" data-level="6.1.3" data-path="linear-model.html"><a href="linear-model.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.1.3</b> Evaluating accuracy</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a><ul>
+<li class="chapter" data-level="6.2" data-path="linear-model.html"><a href="linear-model.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>6.2</b> Simple Regression continuous predictor</a>
+<ul>
 <li class="chapter" data-level="6.2.1" data-path="linear-model.html"><a href="linear-model.html#description-of-the-data"><i class="fa fa-check"></i><b>6.2.1</b> Description of the Data</a></li>
 <li class="chapter" data-level="6.2.2" data-path="linear-model.html"><a href="linear-model.html#scatterplots"><i class="fa fa-check"></i><b>6.2.2</b> Scatterplots</a></li>
 <li class="chapter" data-level="6.2.3" data-path="linear-model.html"><a href="linear-model.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>6.2.3</b> Fitting a linear regression model</a></li>
@@ -177,25 +219,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="linear-model.html"><a href="linear-model.html#conditional-means"><i class="fa fa-check"></i><b>6.3</b> Conditional Means</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a><ul>
+<li class="chapter" data-level="7" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html"><i class="fa fa-check"></i><b>7</b> Estimation / Bootstrap / Uncertainty</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#estimating-error"><i class="fa fa-check"></i><b>7.1</b> Estimating Error</a></li>
-<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother's smoking</a></li>
+<li class="chapter" data-level="7.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#categorical-predictors"><i class="fa fa-check"></i><b>7.2</b> Categorical Predictor(s)</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#mothers-smoking"><i class="fa fa-check"></i><b>7.2.1</b> Mother’s smoking</a></li>
 <li class="chapter" data-level="7.2.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>7.2.2</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="7.2.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#inference"><i class="fa fa-check"></i><b>7.2.3</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a><ul>
+<li class="chapter" data-level="7.3" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>7.3</b> More than 2 categorical groups</a>
+<ul>
 <li class="chapter" data-level="7.3.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>7.3.1</b> Explore distribution 3 groups</a></li>
 <li class="chapter" data-level="7.3.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#overall-model-fit"><i class="fa fa-check"></i><b>7.3.2</b> Overall model fit</a></li>
 </ul></li>
-<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a><ul>
+<li class="chapter" data-level="7.4" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#multiple-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple Regression</a>
+<ul>
 <li class="chapter" data-level="7.4.1" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#interactions"><i class="fa fa-check"></i><b>7.4.1</b> Interactions</a></li>
 <li class="chapter" data-level="7.4.2" data-path="estimation-bootstrap-uncertainty.html"><a href="estimation-bootstrap-uncertainty.html#evaluating-model-fit"><i class="fa fa-check"></i><b>7.4.2</b> Evaluating model fit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a><ul>
+<li class="chapter" data-level="8" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>8</b> Prediction for individuals</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>8.1</b> Comparison of classification / linear model</a></li>
-<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a><ul>
+<li class="chapter" data-level="8.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>8.2</b> Compared linear model with median</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>8.2.1</b> Skewed Data - Inference</a></li>
 <li class="chapter" data-level="8.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>8.2.2</b> Bootstrap Median</a></li>
 </ul></li>
@@ -220,127 +268,129 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="multivariate-visualization" class="section level1">
+<div id="multivariate-visualization" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Multivariate Visualization</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(ggformula)
-<span class="kw">library</span>(statthink)
-
-<span class="co"># Add plot theme</span>
-<span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())
-
-<span class="co"># Import data</span>
-<span class="kw">head</span>(us_weather)</code></pre></div>
-<pre><code>## # A tibble: 6 x 35
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="multivariate-visualization.html#cb69-1" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb69-2"><a href="multivariate-visualization.html#cb69-2" aria-hidden="true"></a><span class="kw">library</span>(ggformula)</span>
+<span id="cb69-3"><a href="multivariate-visualization.html#cb69-3" aria-hidden="true"></a><span class="kw">library</span>(statthink)</span>
+<span id="cb69-4"><a href="multivariate-visualization.html#cb69-4" aria-hidden="true"></a></span>
+<span id="cb69-5"><a href="multivariate-visualization.html#cb69-5" aria-hidden="true"></a><span class="co"># Add plot theme</span></span>
+<span id="cb69-6"><a href="multivariate-visualization.html#cb69-6" aria-hidden="true"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())</span>
+<span id="cb69-7"><a href="multivariate-visualization.html#cb69-7" aria-hidden="true"></a></span>
+<span id="cb69-8"><a href="multivariate-visualization.html#cb69-8" aria-hidden="true"></a><span class="co"># Import data</span></span>
+<span id="cb69-9"><a href="multivariate-visualization.html#cb69-9" aria-hidden="true"></a><span class="kw">head</span>(us_weather)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 6 x 35[39m
 ##   station date                dewpoint_avg drybulbtemp_avg relativehumidit…
-##     &lt;dbl&gt; &lt;dttm&gt;                     &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
-## 1 7.25e10 2018-10-01 23:59:00           51              52               95
-## 2 7.25e10 2018-10-02 23:59:00           59              60               96
-## 3 7.25e10 2018-10-03 23:59:00           55              62               86
-## 4 7.25e10 2018-10-04 23:59:00           56              60               77
-## 5 7.25e10 2018-10-05 23:59:00           43              51               75
-## 6 7.25e10 2018-10-06 23:59:00           62              63               90
-## # … with 30 more variables: sealevelpressure_avg &lt;dbl&gt;,
-## #   stationpressure_avg &lt;dbl&gt;, wetbulbtemp_avg &lt;dbl&gt;, windspeed_avg &lt;dbl&gt;,
-## #   cooling_degree_days &lt;dbl&gt;, departure_from_normal_temperature &lt;dbl&gt;,
-## #   heating_degree_days &lt;dbl&gt;, drybulbtemp_max &lt;dbl&gt;, drybulbtemp_min &lt;dbl&gt;,
-## #   peak_wind_direction &lt;dbl&gt;, peak_wind_speed &lt;dbl&gt;, precipitation &lt;dbl&gt;,
-## #   snow_depth &lt;dbl&gt;, snowfall &lt;dbl&gt;, wind_direction &lt;dbl&gt;, wind_speed &lt;dbl&gt;,
-## #   weather_occurances &lt;chr&gt;, sunrise &lt;dbl&gt;, sunset &lt;dbl&gt;, month &lt;ord&gt;,
-## #   month_numeric &lt;dbl&gt;, year &lt;dbl&gt;, day &lt;int&gt;, winter_group &lt;chr&gt;,
-## #   location &lt;chr&gt;, fog &lt;chr&gt;, mist &lt;chr&gt;, drizzle &lt;chr&gt;, rain &lt;chr&gt;,
-## #   snow &lt;chr&gt;</code></pre>
+##     [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dttm&gt;[39m[23m                     [3m[90m&lt;dbl&gt;[39m[23m           [3m[90m&lt;dbl&gt;[39m[23m            [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m 7.25[90me[39m10 2018-10-01 [90m23:59:00[39m           51              52               95
+## [90m2[39m 7.25[90me[39m10 2018-10-02 [90m23:59:00[39m           59              60               96
+## [90m3[39m 7.25[90me[39m10 2018-10-03 [90m23:59:00[39m           55              62               86
+## [90m4[39m 7.25[90me[39m10 2018-10-04 [90m23:59:00[39m           56              60               77
+## [90m5[39m 7.25[90me[39m10 2018-10-05 [90m23:59:00[39m           43              51               75
+## [90m6[39m 7.25[90me[39m10 2018-10-06 [90m23:59:00[39m           62              63               90
+## [90m# … with 30 more variables: sealevelpressure_avg [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   stationpressure_avg [3m[90m&lt;dbl&gt;[90m[23m, wetbulbtemp_avg [3m[90m&lt;dbl&gt;[90m[23m, windspeed_avg [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   cooling_degree_days [3m[90m&lt;dbl&gt;[90m[23m, departure_from_normal_temperature [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   heating_degree_days [3m[90m&lt;dbl&gt;[90m[23m, drybulbtemp_max [3m[90m&lt;dbl&gt;[90m[23m, drybulbtemp_min [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   peak_wind_direction [3m[90m&lt;dbl&gt;[90m[23m, peak_wind_speed [3m[90m&lt;dbl&gt;[90m[23m, precipitation [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   snow_depth [3m[90m&lt;dbl&gt;[90m[23m, snowfall [3m[90m&lt;dbl&gt;[90m[23m, wind_direction [3m[90m&lt;dbl&gt;[90m[23m, wind_speed [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   weather_occurances [3m[90m&lt;chr&gt;[90m[23m, sunrise [3m[90m&lt;dbl&gt;[90m[23m, sunset [3m[90m&lt;dbl&gt;[90m[23m, month [3m[90m&lt;ord&gt;[90m[23m,[39m
+## [90m#   month_numeric [3m[90m&lt;dbl&gt;[90m[23m, year [3m[90m&lt;dbl&gt;[90m[23m, day [3m[90m&lt;int&gt;[90m[23m, winter_group [3m[90m&lt;chr&gt;[90m[23m,[39m
+## [90m#   location [3m[90m&lt;chr&gt;[90m[23m, fog [3m[90m&lt;chr&gt;[90m[23m, mist [3m[90m&lt;chr&gt;[90m[23m, drizzle [3m[90m&lt;chr&gt;[90m[23m, rain [3m[90m&lt;chr&gt;[90m[23m,[39m
+## [90m#   snow [3m[90m&lt;chr&gt;[90m[23m[39m</code></pre>
 <p>Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Univariate distribution of average daily temperature&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="multivariate-visualization.html#cb71-1" aria-hidden="true"></a><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb71-2"><a href="multivariate-visualization.html#cb71-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, </span>
+<span id="cb71-3"><a href="multivariate-visualization.html#cb71-3" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&quot;Univariate distribution of average daily temperature&quot;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>, 
-             <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
-          <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="multivariate-visualization.html#cb72-1" aria-hidden="true"></a><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>, </span>
+<span id="cb72-2"><a href="multivariate-visualization.html#cb72-2" aria-hidden="true"></a>             <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span></span>
+<span id="cb72-3"><a href="multivariate-visualization.html#cb72-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, </span>
+<span id="cb72-4"><a href="multivariate-visualization.html#cb72-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,</span>
+<span id="cb72-5"><a href="multivariate-visualization.html#cb72-5" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Often density plots are easier to visualize when there are more than one group. To plot more than one density curve, we need to specify the color argument instead of fill.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">1</span>,
-             <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
-          <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="multivariate-visualization.html#cb73-1" aria-hidden="true"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">1</span>,</span>
+<span id="cb73-2"><a href="multivariate-visualization.html#cb73-2" aria-hidden="true"></a>             <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span></span>
+<span id="cb73-3"><a href="multivariate-visualization.html#cb73-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, </span>
+<span id="cb73-4"><a href="multivariate-visualization.html#cb73-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,</span>
+<span id="cb73-5"><a href="multivariate-visualization.html#cb73-5" aria-hidden="true"></a>          <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">1</span>,
-             <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
-          <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="multivariate-visualization.html#cb74-1" aria-hidden="true"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">1</span>,</span>
+<span id="cb74-2"><a href="multivariate-visualization.html#cb74-2" aria-hidden="true"></a>             <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow)) <span class="op">%&gt;%</span></span>
+<span id="cb74-3"><a href="multivariate-visualization.html#cb74-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, </span>
+<span id="cb74-4"><a href="multivariate-visualization.html#cb74-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,</span>
+<span id="cb74-5"><a href="multivariate-visualization.html#cb74-5" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), 
-           <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
-          <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>,
-          <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="multivariate-visualization.html#cb75-1" aria-hidden="true"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), </span>
+<span id="cb75-2"><a href="multivariate-visualization.html#cb75-2" aria-hidden="true"></a>           <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb75-3"><a href="multivariate-visualization.html#cb75-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, </span>
+<span id="cb75-4"><a href="multivariate-visualization.html#cb75-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,</span>
+<span id="cb75-5"><a href="multivariate-visualization.html#cb75-5" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb75-6"><a href="multivariate-visualization.html#cb75-6" aria-hidden="true"></a>          <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), 
-           <span class="dt">fill =</span> <span class="st">&#39;gray75&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, 
-          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,
-          <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</code></pre></div>
-<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-6-1.png" width="672" /> ## Violin Plots</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="multivariate-visualization.html#cb76-1" aria-hidden="true"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_avg, <span class="dt">data =</span> us_weather, <span class="dt">color =</span> <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(snow), </span>
+<span id="cb76-2"><a href="multivariate-visualization.html#cb76-2" aria-hidden="true"></a>           <span class="dt">fill =</span> <span class="st">&#39;gray75&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb76-3"><a href="multivariate-visualization.html#cb76-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>, </span>
+<span id="cb76-4"><a href="multivariate-visualization.html#cb76-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&quot;Multivariate distribution of average daily temperature by whether it snowed that day&quot;</span>,</span>
+<span id="cb76-5"><a href="multivariate-visualization.html#cb76-5" aria-hidden="true"></a>          <span class="dt">color =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+## Violin Plots</p>
 <p>Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="multivariate-visualization.html#cb77-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span></span>
+<span id="cb77-2"><a href="multivariate-visualization.html#cb77-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,</span>
+<span id="cb77-3"><a href="multivariate-visualization.html#cb77-3" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,</span>
+<span id="cb77-4"><a href="multivariate-visualization.html#cb77-4" aria-hidden="true"></a>          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="multivariate-visualization.html#cb78-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span></span>
+<span id="cb78-2"><a href="multivariate-visualization.html#cb78-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,</span>
+<span id="cb78-3"><a href="multivariate-visualization.html#cb78-3" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,</span>
+<span id="cb78-4"><a href="multivariate-visualization.html#cb78-4" aria-hidden="true"></a>          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb78-5"><a href="multivariate-visualization.html#cb78-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the <code>fill =</code> argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>, 
-          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="multivariate-visualization.html#cb79-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb79-2"><a href="multivariate-visualization.html#cb79-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,</span>
+<span id="cb79-3"><a href="multivariate-visualization.html#cb79-3" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>, </span>
+<span id="cb79-4"><a href="multivariate-visualization.html#cb79-4" aria-hidden="true"></a>          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb79-5"><a href="multivariate-visualization.html#cb79-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>Adding quantiles are useful to aid in the comparison with the violin plots. These can be added with the <code>draw_quantiles</code> argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, 
-          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
-<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" /> ### Violin Plots with many groups</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="multivariate-visualization.html#cb80-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, </span>
+<span id="cb80-2"><a href="multivariate-visualization.html#cb80-2" aria-hidden="true"></a>          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb80-3"><a href="multivariate-visualization.html#cb80-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,</span>
+<span id="cb80-4"><a href="multivariate-visualization.html#cb80-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by whether it snowed that day&#39;</span>,</span>
+<span id="cb80-5"><a href="multivariate-visualization.html#cb80-5" aria-hidden="true"></a>          <span class="dt">x =</span> <span class="st">&quot;Snow?&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb80-6"><a href="multivariate-visualization.html#cb80-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
+<p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+### Violin Plots with many groups</p>
 <p>Many groups are more easily shown in the violin plot framework.</p>
 <p>With many groups, it is often of interest to put the long x-axis labels representing each group on the y-axis so that it reads the correct direction and the labels do not run into each other. This can be done with the <code>gf_refine()</code> function with <code>coord_flip()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>location, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, 
-          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by location&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Location&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="multivariate-visualization.html#cb81-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>location, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, </span>
+<span id="cb81-2"><a href="multivariate-visualization.html#cb81-2" aria-hidden="true"></a>          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, <span class="fl">.5</span>, <span class="fl">.9</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb81-3"><a href="multivariate-visualization.html#cb81-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,</span>
+<span id="cb81-4"><a href="multivariate-visualization.html#cb81-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by location&#39;</span>,</span>
+<span id="cb81-5"><a href="multivariate-visualization.html#cb81-5" aria-hidden="true"></a>          <span class="dt">x =</span> <span class="st">&quot;Location&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb81-6"><a href="multivariate-visualization.html#cb81-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<div id="facetting" class="section level2">
+<div id="facetting" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Facetting</h2>
 <p>Facetting is another way to explore distributions of two or more variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>location, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, 
-          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,
-          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by location&#39;</span>,
-          <span class="dt">x =</span> <span class="st">&quot;Location&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>()) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>snow)</code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="multivariate-visualization.html#cb82-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_avg <span class="op">~</span><span class="st"> </span>location, <span class="dt">data =</span> us_weather, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, </span>
+<span id="cb82-2"><a href="multivariate-visualization.html#cb82-2" aria-hidden="true"></a>          <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(.<span class="dv">1</span>, <span class="fl">.5</span>, <span class="fl">.9</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb82-3"><a href="multivariate-visualization.html#cb82-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">y =</span> <span class="st">&quot;Average daily temperature, in Fahrenheit&quot;</span>,</span>
+<span id="cb82-4"><a href="multivariate-visualization.html#cb82-4" aria-hidden="true"></a>          <span class="dt">title =</span> <span class="st">&#39;Multivariate distribution of average daily temperature by location&#39;</span>,</span>
+<span id="cb82-5"><a href="multivariate-visualization.html#cb82-5" aria-hidden="true"></a>          <span class="dt">x =</span> <span class="st">&quot;Location&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb82-6"><a href="multivariate-visualization.html#cb82-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb82-7"><a href="multivariate-visualization.html#cb82-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>snow)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
-<div id="considering-groups" class="section level2">
+<div id="considering-groups" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Considering Groups</h2>
-<p>We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful.</p>
+<p>We’ve spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful.</p>
 <p>Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">us_weather <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, median) </code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="multivariate-visualization.html#cb83-1" aria-hidden="true"></a>us_weather <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb83-2"><a href="multivariate-visualization.html#cb83-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, median) </span></code></pre></div>
 <pre><code>##          location median_drybulbtemp_max
 ## 1      Boston, MA                     48
 ## 2     Buffalo, NY                     42
@@ -350,11 +400,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 6   Iowa City, IA                     46
 ## 7 Minneapolis, MN                     38
 ## 8    Portland, ME                     43</code></pre>
-<p>Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now <code>outcome ~ grouping</code> where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the <code>~</code> is the grouping variable. This syntax is similar to the violin plots that were created earlier.</p>
+<p>Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now <code>outcome ~ grouping</code> where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the <code>~</code> is the grouping variable. This syntax is similar to the violin plots that were created earlier.</p>
 <p>Can you see differences in the admission rates across the regions?</p>
 <p>One thing that is useful to add in when computing conditional statisics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which is common. To do this, we can add another function to the <code>df_stats()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">us_weather <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st"> </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, median, length) </code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="multivariate-visualization.html#cb85-1" aria-hidden="true"></a>us_weather <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb85-2"><a href="multivariate-visualization.html#cb85-2" aria-hidden="true"></a><span class="st"> </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, median, length) </span></code></pre></div>
 <pre><code>##          location median_drybulbtemp_max length_drybulbtemp_max
 ## 1      Boston, MA                     48                    425
 ## 2     Buffalo, NY                     42                    425
@@ -365,11 +415,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 7 Minneapolis, MN                     38                    425
 ## 8    Portland, ME                     43                    425</code></pre>
 <p>This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the <code>df_stats()</code> function and are not limited to a single function. We will take advantage of this feature later on.</p>
-<div id="adding-additional-groups" class="section level3">
+<div id="adding-additional-groups" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Adding additional groups</h3>
 <p>What if we thought more than one variable was important in explaining variation in the outcome variable? These can also be added to the <code>df_stats()</code> function for additional conditional statistics. The key is to add another variable to the right-hand side of the formula argument. More than one variable are separated with a <code>+</code> symbol.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">us_weather <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location <span class="op">+</span><span class="st"> </span>month, median, length) </code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="multivariate-visualization.html#cb87-1" aria-hidden="true"></a>us_weather <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb87-2"><a href="multivariate-visualization.html#cb87-2" aria-hidden="true"></a><span class="st">   </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location <span class="op">+</span><span class="st"> </span>month, median, length) </span></code></pre></div>
 <pre><code>##           location month median_drybulbtemp_max length_drybulbtemp_max
 ## 1       Boston, MA   Jan                   42.0                     62
 ## 2      Buffalo, NY   Jan                   35.0                     62
@@ -429,12 +479,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 56    Portland, ME   Dec                   36.0                     62</code></pre>
 </div>
 </div>
-<div id="other-statistics-of-center" class="section level2">
+<div id="other-statistics-of-center" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Other statistics of center</h2>
-<p>So far we have been discussing the median. The median attempts to provide a single number summary for the center of the distribution. It is a robust statistic, but likely isn't the most popular statistic to provide a location for the center of a distribution. The mean is often more commonly used as a measure of the center of a distribution. Part of this is due to the usage of the mean in common statistical methods and the mean also uses the values of all the data in the calculation. The median only considers the values of the middle score or scores, therefore this statistic is less sensitive to extreme values than the mean. I like to look at both statistics and this can provide some insight into the distribution of interest. We can add the mean using the <code>df_stats()</code> function by adding the function <code>mean</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stats_compute &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st"> </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, median, mean, length) 
-stats_compute </code></pre></div>
+<p>So far we have been discussing the median. The median attempts to provide a single number summary for the center of the distribution. It is a robust statistic, but likely isn’t the most popular statistic to provide a location for the center of a distribution. The mean is often more commonly used as a measure of the center of a distribution. Part of this is due to the usage of the mean in common statistical methods and the mean also uses the values of all the data in the calculation. The median only considers the values of the middle score or scores, therefore this statistic is less sensitive to extreme values than the mean. I like to look at both statistics and this can provide some insight into the distribution of interest. We can add the mean using the <code>df_stats()</code> function by adding the function <code>mean</code>.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="multivariate-visualization.html#cb89-1" aria-hidden="true"></a>stats_compute &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb89-2"><a href="multivariate-visualization.html#cb89-2" aria-hidden="true"></a><span class="st"> </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, median, mean, length) </span>
+<span id="cb89-3"><a href="multivariate-visualization.html#cb89-3" aria-hidden="true"></a>stats_compute </span></code></pre></div>
 <pre><code>##          location median_drybulbtemp_max mean_drybulbtemp_max
 ## 1      Boston, MA                     48             49.11294
 ## 2     Buffalo, NY                     42             43.77176
@@ -454,54 +504,54 @@ stats_compute </code></pre></div>
 ## 7                    425
 ## 8                    425</code></pre>
 <p>Do you notice any trends in the direction the mean and median typically follow? More specifically, is the mean typically larger than the median or vice versa?</p>
-<p>Let's visualize them.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>location) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>median_drybulbtemp_max, 
-           <span class="dt">data =</span> stats_compute, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;lightblue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>mean_drybulbtemp_max, 
-           <span class="dt">data =</span> stats_compute, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</code></pre></div>
+<p>Let’s visualize them.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="multivariate-visualization.html#cb91-1" aria-hidden="true"></a><span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb91-2"><a href="multivariate-visualization.html#cb91-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>location) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb91-3"><a href="multivariate-visualization.html#cb91-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>median_drybulbtemp_max, </span>
+<span id="cb91-4"><a href="multivariate-visualization.html#cb91-4" aria-hidden="true"></a>           <span class="dt">data =</span> stats_compute, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb91-5"><a href="multivariate-visualization.html#cb91-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;lightblue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>mean_drybulbtemp_max, </span>
+<span id="cb91-6"><a href="multivariate-visualization.html#cb91-6" aria-hidden="true"></a>           <span class="dt">data =</span> stats_compute, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb91-7"><a href="multivariate-visualization.html#cb91-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>What is different about the distributions that have larger differences in the mean and median?</p>
 </div>
-<div id="measures-of-variation" class="section level2">
+<div id="measures-of-variation" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> Measures of Variation</h2>
 <p>So far we have focused primarily on applying functions to columns of data to provide a single numeric summary for where the center of the distribution may lie. The center of the distribution is important, however the primary goal in research and with statistics is to try to understand the variation in the distribution.</p>
 <p>One crude measure of variation that is intuitive is the range of a variable. The range is the difference between the smallest and the largest number in the data. We can compute this with the <code>df_stats()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> us_weather <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, range) </code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="multivariate-visualization.html#cb92-1" aria-hidden="true"></a> us_weather <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb92-2"><a href="multivariate-visualization.html#cb92-2" aria-hidden="true"></a><span class="st">   </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, range) </span></code></pre></div>
 <pre><code>##   range_drybulbtemp_max_1 range_drybulbtemp_max_2
 ## 1                     -14                      89</code></pre>
 <p>The details of the <code>df_stats()</code> function are in the previous course notes. The output for this computation returns two values, the minimum and maximum value in the data and unsurprisingly, is 0 and 1 respectively.</p>
-<div id="robust-measure-of-variation" class="section level3">
+<div id="robust-measure-of-variation" class="section level3" number="4.4.1">
 <h3><span class="header-section-number">4.4.1</span> Robust measure of variation</h3>
 <p>The idea behind the IQR representing differences in percentiles allows us to extend this to different percentiles that may be more directly interpretable for a given situation. For example, suppose we wanted to know how spread out the middle 80% of the distribution is. We can do this directly by computing the 90th and 10th percentiles and finding the difference between the two.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> mid_<span class="dv">80</span> &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>)), <span class="dt">nice_names =</span> <span class="ot">TRUE</span>) 
- mid_<span class="dv">80</span> </code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="multivariate-visualization.html#cb94-1" aria-hidden="true"></a> mid_<span class="dv">80</span> &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb94-2"><a href="multivariate-visualization.html#cb94-2" aria-hidden="true"></a><span class="st">   </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>)), <span class="dt">nice_names =</span> <span class="ot">TRUE</span>) </span>
+<span id="cb94-3"><a href="multivariate-visualization.html#cb94-3" aria-hidden="true"></a> mid_<span class="dv">80</span> </span></code></pre></div>
 <pre><code>##   X10. X90.
 ## 1   25   62</code></pre>
 <p>As you can see, once you extend the amount of the distribution contained, the distance increases, now to 0.555 or 55.5% the the range of the middle 80% of the admission rate distribution. We can also visualize what this looks like.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather, 
-              <span class="dt">bins =</span> <span class="dv">30</span>, <span class="dt">color =</span> <span class="st">&#39;black&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value, 
-            <span class="dt">data =</span> <span class="kw">gather</span>(mid_<span class="dv">80</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="multivariate-visualization.html#cb96-1" aria-hidden="true"></a> <span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather, </span>
+<span id="cb96-2"><a href="multivariate-visualization.html#cb96-2" aria-hidden="true"></a>              <span class="dt">bins =</span> <span class="dv">30</span>, <span class="dt">color =</span> <span class="st">&#39;black&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb96-3"><a href="multivariate-visualization.html#cb96-3" aria-hidden="true"></a><span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value, </span>
+<span id="cb96-4"><a href="multivariate-visualization.html#cb96-4" aria-hidden="true"></a>            <span class="dt">data =</span> <span class="kw">gather</span>(mid_<span class="dv">80</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb96-5"><a href="multivariate-visualization.html#cb96-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p>We can also view the exact percentages using the empirical cumulative density function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">gf_ecdf</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value, <span class="dt">data =</span> <span class="kw">gather</span>(mid_<span class="dv">80</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="multivariate-visualization.html#cb97-1" aria-hidden="true"></a> <span class="kw">gf_ecdf</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb97-2"><a href="multivariate-visualization.html#cb97-2" aria-hidden="true"></a><span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value, <span class="dt">data =</span> <span class="kw">gather</span>(mid_<span class="dv">80</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb97-3"><a href="multivariate-visualization.html#cb97-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
-<div id="variation-by-group" class="section level3">
+<div id="variation-by-group" class="section level3" number="4.4.2">
 <h3><span class="header-section-number">4.4.2</span> Variation by Group</h3>
 <p>These statistics can also be calculated by different grouping variables similar to what was done with statisitcs of center. Now the variable of interest is on the left-hand side of the equation and the grouping variable is on the right hand side.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> iqr_groups &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, IQR, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), 
-            <span class="dt">nice_names =</span> <span class="ot">TRUE</span>) 
- iqr_groups </code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="multivariate-visualization.html#cb98-1" aria-hidden="true"></a> iqr_groups &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb98-2"><a href="multivariate-visualization.html#cb98-2" aria-hidden="true"></a><span class="st">   </span><span class="kw">df_stats</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, IQR, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), </span>
+<span id="cb98-3"><a href="multivariate-visualization.html#cb98-3" aria-hidden="true"></a>            <span class="dt">nice_names =</span> <span class="ot">TRUE</span>) </span>
+<span id="cb98-4"><a href="multivariate-visualization.html#cb98-4" aria-hidden="true"></a> iqr_groups </span></code></pre></div>
 <pre><code>##          location IQR_drybulbtemp_max X25. X75.
 ## 1      Boston, MA                  16   41   57
 ## 2     Buffalo, NY                  17   35   52
@@ -512,19 +562,19 @@ stats_compute </code></pre></div>
 ## 7 Minneapolis, MN                  21   28   49
 ## 8    Portland, ME                  16   36   52</code></pre>
 <p>This can also be visualized to see how these statistics vary across the groups.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>, <span class="dt">color =</span> <span class="st">&#39;black&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value,  
-      <span class="dt">data =</span> <span class="kw">filter</span>(<span class="kw">pivot_longer</span>(iqr_groups, IQR_drybulbtemp_max<span class="op">:</span><span class="st">&#39;X75.&#39;</span>), 
-                    name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;X25.&#39;</span>, <span class="st">&#39;X75.&#39;</span>)), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>location) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="multivariate-visualization.html#cb100-1" aria-hidden="true"></a> <span class="kw">gf_histogram</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather, <span class="dt">bins =</span> <span class="dv">30</span>, <span class="dt">color =</span> <span class="st">&#39;black&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb100-2"><a href="multivariate-visualization.html#cb100-2" aria-hidden="true"></a><span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value,  </span>
+<span id="cb100-3"><a href="multivariate-visualization.html#cb100-3" aria-hidden="true"></a>      <span class="dt">data =</span> <span class="kw">filter</span>(<span class="kw">pivot_longer</span>(iqr_groups, IQR_drybulbtemp_max<span class="op">:</span><span class="st">&#39;X75.&#39;</span>), </span>
+<span id="cb100-4"><a href="multivariate-visualization.html#cb100-4" aria-hidden="true"></a>                    name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;X25.&#39;</span>, <span class="st">&#39;X75.&#39;</span>)), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb100-5"><a href="multivariate-visualization.html#cb100-5" aria-hidden="true"></a><span class="st">   </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>location) <span class="op">%&gt;%</span></span>
+<span id="cb100-6"><a href="multivariate-visualization.html#cb100-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">gf_ecdf</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value,  
-      <span class="dt">data =</span> <span class="kw">filter</span>(<span class="kw">pivot_longer</span>(iqr_groups, IQR_drybulbtemp_max<span class="op">:</span><span class="st">&#39;X75.&#39;</span>), 
-                    name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;X25.&#39;</span>, <span class="st">&#39;X75.&#39;</span>)), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">   </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>location) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="multivariate-visualization.html#cb101-1" aria-hidden="true"></a> <span class="kw">gf_ecdf</span>(<span class="op">~</span><span class="st"> </span>drybulbtemp_max, <span class="dt">data =</span> us_weather) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb101-2"><a href="multivariate-visualization.html#cb101-2" aria-hidden="true"></a><span class="st">   </span><span class="kw">gf_vline</span>(<span class="dt">color =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">xintercept =</span> <span class="op">~</span><span class="st"> </span>value,  </span>
+<span id="cb101-3"><a href="multivariate-visualization.html#cb101-3" aria-hidden="true"></a>      <span class="dt">data =</span> <span class="kw">filter</span>(<span class="kw">pivot_longer</span>(iqr_groups, IQR_drybulbtemp_max<span class="op">:</span><span class="st">&#39;X75.&#39;</span>), </span>
+<span id="cb101-4"><a href="multivariate-visualization.html#cb101-4" aria-hidden="true"></a>                    name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;X25.&#39;</span>, <span class="st">&#39;X75.&#39;</span>)), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb101-5"><a href="multivariate-visualization.html#cb101-5" aria-hidden="true"></a><span class="st">   </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>location) <span class="op">%&gt;%</span></span>
+<span id="cb101-6"><a href="multivariate-visualization.html#cb101-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&#39;Maxmimum daily temperature&#39;</span>)</span></code></pre></div>
 <p><img src="04-multivariate-visualization_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 
 </div>
@@ -591,7 +641,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
