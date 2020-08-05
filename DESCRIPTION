@@ -12,5 +12,6 @@ Imports:
   rpart,
   rpart.plot,
   ISLR,
-  broom
+  broom,
+  DT
 Remotes: lebebr01/statthink

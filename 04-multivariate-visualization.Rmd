@@ -7,12 +7,18 @@ library(statthink)
 
 # Add plot theme
 theme_set(theme_statthinking())
-
-# Import data
-head(us_weather)
 ```
 
-Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases things interact, move in tandem, and many phenomena help to explain the variable of interest. For example, when thinking about admission rates, what may be some important factors that would explain some of the reasons why higher education institutions differ in their admission rates? Take a few minutes to brainstorm some ideas.
+Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases attributes interact with one another, move in tandem, and many phenomena help to explain the attribute of interest. For example, when thinking about admission rates of higher education institutions, what may be some important attributes that would explain some of the reasons why higher education institutions differ in their admission rates? When thinking about the high temperature for the given day, what attributes would be helpful to understand why the high temperature on a day is different? Take a few minutes to brainstorm some ideas.
+
+Building off of the high temperature example, we will use weather data from two seasons of cooler months of the year, October through April of 2018-2019 and 2019-2020, of various locations around the United States. This data was downloaded from the [National Centers for Environmental Information (NCEI) Climate Data Online portal](https://www.ncdc.noaa.gov/cdo-web/) and is part of the companion package, `statthink`. The locations extracted in these data are found in the northern part of the United States and include: `r distinct(us_weather, location) %>% paste(sep = ", ")`. The first few rows of the data are shown below.
+
+```{r show-data, message=FALSE}
+DT::datatable(us_weather)
+```
+
+## Multivariate Distributions
+Before moving to multivariate distributions, first, we will explore a univariate distribution of the average daily temperature. The average daily temperature takes the recorded temperatures from a single day and averages those, therefore this value would fall somewhere between the high and low temperature for the day. What are some key characteristics of the average daily temperature distribution? Take a few minutes to summarize the key characteristics.
 
 ```{r}
 gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30) %>% 
@@ -20,21 +26,40 @@ gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30) %>%
           title = "Univariate distribution of average daily temperature")
 ```
 
+From the univariate figure of the average daily temperature, you may have noticed that there is variation in these values, with a fairly wide range considering the values. For example, there are some average daily temperatures that are below zero and some of 60 degree Fahrenheit. However, most values are between 20 and 45 or so, which is reasonable given these are cooler months of the year and mostly northern location in the United States. Finally, the distribution is unimodal and somewhat symmetric, at least not skewed enough to be too concerned. 
+
+Earlier the question was asked what other attributes may help to explain why there are variations in high temperatures. If you did not think about that question then, we encourage you to think about this question now. What attributes could help to understand why there is such a wide range of values in the average daily temperature?
+
+There are many answers that could be informative to this discussion, the one we will explore first is whether it snowed on a given day. This could influence the average temperature for a few reasons, first when it snows it must be cold enough for the precipitation to stay in frozen form rather than melting as it falls being at or below freezing (32 degrees Fahrenheit) ^[For more information on why it snows instead of rains, this is an informative description from the [National Snow & Ice Data Center](https://nsidc.org/cryosphere/snow/science/formation.html)]; also, if it snowed during the day it would also be less likely for the sun to be out further making the temperature less variable and likely lower during the winter months. 
+
+Below is the multivariate distribution of the average daily temperature by whether it snowed or not at some point during that day. Whether it snowed or not is depicted by color in the figure, the blue color is showing the distribution of average daily temperature for days where it snowed and red is otherwise. Before we interpret the figure in more detail, the code for making this change was done by adding the snow attribute to the `fill` aesthetic using the formula syntax: `fill = ~ snow`. The `fill` aesthetic is telling the histogram bars to be colored by the different categories of the attribute of interest, here snow. The `fill` attribute for histrograms is best used when the attribute only has a few categories. 
  
 
 ```{r}
 gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30, 
-             fill = ~ factor(snow)) %>%
+             fill = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           fill = "")
 ```
 
+If you were to compare the distribution for the average daily temperature for days when it snowed compared to when it did not snow, what similarities and differences do you notice? Take a few minutes to try and interpret this figure, focusing on characteristics that are similar or different across days when it snowed or not. 
+
+You may notice first that the bars are higher for the days that did not snow compared to days that it did snow. Why might this be occurring? If you said the reason is that it tends to snow less frequently, you would be correct. The bars are higher for days when it did not snow due to more data (i.e., days) where it did not snow. This characteristic of the histogram in this example makes the histogram more difficult to interpret and can even mislead when making comparisons across the two groups. We will explore a solution to this problem soon. 
+
+Another observation you may have noticed is that it appears the temperature tends to be lower for days in which it snows compared to those that it did not snow. On average, if you estimated the location of the mean for the two groups, the average daily temperature for days where it snowed would likely be just under 30 degrees where as it would be around 45 degrees Fahrenheit for days it did not snow. You may have also noticed that the variability for days when it snowed was also lower compared to days where it did snow. Why might this occur? This is likely due to the temperature ranges where snow forms readily.
+
+You may wonder, why are there days where the average daily temperature was about 45 degrees Fahrenheit when it generally needs to be lower than 32 degrees Fahrenheit for it to snow? There could be many explanations for this, but since the distribution is showing the average daily temperature over a 24 hour period, the weather can change quite drastically over this period. For example, it could snow at the beginning or end of the day and the rest of the day could be quite different and much warmer than when it snowed. 
+
+Finally, you may also notice that the distribution for days when it snowed is somewhat more left skewed compared to days in which it does not snow. As snow readily forms when it is cooler, typically less than 32 degrees Fahrenheit, the temperature would commonly fall below this value when it snows. Therefore, the average temperature would be restricted by those colder values, pulling the average lower, even if it was warmer earlier or later in the day. This restriction is not found for days when it does not snow, therefore the temperatures are able to be found over a wider range of temperature values. 
+
+
+### Multivariate Density
 Often density plots are easier to visualize when there are more than one group. To plot more than one density curve, we need to specify the color argument instead of fill.
 
 ```{r}
 gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
-             color = ~ factor(snow)) %>%
+             color = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           color = "")
@@ -42,7 +67,7 @@ gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
 
 ```{r}
 gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
-             fill = ~ factor(snow)) %>%
+             fill = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           fill = "")
@@ -50,7 +75,7 @@ gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
 
 ```{r}
 gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ factor(snow), 
-           fill = ~ factor(snow), size = 1) %>%
+           fill = ~ snow, size = 1) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
           fill = "",
@@ -58,7 +83,7 @@ gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ factor(snow),
 ```
 
 ```{r}
-gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ factor(snow), 
+gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ snow, 
            fill = 'gray75', size = 1) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
