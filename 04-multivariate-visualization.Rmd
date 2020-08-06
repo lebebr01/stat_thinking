@@ -20,7 +20,7 @@ DT::datatable(us_weather)
 ## Multivariate Distributions
 Before moving to multivariate distributions, first, we will explore a univariate distribution of the average daily temperature. The average daily temperature takes the recorded temperatures from a single day and averages those, therefore this value would fall somewhere between the high and low temperature for the day. What are some key characteristics of the average daily temperature distribution? Take a few minutes to summarize the key characteristics.
 
-```{r}
+```{r temp-hist}
 gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30) %>% 
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Univariate distribution of average daily temperature")
@@ -32,15 +32,16 @@ Earlier the question was asked what other attributes may help to explain why the
 
 There are many answers that could be informative to this discussion, the one we will explore first is whether it snowed on a given day. This could influence the average temperature for a few reasons, first when it snows it must be cold enough for the precipitation to stay in frozen form rather than melting as it falls being at or below freezing (32 degrees Fahrenheit) ^[For more information on why it snows instead of rains, this is an informative description from the [National Snow & Ice Data Center](https://nsidc.org/cryosphere/snow/science/formation.html)]; also, if it snowed during the day it would also be less likely for the sun to be out further making the temperature less variable and likely lower during the winter months. 
 
+### Histograms
 Below is the multivariate distribution of the average daily temperature by whether it snowed or not at some point during that day. Whether it snowed or not is depicted by color in the figure, the blue color is showing the distribution of average daily temperature for days where it snowed and red is otherwise. Before we interpret the figure in more detail, the code for making this change was done by adding the snow attribute to the `fill` aesthetic using the formula syntax: `fill = ~ snow`. The `fill` aesthetic is telling the histogram bars to be colored by the different categories of the attribute of interest, here snow. The `fill` attribute for histrograms is best used when the attribute only has a few categories. 
  
 
-```{r}
+```{r temp-snow-hist}
 gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30, 
              fill = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
-          fill = "")
+          fill = "Snow?")
 ```
 
 If you were to compare the distribution for the average daily temperature for days when it snowed compared to when it did not snow, what similarities and differences do you notice? Take a few minutes to try and interpret this figure, focusing on characteristics that are similar or different across days when it snowed or not. 
@@ -54,32 +55,36 @@ You may wonder, why are there days where the average daily temperature was about
 Finally, you may also notice that the distribution for days when it snowed is somewhat more left skewed compared to days in which it does not snow. As snow readily forms when it is cooler, typically less than 32 degrees Fahrenheit, the temperature would commonly fall below this value when it snows. Therefore, the average temperature would be restricted by those colder values, pulling the average lower, even if it was warmer earlier or later in the day. This restriction is not found for days when it does not snow, therefore the temperatures are able to be found over a wider range of temperature values. 
 
 
-### Multivariate Density
-Often density plots are easier to visualize when there are more than one group. To plot more than one density curve, we need to specify the color argument instead of fill.
+### Density Curves
+Often density plots are easier to visualize when there are more than one group. The other benefit of moving to a density plot is that any sample size differences across the groups are normalized automatically, which does not occur by default with the histogram. To start, we will explore the average daily temperature based on whether it snowed that day or not. For the first density curve, we will use almost the same code as the multivariate histogram. The only change in the code is to use `gf_density()` instead of `gf_histogram()`.  
+
+```{r temp-density-fill}
+gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
+             fill = ~ snow) %>%
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
+          fill = "Snow?")
+```
+
+Notice that there are two density curves, each shaded a different color, light blue for days in which is 
 
 ```{r}
 gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
              color = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
-          color = "")
+          color = "Snow?")
 ```
 
-```{r}
-gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
-             fill = ~ snow) %>%
-  gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
-          fill = "")
-```
+
 
 ```{r}
 gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ factor(snow), 
            fill = ~ snow, size = 1) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
-          fill = "",
-          color = "")
+          fill = "Snow?",
+          color = "Snow?")
 ```
 
 ```{r}
@@ -87,9 +92,10 @@ gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ snow,
            fill = 'gray75', size = 1) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of average daily temperature by whether it snowed that day",
-          color = "")
+          color = "Snow?")
 ```
-## Violin Plots
+
+### Violin Plots
  
 Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.
 
