@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-08-05" />
+<meta name="date" content="2020-08-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -59,6 +59,15 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-43425299-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-43425299-4');
+</script>
 
 
 <style type="text/css">
@@ -327,8 +336,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb199-10"><a href="estimation-bootstrap-uncertainty.html#cb199-10" aria-hidden="true"></a>}</span>
 <span id="cb199-11"><a href="estimation-bootstrap-uncertainty.html#cb199-11" aria-hidden="true"></a></span>
 <span id="cb199-12"><a href="estimation-bootstrap-uncertainty.html#cb199-12" aria-hidden="true"></a><span class="kw">resample_baby</span>()</span></code></pre></div>
-<pre><code>##                         .
-## gestational_days 0.569239</code></pre>
+<pre><code>##                          .
+## gestational_days 0.5421321</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="estimation-bootstrap-uncertainty.html#cb201-1" aria-hidden="true"></a>baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
 <span id="cb201-2"><a href="estimation-bootstrap-uncertainty.html#cb201-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
@@ -338,8 +347,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="07-estimation_files/figure-html/resample-10k-density-1.png" width="672" /></p>
 <div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="estimation-bootstrap-uncertainty.html#cb202-1" aria-hidden="true"></a>baby_coef <span class="op">%&gt;%</span></span>
 <span id="cb202-2"><a href="estimation-bootstrap-uncertainty.html#cb202-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
-<pre><code>##          5%      50%       95%
-## 1 0.3936017 0.468302 0.5445503</code></pre>
+<pre><code>##          5%       50%       95%
+## 1 0.3959025 0.4677796 0.5426798</code></pre>
 </div>
 <div id="categorical-predictors" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> Categorical Predictor(s)</h2>
@@ -431,8 +440,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb218-10"><a href="estimation-bootstrap-uncertainty.html#cb218-10" aria-hidden="true"></a>}</span>
 <span id="cb218-11"><a href="estimation-bootstrap-uncertainty.html#cb218-11" aria-hidden="true"></a></span>
 <span id="cb218-12"><a href="estimation-bootstrap-uncertainty.html#cb218-12" aria-hidden="true"></a><span class="kw">resample_baby</span>()</span></code></pre></div>
-<pre><code>##                            .
-## maternal_smokerTRUE -9.98608</code></pre>
+<pre><code>##                             .
+## maternal_smokerTRUE -8.672671</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
 <div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="estimation-bootstrap-uncertainty.html#cb220-1" aria-hidden="true"></a>baby_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
 <span id="cb220-2"><a href="estimation-bootstrap-uncertainty.html#cb220-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
@@ -443,7 +452,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="estimation-bootstrap-uncertainty.html#cb221-1" aria-hidden="true"></a>baby_coef <span class="op">%&gt;%</span></span>
 <span id="cb221-2"><a href="estimation-bootstrap-uncertainty.html#cb221-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>slope, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
 <pre><code>##          5%       50%       95%
-## 1 -11.01574 -9.282973 -7.476961</code></pre>
+## 1 -11.03766 -9.282004 -7.523831</code></pre>
 </div>
 </div>
 <div id="more-than-2-categorical-groups" class="section level2" number="7.3">
@@ -553,9 +562,9 @@ Similar to before, the distribution of effects can be obtained with the followin
 <pre><code>## [90m# A tibble: 3 x 2[39m
 ##   term                                         estimate
 ##   [3m[90m&lt;chr&gt;[39m[23m                                           [3m[90m&lt;dbl&gt;[39m[23m
-## [90m1[39m (Intercept)                                   121.   
-## [90m2[39m I(gestational_days - mean(gestational_days))    0.507
-## [90m3[39m maternal_smokerTRUE                            -[31m7[39m[31m.[39m[31m55[39m</code></pre>
+## [90m1[39m (Intercept)                                   123.   
+## [90m2[39m I(gestational_days - mean(gestational_days))    0.545
+## [90m3[39m maternal_smokerTRUE                            -[31m9[39m[31m.[39m[31m29[39m</code></pre>
 <div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="estimation-bootstrap-uncertainty.html#cb242-1" aria-hidden="true"></a>coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
 <span id="cb242-2"><a href="estimation-bootstrap-uncertainty.html#cb242-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
 <span id="cb242-3"><a href="estimation-bootstrap-uncertainty.html#cb242-3" aria-hidden="true"></a></span>
@@ -594,10 +603,10 @@ Similar to before, the distribution of effects can be obtained with the followin
 <pre><code>## [90m# A tibble: 4 x 2[39m
 ##   term                                                             estimate
 ##   [3m[90m&lt;chr&gt;[39m[23m                                                               [3m[90m&lt;dbl&gt;[39m[23m
-## [90m1[39m (Intercept)                                                       123.   
-## [90m2[39m I(gestational_days - mean(gestational_days))                        0.344
-## [90m3[39m maternal_smokerTRUE                                                -[31m8[39m[31m.[39m[31m55[39m 
-## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.226</code></pre>
+## [90m1[39m (Intercept)                                                       122.   
+## [90m2[39m I(gestational_days - mean(gestational_days))                        0.355
+## [90m3[39m maternal_smokerTRUE                                                -[31m6[39m[31m.[39m[31m98[39m 
+## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.259</code></pre>
 <div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="estimation-bootstrap-uncertainty.html#cb249-1" aria-hidden="true"></a>coef_baby &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_baby) <span class="op">%&gt;%</span></span>
 <span id="cb249-2"><a href="estimation-bootstrap-uncertainty.html#cb249-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
 <span id="cb249-3"><a href="estimation-bootstrap-uncertainty.html#cb249-3" aria-hidden="true"></a></span>

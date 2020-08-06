@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-08-05" />
+<meta name="date" content="2020-08-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -59,6 +59,15 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-43425299-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-43425299-4');
+</script>
 
 
 <style type="text/css">
@@ -332,9 +341,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [90m# A tibble: 3 x 2[39m
 ##   term                      estimate
 ##   [3m[90m&lt;chr&gt;[39m[23m                        [3m[90m&lt;dbl&gt;[39m[23m
-## [90m1[39m (Intercept)                0.749  
-## [90m2[39m preddegBachelor Degree    -[31m0[39m[31m.[39m[31m0[39m[31m82[4m9[24m[39m 
-## [90m3[39m preddegCertificate Degree  0.001[4m0[24m[4m4[24m</code></pre>
+## [90m1[39m (Intercept)                 0.713 
+## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m38[4m9[24m[39m
+## [90m3[39m preddegCertificate Degree   0.037[4m5[24m</code></pre>
 <div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="prediction-for-individuals.html#cb264-1" aria-hidden="true"></a>admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span></span>
 <span id="cb264-2"><a href="prediction-for-individuals.html#cb264-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
 <span id="cb264-3"><a href="prediction-for-individuals.html#cb264-3" aria-hidden="true"></a></span>
@@ -374,12 +383,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb265-19"><a href="prediction-for-individuals.html#cb265-19" aria-hidden="true"></a></span>
 <span id="cb265-20"><a href="prediction-for-individuals.html#cb265-20" aria-hidden="true"></a><span class="kw">resample_admrate_median</span>()</span></code></pre></div>
 <pre><code>##                    Term Median_Difference
-## 1             Associate            0.7843
-## 2              Bachelor            0.6954
-## 3           Certificate            0.7742
-## 4    bachelor_associate           -0.0889
-## 5 certificate_associate           -0.0101
-## 6  bachelor_certificate           -0.0788</code></pre>
+## 1             Associate            0.7021
+## 2              Bachelor            0.7036
+## 3           Certificate            0.8000
+## 4    bachelor_associate            0.0015
+## 5 certificate_associate            0.0979
+## 6  bachelor_certificate           -0.0964</code></pre>
 <div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="prediction-for-individuals.html#cb267-1" aria-hidden="true"></a>admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span></span>
 <span id="cb267-2"><a href="prediction-for-individuals.html#cb267-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
 <span id="cb267-3"><a href="prediction-for-individuals.html#cb267-3" aria-hidden="true"></a></span>
