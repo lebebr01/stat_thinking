@@ -23,7 +23,7 @@ Before moving to multivariate distributions, first, we will explore a univariate
 ```{r temp-hist}
 gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30) %>% 
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Univariate distribution of average daily temperature")
+          title = "Univariate distribution of avg daily temperature")
 ```
 
 From the univariate figure of the average daily temperature, you may have noticed that there is variation in these values, with a fairly wide range considering the values. For example, there are some average daily temperatures that are below zero and some of 60 degree Fahrenheit. However, most values are between 20 and 45 or so, which is reasonable given these are cooler months of the year and mostly northern location in the United States. Finally, the distribution is unimodal and somewhat symmetric, at least not skewed enough to be too concerned. 
@@ -40,7 +40,7 @@ Below is the multivariate distribution of the average daily temperature by wheth
 gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30, 
              fill = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
+          title = "Multivariate distribution of avg daily temperature by whether it snowed",
           fill = "Snow?")
 ```
 
@@ -56,44 +56,67 @@ Finally, you may also notice that the distribution for days when it snowed is so
 
 
 ### Density Curves
-Often density plots are easier to visualize when there are more than one group. The other benefit of moving to a density plot is that any sample size differences across the groups are normalized automatically, which does not occur by default with the histogram. To start, we will explore the average daily temperature based on whether it snowed that day or not. For the first density curve, we will use almost the same code as the multivariate histogram. The only change in the code is to use `gf_density()` instead of `gf_histogram()`.  
+Often density plots are easier to visualize when there are more than one group. The other benefit of moving to a density plot is that any sample size differences across the groups are normalized automatically, which does not occur by default with the histogram. To start, we will explore the average daily temperature based on whether it snowed that day or not. For the first density curve, we will use almost the same code as the multivariate histogram. The only change in the code is to use `gf_density()` instead of `gf_histogram()`. Take a few minutes to summarize important differences in this figure compared to the multivariate histogram. 
 
 ```{r temp-density-fill}
 gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
              fill = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
+          title = "Multivariate distribution of avg daily temperature by whether it snowed",
           fill = "Snow?")
 ```
 
-Notice that there are two density curves, each shaded a different color, light blue for days in which is 
+Notice that there are two density curves, each shaded a different color, light blue for days in which it snowed, and light red for days where it did not snow. One primary difference, between the density and histogram is that the curves are normalized for sample size differences, therefore differences in heights for the two density curves can be interpreted as there being more data at that location. For example, the curve for days it snowed has a higher peak, around 30 degrees Fahrenheit, compared to the peak for days it did not snow, around 45 degrees. The higher peak here means there is more data clustered around 30 degrees for the snowy days compared to the amount of data clustered around 45 degrees for the days it did not snow. 
 
-```{r}
-gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
-             color = ~ snow) %>%
+The normalization of sample size across the groups helps to accentuate the key differences. Namely, there are differences in where the center and amount of variation between the two groups. When plotting two groups with a histogram, the groups are plotted over top of each other which can further mask differences in the group that is plotted first. The density curve with some transparency, as depicted above, does not suffer from these problems. 
+
+There is another plotting aesthetic that is useful to know about when using density curves. This is the `color` aesthetic which changes the colors of the line of the density curve. Similar to the `fill` aesthetic, it is possible to have the lines change color based on the snow attribute as such: `color = ~ snow`. The code below does this and also makes the lines slightly larger to view easier with the `size = 1` global aesthetic.
+
+```{r temp-color-density}
+gf_density(~ drybulbtemp_avg, data = us_weather, 
+             color = ~ snow, size = 1) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
+          title = "Multivariate distribution of avg daily temperature by whether it snowed",
           color = "Snow?")
 ```
 
+Without specifying the fill aesthetic, both groups have the same fill color below the lines, but notice that now the lines are colored instead of the entire curve being filled in. Areas that are darker gray are areas where the two groups overlap. The rest of the density curves are the same besides the appearance differences. 
 
+It is also possible to combine the `color` and `fill` aesthetics, even with the same attribute. For example, the code below using the snow attribute for both the `color` and `fill` aesthetics. The primary difference here is that the lines are a bit larger compared to the first density figure shown. 
 
-```{r}
-gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ factor(snow), 
-           fill = ~ snow, size = 1) %>%
+```{r temp-color-fill-density}
+gf_density(~ drybulbtemp_avg, data = us_weather, 
+           color = ~ snow, size = 1,
+           fill = ~ snow) %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
+          title = "Multivariate distribution of avg daily temperature by whether it snowed",
           fill = "Snow?",
           color = "Snow?")
 ```
 
-```{r}
-gf_density(~ drybulbtemp_avg, data = us_weather, color = ~ snow, 
-           fill = 'gray75', size = 1) %>%
+It is also possible to use both aesthetics, but set one to be constant rather than adding the attribute to it. When there are many groups, this can be a good way to visualize more groups and not have too much color happening. In the code below, the snow attribute is specified to the `color` aesthetic, but now the `fill` aesthetic is set to a specific color, this time a shade of gray. The grayscale ranges from 0 to 100, where 0 is black and 100 is white, therefore in this case when setting `fill = 'gray75'` this would be a lighter gray as the number is closer to 100. 
+
+```{r temp-color-fixedfill-density}
+gf_density(~ drybulbtemp_avg, data = us_weather, 
+           color = ~ snow, size = 1,
+           fill = 'gray75') %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Multivariate distribution of average daily temperature by whether it snowed that day",
+          title = "Multivariate distribution of avg daily temperature by whether it snowed",
           color = "Snow?")
 ```
+
+This results in a figure that is a bit lighter than the default gray color used in density plots. This lighter gray makes it a bit easier to see the density curves that are plotted behind. When there are more than two groups, this can be an important consideration to take into account to ensure the visualization is easier to interpret. Take the example below which instead of showing whether it snowed it shows the different locations. 
+
+```{r temp-density-location}
+gf_density(~ drybulbtemp_avg, data = us_weather, 
+           color = ~ location, size = 1,
+           fill = 'gray85') %>%
+  gf_labs(x = "Average daily temperature, in Fahrenheit", 
+          title = "Multivariate distribution of avg daily temperature by whether it snowed",
+          color = "")
+```
+
+In this figure, the grayscale was changed from 75 to 85 as well, but you'll notice that it is still difficult to view all of the locations. This is made more difficult here due to the locations having similar distributional centers. The next section will show an alternative visualization that can help when density curves are difficult to interpret. 
 
 ### Violin Plots
  
@@ -102,14 +125,14 @@ Violin plots are another way to make comparisons of distributions across groups.
 ```{r}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of average daily temperature by whether it snowed that day',
+          title = 'Multivariate distribution of avg daily temperature by whether it snowed',
           x = "Snow?")
 ```
 
 ```{r}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of average daily temperature by whether it snowed that day',
+          title = 'Multivariate distribution of avg daily temperature by whether it snowed',
           x = "Snow?") %>%
   gf_refine(coord_flip())
 ```
@@ -119,7 +142,7 @@ Aesthetically, these figures are a bit more pleasing to look at if they include 
 ```{r}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85') %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of average daily temperature by whether it snowed that day', 
+          title = 'Multivariate distribution of avg daily temperature by whether it snowed', 
           x = "Snow?") %>%
   gf_refine(coord_flip())
 ```
@@ -130,7 +153,7 @@ Adding quantiles are useful to aid in the comparison with the violin plots. Thes
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85', 
           draw_quantiles = c(0.1, 0.5, 0.9)) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of average daily temperature by whether it snowed that day',
+          title = 'Multivariate distribution of avg daily temperature by whether it snowed',
           x = "Snow?") %>%
   gf_refine(coord_flip())
 ```
@@ -144,7 +167,7 @@ With many groups, it is often of interest to put the long x-axis labels represen
 gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
           draw_quantiles = c(.1, .5, .9)) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of average daily temperature by location',
+          title = 'Multivariate distribution of avg daily temperature by location',
           x = "Location") %>%
   gf_refine(coord_flip())
 ```
@@ -157,7 +180,7 @@ Facetting is another way to explore distributions of two or more variables.
 gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
           draw_quantiles = c(.1, .5, .9)) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of average daily temperature by location',
+          title = 'Multivariate distribution of avg daily temperature by location',
           x = "Location") %>%
   gf_refine(coord_flip()) %>%
   gf_facet_wrap(~ snow)
