@@ -155,11 +155,10 @@ gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85') %>%
 
 Percentiles are another useful feature to aid in the comparison across groups with violin plots. These can be added with the `draw_quantiles` argument. In the below code, three percentiles are shown, the 10th, 50th, and 90th percentiles are added with the code, `draw_quantiles = c(0.1, 0.5, 0.9)`. Notice that the percentiles are represented as a proportion instead of as a percentage.
 
-```{r violin-temp-snow-quantile}
+```{r violin-temp-snow-quantile, fig.cap = 'Multivariate distribution of average daily temperature by whether it snowed'}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85', 
           draw_quantiles = c(0.1, 0.5, 0.9)) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of avg daily temperature by whether it snowed',
           x = "Snow?") %>%
   gf_refine(coord_flip())
 ```
@@ -182,7 +181,29 @@ gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85',
   gf_refine(coord_flip())
 ```
 
+#### Boxplots
+Boxplots are another way to visualize multiple groups and typically consist of 5 number summaries plotted visually. The 5 numbers that summarize a distribution include the minimum, the 25th percentile, the 50th percentile or median, the 75th percentile, and the maximum value. Boxplots can be more complicated than this if there are values that are extreme values, sometimes referred to as outliers ^[We prefer the term extreme values as this reflects what the value is without the added jargon of an outlier. We prefer to use outliers for data that should be removed from analysis due to being from another population or not an accurate measurement.]. More on how extreme values are depicted later.
 
+First, an example of a boxplot. The average daily temperature will be shown based on whether it snowed or not that day. The code is very similar to that of the violin plot, except the `gf_boxplot()` function is used. Take a minute to compare the final violin plot in \@ref(fig:violin-temp-snow-quantile) to the boxplot created in \@ref(fig:boxplot-temp-snow) to note key similarities and differences. Do you have a preference between the two figures?
+
+```{r boxplot-temp-snow, fig.cap = 'Multivariate distribution of average daily temperature by whether it snowed'}
+gf_boxplot(drybulbtemp_avg ~ snow, data = us_weather) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          x = "Snow?") %>%
+  gf_refine(coord_flip())
+```
+
+The box of the boxplot contains the middle 50% of the data and is defined by the 25th percentile as the lower/left most portion of the box, the 50th percentile or median is in the middle, and the 75th percentile is the upper/right most portion of the box. The whiskers are the lines that extend beyond the upper and lower portions of the box and will extend to the minimum or maximum in the case that there are no extreme values. 
+
+You may notice this figure contains individual points at the upper/lower end of the boxplots (only the lower end for days in which it snowed). These are the way a boxplot labels extreme values that are 1.5 times the interquartile range from the 25th or 75th percentile. When there are points more than 1.5 times the IQR distance away from the 25th and 75th percentiles the boxplot truncates the whiskers as this point and labels any remained data as individual points. More formally, data that are extreme values are calculated based on the size of the interquartile range as:
+
+\begin{equation}
+\textrm{whisker minimum} = 25^{th} \textrm{ percentile} - 1.5 * IQR \\
+\textrm{whisker maximum} = 75^{th} \textrm{ percentile} + 1.5 * IQR 
+(\#eq:extreme-boxplot)
+\end{equation}
+
+These equations are how far the whiskers will extend above and below the box of the boxplot and any data outside these locations are commonly notated as individual data points. In Figure \@ref(fig:boxplot-temp-snow), the data shown as black circles are those labeled as extreme values, or more than 1.5 times the IQR away from the 25th or 75th percentiles. 
 
 ## Facetting
  
