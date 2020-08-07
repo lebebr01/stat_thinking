@@ -107,12 +107,11 @@ gf_density(~ drybulbtemp_avg, data = us_weather,
 
 This results in a figure that is a bit lighter than the default gray color used in density plots. This lighter gray makes it a bit easier to see the density curves that are plotted behind. When there are more than two groups, this can be an important consideration to take into account to ensure the visualization is easier to interpret. Take the example below which instead of showing whether it snowed it shows the different locations. 
 
-```{r temp-density-location}
+```{r temp-density-location, fig.cap = "Multivariate distribution of avg daily temperature by whether it snowed"}
 gf_density(~ drybulbtemp_avg, data = us_weather, 
            color = ~ location, size = 1,
            fill = 'gray85') %>%
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
-          title = "Multivariate distribution of avg daily temperature by whether it snowed",
           color = "")
 ```
 
@@ -171,7 +170,7 @@ Comparing the distance between the 10th and 90th percentiles for each group can 
 
 #### Violin Plots with many groups
  
-Many groups are more easily shown in the violin plot framework.
+As discussed earlier, visualizing many groups can be done more easily using violin plots compared to density or histograms. This is shown below where the average daily temperature is shown for each of the 8 locations in the US weather data. The 10th, 50th, and 90th percentiles are shown as well for comparison. Take a minute to compare this figure to the one with overlapping density curves in Figure \@ref(fig:temp-density-location).
 
 
 ```{r}
@@ -182,6 +181,8 @@ gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85',
           x = "Location") %>%
   gf_refine(coord_flip())
 ```
+
+
 
 ## Facetting
  
