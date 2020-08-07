@@ -120,16 +120,19 @@ In this figure, the grayscale was changed from 75 to 85 as well, but you'll noti
 
 ### Violin Plots
  
-Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to show more groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Best to explore with an example.
+Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to interpret when there are more than two groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Procedurally, the density curve that was shown above is mirrored or flipped across the x-axis. Let's explore an example that creates a violin plot with the `gf_violin()` function and a two-sided formula, `drybulbtemp_avg ~ snow` which will visualize the average daily temperature by whether it has snowed or not.
 
-```{r}
+```{r violin-temp-snow}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
           title = 'Multivariate distribution of avg daily temperature by whether it snowed',
           x = "Snow?")
 ```
 
-```{r}
+By default, the violin plots are oriented vertically, where the temperature is on the y-axis and whether it snowed or not is on the x-axis. This is opposite of what we have been using with histograms and density curves. Fortunately, we can change this behavior by adding a single line of code, `gf_refine(coord_flip())`. This command flips the x- and y- axes to place the average daily temperature on the x-axis. Throughout the rest of the book, any violin plots shown will have the default axes flipped for consistency with the histograms and density plots. 
+
+
+```{r violin-temp-snow-flipped}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
           title = 'Multivariate distribution of avg daily temperature by whether it snowed',
@@ -137,9 +140,13 @@ gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
   gf_refine(coord_flip())
 ```
 
-Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the `fill = ` argument.
+Violin plots are depicted for each group separately. This means that there will be the same number of violin plots as the number of groups that are in the attribute on the right hand side of the equation specified inside `gf_violin()`. In the example above, there is a violin plot for days it snowed and second one for days it did not snow and these violin plots are shown separately and never stacked on top of one another. This is the feature that makes these figures able to handle a larger number of groups more efficiently compared to density of histograms. 
 
-```{r}
+From the figure, similar findings discussed earlier can be articulated. For example, there is a higher center and more variation on days that it did not snow. There is also evidence that the distribution for days that did snow is left-skewed whereas the distribution for days it did not snow is more symmetric. 
+
+Aesthetically, these figures are a bit more pleasing to look at if they include a light fill color. This is done similar to the density plots shown above with the `fill = ` argument, specified as `fill = 'gray85'`.
+
+```{r violin-temp-snow-gray}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85') %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
           title = 'Multivariate distribution of avg daily temperature by whether it snowed', 
@@ -147,9 +154,9 @@ gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85') %>%
   gf_refine(coord_flip())
 ```
 
-Adding quantiles are useful to aid in the comparison with the violin plots. These can be added with the `draw_quantiles` argument.
+Percentiles are another useful feature to aid in the comparison across groups with violin plots. These can be added with the `draw_quantiles` argument. In the below code, three percentiles are shown, the 10th, 50th, and 90th percentiles are added with the code, `draw_quantiles = c(0.1, 0.5, 0.9)`. Notice that the percentiles are represented as a proportion instead of as a percentage.
 
-```{r}
+```{r violin-temp-snow-quantile}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85', 
           draw_quantiles = c(0.1, 0.5, 0.9)) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
@@ -157,11 +164,15 @@ gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85',
           x = "Snow?") %>%
   gf_refine(coord_flip())
 ```
-### Violin Plots with many groups
+
+When the percentiles are added, it is now easier to compare the center of the two distributions by using the middle vertical line in each violin plot which represents the 50th percentile or median. In this violin plot, the 50th percentile is lower for days it did snow compared to days it did not snow. Furthermore, the 90th percentile is also lower than the 50th percentile for days that it did snow. This helps to provide evidence that days that it did snow tend to be much colder than typical days, as shown by the 50th percentile, when it did not snow. 
+
+Comparing the distance between the 10th and 90th percentiles for each group can also give a sense of the range of typical values. Although this isn't the interquartile range ^[The interquartile range is the difference between the 25th and 75th percentiles], the difference between the 10th and 90th percentiles reflects a similar quantity. For days that it snowed, the 10th percentile is around 10 to 12 degrees Fahrenheit and the 90th percentile is around 37 to 40 degrees Fahrenheit. Therefore the difference would be about 25 to 30 degrees Fahrenheit. Doing the same process for days it did not snow, the 10th percentile would be around 24 degrees Fahrenheit and the 90th percentile would be around 55 degrees Fahrenheit. The difference would then be around 31 degrees Fahrenheit. This suggests that the spread of the middle 80% of the data in each group are similar, with days in which it snowed showing some evidence of being slightly less spread out over this middle 80%. 
+
+#### Violin Plots with many groups
  
 Many groups are more easily shown in the violin plot framework.
 
-With many groups, it is often of interest to put the long x-axis labels representing each group on the y-axis so that it reads the correct direction and the labels do not run into each other. This can be done with the `gf_refine()` function with `coord_flip()`.
 
 ```{r}
 gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
