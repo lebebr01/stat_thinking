@@ -70,9 +70,9 @@ resample_admrate()
 ## [90m# A tibble: 3 x 2[39m
 ##   term                      estimate
 ##   [3m[90m<chr>[39m[23m                        [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                 0.716 
-## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m50[4m7[24m[39m
-## [90m3[39m preddegCertificate Degree   0.017[4m4[24m
+## [90m1[39m (Intercept)                 0.700 
+## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m25[4m6[24m[39m
+## [90m3[39m preddegCertificate Degree   0.031[4m1[24m
 ```
 
 
@@ -122,12 +122,12 @@ resample_admrate_median()
 
 ```
 ##                    Term Median_Difference
-## 1             Associate           0.78430
-## 2              Bachelor           0.68965
-## 3           Certificate           0.79540
-## 4    bachelor_associate          -0.09465
-## 5 certificate_associate           0.01110
-## 6  bachelor_certificate          -0.10575
+## 1             Associate           0.78665
+## 2              Bachelor           0.69500
+## 3           Certificate           0.78760
+## 4    bachelor_associate          -0.09165
+## 5 certificate_associate           0.00095
+## 6  bachelor_certificate          -0.09260
 ```
 
 
