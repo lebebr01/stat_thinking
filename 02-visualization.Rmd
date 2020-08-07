@@ -36,6 +36,12 @@ Once we have imported and assigned the data to an object, it is quite useful to 
 head(colleges)
 ```
 
+We can also include an interactive version for viewing the book on the web using the DT package.
+
+```{r dt-data}
+DT::datatable(colleges)
+```
+
 
 ## Exploring Attributes
 

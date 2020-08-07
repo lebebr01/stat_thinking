@@ -22,7 +22,7 @@ colleges <- read_csv(
   )
 
 # View first six cases
-head(colleges)
+DT::datatable(colleges)
 ```
 
 ## Summarizing Attributes
