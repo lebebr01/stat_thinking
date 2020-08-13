@@ -172,25 +172,40 @@ Comparing the distance between the 10th and 90th percentiles for each group can 
 As discussed earlier, visualizing many groups can be done more easily using violin plots compared to density or histograms. This is shown below where the average daily temperature is shown for each of the 8 locations in the US weather data. The 10th, 50th, and 90th percentiles are shown as well for comparison. Take a minute to compare this figure to the one with overlapping density curves in Figure \@ref(fig:temp-density-location).
 
 
-```{r}
+```{r temp-location-violin, fig.cap = 'Average daily temperature by the location of weather measurement.'}
 gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
           draw_quantiles = c(.1, .5, .9)) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of avg daily temperature by location',
           x = "Location") %>%
   gf_refine(coord_flip())
 ```
 
-## Facetting
+## Faceting
  
-Facetting is another way to explore distributions of two or more variables.
+Faceting is a graphical procedure to create multiple figures side by side. This is helpful when there are more than 2 attributes to explore. For example, we have explored the distribution of average daily temperature by whether it snowed or not and also the location separately. Perhaps, there are differences in the distribution of average daily temperatures for whether it snowed or not based on the location. This multivariate visualization now considers two attributes that may help to understand why the average daily temperature may differ. 
 
-```{r}
+Below is an example of adding the faceting to a violin plot. The violin plot will explore the average daily temperature by the location. This figure was explored initially in Figure \@ref(fig:temp-location-violin). This new figure (Figure \@ref(fig:temp-location-violin-facet)) adds one line of code to do the faceting, `gf_facet_wrap(~ snow)`. You may notice that inside the `gf_facet_wrap()` function, a similar formula notation used by other plotting functions is used. Within this function, a one-sided formula is used where the attribute name is specified after the `~`. 
+
+```{r temp-location-violin-facet, fig.cap = 'Average daily temperature by the location of weather measurement and whether it snowed on a given day.'} 
 gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
           draw_quantiles = c(.1, .5, .9)) %>%
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          title = 'Multivariate distribution of avg daily temperature by location',
           x = "Location") %>%
+  gf_refine(coord_flip()) %>%
+  gf_facet_wrap(~ snow)
+```
+
+From the figure, the primary difference between Figure \@ref(fig:temp-location-violin) is the creation of two side-by-side plots, one representing observations when it did not snow (left-side plot) and the other representing observations when it did snow that day (right-side plot). If the two figures were combined, the same figure as in Figure \@ref(fig:temp-location-violin) happen. The faceting is splitting the observations based on this new attribute, therefore each panel of the figure has less data compared to the overall that did not split the figure by whether it snowed or not. 
+
+There are a few differences shown in the figure, primarily related to variation differences. For instance, the variation of average daily temperatures is much smaller for Detroit when it snows compared to when it does not snow. These variation differences are not as pronounced for a city like Duluth or Minneapolis. Similar to previous discussions, there does not seem to be large differences in average daily temperature across the locations. 
+
+As a contrast, one instance that may have a larger impact than location, would be month of the year. Below is a faceted figure that instead of location, adds month of year. 
+
+```{r temp-month-violin-facet, fig.cap = 'Average daily temperature by the month of weather measurement and whether it snowed on a given day.'} 
+gf_violin(drybulbtemp_avg ~ month, data = us_weather, fill = 'gray85', 
+          draw_quantiles = c(.1, .5, .9)) %>%
+  gf_labs(y = "Average daily temperature, in Fahrenheit",
+          x = "Month") %>%
   gf_refine(coord_flip()) %>%
   gf_facet_wrap(~ snow)
 ```
