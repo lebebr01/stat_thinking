@@ -212,28 +212,28 @@ gf_violin(drybulbtemp_avg ~ month, data = us_weather, fill = 'gray85',
 
 
 
-## Considering Groups
-We've spent a lot of time trying to reason about other variables that may be important in explaining variation in our variable of interest. So far we have only explored the variable without considering other variables, in practice that is not that useful.
+## Multivariate Descriptive Statistics
+We've spent a lot of time trying to reason about other attributes that may be important in explaining variation in our attribute of interest. We started this chapter by exploring visually other attributes that help to understand or explain variation in the primary outcome. For example, we visually explored attributes that may help us understand why average daily temperatures may differ. We found that if it snows on a given day has an impact and month has an impact, but location does not seem to have as large of an effect. 
 
-Instead, it is common to compute conditional statistics based on other characteristics in the data. An example may help to show the idea more clearly. 
+In this section, we will revisit descriptive statistics, or single number summaries of key elements of a distribution. The idea of descriptive statistics will now be generalized to be multivariate in nature. Practically, this means that we will no longer use a single numeric quantity as was done in Chapter 3, instead, we will consider multiple numeric quantities for a single distribution. More accurately, we are now calculating conditional descriptive statistics for conditional distributions. For example, if you look back at Figure \@ref(fig:temp-month-violin-facet), we conditioned the distribution on month and whether it snowed or not. The conditioning means that the distribution of the average daily temperature was split into separate distributions for each unique combination of the month and snow attributes. In the case of descriptive statistics, we will now compute single number summaries for those conditional or separate distributions. Let's jump in with a concrete example that computes the multivariate (conditional) descriptive statistics that we explored in Figure \@ref(fig:violin-temp-snow-quantile).
 
-```{r} 
-us_weather %>% 
-  df_stats(drybulbtemp_max ~ location, median) 
-``` 
-
-Presented above are the conditional medians for the higher education institutions in different areas of the country. More specifically, the data are essentially split into subgroups and the median is computed for each of those subgroups instead of pooling all institutions into a single data frame. The formula syntax is now `outcome ~ grouping` where the variable of interest (i.e. commonly a numeric variable) and the variable to the right of the `~` is the grouping variable. This syntax is similar to the violin plots that were created earlier. 
-
-Can you see differences in the admission rates across the regions? 
-
-One thing that is useful to add in when computing conditional statisics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which is common. To do this, we can add another function to the `df_stats()` function. 
+Recall from Chapter 3, to compute descriptive statistics the `df_stats()` function is used. The primary arguments to this function are a formula indicating the attributes to consider followed by the statistics to be calculated. In Chapter 3, the formula used for the `df_stats()` function were all one-sided as these were univariate descriptive statistics. The formula when calculating multivariate (conditional) descriptive statistics will be two-sided of the following form `primary-attribute ~ conditional-attributes`. In this formula specification, the primary attribute would represent the attribute the descriptive statistics will be computed for or the attribute of interest. The conditional attribute(s) represent the attribute that the data will be conditioned or split on. Looking at the next code chunk, notice that the formula specification is `drybulbtemp_avg ~ snow` which means that the descriptive statistics will be computed for the average daily temperature or the primary attribute and this computation will be done for each unique value of the `snow` attribute. As we know, the snow attribute takes on two unique values, either it snowed or it did not snow. Therefore, the resulting output will contain two rows, one for days in which it did snow and one for when it did not snow. 
 
 ```{r} 
 us_weather %>% 
- df_stats(drybulbtemp_max ~ location, median, length) 
+  df_stats(drybulbtemp_avg ~ snow, median) 
 ``` 
 
-This adds another columns which represents the number of observations that went into the median calculation for each group. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on. 
+Presented above are the conditional medians for the average daily temperature for days in which it snowed (Yes) compared to days it did not snow (No). These are the middle lines shown in Figure \@ref(fig:violin-temp-snow-quantile), but now explicitly calculated. The data were split into subgroups and the median was computed for each of those subgroups instead of pooling all observations.
+
+One thing that is useful to add in when computing conditional statistics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which commonly occurs. To do this, we can add another function, `length`, to the `df_stats()` function. 
+
+```{r} 
+us_weather %>% 
+ df_stats(drybulbtemp_avg ~ snow, median, length) 
+``` 
+
+This adds another columns which represents the number of observations that went into the median calculation for each group and that there are many more days for these locations where it did not snow. The syntax above also shows that you can add additional functions separated by a comma in the `df_stats()` function and are not limited to a single function. We will take advantage of this feature later on. 
 
 ### Adding additional groups 
 What if we thought more than one variable was important in explaining variation in the outcome variable? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another variable to the right-hand side of the formula argument. More than one variable are separated with a `+` symbol. 
