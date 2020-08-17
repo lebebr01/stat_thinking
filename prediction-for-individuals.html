@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-08-13" />
+<meta name="date" content="2020-08-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -201,7 +201,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.1.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#violin-plots"><i class="fa fa-check"></i><b>4.1.3</b> Violin Plots</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#faceting"><i class="fa fa-check"></i><b>4.2</b> Faceting</a></li>
-<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#considering-groups"><i class="fa fa-check"></i><b>4.3</b> Considering Groups</a>
+<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-descriptive-statistics"><i class="fa fa-check"></i><b>4.3</b> Multivariate Descriptive Statistics</a>
 <ul>
 <li class="chapter" data-level="4.3.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.3.1</b> Adding additional groups</a></li>
 </ul></li>
@@ -343,9 +343,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [90m# A tibble: 3 x 2[39m
 ##   term                      estimate
 ##   [3m[90m&lt;chr&gt;[39m[23m                        [3m[90m&lt;dbl&gt;[39m[23m
-## [90m1[39m (Intercept)                 0.710 
-## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m37[4m8[24m[39m
-## [90m3[39m preddegCertificate Degree   0.048[4m4[24m</code></pre>
+## [90m1[39m (Intercept)                 0.722 
+## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m57[4m0[24m[39m
+## [90m3[39m preddegCertificate Degree   0.012[4m9[24m</code></pre>
 <div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="prediction-for-individuals.html#cb266-1" aria-hidden="true"></a>admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span></span>
 <span id="cb266-2"><a href="prediction-for-individuals.html#cb266-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
 <span id="cb266-3"><a href="prediction-for-individuals.html#cb266-3" aria-hidden="true"></a></span>
@@ -385,12 +385,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb267-19"><a href="prediction-for-individuals.html#cb267-19" aria-hidden="true"></a></span>
 <span id="cb267-20"><a href="prediction-for-individuals.html#cb267-20" aria-hidden="true"></a><span class="kw">resample_admrate_median</span>()</span></code></pre></div>
 <pre><code>##                    Term Median_Difference
-## 1             Associate            0.7660
-## 2              Bachelor            0.6961
-## 3           Certificate            0.7857
-## 4    bachelor_associate           -0.0699
-## 5 certificate_associate            0.0197
-## 6  bachelor_certificate           -0.0896</code></pre>
+## 1             Associate           0.73255
+## 2              Bachelor           0.69920
+## 3           Certificate           0.79145
+## 4    bachelor_associate          -0.03335
+## 5 certificate_associate           0.05890
+## 6  bachelor_certificate          -0.09225</code></pre>
 <div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="prediction-for-individuals.html#cb269-1" aria-hidden="true"></a>admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span></span>
 <span id="cb269-2"><a href="prediction-for-individuals.html#cb269-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
 <span id="cb269-3"><a href="prediction-for-individuals.html#cb269-3" aria-hidden="true"></a></span>
