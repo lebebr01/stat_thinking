@@ -219,7 +219,7 @@ In this section, we will revisit descriptive statistics, or single number summar
 
 Recall from Chapter 3, to compute descriptive statistics the `df_stats()` function is used. The primary arguments to this function are a formula indicating the attributes to consider followed by the statistics to be calculated. In Chapter 3, the formula used for the `df_stats()` function were all one-sided as these were univariate descriptive statistics. The formula when calculating multivariate (conditional) descriptive statistics will be two-sided of the following form `primary-attribute ~ conditional-attributes`. In this formula specification, the primary attribute would represent the attribute the descriptive statistics will be computed for or the attribute of interest. The conditional attribute(s) represent the attribute that the data will be conditioned or split on. Looking at the next code chunk, notice that the formula specification is `drybulbtemp_avg ~ snow` which means that the descriptive statistics will be computed for the average daily temperature or the primary attribute and this computation will be done for each unique value of the `snow` attribute. As we know, the snow attribute takes on two unique values, either it snowed or it did not snow. Therefore, the resulting output will contain two rows, one for days in which it did snow and one for when it did not snow. 
 
-```{r} 
+```{r mult-stats-snow} 
 us_weather %>% 
   df_stats(drybulbtemp_avg ~ snow, median) 
 ``` 
@@ -228,7 +228,7 @@ Presented above are the conditional medians for the average daily temperature fo
 
 One thing that is useful to add in when computing conditional statistics, is how many data points are in each group. This is particularly useful when the groups are different sizes, which commonly occurs. To do this, we can add another function, `length`, to the `df_stats()` function. 
 
-```{r} 
+```{r mult-stats-snow-length} 
 us_weather %>% 
  df_stats(drybulbtemp_avg ~ snow, median, length) 
 ``` 
@@ -238,7 +238,7 @@ This adds another columns which represents the number of observations that went 
 ### Adding additional groups 
 What if we thought more than one attribute was important in explaining variation in the outcome? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another attribute to the right-hand side of the formula argument. Each attribute on the right-hand side of the `~` are separated with a `+` symbol. The following example computes the median and number of observations for the average daily temperature based on the unique values of whether it snowed by each month. 
 
-```{r} 
+```{r mult-stats-twogroup} 
 us_weather %>% 
    df_stats(drybulbtemp_avg ~ snow + month, median, length) 
 ``` 
@@ -246,3 +246,13 @@ us_weather %>%
 From the output, there are `r nrow(us_weather %>% df_stats(drybulbtemp_avg ~ snow + month, median, length))` rows which coincide with the number of months times 2. The 2 here represents the number of categories for the snow attribute, being if it snowed or not. In this case each month by snow combination has data, but if a combination of the attributes on the right-hand side of the equation do not have any data, those rows would not show up in the descriptive statistic summary table. These multivariate descriptive statistics coincide with Figure \@ref(fig:temp-month-violin-facet), specifically the middle line in these violin plots. 
 
 ### Adding more descriptive statistics
+Chapter 3 discussed how to add more descriptive statistics to the `df_stats()` function. This section serves as a reminder for how to do that. In this chapter, we have only computed the median and number of observations, these are useful statistics, but it is often useful to compute descriptive statistics of variation or other location based statistics such as percentiles or means. 
+
+To do this, we can continue adding function separated by commas directly at the end of the `df_stats()` function. For example, we can add the mean and standard deviation to the previous multivariate descriptive statistics tables by adding `, mean, sd` to the end of the previous `df_stats()` function. 
+
+```{r mult-stats-morestats}
+us_weather %>% 
+   df_stats(drybulbtemp_avg ~ snow + month, median, length, mean, sd) 
+```
+
+One thing to note when adding more statistics to the `df_stats()` function is the order with which these show up. The statistics computed show up in the order specified, therefore the statistics from the following command will be median, number of observations (length), mean, and then standard deviation. 
