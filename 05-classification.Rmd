@@ -1,37 +1,45 @@
 # Classification   
 
-In this example, we will explore data from the titanic that comes from Kaggle (https://www.kaggle.com/c/titanic/data). You can view the attributes in the data from the link previous. The following set of code will install a couple a new packages that we will utilize for this section of the course, the titanic package has the data we will use and the rpart package includes functions to perform the tree based models we will employ.
+Classification is a task that tries to predict group membership using the data attributes available. For example, one could try to predict if an individual is left or right handed based on their preferences to music or hobbies. In this situation, the classification technique would look for patterns in the music or hobby preferences to help differentiate between those that are left or right handed. Perhaps the data would show that left handed individuals would be more likely to be artistic, therefore those that rated more highly artistic tasks would be more likely to be classified as left handed.
+
+To perform the classification tasks in this chapter, we are going to consider a group of **statistical models** called decision trees, or more specifically in this case, classification trees. Statistical models are used to help us as humans understand patterns in the data and estimate uncertainty. Uncertainty comes from the variation in the data. For example, those that are left handed are likely not all interested or like artistic hobbies or tasks, but on average maybe they are more likely to enjoy these tasks compared to right handed individuals. Statistical models help us to understand if the differences shown in our sample of data are due to signal (true differences) or noise (uncertainty). 
+
+In the remaining sections of this chapter, we will build off of this idea of statistical models to understanding how these work with classification trees to classify. Furthermore, we will aim to develop heuristics to understand if our statistical model is practically useful. That is, does our model help us to do our classification task above just randomly guessing. We will use a few additional packages to perform the classification tasks, including `rpart`, `rpart.plot`, and `rsample`. The following code chunk loads all the packages that will be used in the current chapter. 
+
+```{r load-packages, message = FALSE}
+library(tidyverse)
+library(ggformula)
+library(statthink)
+library(rpart)
+library(rpart.plot)
+library(rsample)
+
+# Add plot theme
+theme_set(theme_statthinking())
+```
 
 ## Topic: Decision Trees 
 
-```{r class-setup, message = FALSE}
-library(tidyverse)
-library(ggformula)
-library(mosaic)
-library(titanic)
-library(rpart)
-library(rsample)
-library(rpart.plot)
-library(statthink)
+We will continue to use the United States weather data introduced in Chapter 4. Given that this data was for the winter months in the United States, the classification task we will attempt to perform is to correct predict if it will rain or snow on a particular day that precipitation occurs. To get a sense of how often it rains vs snows in these data, we can use the `count()` function to do this. For the `count()` function, the first argument is the name of the data, followed by the attributes we wish to count the number of observations in the unique values of those attributes.
 
-theme_set(theme_statthinking())
-
-titanic <- bind_rows(titanic_train, titanic_test) %>% 
-  mutate(survived = ifelse(Survived == 1, 'Survived', 'Died')) %>% 
-  select(-Survived) %>%
-  drop_na(survived)
-
-head(titanic)
+```{r rain-or-snow}
+count(us_weather, rain, snow)
 ```
 
-```{r}
-count(titanic, survived)
+The following table counts the number of times that it rains or snows in the data. You may notice that there are days in which it does not rain or snow as shown by the row with No for both the rain and snow columns. There are also days in which it both rains and snows as shown in the row with Yes in both the rain and snow columns. Not surprisingly, a majority of the days it does not rain or snow, occurring about 46% of the time ($1571 / (1571 + 728 + 821 + 280) = 46.2%$). Using similar logic, about 8% of the days in the data have both snow and rain. 
+
+For the current classification, we will focus on days in which it either rains or snows instead of both or none. To do this, we will filter or restrict that data to those cases only, a data task that can be done with the `filter()` function. The `filter()` function works by selecting rows of data that match specific situations. This is similar to how a search engine, such as Google, works. In a search engine, you type is search criteria and the search engine gives you back matches that meet those criteria. The `filter()` function works similarly, we specify the criteria with which we hope to have data match to keep. 
+
+In this example, we hope to keep the rows where it either rains or snows, but rows where it doesn't or both rains or snows. To do this, we will use the `|` and `&` operators which can be translated into "or" or "and" respectively. In English, the cases we want to keep are days in which it does not rain **and** it does snow *or* days in which it does rain **and** it does not snow. Turning this into data language that `filter()` can understand, we can substitute the `|` or `&` operators into places where or/and are in the English version along with the data attribute names. Therefore we could write in code, `(rain & snow) | (rain & snow)`. The last piece we need to add to the code version, is the values we want to retain for the attributes. For example, in the data, "No" means that the event did not occur and "Yes" means the event did occur. Therefore, translating the English version into code with data values would look like: `(rain == 'No' & snow == 'Yes') | (rain =='Yes' & snow == 'No')`. In R, the `==` means literal values, therefore the code `rain == 'No'` means the literal word "No" within the rain attribute. 
+
+```{r filter-cases}
+us_weather_rs <- us_weather %>%
+  filter((rain == 'No' & snow == 'Yes') | (rain == 'Yes' & snow == 'No'))
+
+count(us_weather_rs, rain, snow)
 ```
 
-```{r}
-gf_bar(~ survived,  data = titanic)
-```
-
+We can further check if the filtering command worked by using the `count()` function. Using the `count()` function on the filtered data shows that we only retained rows of the data for the combinations that we wanted, namely days in which it there is some form of precipitation, but only if it snowed or rained, not both.
 
 ### Fitting a Classification Tree
 
@@ -39,14 +47,14 @@ Let's class_tree our first classification tree to predict the dichotomous attrib
 
 In this example, I picked a handful of attributes that would seem important. These can either be numeric or represent categories, the method does not care the type of attributes that are included in the analysis. Notice that I save the computation to the object, class_tree.
 
-```{r}
+```{r, eval = FALSE}
 class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Parch, 
    method = 'class', data = titanic)
 
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-```{r}
+```{r, eval = FALSE}
 rpart.rules(class_tree, cover = TRUE)
 ```
 
@@ -54,41 +62,41 @@ rpart.rules(class_tree, cover = TRUE)
 
 One downside of decision trees, is that they can tend to overfit the data and capitalize on chance variation in our sample that we can not generalize to another sample. This means that there are features in the current sample that would not be present in another sample of data. There are a few ways to overcome this, one is to prune the tree to only include the attributes that are most important and improve the classification accuracy. One measure of this can be used is called the complexity parameter (CP) and this statistic attempts to balance the tree complexity related to how strongly the levels of the tree improve the classification accuracy. We can view these statistics with the printcp() and plotcp() functions where the only argument to be specified is the classification tree computation that was saved in the previous step.
 
-```{r}
+```{r eval = FALSE}
 printcp(class_tree)
 plotcp(class_tree)
 ```
 
-```{r}
+```{r eval = FALSE}
 prune_class_tree <- prune(class_tree, cp = .02)
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
 ### Accuracy
 
-```{r}
+```{r eval = FALSE}
 titanic_predict <- titanic %>%
   mutate(tree_predict = predict(prune_class_tree, type = 'class')) %>%
   cbind(predict(prune_class_tree, type = 'prob'))
 head(titanic_predict, n = 20)
 ```
 
-```{r}
+```{r eval = FALSE}
 titanic_predict %>%
   count(survived, tree_predict)
 ```
 
-```{r}
+```{r eval = FALSE}
 gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict)
 ```
 
-```{r}
+```{r eval = FALSE}
 gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict, position = "fill") %>%
   gf_labs(y = 'Proportion') %>%
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
-```{r}
+```{r eval = FALSE}
 titanic_predict %>%
   mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
   df_stats(~ same_class, mean, sum)
@@ -98,7 +106,7 @@ titanic_predict %>%
 
 ### Comparison to Baseline
 
-```{r}
+```{r eval = FALSE}
 titanic_predict <- titanic_predict %>%
   mutate(tree_predict_full = predict(class_tree, type = 'class'))
 
@@ -106,13 +114,13 @@ titanic_predict %>%
   count(survived, tree_predict_full)
 ```
 
-```{r}
+```{r eval = FALSE}
 gf_bar(~ survived, fill = ~tree_predict_full, data = titanic_predict, position = "fill") %>%
   gf_labs(y = "proportion") %>%
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
-```{r}
+```{r eval = FALSE}
 titanic_predict %>%
   mutate(same_class = ifelse(survived == tree_predict_full, 1, 0)) %>%
   df_stats(~ same_class, mean, sum)
@@ -132,7 +140,7 @@ This is done with the rsample package utilizing three functions, initial_split()
 
 Let's do the data splitting.
  
-```{r}
+```{r eval = FALSE}
 titanic <- bind_rows(titanic_train, titanic_test) %>% 
   mutate(survived = ifelse(Survived == 1, 'Survived', 'Died')) %>% 
   drop_na(survived)
@@ -143,14 +151,14 @@ titanic_train <- training(titanic_split)
 titanic_test <- testing(titanic_split)
 ```
  
-```{r}
+```{r eval = FALSE}
 class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Parch, 
    method = 'class', data = titanic_train)
 
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-```{r}
+```{r eval = FALSE}
 prune_class_tree <- prune(class_tree, cp = .02)
 
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
@@ -158,7 +166,7 @@ rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 
 This seems like a reasonable model. Let's check the model accuracy.
 
-```{r}
+```{r eval = FALSE}
 titanic_predict <- titanic_train %>%
   mutate(tree_predict = predict(prune_class_tree, type = 'class'))
 titanic_predict %>%
@@ -169,7 +177,7 @@ titanic_predict %>%
  This is actually slightly better accuracy compared to the model last time, about xxx compared to about xxx prediction accuracy. But, let's test the model out on the test data to see the prediction accuracy for the test data, the real test.
 
 
-```{r}
+```{r eval = FALSE}
 titanic_predict_test <- titanic_test %>%
   mutate(tree_predict = predict(prune_class_tree, newdata = titanic_test, type = 'class'))
 titanic_predict_test %>%
@@ -192,7 +200,7 @@ Resampling and bootstrap methods use the sample data we have and perform the sam
 
 Let's now try the resampling with the calculation of the proportion that survived. We will then save these 1000 survival proportions and create a visualization.
 
-```{r}
+```{r eval = FALSE}
 resample_titanic <- function(...) {
     titanic %>%
         sample_n(nrow(titanic), replace = TRUE) %>%
@@ -212,7 +220,7 @@ Bootstrap full data.
 
 Let's first explore the full data to see how much variation there is in the prediction accuracy using all of the data. Here we will again use the sample_n() function to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I'm going to write a function to do all of these steps one time.
 
-```{r}
+```{r eval = FALSE}
 calc_predict_acc <- function(data) {
   rsamp_titanic <- titanic %>%
     sample_n(nrow(titanic), replace = TRUE)
@@ -234,14 +242,14 @@ calc_predict_acc()
  To do the bootstrap, this process can be replicated many times. In this case, I'm going to do 500. In practice, we would likely want to do a few more.
 
 
-```{r}
+```{r eval = FALSE}
 predict_accuracy_fulldata <- map(1:2000, calc_predict_acc) %>%
   bind_rows()
 
 gf_density(~ mean_same_class, data = predict_accuracy_fulldata)
 ```
 
-```{r}
+```{r eval = FALSE}
 calc_predict_acc_split <- function(data) {
   titanic_split <- initial_split(titanic, prop = .7)
   titanic_train <- training(titanic_split)
@@ -261,14 +269,14 @@ calc_predict_acc_split()
 
 ```
 
-```{r}
+```{r eval = FALSE}
 predict_accuracy_traintest <- map(1:2000, calc_predict_acc_split) %>%
   bind_rows()
 
 gf_density(~ mean_same_class, data = predict_accuracy_traintest)
 ```
 
-```{r}
+```{r eval = FALSE}
 bind_rows(
   mutate(predict_accuracy_fulldata, type = "Full Data"),
   mutate(predict_accuracy_traintest, type = "Train/Test")
