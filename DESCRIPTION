@@ -15,4 +15,5 @@ Imports:
   broom,
   DT,
   parttree
-Remotes: lebebr01/statthink
+Remotes: lebebr01/statthink,
+  grantmcdermott/parttree
