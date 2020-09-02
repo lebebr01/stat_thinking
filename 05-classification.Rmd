@@ -13,9 +13,12 @@ library(statthink)
 library(rpart)
 library(rpart.plot)
 library(rsample)
+library(parttree)
 
 # Add plot theme
 theme_set(theme_statthinking())
+
+us_weather <- mutate(us_weather, snow_factor = factor(snow))
 ```
 
 ## Topic: Decision Trees 
@@ -43,20 +46,51 @@ We can further check if the filtering command worked by using the `count()` func
 
 ### Fitting a Classification Tree
 
-Let's class_tree our first classification tree to predict the dichotomous attribute, survival. For this, we will use the rpart() function from the rpart package. The first argument to the rpart() function is a formula where the outcome of interest is specified to the left of the ~ and the attributes that are predictive of the outcome are specified to the right of the ~ separated with + signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify individuals based on the values in the data, therefore we specify method = 'class'. The final argument is the data element, in this case titanic.
+Let's class_tree our first classification tree to predict whether the precipitation is either snow or rain during the winter months. For this, we will use the `rpart()` function from the rpart package. The first argument to the `rpart()` function is a formula where the outcome of interest is specified to the left of the `~` and the attributes that are predictive of the outcome are specified to the right of the `~` separated with `+` signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify days based on the values in the data, therefore we specify `method = 'class'`. The final argument is the data element, in this case `us_weather`.
 
-In this example, I picked a handful of attributes that would seem important. These can either be numeric or represent categories, the method does not care the type of attributes that are included in the analysis. Notice that I save the computation to the object, class_tree.
+Before we fit the model, what attributes do you think would be predictive of whether it will rain or snow on a particular day during the winter months? Take a few minutes to brainstorm some ideas.
 
-```{r, eval = FALSE}
-class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Parch, 
-   method = 'class', data = titanic)
+In this example, I picked a handful of continuous attributes to initially explore, including the average, minimum, and maximum temperature for the day. Notice that the fitted model is saved to the object, `class_tree`. This will allow for easier interaction with the model results later. Then after fitting the model, the model is visualized using the `rpart.plot()` function. The primary argument to the `rpart.plot()` function is the fitted model object from the `rpart()` function, here that would be `class_tree`. The additional arguments passed below adjust the appearance of the visualization. 
+
+```{r first-class-tree, fig.cap = "Classification tree predicting whether it will snow or rain}
+class_tree <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max, 
+   method = 'class', data = us_weather)
 
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-```{r, eval = FALSE}
+The visualization shown in Figure \@ref(fig:first-class-tree) produces the decision rules for the classification tree. The decision rules start from the top of the tree and proceed down the branches to the leaf nodes at the bottom that highlight the predictions. By default, the `rpart()` algorithm assumes that each split should go in two directions. For example, the first split occurs with the maximum temperature is less than 42 degrees Fahrenheit or greater than or equal to 42 degrees Fahrenheit. If the maximum temperature for the day is greater than or equal to 42 degrees Fahrenheit, the first split in the decision tree follows the left-most branch and proceeds to the left-most leaf node. This results in the prediction for those days as being days in which it does not snow (i.e., a category prediction of "No"). The numbers below the "No" label indicate that the probability of it snowing on a day where the maximum temperature was greater than or equal to 42 degrees Fahrenheit is 0.09 or about 9%. Furthermore, this category represents about 53% of the total number of data cases inputted. 
+
+Following the right-hand split of the first decision, which occurs for days when the maximum temperature is less than 42 degrees, we come to another split. This split is again for the maximum temperature, but now the split comes at 36 degrees Fahrenheit. In this case, if the temperature is greater than or equal to 36 degrees Fahrenheit, the decision leads to the next leaf node and a prediction that it will not snow that day. For this leaf node, there is more uncertainty in the prediction, where on average the probability of it snowing would be 0.42 or about 42%. This value is less than 50%, therefore the "No" category is chosen. This occurs for about 16% of the data. 
+
+For days in which the maximum temperature is less than 36 degrees Fahrenheit, the decision tree moves to the right further and comes to another split. The third split in the decision tree is for the minimum daily temperature and occurs at 23 degrees Fahrenheit. For days where the minimum temperature is greater than 23 degrees Fahrenheit (but also had a maximum temperature less than 36 degree Fahrenheit), the right-most leaf node is predicted. For these data cases, about 8% of the total data, the prediction is that it will snow (i.e., "Yes" category) and the probability of it snowing in those conditions is about 71%. 
+
+Finally, if the minimum temperature is less than 23 degrees Fahrenheit (but also had a maximum temperature less than 36 degree Fahrenheit), then one last split occurs on the maximum temperature at 29 degrees Fahrenheit. This leads to the last two leaf node in the middle of Figure \@ref(fig:first-class-tree). One prediction states it will snow, for maximum temperature less than 29 degrees and one predicting it will not snow, for those greater than or equal to 29 degrees. Both of these leaf nodes have more uncertainty in the predictions, being close to 50% probability.
+
+Note, that the average daily temperature was included in the model fitting procedure, but was not included in the results shown in Figure \@ref(fig:first-class-tree). Why do you think this happened? The model results show the attributes that were helpful in making the prediction of whether it snowed or not. For this task, the model found that the maximum and minimum temperature attributes were more useful and adding the average daily temperature did not appreciably improve the predictions. For this reason, it did not show up in the decision tree. Furthermore, the attributes that are most informative in making the prediction are at the top of the decision tree. In the results shown in Figure \@ref(fig:first-class-tree), the maximum daily temperature was the most helpful attribute in making the snow or not prediction.
+
+The decision tree rules can also be requested in text form using the `rpart.rules()` function and are shown below. In this cases
+
+```{r class-rules}
 rpart.rules(class_tree, cover = TRUE)
 ```
+
+#### Visualizing Results
+
+```{r scatter-usweather, fig.cap = "Scatterplot of the minimum and maximum daily temperatures and if it snows or not"}
+temperature_scatter <- gf_point(drybulbtemp_min ~ drybulbtemp_max, 
+                                color = ~ snow_factor,
+                                alpha = .75,
+                                data = us_weather)
+temperature_scatter
+```
+
+
+```{r predict-usweather, fig.cap = "Showing the predictions based on the classification tree with the raw data"}
+temperature_scatter + 
+  geom_parttree(data = class_tree, aes(fill = snow_factor), alpha = .25)
+```
+
 
 ### Pruning Trees
 
