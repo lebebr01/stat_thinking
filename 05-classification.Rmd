@@ -54,7 +54,7 @@ Before we fit the model, what attributes do you think would be predictive of whe
 
 In this example, I picked a handful of continuous attributes to initially explore, including the average, minimum, and maximum temperature for the day. Notice that the fitted model is saved to the object, `class_tree`. This will allow for easier interaction with the model results later. Then after fitting the model, the model is visualized using the `rpart.plot()` function. The primary argument to the `rpart.plot()` function is the fitted model object from the `rpart()` function, here that would be `class_tree`. The additional arguments passed below adjust the appearance of the visualization. 
 
-```{r first-class-tree, fig.cap = "Classification tree predicting whether it will snow or rain}
+```{r first-class-tree, fig.cap = "Classification tree predicting whether it will snow or rain"}
 class_tree <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max, 
    method = 'class', data = us_weather)
 
