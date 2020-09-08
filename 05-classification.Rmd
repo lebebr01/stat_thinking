@@ -121,7 +121,7 @@ plotcp(class_tree)
 prune_class_tree <- prune(class_tree, cp = .02)
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
--->
+
 
 ### Accuracy
 
@@ -338,3 +338,4 @@ bind_rows(
 
 ### Cross-validation
 
+-->
