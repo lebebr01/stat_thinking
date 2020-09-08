@@ -25,7 +25,7 @@ us_weather <- mutate(us_weather, snow_factor = factor(snow))
 
 ## Topic: Decision Trees 
 
-We will continue to use the United States weather data introduced in Chapter 4. Given that this data was for the winter months in the United States, the classification task we will attempt to perform is to correct predict if it will rain or snow on a particular day that precipitation occurs. To get a sense of how often it rains vs snows in these data, we can use the `count()` function to do this. For the `count()` function, the first argument is the name of the data, followed by the attributes we wish to count the number of observations in the unique values of those attributes.
+We will continue to use the United States weather data introduced in Chapter 4. Given that this data was for the winter months in the United States, the classification task we will attempt to perform is to correct predict if it will snow on a particular day that precipitation occurs. To get a sense of how often it rains vs snows in these data, we can use the `count()` function to do this. For the `count()` function, the first argument is the name of the data, followed by the attributes we wish to count the number of observations in the unique values of those attributes.
 
 ```{r rain-or-snow}
 count(us_weather, rain, snow)
@@ -33,6 +33,7 @@ count(us_weather, rain, snow)
 
 The following table counts the number of times that it rains or snows in the data. You may notice that there are days in which it does not rain or snow as shown by the row with No for both the rain and snow columns. There are also days in which it both rains and snows as shown in the row with Yes in both the rain and snow columns. Not surprisingly, a majority of the days it does not rain or snow, occurring about 46% of the time ($1571 / (1571 + 728 + 821 + 280) = 46.2%$). Using similar logic, about 8% of the days in the data have both snow and rain. 
 
+<!--
 For the current classification, we will focus on days in which it either rains or snows instead of both or none. To do this, we will filter or restrict that data to those cases only, a data task that can be done with the `filter()` function. The `filter()` function works by selecting rows of data that match specific situations. This is similar to how a search engine, such as Google, works. In a search engine, you type is search criteria and the search engine gives you back matches that meet those criteria. The `filter()` function works similarly, we specify the criteria with which we hope to have data match to keep. 
 
 In this example, we hope to keep the rows where it either rains or snows, but rows where it doesn't or both rains or snows. To do this, we will use the `|` and `&` operators which can be translated into "or" or "and" respectively. In English, the cases we want to keep are days in which it does not rain **and** it does snow *or* days in which it does rain **and** it does not snow. Turning this into data language that `filter()` can understand, we can substitute the `|` or `&` operators into places where or/and are in the English version along with the data attribute names. Therefore we could write in code, `(rain & snow) | (rain & snow)`. The last piece we need to add to the code version, is the values we want to retain for the attributes. For example, in the data, "No" means that the event did not occur and "Yes" means the event did occur. Therefore, translating the English version into code with data values would look like: `(rain == 'No' & snow == 'Yes') | (rain =='Yes' & snow == 'No')`. In R, the `==` means literal values, therefore the code `rain == 'No'` means the literal word "No" within the rain attribute. 
@@ -45,14 +46,17 @@ count(us_weather_rs, rain, snow)
 ```
 
 We can further check if the filtering command worked by using the `count()` function. Using the `count()` function on the filtered data shows that we only retained rows of the data for the combinations that we wanted, namely days in which it there is some form of precipitation, but only if it snowed or rained, not both.
+-->
 
 ### Fitting a Classification Tree
 
-Let's class_tree our first classification tree to predict whether the precipitation is either snow or rain during the winter months. For this, we will use the `rpart()` function from the rpart package. The first argument to the `rpart()` function is a formula where the outcome of interest is specified to the left of the `~` and the attributes that are predictive of the outcome are specified to the right of the `~` separated with `+` signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify days based on the values in the data, therefore we specify `method = 'class'`. The final argument is the data element, in this case `us_weather`.
+Let's class_tree our first classification tree to predict whether it snowed on a particular day. For this, we will use the `rpart()` function from the *rpart* package. The first argument to the `rpart()` function is a formula where the outcome of interest is specified to the left of the `~` and the attributes that are predictive of the outcome are specified to the right of the `~` separated with `+` signs. The second argument specifies the method for which we want to run the analysis, in this case we want to classify days based on the values in the data, therefore we specify `method = 'class'`. The final argument is the data element, in this case `us_weather`.
 
 Before we fit the model, what attributes do you think would be predictive of whether it will rain or snow on a particular day during the winter months? Take a few minutes to brainstorm some ideas.
 
-In this example, I picked a handful of continuous attributes to initially explore, including the average, minimum, and maximum temperature for the day. Notice that the fitted model is saved to the object, `class_tree`. This will allow for easier interaction with the model results later. Then after fitting the model, the model is visualized using the `rpart.plot()` function. The primary argument to the `rpart.plot()` function is the fitted model object from the `rpart()` function, here that would be `class_tree`. The additional arguments passed below adjust the appearance of the visualization. 
+In this example, a handful of attributes to explore, including the average, minimum, and maximum temperature for the day. These happen to be all continuous attributes, meaning that these attributes can take many data values. The model is not limited to those types of data attributes, but that is where we will start the classification journey. 
+
+Notice that the fitted model is saved to the object, `class_tree`. This will allow for easier interaction with the model results later. Then after fitting the model, the model is visualized using the `rpart.plot()` function. The primary argument to the `rpart.plot()` function is the fitted model object from the `rpart()` function, here that would be `class_tree`. The additional arguments passed below adjust the appearance of the visualization. 
 
 ```{r first-class-tree, fig.cap = "Classification tree predicting whether it will snow or rain"}
 class_tree <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max, 
@@ -71,7 +75,7 @@ Finally, if the minimum temperature is less than 23 degrees Fahrenheit (but also
 
 Note, that the average daily temperature was included in the model fitting procedure, but was not included in the results shown in Figure \@ref(fig:first-class-tree). Why do you think this happened? The model results show the attributes that were helpful in making the prediction of whether it snowed or not. For this task, the model found that the maximum and minimum temperature attributes were more useful and adding the average daily temperature did not appreciably improve the predictions. For this reason, it did not show up in the decision tree. Furthermore, the attributes that are most informative in making the prediction are at the top of the decision tree. In the results shown in Figure \@ref(fig:first-class-tree), the maximum daily temperature was the most helpful attribute in making the snow or not prediction.
 
-The decision tree rules can also be requested in text form using the `rpart.rules()` function and are shown below. In this cases
+The decision tree rules can also be requested in text form using the `rpart.rules()` function and are shown below. The rows in the output are the leaf nodes from \@ref(fig:first-class-tree) and the columns represent the probability of it snowing, the decision rules that are applicable, and the percentage of data found in each row. For example, for the first row, it is predicted to snow about 9% of the time when the maximum temperature for the day is greater than 42 and this occurred in 53% of the original data. Since the probability is less than 50%, the prediction would be that it would not snow on days with those characteristics. In rows where there are `&` symbols, these separate different data attributes that are useful in the classification model.
 
 ```{r class-rules}
 rpart.rules(class_tree, cover = TRUE)
@@ -79,21 +83,31 @@ rpart.rules(class_tree, cover = TRUE)
 
 #### Visualizing Results
 
+To get another view of what the classification model is doing in this scenario, we will visualize the study results. First, the `gf_point()` function is used to create a scatterplot where the maximum temperature is shown on the x-axis and the minimum temperature is shown on the y-axis, shown in Figure \@ref(fig:scatter-usweather). There is a positive relationship between maximum and minimum temperatures and on days with lower maximum temperatures are where it tends to snow. However, there is not perfect separation, meaning that there are days that have similar minimum and maximum temperatures where it does snow and other where it does not snow. 
+
 ```{r scatter-usweather, fig.cap = "Scatterplot of the minimum and maximum daily temperatures and if it snows or not"}
 temperature_scatter <- gf_point(drybulbtemp_min ~ drybulbtemp_max, 
                                 color = ~ snow_factor,
                                 alpha = .75,
-                                data = us_weather)
+                                data = us_weather) %>%
+  gf_labs(x = "Maximum Temperature (in F)",
+          y = "Minimum Temperature (in F)",
+          color = "Snow?")
+
 temperature_scatter
 ```
 
+The next figure will make use of the *parttree* R package to visualize what the classification model is doing. The `geom_parttree()` function is used where the primary argument is the saved classification model object that was save earlier, named `class_tree`. The other two arguments to add are the fill aesthetic that is the outcome of the classification tree and to control how transparent the backgroud fill color is. In this example, this is set using `alpha = .25` where the transparency is set at 75% (i.e., 1 - 0.25 = 0.75). Setting a higher alpha value would reduce the amount of transparency, whereas setting a smaller value would increase the transparency. 
+
+Figure \@ref(fig:predict-usweather) gives a sense as to what the classification model is doing to the data. The classification model breaks the data into quadrants and makes a single uniform prediction for those quadrants. For example, the areas of the figure that are shaded as red are days in which the model predicts **it will not snow** whereas the blue/green color are days in which the model predicts **it will snow**. The data points are the real data cases, therefore there are instances inside each of the quadrants in which the model did not correctly predict or classify the case. Each of the quadrants in the figure represent different leaf nodes shown in \@ref(fig:first-class-tree) and each represent a different likelihood of it snowing. 
 
 ```{r predict-usweather, fig.cap = "Showing the predictions based on the classification tree with the raw data"}
 temperature_scatter + 
-  geom_parttree(data = class_tree, aes(fill = snow_factor), alpha = .25)
+  geom_parttree(data = class_tree, aes(fill = snow_factor), alpha = .25) + 
+  scale_fill_discrete("Snow?")
 ```
 
-
+<!--
 ### Pruning Trees
 
 One downside of decision trees, is that they can tend to overfit the data and capitalize on chance variation in our sample that we can not generalize to another sample. This means that there are features in the current sample that would not be present in another sample of data. There are a few ways to overcome this, one is to prune the tree to only include the attributes that are most important and improve the classification accuracy. One measure of this can be used is called the complexity parameter (CP) and this statistic attempts to balance the tree complexity related to how strongly the levels of the tree improve the classification accuracy. We can view these statistics with the printcp() and plotcp() functions where the only argument to be specified is the classification tree computation that was saved in the previous step.
@@ -107,6 +121,7 @@ plotcp(class_tree)
 prune_class_tree <- prune(class_tree, cp = .02)
 rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
+-->
 
 ### Accuracy
 
