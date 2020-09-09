@@ -7,7 +7,7 @@ rmd_files: ["index.Rmd",
     "02-visualization.Rmd",
     "03-descriptive.Rmd",
     "04-multivariate-visualization.Rmd",
-    "05-classification.Rmd",
+    "05-classification-new.Rmd",
     "06-regression.Rmd",
     "07-estimation.Rmd",
     "08-prediction.Rmd"]
