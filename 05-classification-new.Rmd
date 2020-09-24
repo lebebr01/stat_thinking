@@ -107,54 +107,63 @@ temperature_scatter +
   scale_fill_discrete("Snow?")
 ```
 
-<!--
-### Pruning Trees
-
-One downside of decision trees, is that they can tend to overfit the data and capitalize on chance variation in our sample that we can not generalize to another sample. This means that there are features in the current sample that would not be present in another sample of data. There are a few ways to overcome this, one is to prune the tree to only include the attributes that are most important and improve the classification accuracy. One measure of this can be used is called the complexity parameter (CP) and this statistic attempts to balance the tree complexity related to how strongly the levels of the tree improve the classification accuracy. We can view these statistics with the printcp() and plotcp() functions where the only argument to be specified is the classification tree computation that was saved in the previous step.
-
-```{r eval = FALSE}
-printcp(class_tree)
-plotcp(class_tree)
-```
-
-```{r eval = FALSE}
-prune_class_tree <- prune(class_tree, cp = .02)
-rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
-```
-
 
 ### Accuracy
 
+Evaluating the model accuracy helps to understand how well the model performed the classification. If you recall, the classification model is making a prediction about whether it is going to snow on a given day based on the observed data where it was recorded if it snowed that day or not. Therefore, the data has for each day if it snowed or not. With this information, how could we evaluate how well the model performed in classifying whether it snows on a given day? 
+
+To do this, the observation of whether it snowed or not can be compared to the model prediction of whether it snowed or not. Better classification accuracy would occur when the observed snow or no snow attribute is the same as the model prediction of snow or not. That is, when the same category is predicted as what is observed, this would result in better classification accuracy, a good thing. If there are cases where different categories between the observed and predicted categories or classes, this would be an example of poor classification accuracy. 
+
+In the data so far, there is the observed data value on whether it snowed or not, this is the attribute that was used to fit the classification model, named `snow_factor`. To add the predicted classes based on the classification model shown in Figure \@ref(fig:first-class-tree), the `predict()` function can be used. To use the `predict()` function, the primary argument is a model object, in this case the classification model object named `class_tree`. To get the predicted classes, that is the leaf nodes at the bottom of Figure \@ref(fig:first-class-tree), a second argument is needed, `type = 'class'` which tells the predict function to report the top line of the leaf nodes in Figure \@ref(fig:first-class-tree). These predicted classes are saved into a new attribute named `snow_predict`. Another element is also added that represent the probability of a particular day not snowing or snowing, these are reported in the columns `No` and `Yes` in the resulting output. 
+
 ```{r eval = FALSE}
-titanic_predict <- titanic %>%
-  mutate(tree_predict = predict(prune_class_tree, type = 'class')) %>%
-  cbind(predict(prune_class_tree, type = 'prob'))
-head(titanic_predict, n = 20)
+us_weather_predict <- us_weather %>%
+  mutate(snow_predict = predict(class_tree, type = 'class')) %>%
+  cbind(predict(class_tree, type = 'prob'))
+head(us_weather_predict, n = 20)
+```
+
+The first 20 rows of the resulting data are shown. Notice that for all of these 20 rows, the predicted class, shown in the attribute, `snow_predict`, are represented as "No" indicating that these days it was not predicted to snow. Notice toward the bottom however, that there were two days in which it did in fact snow, shown in the column named, `snow_factor`. These would represent two cases of misclassification as the observed data is not the same as the model predicted class. Finally, the probabilities shown in the last two attribute columns are all the same here. These are all the same as the maximum dry bulb temperature was greater than 42 degrees Fahrenheit in all of these days. Therefore, all 20 of the cases shown in the data here represent the left-most leaf node shown in Figure \@ref(fig:first-class-tree). 
+
+Now that the observed data and the model predicted classes are in the data, it is possible to produce a table that shows how many observations were correctly predicted (indicating better model accuracy). To do this, the `count()` function can be used where the observed and predicted class attributes are passed as arguments. 
+
+```{r eval = FALSE}
+us_weather_predict %>%
+  count(snow_factor, snow_predict)
+```
+
+The resulting table shows the observed data values in the left-most column (`snow_factor`) followed by the predicted class (`snow_predict`) in the middle column. The final column represents the number of rows or observations that were in each combination of the first two columns. For example, the first row shows that 2,147 observations were counted that had the combination where it was observed and predicted to have not snowed that day. These 2,147 observations would be instances of correct classification. The second row shows that 245 observations occurred where it was observed to not have snowed, but the model predicted it would snow that day. All of the 245 observations were misclassified based on the classification model. 
+
+From this table, the overall model accuracy can be calculated by summing up the cases that matched and dividing by the total number of observations. This computation would look like:
+$$
+accuracy = \frac{\textrm{matching predictions}}{\textrm{total observations}} = \frac{(2147 + 479)}{(2147 + 245 + 529 + 479)} = .772 = 77.2%
+$$
+This means that the overall classification accuracy for this example was just over 77%, meaning that about 77% of days the model was able to correctly classify whether it snowed or not. This computation can also be done programmatically. To do this, a new attribute named, `same_class`, can be added to the data that is given a value of 1 if the observed data matches the predicted class and a value of 0 otherwise. Descriptive statistics, such as the mean and sum, can be computed on this new vector to represent the accuracy as a proportion and the number of matching predictions (the numerator shown in the equation above). 
+
+```{r eval = FALSE}
+us_weather_predict %>%
+  mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0)) %>%
+  df_stats(~ same_class, mean, sum)
+```
+
+Notice that the same model accuracy was found, about 77.2%, and the number of observations (i.e., days) that the correct classification was found was 2,626 days. Is correctly predicting 77.2% of the days good? That is, would you say this model is doing a good job at accurately predicting if it will snow or not on that day? 
+
+#### Conditional Accuracy
+
+```{r eval = FALSE}
+gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict)
 ```
 
 ```{r eval = FALSE}
-titanic_predict %>%
-  count(survived, tree_predict)
-```
-
-```{r eval = FALSE}
-gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict)
-```
-
-```{r eval = FALSE}
-gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict, position = "fill") %>%
+gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict, position = "fill") %>%
   gf_labs(y = 'Proportion') %>%
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
-```{r eval = FALSE}
-titanic_predict %>%
-  mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
-  df_stats(~ same_class, mean, sum)
-```
 
 
 
+<!--
 ### Comparison to Baseline
 
 ```{r eval = FALSE}
