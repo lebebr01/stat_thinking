@@ -116,7 +116,7 @@ To do this, the observation of whether it snowed or not can be compared to the m
 
 In the data so far, there is the observed data value on whether it snowed or not, this is the attribute that was used to fit the classification model, named `snow_factor`. To add the predicted classes based on the classification model shown in Figure \@ref(fig:first-class-tree), the `predict()` function can be used. To use the `predict()` function, the primary argument is a model object, in this case the classification model object named `class_tree`. To get the predicted classes, that is the leaf nodes at the bottom of Figure \@ref(fig:first-class-tree), a second argument is needed, `type = 'class'` which tells the predict function to report the top line of the leaf nodes in Figure \@ref(fig:first-class-tree). These predicted classes are saved into a new attribute named `snow_predict`. Another element is also added that represent the probability of a particular day not snowing or snowing, these are reported in the columns `No` and `Yes` in the resulting output. 
 
-```{r eval = FALSE}
+```{r add-predictions}
 us_weather_predict <- us_weather %>%
   mutate(snow_predict = predict(class_tree, type = 'class')) %>%
   cbind(predict(class_tree, type = 'prob'))
@@ -127,7 +127,7 @@ The first 20 rows of the resulting data are shown. Notice that for all of these 
 
 Now that the observed data and the model predicted classes are in the data, it is possible to produce a table that shows how many observations were correctly predicted (indicating better model accuracy). To do this, the `count()` function can be used where the observed and predicted class attributes are passed as arguments. 
 
-```{r eval = FALSE}
+```{r count-predictions}
 us_weather_predict %>%
   count(snow_factor, snow_predict)
 ```
@@ -140,7 +140,7 @@ accuracy = \frac{\textrm{matching predictions}}{\textrm{total observations}} = \
 $$
 This means that the overall classification accuracy for this example was just over 77%, meaning that about 77% of days the model was able to correctly classify whether it snowed or not. This computation can also be done programmatically. To do this, a new attribute named, `same_class`, can be added to the data that is given a value of 1 if the observed data matches the predicted class and a value of 0 otherwise. Descriptive statistics, such as the mean and sum, can be computed on this new vector to represent the accuracy as a proportion and the number of matching predictions (the numerator shown in the equation above). 
 
-```{r eval = FALSE}
+```{r compute-overall-accuracy}
 us_weather_predict %>%
   mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0)) %>%
   df_stats(~ same_class, mean, sum)
@@ -150,17 +150,39 @@ Notice that the same model accuracy was found, about 77.2%, and the number of ob
 
 #### Conditional Accuracy
 
-```{r eval = FALSE}
-gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict)
+One potential misleading element of simply computing the overall model accuracy as done above, is that the accuracy will likely differ based on the which class. This could occur for a few reasons, one it could be more difficult to predict one of the classes due to similarities in data across the two classes. The two classes are also often unbalanced, therefore exploring the overall model accuracy will give more weight to the group/class that has more data. In addition, this group has more data so it could make it a bit easier for the model to predict, these issues could be exacerbated in small sample conditions. 
+
+Therefore, similar to earlier discussion in the book about multivariate distributions, it is often important to consider conditional or multivariate accuracy instead of the overall model accuracy. Let's explore this a different way than simply computing a percentage, instead we could use a bar graph to explore the model accuracy. Figure \@ref(fig:bar-accuracy-count) shows the number of correct classifications for the two observed data classes (i.e., snow or did not snow) on the x-axis by the predicted classes shown with the fill color in the bars. The fill color are red for days that the model predicts it will not show and green/blue for days in which it will not snow. Therefore, accuracy would be represented in the left-bar by the red portion of the bar and the right-bar by the green/blue portion of the bar. 
+
+```{r bar-accuracy-count, fig.cap = "A bar graph showing the conditional prediction accuracy represented as counts."}
+gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict) %>%
+  gf_labs(x = "Observed Snow Status",
+          fill = "Predicted Snow Status")
 ```
 
-```{r eval = FALSE}
+Figure \@ref(fig:bar-accuracy-count) is not a very good picture to depict accuracy as the two groups have different numbers of observations so comparisons between the bars is difficult. Secondly, the count metric makes it difficult to estimate how many are in each group, for example, it is difficult from the figure alone to know how many were incorrectly classified in the left-most bar represented by the blue/green color. These issues can be fixed by adding an additional argument, `position = 'fill'` which will scale each bar as a proportion, ranging from 0 to 1. The bar graph is now scaling each bar based on the sample size to normalize sample size differences. 
+
+```{r bar-accuracy-fill, fig.cap = "A bar graph showing the conditional prediction accuracy represented as a proportion."}
 gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict, position = "fill") %>%
-  gf_labs(y = 'Proportion') %>%
+  gf_labs(x = "Observed Snow Status",
+          fill = "Predicted Snow Status",
+          y = 'Proportion') %>%
   gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
 ```
 
+From this new figure (Figure \@ref(fig:bar-accuracy-fill)), it is much easier to estimate the prediction accuracy from the figure. For example, the green/blue portion of the left-most bar is at about 0.10, meaning that about 10% of the cases are misclassified and 90% would be correctly classified. Therefore the classification accuracy for days in which it did not snow would be about 90%. Compare this to days in which it did not snow (the right bar), where the prediction accuracy represented by the green/blue color is about 48%, meaning that the misclassification rate is about 52%. 
 
+Let's recalibrate how we think the model is doing? If you were just given the overall classification rate of about 77%, how did you feel about the model? Now that we know the model accurate predicts it won't snow about 90% of the time, but can only identify that it will snow about 48% of the time, how well do you feel the model is performing now? Would you feel comfortable using this model in the real world? 
+
+One last note, we can also compute the conditional model accuracy more directly using the `df_stats()` function as was done for the overall model accuracy. The primary difference in the code is to specify the `same_class` attribute to the left of the `~`. This represent the attribute to compute the statistics of interest with. Another attribute is added to the right of the `~` to represent the attribute to condition on, in this case the observed data point of whether it snowed or not. 
+
+```{r conditional-df-stats}
+us_weather_predict %>%
+  mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0)) %>%
+  df_stats(same_class ~ snow_factor, mean, sum, length)
+```
+
+The output returns the conditional model accuracy as a proportion, the number of correct classifications for each class/group, and the total number of observations (both correct and incorrect classifications) for each class/group. The estimated values we had from the figure were very close to the actual calculated values, but we find the figure to be more engaging than just the statistics. 
 
 
 <!--
