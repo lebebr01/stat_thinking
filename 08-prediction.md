@@ -70,9 +70,9 @@ resample_admrate()
 ## [90m# A tibble: 3 x 2[39m
 ##   term                      estimate
 ##   [3m[90m<chr>[39m[23m                        [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                 0.703 
-## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m28[4m9[24m[39m
-## [90m3[39m preddegCertificate Degree   0.058[4m5[24m
+## [90m1[39m (Intercept)                 0.706 
+## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m25[4m1[24m[39m
+## [90m3[39m preddegCertificate Degree   0.037[4m2[24m
 ```
 
 
@@ -104,7 +104,7 @@ resample_admrate_median <- function(...) {
 
   med_est <- college_resample %>%
     df_stats(adm_rate ~ preddeg, median) %>%
-    spread(preddeg, median_adm_rate)
+    pivot_wider(names_from = preddeg, values_from = median_adm_rate)
 
   names(med_est) <- c("Associate", "Bachelor", "Certificate")
   
@@ -112,22 +112,12 @@ resample_admrate_median <- function(...) {
     mutate(bachelor_associate = Bachelor - Associate,
            certificate_associate = Certificate - Associate,
            bachelor_certificate = Bachelor - Certificate) %>%
-    gather(Associate:bachelor_certificate, 
-                 key = "Term", 
-                 value = "Median_Difference")
+    pivot_longer(Associate:bachelor_certificate, 
+                 names_to = "Term", 
+                 values_to = "Median_Difference")
 }
 
 resample_admrate_median()
-```
-
-```
-##                    Term Median_Difference
-## 1             Associate            0.7826
-## 2              Bachelor            0.6942
-## 3           Certificate            0.7677
-## 4    bachelor_associate           -0.0884
-## 5 certificate_associate           -0.0149
-## 6  bachelor_certificate           -0.0735
 ```
 
 
@@ -140,7 +130,5 @@ admrate_median %>%
     gf_density(~ Median_Difference) %>% 
     gf_facet_wrap(~ Term, scales = 'free_x')
 ```
-
-<img src="08-prediction_files/figure-html/replicate-adm-median-1.png" width="672" />
 
 

@@ -237,8 +237,8 @@ Hitters %>%
 ```
 
 ```
-##   mean_log_error median_log_error sd_log_error min_log_error max_log_error
-## 1    1.09754e-15         0.118683    0.7493933     -1.612228      2.287419
+##    response        mean   median        sd       min      max
+## 1 log_error 1.09754e-15 0.118683 0.7493933 -1.612228 2.287419
 ```
 
 
@@ -248,8 +248,8 @@ Hitters %>%
 ```
 
 ```
-##   mean_error median_error sd_error min_error max_error
-## 1   115.4757     34.01581 386.1183  -609.801  1911.349
+##   response     mean   median       sd      min      max
+## 1    error 115.4757 34.01581 386.1183 -609.801 1911.349
 ```
 
 Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the log salary scale. In general, lower average distances means the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without some prior standardization.
@@ -261,10 +261,8 @@ Hitters %>%
 ```
 
 ```
-##   mean_abs(log_error) median_abs(log_error) sd_abs(log_error)
-## 1           0.6128455              0.527838         0.4296245
-##   min_abs(log_error) max_abs(log_error)
-## 1       0.0002568557           2.287419
+##         response      mean   median        sd          min      max
+## 1 abs(log_error) 0.6128455 0.527838 0.4296245 0.0002568557 2.287419
 ```
 
 

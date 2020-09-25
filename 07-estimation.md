@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.5575204
+## gestational_days 0.4487489
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -83,8 +83,8 @@ baby_coef %>%
 ```
 
 ```
-##          5%       50%       95%
-## 1 0.3945104 0.4682685 0.5422681
+##   response        5%       50%       95%
+## 1    slope 0.3955932 0.4683647 0.5442306
 ```
 
 ## Categorical Predictor(s)
@@ -125,12 +125,9 @@ baby %>%
 ```
 
 ```
-##   maternal_smoker mean_birth_weight sd_birth_weight median_birth_weight 25% 75%
-## 1           FALSE          123.0853        17.42370                 123 113 134
-## 2            TRUE          113.8192        18.29501                 115 101 126
-##   length_birth_weight
-## 1                 715
-## 2                 459
+##       response maternal_smoker     mean       sd median 25% 75% length
+## 1 birth_weight           FALSE 123.0853 17.42370    123 113 134    715
+## 2 birth_weight            TRUE 113.8192 18.29501    115 101 126    459
 ```
 
 ### Linear Regression - Categorical Predictor
@@ -193,12 +190,9 @@ baby %>%
 ```
 
 ```
-##   maternal_smoker mean_birth_weight sd_birth_weight median_birth_weight 25% 75%
-## 1           FALSE          123.0853        17.42370                 123 113 134
-## 2            TRUE          113.8192        18.29501                 115 101 126
-##   length_birth_weight
-## 1                 715
-## 2                 459
+##       response maternal_smoker     mean       sd median 25% 75% length
+## 1 birth_weight           FALSE 123.0853 17.42370    123 113 134    715
+## 2 birth_weight            TRUE 113.8192 18.29501    115 101 126    459
 ```
 
 ```r
@@ -238,8 +232,8 @@ resample_baby()
 ```
 
 ```
-##                             .
-## maternal_smokerTRUE -8.678728
+##                            .
+## maternal_smokerTRUE -10.9041
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -262,8 +256,8 @@ baby_coef %>%
 ```
 
 ```
-##          5%       50%       95%
-## 1 -11.03105 -9.265887 -7.467198
+##   response        5%       50%       95%
+## 1    slope -10.98238 -9.248666 -7.522132
 ```
 
 ## More than 2 categorical groups
@@ -444,9 +438,9 @@ resample_baby()
 ## [90m# A tibble: 3 x 2[39m
 ##   term                                         estimate
 ##   [3m[90m<chr>[39m[23m                                           [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                                   123.   
-## [90m2[39m I(gestational_days - mean(gestational_days))    0.491
-## [90m3[39m maternal_smokerTRUE                            -[31m8[39m[31m.[39m[31m28[39m
+## [90m1[39m (Intercept)                                   122.   
+## [90m2[39m I(gestational_days - mean(gestational_days))    0.503
+## [90m3[39m maternal_smokerTRUE                            -[31m6[39m[31m.[39m[31m79[39m
 ```
 
 
@@ -512,10 +506,10 @@ resample_baby()
 ## [90m# A tibble: 4 x 2[39m
 ##   term                                                             estimate
 ##   [3m[90m<chr>[39m[23m                                                               [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                                                      123.    
-## [90m2[39m I(gestational_days - mean(gestational_days))                       0.420 
-## [90m3[39m maternal_smokerTRUE                                               -[31m8[39m[31m.[39m[31m81[39m  
-## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE   0.079[4m8[24m
+## [90m1[39m (Intercept)                                                       123.   
+## [90m2[39m I(gestational_days - mean(gestational_days))                        0.331
+## [90m3[39m maternal_smokerTRUE                                                -[31m8[39m[31m.[39m[31m40[39m 
+## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.265
 ```
 
 

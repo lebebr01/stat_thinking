@@ -156,61 +156,291 @@ temperature_scatter +
 <p class="caption">(\#fig:predict-usweather)Showing the predictions based on the classification tree with the raw data</p>
 </div>
 
-<!--
-### Pruning Trees
-
-One downside of decision trees, is that they can tend to overfit the data and capitalize on chance variation in our sample that we can not generalize to another sample. This means that there are features in the current sample that would not be present in another sample of data. There are a few ways to overcome this, one is to prune the tree to only include the attributes that are most important and improve the classification accuracy. One measure of this can be used is called the complexity parameter (CP) and this statistic attempts to balance the tree complexity related to how strongly the levels of the tree improve the classification accuracy. We can view these statistics with the printcp() and plotcp() functions where the only argument to be specified is the classification tree computation that was saved in the previous step.
-
-
-```r
-printcp(class_tree)
-plotcp(class_tree)
-```
-
-
-```r
-prune_class_tree <- prune(class_tree, cp = .02)
-rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
-```
-
 
 ### Accuracy
 
+Evaluating the model accuracy helps to understand how well the model performed the classification. If you recall, the classification model is making a prediction about whether it is going to snow on a given day based on the observed data where it was recorded if it snowed that day or not. Therefore, the data has for each day if it snowed or not. With this information, how could we evaluate how well the model performed in classifying whether it snows on a given day? 
+
+To do this, the observation of whether it snowed or not can be compared to the model prediction of whether it snowed or not. Better classification accuracy would occur when the observed snow or no snow attribute is the same as the model prediction of snow or not. That is, when the same category is predicted as what is observed, this would result in better classification accuracy, a good thing. If there are cases where different categories between the observed and predicted categories or classes, this would be an example of poor classification accuracy. 
+
+In the data so far, there is the observed data value on whether it snowed or not, this is the attribute that was used to fit the classification model, named `snow_factor`. To add the predicted classes based on the classification model shown in Figure \@ref(fig:first-class-tree), the `predict()` function can be used. To use the `predict()` function, the primary argument is a model object, in this case the classification model object named `class_tree`. To get the predicted classes, that is the leaf nodes at the bottom of Figure \@ref(fig:first-class-tree), a second argument is needed, `type = 'class'` which tells the predict function to report the top line of the leaf nodes in Figure \@ref(fig:first-class-tree). These predicted classes are saved into a new attribute named `snow_predict`. Another element is also added that represent the probability of a particular day not snowing or snowing, these are reported in the columns `No` and `Yes` in the resulting output. 
+
 
 ```r
-titanic_predict <- titanic %>%
-  mutate(tree_predict = predict(prune_class_tree, type = 'class')) %>%
-  cbind(predict(prune_class_tree, type = 'prob'))
-head(titanic_predict, n = 20)
+us_weather_predict <- us_weather %>%
+  mutate(snow_predict = predict(class_tree, type = 'class')) %>%
+  cbind(predict(class_tree, type = 'prob'))
+head(us_weather_predict, n = 20)
 ```
 
-
-```r
-titanic_predict %>%
-  count(survived, tree_predict)
+```
+##        station                date dewpoint_avg drybulbtemp_avg
+## 1  72528014733 2018-10-01 23:59:00           51              52
+## 2  72528014733 2018-10-02 23:59:00           59              60
+## 3  72528014733 2018-10-03 23:59:00           55              62
+## 4  72528014733 2018-10-04 23:59:00           56              60
+## 5  72528014733 2018-10-05 23:59:00           43              51
+## 6  72528014733 2018-10-06 23:59:00           62              63
+## 7  72528014733 2018-10-07 23:59:00           58              60
+## 8  72528014733 2018-10-08 23:59:00           61              68
+## 9  72528014733 2018-10-09 23:59:00           66              77
+## 10 72528014733 2018-10-10 23:59:00           64              74
+## 11 72528014733 2018-10-11 23:59:00           56              62
+## 12 72528014733 2018-10-12 23:59:00           36              47
+## 13 72528014733 2018-10-13 23:59:00           36              46
+## 14 72528014733 2018-10-14 23:59:00           39              51
+## 15 72528014733 2018-10-15 23:59:00           43              49
+## 16 72528014733 2018-10-16 23:59:00           32              45
+## 17 72528014733 2018-10-17 23:59:00           34              45
+## 18 72528014733 2018-10-18 23:59:00           30              40
+## 19 72528014733 2018-10-19 23:59:00           38              50
+## 20 72528014733 2018-10-20 23:59:00           42              48
+##    relativehumidity_avg sealevelpressure_avg stationpressure_avg
+## 1                    95                30.26               29.50
+## 2                    96                30.01               29.26
+## 3                    86                30.05               29.31
+## 4                    77                29.97               29.18
+## 5                    75                30.17               29.41
+## 6                    90                30.03               29.28
+## 7                    97                30.24               29.44
+## 8                    84                30.23               29.49
+## 9                    72                30.13               29.39
+## 10                   70                29.89               29.18
+## 11                   77                29.66               28.91
+## 12                   66                29.82               29.05
+## 13                   74                29.95               29.15
+## 14                   69                30.12               29.34
+## 15                   79                29.94               29.16
+## 16                   61                30.06               29.31
+## 17                   66                30.02               29.21
+## 18                   68                30.37               29.59
+## 19                   63                30.00               29.28
+## 20                   86                29.68               28.90
+##    wetbulbtemp_avg windspeed_avg cooling_degree_days
+## 1               51          10.9                   0
+## 2               60           8.5                   0
+## 3               57           5.5                   0
+## 4               59          12.5                   0
+## 5               47           9.6                   0
+## 6               63           8.1                   0
+## 7               58           9.4                   0
+## 8               63           7.9                   3
+## 9               69          11.4                  12
+## 10              68          10.6                   9
+## 11              59          15.7                   0
+## 12              42          12.5                   0
+## 13              41           8.4                   0
+## 14              45           6.5                   0
+## 15              47          12.8                   0
+## 16              39          15.8                   0
+## 17              40          15.3                   0
+## 18              36          11.2                   0
+## 19              45          18.0                   0
+## 20              45          12.3                   0
+##    departure_from_normal_temperature heating_degree_days drybulbtemp_max
+## 1                               -4.6                  13              54
+## 2                                3.8                   5              69
+## 3                                6.2                   3              70
+## 4                                4.6                   5              74
+## 5                               -4.0                  14              58
+## 6                                8.4                   2              74
+## 7                                5.7                   5              67
+## 8                               14.1                   0              82
+## 9                               23.5                   0              83
+## 10                              20.9                   0              81
+## 11                               9.2                   3              74
+## 12                              -5.4                  18              51
+## 13                              -6.1                  19              51
+## 14                              -0.7                  14              60
+## 15                              -2.4                  16              58
+## 16                              -6.0                  20              52
+## 17                              -5.7                  20              53
+## 18                             -10.4                  25              47
+## 19                               0.0                  15              57
+## 20                              -1.7                  17              55
+##    drybulbtemp_min peak_wind_direction peak_wind_speed precipitation snow_depth
+## 1               50                  50              24         0.090          0
+## 2               51                 320              24         1.000          0
+## 3               53                 210              25         0.005          0
+## 4               46                 220              39         0.450          0
+## 5               44                 100              21         0.000          0
+## 6               51                 250              26         0.730          0
+## 7               53                  50              21         0.020          0
+## 8               53                  70              20         0.010          0
+## 9               70                 210              30         0.000          0
+## 10              67                 190              25         0.005          0
+## 11              50                 220              39         0.010          0
+## 12              42                 280              27         0.010          0
+## 13              40                 250              24         0.140          0
+## 14              41                 250              17         0.000          0
+## 15              40                 220              37         0.090          0
+## 16              38                 210              40         0.005          0
+## 17              36                 290              36         0.050          0
+## 18              33                 250              28         0.030          0
+## 19              43                 210              48         0.005          0
+## 20              40                 220              49         0.470          0
+##    snowfall wind_direction wind_speed weather_occurances sunrise sunset month
+## 1     0.000             60         20           RA DZ BR     612   1757   Oct
+## 2     0.000            320         21           RA DZ BR     613   1755   Oct
+## 3     0.000            200         20              DZ BR     614   1753   Oct
+## 4     0.000            220         32           TS RA BR     615   1751   Oct
+## 5     0.000             70         16               <NA>     616   1750   Oct
+## 6     0.000            200         20           TS RA BR     618   1748   Oct
+## 7     0.000             60         16           RA DZ BR     619   1746   Oct
+## 8     0.000             70         16                 RA     620   1744   Oct
+## 9     0.000            210         23               <NA>     621   1743   Oct
+## 10    0.000            190         21               <NA>     622   1741   Oct
+## 11    0.000            240         29                 RA     623   1739   Oct
+## 12    0.000            260         21                 RA     625   1738   Oct
+## 13    0.000            240         18              RA BR     626   1736   Oct
+## 14    0.000            250         14               <NA>     627   1734   Oct
+## 15    0.000            290         28              RA BR     628   1733   Oct
+## 16    0.000            220         30                 RA     629   1731   Oct
+## 17    0.005            290         28           GR RA SN     631   1729   Oct
+## 18    0.005            240         21           RA SN HZ     632   1728   Oct
+## 19    0.000            240         35                 RA     633   1726   Oct
+## 20    0.100            240         36     TS GR RA BR PL     634   1725   Oct
+##    month_numeric year day winter_group    location fog mist drizzle rain snow
+## 1             10 2018   1        18_19 Buffalo, NY  No  Yes     Yes  Yes   No
+## 2             10 2018   2        18_19 Buffalo, NY  No  Yes     Yes  Yes   No
+## 3             10 2018   3        18_19 Buffalo, NY  No  Yes     Yes   No   No
+## 4             10 2018   4        18_19 Buffalo, NY  No  Yes      No  Yes   No
+## 5             10 2018   5        18_19 Buffalo, NY  No   No      No   No   No
+## 6             10 2018   6        18_19 Buffalo, NY  No  Yes      No  Yes   No
+## 7             10 2018   7        18_19 Buffalo, NY  No  Yes     Yes  Yes   No
+## 8             10 2018   8        18_19 Buffalo, NY  No   No      No  Yes   No
+## 9             10 2018   9        18_19 Buffalo, NY  No   No      No   No   No
+## 10            10 2018  10        18_19 Buffalo, NY  No   No      No   No   No
+## 11            10 2018  11        18_19 Buffalo, NY  No   No      No  Yes   No
+## 12            10 2018  12        18_19 Buffalo, NY  No   No      No  Yes   No
+## 13            10 2018  13        18_19 Buffalo, NY  No  Yes      No  Yes   No
+## 14            10 2018  14        18_19 Buffalo, NY  No   No      No   No   No
+## 15            10 2018  15        18_19 Buffalo, NY  No  Yes      No  Yes   No
+## 16            10 2018  16        18_19 Buffalo, NY  No   No      No  Yes   No
+## 17            10 2018  17        18_19 Buffalo, NY  No   No      No  Yes  Yes
+## 18            10 2018  18        18_19 Buffalo, NY  No   No      No  Yes  Yes
+## 19            10 2018  19        18_19 Buffalo, NY  No   No      No  Yes   No
+## 20            10 2018  20        18_19 Buffalo, NY  No  Yes      No  Yes   No
+##    snow_factor snow_predict        No        Yes
+## 1           No           No 0.9130676 0.08693245
+## 2           No           No 0.9130676 0.08693245
+## 3           No           No 0.9130676 0.08693245
+## 4           No           No 0.9130676 0.08693245
+## 5           No           No 0.9130676 0.08693245
+## 6           No           No 0.9130676 0.08693245
+## 7           No           No 0.9130676 0.08693245
+## 8           No           No 0.9130676 0.08693245
+## 9           No           No 0.9130676 0.08693245
+## 10          No           No 0.9130676 0.08693245
+## 11          No           No 0.9130676 0.08693245
+## 12          No           No 0.9130676 0.08693245
+## 13          No           No 0.9130676 0.08693245
+## 14          No           No 0.9130676 0.08693245
+## 15          No           No 0.9130676 0.08693245
+## 16          No           No 0.9130676 0.08693245
+## 17         Yes           No 0.9130676 0.08693245
+## 18         Yes           No 0.9130676 0.08693245
+## 19          No           No 0.9130676 0.08693245
+## 20          No           No 0.9130676 0.08693245
 ```
 
+The first 20 rows of the resulting data are shown. Notice that for all of these 20 rows, the predicted class, shown in the attribute, `snow_predict`, are represented as "No" indicating that these days it was not predicted to snow. Notice toward the bottom however, that there were two days in which it did in fact snow, shown in the column named, `snow_factor`. These would represent two cases of misclassification as the observed data is not the same as the model predicted class. Finally, the probabilities shown in the last two attribute columns are all the same here. These are all the same as the maximum dry bulb temperature was greater than 42 degrees Fahrenheit in all of these days. Therefore, all 20 of the cases shown in the data here represent the left-most leaf node shown in Figure \@ref(fig:first-class-tree). 
+
+Now that the observed data and the model predicted classes are in the data, it is possible to produce a table that shows how many observations were correctly predicted (indicating better model accuracy). To do this, the `count()` function can be used where the observed and predicted class attributes are passed as arguments. 
+
 
 ```r
-gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict)
+us_weather_predict %>%
+  count(snow_factor, snow_predict)
 ```
 
-
-```r
-gf_bar(~ survived, fill = ~tree_predict, data = titanic_predict, position = "fill") %>%
-  gf_labs(y = 'Proportion') %>%
-  gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
+```
+##   snow_factor snow_predict    n
+## 1          No           No 2147
+## 2          No          Yes  245
+## 3         Yes           No  529
+## 4         Yes          Yes  479
 ```
 
+The resulting table shows the observed data values in the left-most column (`snow_factor`) followed by the predicted class (`snow_predict`) in the middle column. The final column represents the number of rows or observations that were in each combination of the first two columns. For example, the first row shows that 2,147 observations were counted that had the combination where it was observed and predicted to have not snowed that day. These 2,147 observations would be instances of correct classification. The second row shows that 245 observations occurred where it was observed to not have snowed, but the model predicted it would snow that day. All of the 245 observations were misclassified based on the classification model. 
+
+From this table, the overall model accuracy can be calculated by summing up the cases that matched and dividing by the total number of observations. This computation would look like:
+$$
+accuracy = \frac{\textrm{matching predictions}}{\textrm{total observations}} = \frac{(2147 + 479)}{(2147 + 245 + 529 + 479)} = .772 = 77.2%
+$$
+This means that the overall classification accuracy for this example was just over 77%, meaning that about 77% of days the model was able to correctly classify whether it snowed or not. This computation can also be done programmatically. To do this, a new attribute named, `same_class`, can be added to the data that is given a value of 1 if the observed data matches the predicted class and a value of 0 otherwise. Descriptive statistics, such as the mean and sum, can be computed on this new vector to represent the accuracy as a proportion and the number of matching predictions (the numerator shown in the equation above). 
+
 
 ```r
-titanic_predict %>%
-  mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
+us_weather_predict %>%
+  mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0)) %>%
   df_stats(~ same_class, mean, sum)
 ```
 
+```
+##     response      mean  sum
+## 1 same_class 0.7723529 2626
+```
+
+Notice that the same model accuracy was found, about 77.2%, and the number of observations (i.e., days) that the correct classification was found was 2,626 days. Is correctly predicting 77.2% of the days good? That is, would you say this model is doing a good job at accurately predicting if it will snow or not on that day? 
+
+#### Conditional Accuracy
+
+One potential misleading element of simply computing the overall model accuracy as done above, is that the accuracy will likely differ based on the which class. This could occur for a few reasons, one it could be more difficult to predict one of the classes due to similarities in data across the two classes. The two classes are also often unbalanced, therefore exploring the overall model accuracy will give more weight to the group/class that has more data. In addition, this group has more data so it could make it a bit easier for the model to predict, these issues could be exacerbated in small sample conditions. 
+
+Therefore, similar to earlier discussion in the book about multivariate distributions, it is often important to consider conditional or multivariate accuracy instead of the overall model accuracy. Let's explore this a different way than simply computing a percentage, instead we could use a bar graph to explore the model accuracy. Figure \@ref(fig:bar-accuracy-count) shows the number of correct classifications for the two observed data classes (i.e., snow or did not snow) on the x-axis by the predicted classes shown with the fill color in the bars. The fill color are red for days that the model predicts it will not show and green/blue for days in which it will not snow. Therefore, accuracy would be represented in the left-bar by the red portion of the bar and the right-bar by the green/blue portion of the bar. 
 
 
+```r
+gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict) %>%
+  gf_labs(x = "Observed Snow Status",
+          fill = "Predicted Snow Status")
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/bar-accuracy-count-1.png" alt="A bar graph showing the conditional prediction accuracy represented as counts." width="672" />
+<p class="caption">(\#fig:bar-accuracy-count)A bar graph showing the conditional prediction accuracy represented as counts.</p>
+</div>
+
+Figure \@ref(fig:bar-accuracy-count) is not a very good picture to depict accuracy as the two groups have different numbers of observations so comparisons between the bars is difficult. Secondly, the count metric makes it difficult to estimate how many are in each group, for example, it is difficult from the figure alone to know how many were incorrectly classified in the left-most bar represented by the blue/green color. These issues can be fixed by adding an additional argument, `position = 'fill'` which will scale each bar as a proportion, ranging from 0 to 1. The bar graph is now scaling each bar based on the sample size to normalize sample size differences. 
+
+
+```r
+gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict, position = "fill") %>%
+  gf_labs(x = "Observed Snow Status",
+          fill = "Predicted Snow Status",
+          y = 'Proportion') %>%
+  gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/bar-accuracy-fill-1.png" alt="A bar graph showing the conditional prediction accuracy represented as a proportion." width="672" />
+<p class="caption">(\#fig:bar-accuracy-fill)A bar graph showing the conditional prediction accuracy represented as a proportion.</p>
+</div>
+
+From this new figure (Figure \@ref(fig:bar-accuracy-fill)), it is much easier to estimate the prediction accuracy from the figure. For example, the green/blue portion of the left-most bar is at about 0.10, meaning that about 10% of the cases are misclassified and 90% would be correctly classified. Therefore the classification accuracy for days in which it did not snow would be about 90%. Compare this to days in which it did not snow (the right bar), where the prediction accuracy represented by the green/blue color is about 48%, meaning that the misclassification rate is about 52%. 
+
+Let's recalibrate how we think the model is doing? If you were just given the overall classification rate of about 77%, how did you feel about the model? Now that we know the model accurate predicts it won't snow about 90% of the time, but can only identify that it will snow about 48% of the time, how well do you feel the model is performing now? Would you feel comfortable using this model in the real world? 
+
+One last note, we can also compute the conditional model accuracy more directly using the `df_stats()` function as was done for the overall model accuracy. The primary difference in the code is to specify the `same_class` attribute to the left of the `~`. This represent the attribute to compute the statistics of interest with. Another attribute is added to the right of the `~` to represent the attribute to condition on, in this case the observed data point of whether it snowed or not. 
+
+
+```r
+us_weather_predict %>%
+  mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0)) %>%
+  df_stats(same_class ~ snow_factor, mean, sum, length)
+```
+
+```
+##     response snow_factor      mean  sum length
+## 1 same_class          No 0.8975753 2147   2392
+## 2 same_class         Yes 0.4751984  479   1008
+```
+
+The output returns the conditional model accuracy as a proportion, the number of correct classifications for each class/group, and the total number of observations (both correct and incorrect classifications) for each class/group. The estimated values we had from the figure were very close to the actual calculated values, but we find the figure to be more engaging than just the statistics. 
+
+
+<!--
 ### Comparison to Baseline
 
 
