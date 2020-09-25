@@ -68,7 +68,7 @@ resample_admrate_median <- function(...) {
 
   med_est <- college_resample %>%
     df_stats(adm_rate ~ preddeg, median) %>%
-    spread(preddeg, median_adm_rate)
+    pivot_wider(names_from = preddeg, values_from = median_adm_rate)
 
   names(med_est) <- c("Associate", "Bachelor", "Certificate")
   
