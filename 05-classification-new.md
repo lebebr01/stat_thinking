@@ -406,7 +406,8 @@ Figure \@ref(fig:bar-accuracy-count) is not a very good picture to depict accura
 
 
 ```r
-gf_bar(~ snow_factor, fill = ~snow_predict, data = us_weather_predict, position = "fill") %>%
+gf_bar(~ snow_factor, fill = ~snow_predict, 
+       data = us_weather_predict, position = "fill") %>%
   gf_labs(x = "Observed Snow Status",
           fill = "Predicted Snow Status",
           y = 'Proportion') %>%
@@ -438,6 +439,146 @@ us_weather_predict %>%
 ```
 
 The output returns the conditional model accuracy as a proportion, the number of correct classifications for each class/group, and the total number of observations (both correct and incorrect classifications) for each class/group. The estimated values we had from the figure were very close to the actual calculated values, but we find the figure to be more engaging than just the statistics. 
+
+## Adding Categorical Attributes
+Up to now, the classification models have only used continuous attributes, that is, those that take on many different data values rather than a few specific values that represent categories or groups. Classification models do not need to be limited to only continuous attributes to predict the binary outcome. The model may also add some additional predictive power and accuracy with the inclusion of more attributes.
+
+For example, one attribute that may be helpful in this context to predict whether it will snow on a given day could be the month of year. The data used here are from the fall, winter, and spring seasons, therefore it is likely true that it would be more likely to snow in the winter months rather than fall or spring. Prior to including in the model, this can be visualized. Figure \@ref(fig:snow-month) shows a bar chart that represents the proportion of days in which it tends to snow the most. You may notice that it does snow on some days in every month, however, the frequency is much higher in January and February. As the proportion of days that it snows during different months of the year, this attribute could be helpful in predicting days in which it snows.
+
+
+```r
+gf_bar(~ month, fill = ~ snow, data = us_weather, position = 'fill') %>%
+  gf_labs(x = "", 
+          y = "Proportion of days with snow",
+          fill = "Snow?")
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/snow-month-1.png" alt="Bar chart showing the proportion of days that is snows across months" width="672" />
+<p class="caption">(\#fig:snow-month)Bar chart showing the proportion of days that is snows across months</p>
+</div>
+
+To add this attribute to the classification model, the model formula is extended to the right of the `~` to add `+ month`. Note, this model is saved to the model object, `class_tree_month`, and the remaining code is the same as the previous model fitted with the two continuous attributes. 
+
+
+```r
+class_tree_month <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max + month, 
+   method = 'class', data = us_weather)
+
+rpart.plot(class_tree_month, roundint = FALSE, type = 3, branch = .3)
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/class-categorical-1.png" alt="The classification model with the month attribute added as a categorical attribute." width="672" />
+<p class="caption">(\#fig:class-categorical)The classification model with the month attribute added as a categorical attribute.</p>
+</div>
+
+The fitted model classification results are shown in Figure \@ref(fig:class-categorical). Notice that month does not show up in the figure of the classification tree and Figure \@ref(fig:class-categorical) is identical to Figure \@ref(fig:first-class-tree). Why is this happening and what does this mean? 
+
+To understand what is happening, we need to think about temperature and how that may be related to the month of the year. In the United States, particularly in northern locations as those with the data used here, the temperature varies quite substantially by the month of the year. Figure \@ref(fig:temp-month) shows the maximum daily temperature by the months of the year. Notice there is overlap in adjacent months, but the median for many of the months of the year are quite different from other months. This suggests that temperature can serve as a proxy for month and contain overlapping information. Not shown here, but a similar trend would likely be shown for the minimum daily temperature. 
+
+
+```r
+gf_violin(drybulbtemp_max ~ month, data = us_weather, 
+          fill = 'gray85', draw_quantiles = c(0.1, 0.5, 0.9)) %>%
+  gf_labs(x = "",
+          y = "Maximum daily temperature (in Fahrenheit)") %>%
+  gf_refine(coord_flip())
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/temp-month-1.png" alt="Violin plots of the maximum temperature by month of the year" width="672" />
+<p class="caption">(\#fig:temp-month)Violin plots of the maximum temperature by month of the year</p>
+</div>
+
+For this reason, month does not show up in the model because the classification model determined that the maximum and minimum daily temperatures were more useful at predicting whether it will snow on a particular day. This highlights an important point with these classification models, only the attributes that are the most helpful in predicting the outcome will show up in the final classification model. If an attribute is not helpful, it will not show up in the classification results. As such, the model that included month had the same classification tree and will result in the same predictions as the model fitted without month in it. With the same predictions, the same model accuracy will also be obtained. 
+
+### Exploring Location
+
+Another categorical attribute that is in the data is the location of the weather observation. These locations are across a variety of geographic locations within the northern part of the United States, including areas close to the Canadian border, others are in the northeast portion of the United States as well. Thus, location could be important, and maybe this would include additional information over and above that of just temperature. Figure \@ref(fig:snow-location) shows a bar chart that explores if some locations are more likely to have snow. The figure shows that Buffalo, Duluth, and Minneapolis all tend to have more days where it snows.
+
+
+```r
+gf_bar(~ location, fill = ~ snow, data = us_weather, position = 'fill') %>%
+  gf_labs(x = "", 
+          y = "Proportion of days with snow",
+          fill = "Snow?")
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/snow-location-1.png" alt="Bar chart showing the proportion of days that is snows across locations" width="672" />
+<p class="caption">(\#fig:snow-location)Bar chart showing the proportion of days that is snows across locations</p>
+</div>
+
+We can also explore if the temperature is located to the location to determine if there is overlapping information in these. Recall, Buffalo, Duluth, and Minneapolis had evidence of higher days when it snowed, but notice from Figure \@ref(fig:temp-location), that Duluth has a lower temperature than the rest, but Minneapolis and Buffalo have similar maximum daily temperatures to the other locations. The location may carry some additional information that would be informative to the classification model. 
+
+
+```r
+gf_violin(drybulbtemp_max ~ location, data = us_weather, 
+          fill = 'gray85', draw_quantiles = c(0.1, 0.5, 0.9)) %>%
+  gf_labs(x = "",
+          y = "Maximum daily temperature (in Fahrenheit)") %>%
+  gf_refine(coord_flip())
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/temp-location-1.png" alt="Violin plots of the maximum temperature by location" width="672" />
+<p class="caption">(\#fig:temp-location)Violin plots of the maximum temperature by location</p>
+</div>
+
+The location attribute is added similarly to the model as month was. Note, the month attribute was removed as it was not deemed to be a useful attribute to help understand if it snows on a given day. The model results are shown in Figure \@ref(fig:class-location). Notice that now the maximum daily temperature is still included at two separate locations, but now instead of the minimum daily temperature, location is now more important. As such, the minimum daily temperature is not located in the classification tree. 
+
+
+```r
+class_tree_location <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max + location, 
+   method = 'class', data = us_weather)
+
+rpart.plot(class_tree_location, roundint = FALSE, type = 3, branch = .3)
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/class-location-1.png" alt="The classification model with the location attribute added as a categorical attribute." width="672" />
+<p class="caption">(\#fig:class-location)The classification model with the location attribute added as a categorical attribute.</p>
+</div>
+
+When there is a split for a categorical attribute, the category split does not occur at a value like with continuous attributes, rather the split occurs for one or more categories. For example, for the second split in the latest results, if the location is Buffalo, Detroit, or Duluth, then the path progresses to the right to the "Yes" category representing a prediction of it will snow. The other locations continue to the left of that split, then maximum daily temperature is useful again, and then finally the final split is the location again. Now, the location attribute does not contain Buffalo, Detroit, or Duluth, but contains the other groups. In this case, those locations of Chicago and Minneapolis result in predictions that it will snow and other locations that it will not snow. 
+
+#### Accuracy
+As the attributes used in the model differ, the accuracy could be different. Therefore, it is important to explore model accuracy again. Figure \@ref(fig:location-accuracy) shows the classification results. These results can be compared to Figure \@ref(fig:bar-accuracy-fill). There are two major differences, one, the prediction accuracy for days in which it did not snow decreased slightly (left bar), but the prediction accuracy for days where it did snow the accuracy increased (right bar). 
+
+
+```r
+us_weather_predict <- us_weather_predict %>%
+  mutate(snow_predict_location = predict(class_tree_location, type = 'class'))
+
+gf_bar(~ snow_factor, fill = ~snow_predict_location, 
+       data = us_weather_predict, position = 'fill') %>%
+  gf_labs(x = "Observed Snow Status",
+          fill = "Predicted Snow Status") %>%
+  gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
+```
+
+<div class="figure">
+<img src="05-classification-new_files/figure-html/location-accuracy-1.png" alt="Bar chart showing model accuracy with location attribute included." width="672" />
+<p class="caption">(\#fig:location-accuracy)Bar chart showing model accuracy with location attribute included.</p>
+</div>
+
+The prediction accuracy can also be computed analytically with the `df_stats()` function. 
+
+
+```r
+us_weather_predict %>%
+  mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0),
+    same_class_location = ifelse(snow_factor == snow_predict_location, 1, 0)) %>%
+  df_stats(same_class_location ~ snow_factor, mean, sum, length)
+```
+
+```
+##              response snow_factor      mean  sum length
+## 1 same_class_location          No 0.8599498 2057   2392
+## 2 same_class_location         Yes 0.6220238  627   1008
+```
+
 
 
 <!--

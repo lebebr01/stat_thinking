@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2020-09-25" />
+<meta name="date" content="2020-09-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -213,6 +213,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.2</b> Accuracy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="classification.html"><a href="classification.html#adding-categorical-attributes"><i class="fa fa-check"></i><b>5.2</b> Adding Categorical Attributes</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="classification.html"><a href="classification.html#exploring-location"><i class="fa fa-check"></i><b>5.2.1</b> Exploring Location</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a>
@@ -607,11 +611,12 @@ Figure 5.4: A bar graph showing the conditional prediction accuracy represented 
 </p>
 </div>
 <p>Figure <a href="classification.html#fig:bar-accuracy-count">5.4</a> is not a very good picture to depict accuracy as the two groups have different numbers of observations so comparisons between the bars is difficult. Secondly, the count metric makes it difficult to estimate how many are in each group, for example, it is difficult from the figure alone to know how many were incorrectly classified in the left-most bar represented by the blue/green color. These issues can be fixed by adding an additional argument, <code>position = 'fill'</code> which will scale each bar as a proportion, ranging from 0 to 1. The bar graph is now scaling each bar based on the sample size to normalize sample size differences.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="classification.html#cb108-1" aria-hidden="true"></a><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>snow_factor, <span class="dt">fill =</span> <span class="op">~</span>snow_predict, <span class="dt">data =</span> us_weather_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb108-2"><a href="classification.html#cb108-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Observed Snow Status&quot;</span>,</span>
-<span id="cb108-3"><a href="classification.html#cb108-3" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;Predicted Snow Status&quot;</span>,</span>
-<span id="cb108-4"><a href="classification.html#cb108-4" aria-hidden="true"></a>          <span class="dt">y =</span> <span class="st">&#39;Proportion&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb108-5"><a href="classification.html#cb108-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">.1</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="classification.html#cb108-1" aria-hidden="true"></a><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>snow_factor, <span class="dt">fill =</span> <span class="op">~</span>snow_predict, </span>
+<span id="cb108-2"><a href="classification.html#cb108-2" aria-hidden="true"></a>       <span class="dt">data =</span> us_weather_predict, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb108-3"><a href="classification.html#cb108-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Observed Snow Status&quot;</span>,</span>
+<span id="cb108-4"><a href="classification.html#cb108-4" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;Predicted Snow Status&quot;</span>,</span>
+<span id="cb108-5"><a href="classification.html#cb108-5" aria-hidden="true"></a>          <span class="dt">y =</span> <span class="st">&#39;Proportion&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb108-6"><a href="classification.html#cb108-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">.1</span>)))</span></code></pre></div>
 <div class="figure"><span id="fig:bar-accuracy-fill"></span>
 <img src="05-classification-new_files/figure-html/bar-accuracy-fill-1.png" alt="A bar graph showing the conditional prediction accuracy represented as a proportion." width="672" />
 <p class="caption">
@@ -628,6 +633,110 @@ Figure 5.5: A bar graph showing the conditional prediction accuracy represented 
 ## 1 same_class          No 0.8975753 2147   2392
 ## 2 same_class         Yes 0.4751984  479   1008</code></pre>
 <p>The output returns the conditional model accuracy as a proportion, the number of correct classifications for each class/group, and the total number of observations (both correct and incorrect classifications) for each class/group. The estimated values we had from the figure were very close to the actual calculated values, but we find the figure to be more engaging than just the statistics.</p>
+</div>
+</div>
+</div>
+<div id="adding-categorical-attributes" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Adding Categorical Attributes</h2>
+<p>Up to now, the classification models have only used continuous attributes, that is, those that take on many different data values rather than a few specific values that represent categories or groups. Classification models do not need to be limited to only continuous attributes to predict the binary outcome. The model may also add some additional predictive power and accuracy with the inclusion of more attributes.</p>
+<p>For example, one attribute that may be helpful in this context to predict whether it will snow on a given day could be the month of year. The data used here are from the fall, winter, and spring seasons, therefore it is likely true that it would be more likely to snow in the winter months rather than fall or spring. Prior to including in the model, this can be visualized. Figure <a href="classification.html#fig:snow-month">5.6</a> shows a bar chart that represents the proportion of days in which it tends to snow the most. You may notice that it does snow on some days in every month, however, the frequency is much higher in January and February. As the proportion of days that it snows during different months of the year, this attribute could be helpful in predicting days in which it snows.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="classification.html#cb111-1" aria-hidden="true"></a><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>month, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">position =</span> <span class="st">&#39;fill&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb111-2"><a href="classification.html#cb111-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb111-3"><a href="classification.html#cb111-3" aria-hidden="true"></a>          <span class="dt">y =</span> <span class="st">&quot;Proportion of days with snow&quot;</span>,</span>
+<span id="cb111-4"><a href="classification.html#cb111-4" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;Snow?&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:snow-month"></span>
+<img src="05-classification-new_files/figure-html/snow-month-1.png" alt="Bar chart showing the proportion of days that is snows across months" width="672" />
+<p class="caption">
+Figure 5.6: Bar chart showing the proportion of days that is snows across months
+</p>
+</div>
+<p>To add this attribute to the classification model, the model formula is extended to the right of the <code>~</code> to add <code>+ month</code>. Note, this model is saved to the model object, <code>class_tree_month</code>, and the remaining code is the same as the previous model fitted with the two continuous attributes.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="classification.html#cb112-1" aria-hidden="true"></a>class_tree_month &lt;-<span class="st"> </span><span class="kw">rpart</span>(snow_factor <span class="op">~</span><span class="st"> </span>drybulbtemp_min <span class="op">+</span><span class="st"> </span>drybulbtemp_max <span class="op">+</span><span class="st"> </span>month, </span>
+<span id="cb112-2"><a href="classification.html#cb112-2" aria-hidden="true"></a>   <span class="dt">method =</span> <span class="st">&#39;class&#39;</span>, <span class="dt">data =</span> us_weather)</span>
+<span id="cb112-3"><a href="classification.html#cb112-3" aria-hidden="true"></a></span>
+<span id="cb112-4"><a href="classification.html#cb112-4" aria-hidden="true"></a><span class="kw">rpart.plot</span>(class_tree_month, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> <span class="fl">.3</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:class-categorical"></span>
+<img src="05-classification-new_files/figure-html/class-categorical-1.png" alt="The classification model with the month attribute added as a categorical attribute." width="672" />
+<p class="caption">
+Figure 5.7: The classification model with the month attribute added as a categorical attribute.
+</p>
+</div>
+<p>The fitted model classification results are shown in Figure <a href="classification.html#fig:class-categorical">5.7</a>. Notice that month does not show up in the figure of the classification tree and Figure <a href="classification.html#fig:class-categorical">5.7</a> is identical to Figure <a href="classification.html#fig:first-class-tree">5.1</a>. Why is this happening and what does this mean?</p>
+<p>To understand what is happening, we need to think about temperature and how that may be related to the month of the year. In the United States, particularly in northern locations as those with the data used here, the temperature varies quite substantially by the month of the year. Figure <a href="classification.html#fig:temp-month">5.8</a> shows the maximum daily temperature by the months of the year. Notice there is overlap in adjacent months, but the median for many of the months of the year are quite different from other months. This suggests that temperature can serve as a proxy for month and contain overlapping information. Not shown here, but a similar trend would likely be shown for the minimum daily temperature.</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="classification.html#cb113-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>month, <span class="dt">data =</span> us_weather, </span>
+<span id="cb113-2"><a href="classification.html#cb113-2" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb113-3"><a href="classification.html#cb113-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb113-4"><a href="classification.html#cb113-4" aria-hidden="true"></a>          <span class="dt">y =</span> <span class="st">&quot;Maximum daily temperature (in Fahrenheit)&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb113-5"><a href="classification.html#cb113-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
+<div class="figure"><span id="fig:temp-month"></span>
+<img src="05-classification-new_files/figure-html/temp-month-1.png" alt="Violin plots of the maximum temperature by month of the year" width="672" />
+<p class="caption">
+Figure 5.8: Violin plots of the maximum temperature by month of the year
+</p>
+</div>
+<p>For this reason, month does not show up in the model because the classification model determined that the maximum and minimum daily temperatures were more useful at predicting whether it will snow on a particular day. This highlights an important point with these classification models, only the attributes that are the most helpful in predicting the outcome will show up in the final classification model. If an attribute is not helpful, it will not show up in the classification results. As such, the model that included month had the same classification tree and will result in the same predictions as the model fitted without month in it. With the same predictions, the same model accuracy will also be obtained.</p>
+<div id="exploring-location" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Exploring Location</h3>
+<p>Another categorical attribute that is in the data is the location of the weather observation. These locations are across a variety of geographic locations within the northern part of the United States, including areas close to the Canadian border, others are in the northeast portion of the United States as well. Thus, location could be important, and maybe this would include additional information over and above that of just temperature. Figure <a href="classification.html#fig:snow-location">5.9</a> shows a bar chart that explores if some locations are more likely to have snow. The figure shows that Buffalo, Duluth, and Minneapolis all tend to have more days where it snows.</p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="classification.html#cb114-1" aria-hidden="true"></a><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>location, <span class="dt">fill =</span> <span class="op">~</span><span class="st"> </span>snow, <span class="dt">data =</span> us_weather, <span class="dt">position =</span> <span class="st">&#39;fill&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb114-2"><a href="classification.html#cb114-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb114-3"><a href="classification.html#cb114-3" aria-hidden="true"></a>          <span class="dt">y =</span> <span class="st">&quot;Proportion of days with snow&quot;</span>,</span>
+<span id="cb114-4"><a href="classification.html#cb114-4" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;Snow?&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:snow-location"></span>
+<img src="05-classification-new_files/figure-html/snow-location-1.png" alt="Bar chart showing the proportion of days that is snows across locations" width="672" />
+<p class="caption">
+Figure 5.9: Bar chart showing the proportion of days that is snows across locations
+</p>
+</div>
+<p>We can also explore if the temperature is located to the location to determine if there is overlapping information in these. Recall, Buffalo, Duluth, and Minneapolis had evidence of higher days when it snowed, but notice from Figure <a href="classification.html#fig:temp-location">5.10</a>, that Duluth has a lower temperature than the rest, but Minneapolis and Buffalo have similar maximum daily temperatures to the other locations. The location may carry some additional information that would be informative to the classification model.</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="classification.html#cb115-1" aria-hidden="true"></a><span class="kw">gf_violin</span>(drybulbtemp_max <span class="op">~</span><span class="st"> </span>location, <span class="dt">data =</span> us_weather, </span>
+<span id="cb115-2"><a href="classification.html#cb115-2" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb115-3"><a href="classification.html#cb115-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb115-4"><a href="classification.html#cb115-4" aria-hidden="true"></a>          <span class="dt">y =</span> <span class="st">&quot;Maximum daily temperature (in Fahrenheit)&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb115-5"><a href="classification.html#cb115-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
+<div class="figure"><span id="fig:temp-location"></span>
+<img src="05-classification-new_files/figure-html/temp-location-1.png" alt="Violin plots of the maximum temperature by location" width="672" />
+<p class="caption">
+Figure 5.10: Violin plots of the maximum temperature by location
+</p>
+</div>
+<p>The location attribute is added similarly to the model as month was. Note, the month attribute was removed as it was not deemed to be a useful attribute to help understand if it snows on a given day. The model results are shown in Figure <a href="classification.html#fig:class-location">5.11</a>. Notice that now the maximum daily temperature is still included at two separate locations, but now instead of the minimum daily temperature, location is now more important. As such, the minimum daily temperature is not located in the classification tree.</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="classification.html#cb116-1" aria-hidden="true"></a>class_tree_location &lt;-<span class="st"> </span><span class="kw">rpart</span>(snow_factor <span class="op">~</span><span class="st"> </span>drybulbtemp_min <span class="op">+</span><span class="st"> </span>drybulbtemp_max <span class="op">+</span><span class="st"> </span>location, </span>
+<span id="cb116-2"><a href="classification.html#cb116-2" aria-hidden="true"></a>   <span class="dt">method =</span> <span class="st">&#39;class&#39;</span>, <span class="dt">data =</span> us_weather)</span>
+<span id="cb116-3"><a href="classification.html#cb116-3" aria-hidden="true"></a></span>
+<span id="cb116-4"><a href="classification.html#cb116-4" aria-hidden="true"></a><span class="kw">rpart.plot</span>(class_tree_location, <span class="dt">roundint =</span> <span class="ot">FALSE</span>, <span class="dt">type =</span> <span class="dv">3</span>, <span class="dt">branch =</span> <span class="fl">.3</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:class-location"></span>
+<img src="05-classification-new_files/figure-html/class-location-1.png" alt="The classification model with the location attribute added as a categorical attribute." width="672" />
+<p class="caption">
+Figure 5.11: The classification model with the location attribute added as a categorical attribute.
+</p>
+</div>
+<p>When there is a split for a categorical attribute, the category split does not occur at a value like with continuous attributes, rather the split occurs for one or more categories. For example, for the second split in the latest results, if the location is Buffalo, Detroit, or Duluth, then the path progresses to the right to the “Yes” category representing a prediction of it will snow. The other locations continue to the left of that split, then maximum daily temperature is useful again, and then finally the final split is the location again. Now, the location attribute does not contain Buffalo, Detroit, or Duluth, but contains the other groups. In this case, those locations of Chicago and Minneapolis result in predictions that it will snow and other locations that it will not snow.</p>
+<div id="accuracy-1" class="section level4" number="5.2.1.1">
+<h4><span class="header-section-number">5.2.1.1</span> Accuracy</h4>
+<p>As the attributes used in the model differ, the accuracy could be different. Therefore, it is important to explore model accuracy again. Figure <a href="classification.html#fig:location-accuracy">5.12</a> shows the classification results. These results can be compared to Figure <a href="classification.html#fig:bar-accuracy-fill">5.5</a>. There are two major differences, one, the prediction accuracy for days in which it did not snow decreased slightly (left bar), but the prediction accuracy for days where it did snow the accuracy increased (right bar).</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="classification.html#cb117-1" aria-hidden="true"></a>us_weather_predict &lt;-<span class="st"> </span>us_weather_predict <span class="op">%&gt;%</span></span>
+<span id="cb117-2"><a href="classification.html#cb117-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">snow_predict_location =</span> <span class="kw">predict</span>(class_tree_location, <span class="dt">type =</span> <span class="st">&#39;class&#39;</span>))</span>
+<span id="cb117-3"><a href="classification.html#cb117-3" aria-hidden="true"></a></span>
+<span id="cb117-4"><a href="classification.html#cb117-4" aria-hidden="true"></a><span class="kw">gf_bar</span>(<span class="op">~</span><span class="st"> </span>snow_factor, <span class="dt">fill =</span> <span class="op">~</span>snow_predict_location, </span>
+<span id="cb117-5"><a href="classification.html#cb117-5" aria-hidden="true"></a>       <span class="dt">data =</span> us_weather_predict, <span class="dt">position =</span> <span class="st">&#39;fill&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb117-6"><a href="classification.html#cb117-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Observed Snow Status&quot;</span>,</span>
+<span id="cb117-7"><a href="classification.html#cb117-7" aria-hidden="true"></a>          <span class="dt">fill =</span> <span class="st">&quot;Predicted Snow Status&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb117-8"><a href="classification.html#cb117-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">.1</span>)))</span></code></pre></div>
+<div class="figure"><span id="fig:location-accuracy"></span>
+<img src="05-classification-new_files/figure-html/location-accuracy-1.png" alt="Bar chart showing model accuracy with location attribute included." width="672" />
+<p class="caption">
+Figure 5.12: Bar chart showing model accuracy with location attribute included.
+</p>
+</div>
+<p>The prediction accuracy can also be computed analytically with the <code>df_stats()</code> function.</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="classification.html#cb118-1" aria-hidden="true"></a>us_weather_predict <span class="op">%&gt;%</span></span>
+<span id="cb118-2"><a href="classification.html#cb118-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">same_class =</span> <span class="kw">ifelse</span>(snow_factor <span class="op">==</span><span class="st"> </span>snow_predict, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb118-3"><a href="classification.html#cb118-3" aria-hidden="true"></a>    <span class="dt">same_class_location =</span> <span class="kw">ifelse</span>(snow_factor <span class="op">==</span><span class="st"> </span>snow_predict_location, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb118-4"><a href="classification.html#cb118-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">df_stats</span>(same_class_location <span class="op">~</span><span class="st"> </span>snow_factor, mean, sum, length)</span></code></pre></div>
+<pre><code>##              response snow_factor      mean  sum length
+## 1 same_class_location          No 0.8599498 2057   2392
+## 2 same_class_location         Yes 0.6220238  627   1008</code></pre>
 <!--
 ### Comparison to Baseline
 
