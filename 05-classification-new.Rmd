@@ -20,7 +20,8 @@ library(parttree)
 # Add plot theme
 theme_set(theme_statthinking())
 
-us_weather <- mutate(us_weather, snow_factor = factor(snow))
+us_weather <- mutate(us_weather, snow_factor = factor(snow), 
+                     snow_numeric = ifelse(snow == 'Yes', 1, 0))
 ```
 
 ## Topic: Decision Trees 
@@ -275,10 +276,71 @@ us_weather_predict %>%
   df_stats(same_class_location ~ snow_factor, mean, sum, length)
 ```
 
+### Comparison to Baseline
+Overall model accuracy or conditional model accuracy as shown above, can be an important first step to evaluate how well the classification model is performing. However, it is useful to compare the model accuracy to a baseline. This is important to consider as it is often not the case that the event the model is predicting occurs equally likely, more specifically has a probability of occurring equal to 50%. For example, in the US weather data, the observed number of days in which it snows was `r round(mean(us_weather$snow_numeric), 2)`, meaning that on average for the days and locations in the data, it snowed on 3 out of 10 days. This would mean that a naive model that only predicted it did not snow would be correct 70% of the time. Therefore, the overall accuracy of the classification models can use this information to see if the model outperforms a simple analysis that simply predicts the predominate category (in this case that it does not snow). 
 
+The first model fitted to the US weather data used the drybulb maximum and minimum temperature and has 
+
+#### Absolute vs Relative Comparison
+
+
+### Training/Test Data
+
+So far we have used the entire data to make our classification. This is not best practice and we will explore this is a bit more detail. First, take a minute to hypothesize why using the entire data to make our classification prediction may not be the best?
+
+It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let's refit the classification tree to the weather data by splitting the data into 80% training and 20% test data. 
+
+A 70/30 split is also common in practice, so why choose an 80/20 training/test data split. This choice can be broken down into two primary arguments to consider when making this decision. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. However, as discussed above, it is helpful to evaluate the model on data the model has not seen before. This helps to ensure the process is similar to that of what may happen in the real world where the model could be used to help predict/classify cases that happen in the future. Secondly, the test data does not need to be quite as large, but we would like it to be representative of the population of interest. In larger samples, the splitting may not make big differences, but in small samples more care choosing the appropriate split percentages is a helpful step.  Here, the data are not small, but also not extremely large, about 3400 weather instances. When using a 80/20 training/test data split, there would be `r nrow(us_weather) * 0.8` in the training data and `r nrow(us_weather) * 0.2` in the testing data.
+
+#### Splitting the data into training/test
+
+This is done with the rsample package utilizing three functions, `initial_split()`, `training()`, and `test()`. The `initial_split()` function helps to take the initial random sample and the proportion of data to use for the training data is initially identified. The random sample is done without replacement meaning that the data are randomly selected, but can not show up in the data more than once. Then, after using the `initial_split()` function, the `training()` and `test()` functions are used to obtain the training and test data respectively. It is good practice to use the `set.seed()` function to save the seed that was used as this is a random process. Without using the `set.seed()` function, the same split of data would likely not be able to be recreated in the code was ran again.
+
+Let's do the data splitting.
+ 
+```{r eval = FALSE}
+set.seed(2021)
+us_weather_split <- initial_split(us_weather, prop = .8)
+us_weather_train <- training(us_weather_split)
+us_weather_test <- testing(us_weather_split)
+```
+ 
+```{r eval = FALSE}
+class_tree <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max + location, 
+   method = 'class', data = us_weather_train)
+
+rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
+```
+
+This seems like a reasonable model. Let's check the model accuracy.
+
+```{r eval = FALSE}
+us_weather_predict <- us_weather_train %>%
+  mutate(snow_predict = predict(class_tree, type = 'class'))
+us_weather_predict %>%
+  mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0)) %>%
+  df_stats(~ same_class, mean, sum)
+```
+
+The model accuracy on the training data, the same data that was used to fit the model, was ...
+
+#### Evaluate accuracy on the testing data
+
+To evaluate the accuracy on the test data, the primary difference in the code is to pass a data object to the argument, `newdata`. The new data object is the testing data that was not used to fit the data and was withheld for the sole purpose of testing the performance of the classification model. 
+
+```{r eval = FALSE}
+us_weather_predict_test <- us_weather_test %>%
+  mutate(snow_predict = predict(class_tree, newdata = us_weather_test, type = 'class'))
+us_weather_predict_test %>%
+  mutate(same_class = ifelse(snow_factor == snow_predict, 1, 0)) %>%
+  df_stats(~ same_class, mean, sum)
+
+```
+
+For the test data, prediction accuracy was quite a bit lower, about xxx.
 
 <!--
-### Comparison to Baseline
+
 
 ```{r eval = FALSE}
 titanic_predict <- titanic_predict %>%
@@ -300,67 +362,7 @@ titanic_predict %>%
   df_stats(~ same_class, mean, sum)
 ```
 
-#### Absolute vs Relative Comparison
 
-
-### Training/Test Data
-
-So far we have used the entire data to make our classification. This is not best practice and we will explore this is a bit more detail. First, take a minute to hypothesize why using the entire data to make our classification prediction may not be the best?
-
-It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let's refit the classification tree to the titanic data by splitting the data into 70% training and 30% test data. Why 70% training and 30% test? This is a number that is sometimes used as the splitting, an 80/20 split is also common. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. Secondly, the test data does not need to be quite as large, but we would like it to be representative. Here, the data are not too large, about 1000 passengers with available survival data, therefore, withholding more data helps to ensure the test data is representative of the 1000 total passengers.
-Splitting the data into training/test
-
-This is done with the rsample package utilizing three functions, initial_split(), training(), and test(). The initial_split() function helps to take the initial random sample and the proportion of data to use for the training data is initially identified. The random sample is done without replacement meaning that the data are randomly selected, but can not show up in the data more than once. Then, after using the initial_split() function, the training() and test() functions are used on the resulting output from initial_split() to obtain the training and test data respectively. It is good practice to use the set.seed() function to save the seed that was used as this is a random process. Without using the set.seed() function, the same split of data would likely not be able to be recreated in the code was ran again.
-
-Let's do the data splitting.
- 
-```{r eval = FALSE}
-titanic <- bind_rows(titanic_train, titanic_test) %>% 
-  mutate(survived = ifelse(Survived == 1, 'Survived', 'Died')) %>% 
-  drop_na(survived)
-
-set.seed(2019)
-titanic_split <- initial_split(titanic, prop = .7)
-titanic_train <- training(titanic_split)
-titanic_test <- testing(titanic_split)
-```
- 
-```{r eval = FALSE}
-class_tree <- rpart(survived ~ Pclass + Sex + Age + Fare + Embarked + SibSp + Parch, 
-   method = 'class', data = titanic_train)
-
-rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
-```
-
-```{r eval = FALSE}
-prune_class_tree <- prune(class_tree, cp = .02)
-
-rpart.plot(prune_class_tree, roundint = FALSE, type = 3, branch = .3)
-```
-
-This seems like a reasonable model. Let's check the model accuracy.
-
-```{r eval = FALSE}
-titanic_predict <- titanic_train %>%
-  mutate(tree_predict = predict(prune_class_tree, type = 'class'))
-titanic_predict %>%
-  mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
-  df_stats(~ same_class, mean, sum)
-```
-
- This is actually slightly better accuracy compared to the model last time, about xxx compared to about xxx prediction accuracy. But, let's test the model out on the test data to see the prediction accuracy for the test data, the real test.
-
-
-```{r eval = FALSE}
-titanic_predict_test <- titanic_test %>%
-  mutate(tree_predict = predict(prune_class_tree, newdata = titanic_test, type = 'class'))
-titanic_predict_test %>%
-  mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
-  df_stats(~ same_class, mean, sum)
-
-```
-
-For the test data, prediction accuracy was quite a bit lower, about xxx.
 
 ### Introduction to resampling/bootstrap
 
