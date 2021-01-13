@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.4972706
+## gestational_days 0.5244305
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -84,7 +84,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope 0.3947727 0.4686122 0.5445012
+## 1    slope 0.3951625 0.4685842 0.5417292
 ```
 
 ## Categorical Predictor(s)
@@ -232,8 +232,8 @@ resample_baby()
 ```
 
 ```
-##                            .
-## maternal_smokerTRUE -7.79664
+##                             .
+## maternal_smokerTRUE -8.860313
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -257,7 +257,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope -11.03984 -9.277623 -7.499066
+## 1    slope -11.05831 -9.272492 -7.513858
 ```
 
 ## More than 2 categorical groups
@@ -269,7 +269,8 @@ college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/
 ```
 
 ```
-## Parsed with column specification:
+## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
 ## cols(
 ##   instnm = [31mcol_character()[39m,
 ##   city = [31mcol_character()[39m,
@@ -439,8 +440,8 @@ resample_baby()
 ##   term                                         estimate
 ##   [3m[90m<chr>[39m[23m                                           [3m[90m<dbl>[39m[23m
 ## [90m1[39m (Intercept)                                   123.   
-## [90m2[39m I(gestational_days - mean(gestational_days))    0.486
-## [90m3[39m maternal_smokerTRUE                            -[31m8[39m[31m.[39m[31m68[39m
+## [90m2[39m I(gestational_days - mean(gestational_days))    0.413
+## [90m3[39m maternal_smokerTRUE                            -[31m8[39m[31m.[39m[31m55[39m
 ```
 
 
@@ -506,10 +507,10 @@ resample_baby()
 ## [90m# A tibble: 4 x 2[39m
 ##   term                                                             estimate
 ##   [3m[90m<chr>[39m[23m                                                               [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                                                       124.   
-## [90m2[39m I(gestational_days - mean(gestational_days))                        0.395
-## [90m3[39m maternal_smokerTRUE                                                -[31m9[39m[31m.[39m[31m36[39m 
-## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.131
+## [90m1[39m (Intercept)                                                       122.   
+## [90m2[39m I(gestational_days - mean(gestational_days))                        0.357
+## [90m3[39m maternal_smokerTRUE                                                -[31m6[39m[31m.[39m[31m42[39m 
+## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.244
 ```
 
 

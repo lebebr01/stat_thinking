@@ -277,7 +277,8 @@ baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/da
 ```
 
 ```
-## Parsed with column specification:
+## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
 ## cols(
 ##   birth_weight = [32mcol_double()[39m,
 ##   gestational_days = [32mcol_double()[39m,
