@@ -324,14 +324,14 @@ This is done with the rsample package utilizing three functions, `initial_split(
 
 Let's do the data splitting.
  
-```{r eval = FALSE}
+```{r }
 set.seed(2021)
 us_weather_split <- initial_split(us_weather, prop = .8)
 us_weather_train <- training(us_weather_split)
 us_weather_test <- testing(us_weather_split)
 ```
  
-```{r eval = FALSE}
+```{r }
 class_tree <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max + location, 
    method = 'class', data = us_weather_train)
 
@@ -340,7 +340,7 @@ rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 
 This seems like a reasonable model. Let's check the model accuracy.
 
-```{r eval = FALSE}
+```{r }
 us_weather_predict <- us_weather_train %>%
   mutate(snow_predict = predict(class_tree, type = 'class'))
 us_weather_predict %>%
@@ -348,13 +348,13 @@ us_weather_predict %>%
   df_stats(~ same_class, mean, sum)
 ```
 
-The model accuracy on the training data, the same data that was used to fit the model, was ...
+The model accuracy on the training data, the same data that was used to fit the model was about 80%. We will now use the testing data to compare to the 80% accuracy obtained from the training data. Make a prediction as to what you think the prediction accuracy may be for the testing data, will it be higher, the same, or lower compared to the accuracy for the training data?
 
 ### Evaluate accuracy on the testing data
 
-To evaluate the accuracy on the test data, the primary difference in the code is to pass a data object to the argument, `newdata`. The new data object is the testing data that was not used to fit the data and was withheld for the sole purpose of testing the performance of the classification model. 
+To evaluate the accuracy on the test data, the primary difference in the code is to pass a data object to the argument, `newdata`. The new data object is the testing data that was not used to fit the data and was withheld for the sole purpose of testing the performance of the classification model. In this example, the code to input the new data is, `newdata = us_weather_test`. 
 
-```{r eval = FALSE}
+```{r }
 us_weather_predict_test <- us_weather_test %>%
   mutate(snow_predict = predict(class_tree, newdata = us_weather_test, type = 'class'))
 us_weather_predict_test %>%
@@ -363,7 +363,7 @@ us_weather_predict_test %>%
 
 ```
 
-For the test data, prediction accuracy was quite a bit lower, about xxx.
+For the test data, prediction accuracy was quite a bit lower, about 76.5%. The reason the accuracy tends to be lower when evaluating accuracy on the testing data is that the model has not seen these data, therefore, there could be new patterns in these data that the model has not seen before. Although the accuracy is lower, it would be more realistic to how these models would be used in practice. Commonly, the model is fitted on data on hand and is used to predict future cases. The training/test data setup is more realistic to this scenario in practice where the testing data mimic those future cases that the model would ultimately be used to predict. 
 
 <!--
 
