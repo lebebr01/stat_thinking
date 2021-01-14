@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -217,8 +217,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="classification.html"><a href="classification.html#adding-categorical-attributes"><i class="fa fa-check"></i><b>5.2</b> Adding Categorical Attributes</a>
 <ul>
 <li class="chapter" data-level="5.2.1" data-path="classification.html"><a href="classification.html#exploring-location"><i class="fa fa-check"></i><b>5.2.1</b> Exploring Location</a></li>
-<li class="chapter" data-level="5.2.2" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.2.2</b> Comparison to Baseline</a></li>
-<li class="chapter" data-level="5.2.3" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.2.3</b> Training/Test Data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.3</b> Comparison to Baseline</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="classification.html"><a href="classification.html#absolute-vs-relative-comparison"><i class="fa fa-check"></i><b>5.3.1</b> Absolute vs Relative Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.4</b> Training/Test Data</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="classification.html"><a href="classification.html#splitting-the-data-into-trainingtest"><i class="fa fa-check"></i><b>5.4.1</b> Splitting the data into training/test</a></li>
+<li class="chapter" data-level="5.4.2" data-path="classification.html"><a href="classification.html#evaluate-accuracy-on-the-testing-data"><i class="fa fa-check"></i><b>5.4.2</b> Evaluate accuracy on the testing data</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="linear-model.html"><a href="linear-model.html"><i class="fa fa-check"></i><b>6</b> Linear Model</a>
@@ -742,48 +749,74 @@ Figure 5.12: Bar chart showing model accuracy with location attribute included.
 ## 2 same_class_location         Yes 0.6220238  627   1008</code></pre>
 </div>
 </div>
-<div id="comparison-to-baseline" class="section level3" number="5.2.2">
-<h3><span class="header-section-number">5.2.2</span> Comparison to Baseline</h3>
+</div>
+<div id="comparison-to-baseline" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Comparison to Baseline</h2>
 <p>Overall model accuracy or conditional model accuracy as shown above, can be an important first step to evaluate how well the classification model is performing. However, it is useful to compare the model accuracy to a baseline. This is important to consider as it is often not the case that the event the model is predicting occurs equally likely, more specifically has a probability of occurring equal to 50%. For example, in the US weather data, the observed number of days in which it snows was 0.3, meaning that on average for the days and locations in the data, it snowed on 3 out of 10 days. This would mean that a naive model that only predicted it did not snow would be correct 70% of the time. Therefore, the overall accuracy of the classification models can use this information to see if the model outperforms a simple analysis that simply predicts the predominate category (in this case that it does not snow).</p>
-<p>The first model fitted to the US weather data used the drybulb maximum and minimum temperature and has</p>
-<div id="absolute-vs-relative-comparison" class="section level4" number="5.2.2.1">
-<h4><span class="header-section-number">5.2.2.1</span> Absolute vs Relative Comparison</h4>
+<p>The first model fitted to the US weather data used the drybulb maximum and minimum temperature and had an overall model accuracy of around 77%. Therefore, using the two temperature attributes increased the overall model accuracy about 7%, <span class="math inline">\(77% - 70% = 7%\)</span>, compared to the naive/baseline prediction of not snowing for every day. Is this 7% improved accuracy useful in this situation? In general, likely yes, but this answer is more complicated after looking at the conditional accuracy presented for the model using the two temperature attributes (see Figure <a href="classification.html#fig:bar-accuracy-fill">5.5</a>). For example, the model does a good job of accurately predicting days in which it won’t snow (about 90% accurate), but not days in which it does snow (less than 50% accurate).</p>
+<p>When thinking about this situation compared to the baseline model that would predict that all observations would not snow, this model would correctly predict all of the days in which it would not snow (left-bar in Figure <a href="classification.html#fig:bar-accuracy-fill">5.5</a>), but would not predict any days correctly in which it did snow (right-bar in Figure <a href="classification.html#fig:bar-accuracy-fill">5.5</a>). Arguably, accurately predicting the days in which it snows is the more interesting/useful characteristic, therefore this model going from a 0% prediction accuracy for the baseline model to almost 50% is a sizable increase in prediction accuracy.</p>
+<p>This same idea could be taken with the updated model that includes location in addition to the two temperature attributes (see Figure <a href="#location-accuracy"><strong>??</strong></a>). The prediction accuracy is somewhat worse for days in which it does not snow, but about a 12% increase in accuracy compared to the model with just temperature. Compared to the baseline model there would be a 62% increase in accuracy for days it does snows. This shows that the idea of the baseline comparison can come from the naive model, that is predicting a single category for all attributes, but the baseline comparison can be a previous model to compare how the model improves with the inclusion of even more attributes.</p>
+<div id="further-conditional-accuracy" class="section level4" number="5.3.0.1">
+<h4><span class="header-section-number">5.3.0.1</span> Further conditional accuracy</h4>
+<p>Not explored earlier, but the model uses location in the prediction, therefore it would also be possible to condition the accuracy based on the location to understand if the model is performing better for certain locations than others. Figure <a href="#location-accuracy-facet"><strong>??</strong></a> shows a bar chart on model accuracy for each location separately. This could be compared directly with Figure <a href="#location-accuracy"><strong>??</strong></a> to see if there are differences in the prediction accuracy by different locations.</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="classification.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> snow_factor, <span class="at">fill =</span> <span class="sc">~</span>snow_predict_location, </span>
+<span id="cb120-2"><a href="classification.html#cb120-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">data =</span> us_weather_predict, <span class="at">position =</span> <span class="st">&#39;fill&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb120-3"><a href="classification.html#cb120-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Observed Snow Status&quot;</span>,</span>
+<span id="cb120-4"><a href="classification.html#cb120-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;Predicted Snow Status&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb120-5"><a href="classification.html#cb120-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">2</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb120-6"><a href="classification.html#cb120-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> location)</span></code></pre></div>
+<div class="figure"><span id="fig:location-accuracy-facet"></span>
+<img src="05-classification-new_files/figure-html/location-accuracy-facet-1.png" alt="Bar chart showing model accuracy with location attribute included and facetted by the different locations." width="672" />
+<p class="caption">
+Figure 5.13: Bar chart showing model accuracy with location attribute included and facetted by the different locations.
+</p>
+</div>
+<p>You can really see a lot of variation in the prediction accuracy across locations from this model. For example, Boston, Iowa City, and Portland always predict that it won’t snow (i.e., a 0% prediction accuracy for days it does snow). In contrast, for Buffalo, Detroit, and Duluth, the prediction accuracy for days in which it snows is above 80%. Furthermore, Duluth has the worst prediction accuracy for days in which it does not snow, slightly larger than 50%. If Boston, Iowa City, and Portland were removed from the data to make the predictions, the prediction accuracy for days in which it snows would increase, but the prediction accuracy for days in which it does not snow would likely decrease.</p>
+</div>
+<div id="absolute-vs-relative-comparison" class="section level3" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Absolute vs Relative Comparison</h3>
+<p>To come …</p>
 </div>
 </div>
-<div id="trainingtest-data" class="section level3" number="5.2.3">
-<h3><span class="header-section-number">5.2.3</span> Training/Test Data</h3>
+<div id="trainingtest-data" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Training/Test Data</h2>
 <p>So far we have used the entire data to make our classification. This is not best practice and we will explore this is a bit more detail. First, take a minute to hypothesize why using the entire data to make our classification prediction may not be the best?</p>
 <p>It is common to split the data prior to fitting a classification/prediction model into a training data set in which the model makes a series of predictions on the data, learns which data attributes are the most important, etc. Then, upon successfully identifying a useful model with the training data, test these model predictions on data that the model has not seen before. This is particularly important as the algorithms to make the predictions are very good at understanding and exploiting small differences in the data used to fit the model. Therefore, exploring the extent to which the model does a good job on data the model has not seen is a better test to the utility of the model. We will explore in more detail the impact of not using the training/test data split later, but first, let’s refit the classification tree to the weather data by splitting the data into 80% training and 20% test data.</p>
 <p>A 70/30 split is also common in practice, so why choose an 80/20 training/test data split. This choice can be broken down into two primary arguments to consider when making this decision. The main idea behind the making the test data smaller is so that the model has more data to train on initially to understand the attributes from the data. However, as discussed above, it is helpful to evaluate the model on data the model has not seen before. This helps to ensure the process is similar to that of what may happen in the real world where the model could be used to help predict/classify cases that happen in the future. Secondly, the test data does not need to be quite as large, but we would like it to be representative of the population of interest. In larger samples, the splitting may not make big differences, but in small samples more care choosing the appropriate split percentages is a helpful step. Here, the data are not small, but also not extremely large, about 3400 weather instances. When using a 80/20 training/test data split, there would be 2720 in the training data and 680 in the testing data.</p>
-<div id="splitting-the-data-into-trainingtest" class="section level4" number="5.2.3.1">
-<h4><span class="header-section-number">5.2.3.1</span> Splitting the data into training/test</h4>
+<div id="splitting-the-data-into-trainingtest" class="section level3" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> Splitting the data into training/test</h3>
 <p>This is done with the rsample package utilizing three functions, <code>initial_split()</code>, <code>training()</code>, and <code>test()</code>. The <code>initial_split()</code> function helps to take the initial random sample and the proportion of data to use for the training data is initially identified. The random sample is done without replacement meaning that the data are randomly selected, but can not show up in the data more than once. Then, after using the <code>initial_split()</code> function, the <code>training()</code> and <code>test()</code> functions are used to obtain the training and test data respectively. It is good practice to use the <code>set.seed()</code> function to save the seed that was used as this is a random process. Without using the <code>set.seed()</code> function, the same split of data would likely not be able to be recreated in the code was ran again.</p>
 <p>Let’s do the data splitting.</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="classification.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
-<span id="cb120-2"><a href="classification.html#cb120-2" aria-hidden="true" tabindex="-1"></a>us_weather_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(us_weather, <span class="at">prop =</span> .<span class="dv">8</span>)</span>
-<span id="cb120-3"><a href="classification.html#cb120-3" aria-hidden="true" tabindex="-1"></a>us_weather_train <span class="ot">&lt;-</span> <span class="fu">training</span>(us_weather_split)</span>
-<span id="cb120-4"><a href="classification.html#cb120-4" aria-hidden="true" tabindex="-1"></a>us_weather_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(us_weather_split)</span></code></pre></div>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="classification.html#cb121-1" aria-hidden="true" tabindex="-1"></a>class_tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(snow_factor <span class="sc">~</span> drybulbtemp_min <span class="sc">+</span> drybulbtemp_max <span class="sc">+</span> location, </span>
-<span id="cb121-2"><a href="classification.html#cb121-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">method =</span> <span class="st">&#39;class&#39;</span>, <span class="at">data =</span> us_weather_train)</span>
-<span id="cb121-3"><a href="classification.html#cb121-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb121-4"><a href="classification.html#cb121-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(class_tree, <span class="at">roundint =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">branch =</span> .<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="classification.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb121-2"><a href="classification.html#cb121-2" aria-hidden="true" tabindex="-1"></a>us_weather_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(us_weather, <span class="at">prop =</span> .<span class="dv">8</span>)</span>
+<span id="cb121-3"><a href="classification.html#cb121-3" aria-hidden="true" tabindex="-1"></a>us_weather_train <span class="ot">&lt;-</span> <span class="fu">training</span>(us_weather_split)</span>
+<span id="cb121-4"><a href="classification.html#cb121-4" aria-hidden="true" tabindex="-1"></a>us_weather_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(us_weather_split)</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="classification.html#cb122-1" aria-hidden="true" tabindex="-1"></a>class_tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(snow_factor <span class="sc">~</span> drybulbtemp_min <span class="sc">+</span> drybulbtemp_max <span class="sc">+</span> location, </span>
+<span id="cb122-2"><a href="classification.html#cb122-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">method =</span> <span class="st">&#39;class&#39;</span>, <span class="at">data =</span> us_weather_train)</span>
+<span id="cb122-3"><a href="classification.html#cb122-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb122-4"><a href="classification.html#cb122-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(class_tree, <span class="at">roundint =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">branch =</span> .<span class="dv">3</span>)</span></code></pre></div>
+<p><img src="05-classification-new_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>This seems like a reasonable model. Let’s check the model accuracy.</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="classification.html#cb122-1" aria-hidden="true" tabindex="-1"></a>us_weather_predict <span class="ot">&lt;-</span> us_weather_train <span class="sc">%&gt;%</span></span>
-<span id="cb122-2"><a href="classification.html#cb122-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">snow_predict =</span> <span class="fu">predict</span>(class_tree, <span class="at">type =</span> <span class="st">&#39;class&#39;</span>))</span>
-<span id="cb122-3"><a href="classification.html#cb122-3" aria-hidden="true" tabindex="-1"></a>us_weather_predict <span class="sc">%&gt;%</span></span>
-<span id="cb122-4"><a href="classification.html#cb122-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">same_class =</span> <span class="fu">ifelse</span>(snow_factor <span class="sc">==</span> snow_predict, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb122-5"><a href="classification.html#cb122-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> same_class, mean, sum)</span></code></pre></div>
-<p>The model accuracy on the training data, the same data that was used to fit the model, was …</p>
-</div>
-<div id="evaluate-accuracy-on-the-testing-data" class="section level4" number="5.2.3.2">
-<h4><span class="header-section-number">5.2.3.2</span> Evaluate accuracy on the testing data</h4>
-<p>To evaluate the accuracy on the test data, the primary difference in the code is to pass a data object to the argument, <code>newdata</code>. The new data object is the testing data that was not used to fit the data and was withheld for the sole purpose of testing the performance of the classification model.</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="classification.html#cb123-1" aria-hidden="true" tabindex="-1"></a>us_weather_predict_test <span class="ot">&lt;-</span> us_weather_test <span class="sc">%&gt;%</span></span>
-<span id="cb123-2"><a href="classification.html#cb123-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">snow_predict =</span> <span class="fu">predict</span>(class_tree, <span class="at">newdata =</span> us_weather_test, <span class="at">type =</span> <span class="st">&#39;class&#39;</span>))</span>
-<span id="cb123-3"><a href="classification.html#cb123-3" aria-hidden="true" tabindex="-1"></a>us_weather_predict_test <span class="sc">%&gt;%</span></span>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="classification.html#cb123-1" aria-hidden="true" tabindex="-1"></a>us_weather_predict <span class="ot">&lt;-</span> us_weather_train <span class="sc">%&gt;%</span></span>
+<span id="cb123-2"><a href="classification.html#cb123-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">snow_predict =</span> <span class="fu">predict</span>(class_tree, <span class="at">type =</span> <span class="st">&#39;class&#39;</span>))</span>
+<span id="cb123-3"><a href="classification.html#cb123-3" aria-hidden="true" tabindex="-1"></a>us_weather_predict <span class="sc">%&gt;%</span></span>
 <span id="cb123-4"><a href="classification.html#cb123-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">same_class =</span> <span class="fu">ifelse</span>(snow_factor <span class="sc">==</span> snow_predict, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb123-5"><a href="classification.html#cb123-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> same_class, mean, sum)</span></code></pre></div>
-<p>For the test data, prediction accuracy was quite a bit lower, about xxx.</p>
+<pre><code>##     response     mean  sum
+## 1 same_class 0.799706 2176</code></pre>
+<p>The model accuracy on the training data, the same data that was used to fit the model was about 80%. We will now use the testing data to compare to the 80% accuracy obtained from the training data. Make a prediction as to what you think the prediction accuracy may be for the testing data, will it be higher, the same, or lower compared to the accuracy for the training data?</p>
+</div>
+<div id="evaluate-accuracy-on-the-testing-data" class="section level3" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> Evaluate accuracy on the testing data</h3>
+<p>To evaluate the accuracy on the test data, the primary difference in the code is to pass a data object to the argument, <code>newdata</code>. The new data object is the testing data that was not used to fit the data and was withheld for the sole purpose of testing the performance of the classification model. In this example, the code to input the new data is, <code>newdata = us_weather_test</code>.</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="classification.html#cb125-1" aria-hidden="true" tabindex="-1"></a>us_weather_predict_test <span class="ot">&lt;-</span> us_weather_test <span class="sc">%&gt;%</span></span>
+<span id="cb125-2"><a href="classification.html#cb125-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">snow_predict =</span> <span class="fu">predict</span>(class_tree, <span class="at">newdata =</span> us_weather_test, <span class="at">type =</span> <span class="st">&#39;class&#39;</span>))</span>
+<span id="cb125-3"><a href="classification.html#cb125-3" aria-hidden="true" tabindex="-1"></a>us_weather_predict_test <span class="sc">%&gt;%</span></span>
+<span id="cb125-4"><a href="classification.html#cb125-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">same_class =</span> <span class="fu">ifelse</span>(snow_factor <span class="sc">==</span> snow_predict, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb125-5"><a href="classification.html#cb125-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> same_class, mean, sum)</span></code></pre></div>
+<pre><code>##     response      mean sum
+## 1 same_class 0.7658321 520</code></pre>
+<p>For the test data, prediction accuracy was quite a bit lower, about 76.5%. The reason the accuracy tends to be lower when evaluating accuracy on the testing data is that the model has not seen these data, therefore, there could be new patterns in these data that the model has not seen before. Although the accuracy is lower, it would be more realistic to how these models would be used in practice. Commonly, the model is fitted on data on hand and is used to predict future cases. The training/test data setup is more realistic to this scenario in practice where the testing data mimic those future cases that the model would ultimately be used to predict.</p>
 <!--
 
 
@@ -918,7 +951,6 @@ bind_rows(
 
 -->
 
-</div>
 </div>
 </div>
 </div>

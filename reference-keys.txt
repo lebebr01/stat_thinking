@@ -20,6 +20,7 @@ fig:snow-location
 fig:temp-location
 fig:class-location
 fig:location-accuracy
+fig:location-accuracy-facet
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -71,6 +72,7 @@ adding-categorical-attributes
 exploring-location
 accuracy-1
 comparison-to-baseline
+further-conditional-accuracy
 absolute-vs-relative-comparison
 trainingtest-data
 splitting-the-data-into-trainingtest
