@@ -376,7 +376,12 @@ Resampling and bootstrap methods use the sample data that are already collected 
 2. Sampling with replacement keeps coming up, what do you think this means?
 3. Hypothesize why sampling with replacement would be a good idea?
 
-Let's try the resampling with the calculation of the proportion of days that it snowed. These 10,000 calculations will be saved and visualized.
+Let's try the resampling with the calculation of the proportion of days that it snowed. These 10,000 calculations will be saved and visualized. To summarize what the resampling procedure does here,
+
+1. Resample the data, with replacement (assuming the population is representative)
+2. Compute and save a statistic of interest (e.g., mean)
+3. Repeat steps 1 and 2 many times (i.e., 5000, 10,000, or more)
+4. Explore the distribution of the statistic of interest
 
 ```{r resample-weather-snow, fig.cap = "Density figure of the distribution of the proportion of days in which is snows from the resampled data."}
 resample_weather <- function(...) {
