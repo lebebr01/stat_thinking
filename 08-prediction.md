@@ -70,9 +70,9 @@ resample_admrate()
 ## [90m# A tibble: 3 x 2[39m
 ##   term                      estimate
 ##   [3m[90m<chr>[39m[23m                        [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                0.722  
-## [90m2[39m preddegBachelor Degree    -[31m0[39m[31m.[39m[31m0[39m[31m46[4m7[24m[39m 
-## [90m3[39m preddegCertificate Degree  0.008[4m9[24m[4m1[24m
+## [90m1[39m (Intercept)                 0.693 
+## [90m2[39m preddegBachelor Degree     -[31m0[39m[31m.[39m[31m0[39m[31m26[4m6[24m[39m
+## [90m3[39m preddegCertificate Degree   0.063[4m7[24m
 ```
 
 

@@ -205,27 +205,34 @@ head(Hitters)
 ```
 
 ```
-##   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun CRuns CRBI CWalks
-## 1   315   81     7   24  38    39    14   3449   835     69   321  414    375
-## 2   479  130    18   66  72    76     3   1624   457     63   224  266    263
-## 3   496  141    20   65  78    37    11   5628  1575    225   828  838    354
-## 4   321   87    10   39  42    30     2    396   101     12    48   46     33
-## 5   594  169     4   74  51    35    11   4408  1133     19   501  336    194
-## 6   185   37     1   23   8    21     2    214    42      1    30    9     24
-##   League Division PutOuts Assists Errors Salary NewLeague log_salary_pred
-## 1      N        W     632      43     10  475.0         N        5.375205
-## 2      A        W     880      82     14  480.0         A        6.260120
-## 3      N        E     200      11      3  500.0         N        6.260120
-## 4      N        E     805      40      4   91.5         N        5.872782
-## 5      A        W     282     421     25  750.0         A        6.112038
-## 6      N        E      76     127      7   70.0         A        5.375205
-##   log_salary   log_error salary_pred      error
-## 1   6.163315  0.78810957    215.9842  259.01581
-## 2   6.173786 -0.08633342    523.2815  -43.28148
-## 3   6.214608 -0.04551143    523.2815  -23.28148
-## 4   4.516339 -1.35644260    355.2357 -263.73572
-## 5   6.620073  0.50803537    451.2574  298.74263
-## 6   4.248495 -1.12670999    215.9842 -145.98419
+##                   AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun
+## -Alan Ashby         315   81     7   24  38    39    14   3449   835     69
+## -Alvin Davis        479  130    18   66  72    76     3   1624   457     63
+## -Andre Dawson       496  141    20   65  78    37    11   5628  1575    225
+## -Andres Galarraga   321   87    10   39  42    30     2    396   101     12
+## -Alfredo Griffin    594  169     4   74  51    35    11   4408  1133     19
+## -Al Newman          185   37     1   23   8    21     2    214    42      1
+##                   CRuns CRBI CWalks League Division PutOuts Assists Errors
+## -Alan Ashby         321  414    375      N        W     632      43     10
+## -Alvin Davis        224  266    263      A        W     880      82     14
+## -Andre Dawson       828  838    354      N        E     200      11      3
+## -Andres Galarraga    48   46     33      N        E     805      40      4
+## -Alfredo Griffin    501  336    194      A        W     282     421     25
+## -Al Newman           30    9     24      N        E      76     127      7
+##                   Salary NewLeague log_salary_pred log_salary   log_error
+## -Alan Ashby        475.0         N        5.375205   6.163315  0.78810957
+## -Alvin Davis       480.0         A        6.260120   6.173786 -0.08633342
+## -Andre Dawson      500.0         N        6.260120   6.214608 -0.04551143
+## -Andres Galarraga   91.5         N        5.872782   4.516339 -1.35644260
+## -Alfredo Griffin   750.0         A        6.112038   6.620073  0.50803537
+## -Al Newman          70.0         A        5.375205   4.248495 -1.12670999
+##                   salary_pred      error
+## -Alan Ashby          215.9842  259.01581
+## -Alvin Davis         523.2815  -43.28148
+## -Andre Dawson        523.2815  -23.28148
+## -Andres Galarraga    355.2357 -263.73572
+## -Alfredo Griffin     451.2574  298.74263
+## -Al Newman           215.9842 -145.98419
 ```
 
 hen, the `df_stats()` function is used to compute summary statistics for the `log_error` attribute which represented the difference between the observed and predicted log salaries. After this, the same statistics are computed for the error after back-transforming the data. Both of these are not quite what we want here, any idea why?

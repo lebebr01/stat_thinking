@@ -690,61 +690,44 @@ us_weather_predict_test %>%
 
 For the test data, prediction accuracy was quite a bit lower, about 76.5%. The reason the accuracy tends to be lower when evaluating accuracy on the testing data is that the model has not seen these data, therefore, there could be new patterns in these data that the model has not seen before. Although the accuracy is lower, it would be more realistic to how these models would be used in practice. Commonly, the model is fitted on data on hand and is used to predict future cases. The training/test data setup is more realistic to this scenario in practice where the testing data mimic those future cases that the model would ultimately be used to predict. 
 
-<!--
 
+## Introduction to resampling/bootstrap
 
+To explore these ideas in more detail, it will be helpful to use a statistical technique called resampling or the bootstrap. These ideas will be used a lot going forward to explore inference and understand sampling variation. In very simple terminology, resampling or the bootstrap can help to understand uncertainty in model estimates and also allow more flexibility in the statistics that are able to be used. The main drawback of resampling and bootstrap methods is that they can be computationally heavy, therefore depending on the situation, more time is needed to come to the conclusion desired.
 
-```r
-titanic_predict <- titanic_predict %>%
-  mutate(tree_predict_full = predict(class_tree, type = 'class'))
+Resampling and bootstrap methods use the sample data that are already collected and perform the sampling procedure again. This makes the assumption that the sample data are representative of the population, an assumption that is also made for classical statistical inference. Generating the new samples is done with replacement (more on this later) and is done many times (5000, 10,000, etc.) with more in general being better. As an example with the US weather data, assume this is the population of interest, and resample from this population 10,000 times (with replacement). For each resampled data, calculate the proportion of days that it snows. Before this computation is ran, think about the following questions. 
 
-titanic_predict %>%
-  count(survived, tree_predict_full)
-```
-
-
-```r
-gf_bar(~ survived, fill = ~tree_predict_full, data = titanic_predict, position = "fill") %>%
-  gf_labs(y = "proportion") %>%
-  gf_refine(scale_y_continuous(breaks = seq(0, 1, .1)))
-```
-
-
-```r
-titanic_predict %>%
-  mutate(same_class = ifelse(survived == tree_predict_full, 1, 0)) %>%
-  df_stats(~ same_class, mean, sum)
-```
-
-
-
-### Introduction to resampling/bootstrap
-
-To explore these ideas in more detail, it will be helpful to use a statistical technique called resampling or the bootstrap. We will use these ideas a lot going forward in this course. In very simple terminology, resampling or the bootstrap can help us understand uncertainty in our estimates and also allow us to be more flexible in the statistics that we run. The main drawback of resampling and bootstrap methods is that they can be computationally heavy, therefore depending on the situation, more time is needed to come to the conclusion desired.
-
-Resampling and bootstrap methods use the sample data we have and perform the sampling procedure again treating the sample we have data for as the population. Generating the new samples is done with replacement (more on this later). This resampling is done many times (100, 500, 1000, etc.) with more in general being better. As an example with the titanic data, let's take the titanic data, assume this is the population of interest, and resample from this population 1000 times (with replacement) and each time we will calculate the proportion that survived the disaster in each sample. Before we write the code for this, a few questions to consider.
-
-1. Would you expect the proportion that survived to be the same in each new sample? Why or why not?
+1. Would you expect the proportion of days that it snowed to be the same in each new sample? Why or why not?
 2. Sampling with replacement keeps coming up, what do you think this means?
 3. Hypothesize why sampling with replacement would be a good idea?
 
-Let's now try the resampling with the calculation of the proportion that survived. We will then save these 1000 survival proportions and create a visualization.
+Let's try the resampling with the calculation of the proportion of days that it snowed. These 10,000 calculations will be saved and visualized. To summarize what the resampling procedure does here,
+
+1. Resample the data, with replacement (assuming the population is representative)
+2. Compute and save a statistic of interest (e.g., mean)
+3. Repeat steps 1 and 2 many times (i.e., 5000, 10,000, or more)
+4. Explore the distribution of the statistic of interest
 
 
 ```r
-resample_titanic <- function(...) {
-    titanic %>%
-        sample_n(nrow(titanic), replace = TRUE) %>%
-        df_stats(~ Survived, mean)
+resample_weather <- function(...) {
+    us_weather %>%
+        sample_n(nrow(us_weather), replace = TRUE) %>%
+        df_stats(~ snow_numeric, mean)
 }
 
-survival_prop <- map(1:1000, resample_titanic) %>% 
-  bind_rows()
+snow_prop <- map_dfr(1:10000, resample_weather)
 
-gf_density(~ mean_Survived, data = survival_prop)
+gf_density(~ mean, data = snow_prop) %>%
+  gf_labs(x = 'Proportion of snow days')
 ```
 
-#### Bootstrap variation in prediction accuracy
+<div class="figure">
+<img src="05-classification-new_files/figure-html/resample-weather-snow-1.png" alt="Density figure of the distribution of the proportion of days in which is snows from the resampled data." width="672" />
+<p class="caption">(\#fig:resample-weather-snow)Density figure of the distribution of the proportion of days in which is snows from the resampled data.</p>
+</div>
+
+### Bootstrap variation in prediction accuracy
 
 We can apply these same methods to evaluate the prediction accuracy based on the classification model above. When using the bootstrap, we can get an estimate for how much variation there is in the classification accuracy based on the sample that we have. In addition, we can explore how different the prediction accuracy would be for many samples when using all the data and by splitting the data into training and test sets.
 Bootstrap full data.
@@ -820,6 +803,3 @@ bind_rows(
 ```
 
 
-### Cross-validation
-
--->

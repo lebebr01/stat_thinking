@@ -21,6 +21,7 @@ fig:temp-location
 fig:class-location
 fig:location-accuracy
 fig:location-accuracy-facet
+fig:resample-weather-snow
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -77,6 +78,8 @@ absolute-vs-relative-comparison
 trainingtest-data
 splitting-the-data-into-trainingtest
 evaluate-accuracy-on-the-testing-data
+introduction-to-resamplingbootstrap
+bootstrap-variation-in-prediction-accuracy
 linear-model
 regression-trees
 visualize-distributions
