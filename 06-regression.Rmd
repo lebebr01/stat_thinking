@@ -1,267 +1,135 @@
-# Linear Model    
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Regression Trees
 
-## Regression Trees
-In this example, data on major league baseball players that comes with an R package, `ISLR`. These data contain information about hitters in major league baseball for the 1986 season and also contain information about their starting salary for the 1987 season. Missing data related to salary information was dropped from the data.
+Regression trees are an extension of classification trees where the outcome no longer represents categories (e.g., it snowed or did not snow), but instead represents a continuous or interval type outcome. For example, earlier in this book, distributions of college admission rates were explored, this represented a continuous or interval type attribute as the data took on many different values. Regression trees differ from classification trees in that the outcome of the model is a prediction of the continuous quantity rather than predicting if an observation belongs to a specific category. 
+
+Much of the machinery is similar however. Most notably, the same tree type structure will be used to make the prediction. Also, to parallel the classification trees explored so far, the regression trees used in this text will assume that only two splits can occur at any point along the tree. There are also differences between the classification and regression trees. Already discussed is the outcome attribute is continuous for a regression tree, therefore the predicted value will represent one that is continuous as well instead of representing a category. Furthermore, since the predictions are done on a continuous scale, a different measure of overall model fit or accuracy will have to be used. This chapter will explore those details in turn. But first, an example of a regression tree.
+
+## Predicting ACT Score
+The first example of using a regression tree will attempt to predict the average ACT score for a college institution using other attributes that describe the type of college. Before getting into the model, the packages and loading of the data needs to be done.  
+
 ### Loading R packages
-hen the packages can be loaded and some processing is done on the `Hitters` data to drop any missing data elements from the salary data attribute. Finally, the first few rows of the data are shown with the `head()` function.
+The following code will load the packages to use for the fitting of the regression tree and loading of the college scorecard data that was used earlier in the book (see Chapters 2 and 3). 
 
 ```{r load-hitter, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(ggformula)
 library(mosaic)
-library(ISLR)
 library(rpart)
 library(rsample)
 library(rpart.plot)
 library(statthink)
+library(parttree)
 
 # Set theme for plots
 theme_set(theme_statthinking())
 
-Hitters <- Hitters %>%
-  drop_na(Salary)
-
-head(Hitters)
+# Load in data
+colleges <- read_csv(
+  file = "https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", 
+  guess_max = 10000
+  )
 ```
-
 
 ### Visualize distributions
-Exploring the distribution of the variable of interest is often the first step in an analysis. Here, we are interested in exploring the distribution of salaries of major league baseball players and seeing if data attributes can help to predict the salary for the player. The first plot explored is the density of the salary variable.
+Exploring the distribution of the variable of interest is often the first step in an analysis. A density figure is used to understand 
 
 ```{r}
-gf_density(~ Salary, data = Hitters)
+gf_density(~ actcmmid, data = colleges) %>%
+  gf_labs(x = "Average college ACT score")
 ```
 
-1. What are some features of the distribution above?
-2. Could there be some concerns about this distribution if we are looking to do some analysis on this?
+1. What are the primary features of the distribution for average ACT score of the college?
+2. Could there be concerns about specific features of this distribution if we are looking to do an analysis on this?
 
-In general, symmetric distributions are preferred over skewed distributions and some models make an assumption of normality, a special type of symmetric distribution. One way to help make a skewed distribution more symmetric is to transform the data. For a positively skewed distribution, such as income, rent, salary, etc, a log transformation is a common transformation that is used by econometricians and is a meaningful transformation. The largest downside of the transformation is that the original metric is lost and the analysis is done on the transformed metric. The log transformation identified above is often referred to as a non-linear transformation such that it alters values differently based on where these are on the scale. For example, the log transformation will minimize gaps that are higher up on the scale and spread out gaps in small values, this is why this type of transformation is common for right or positively skewed data. Below is a figure applying the log transformation to the salary attribute.
+## Continuous Association
+It is often interesting to estimate whether two continuous/interval attributes are associated or related to one another. This can be done with a statistic called the correlation. The correlation represents ...
 
-```{r}
-gf_density(~ log(Salary), data = Hitters)
-```
-### Explore relationships between two quantitative attributes
-So far, the course has focused on exploring relationships between a quantitative and various qualitative (i.e. categorical or grouping) attributes. It is also common to want to explore relationships between two quantitative attributes. One way to visualize this type of relationship is with a scatterplot and this can be done with the `gf_point()` function. Similar to other multivariate figures, this function takes a formula as the input where the attribute of interest (log of salary here) is placed on the left hand side of the equation and the second attribute is placed on the right hand side of the equation. Below, the equation `log(Salary) ~ HmRun` means that the log salary is the attribute of interest (placed on the y-axis) is going to be plotted in conjunction with the number of home runs the player hit (placed on the x-axis). Let's look at the figure.
+To come...
 
-```{r}
-gf_point(log(Salary) ~ HmRun, data = Hitters)
-
-```
-
-Another measure of association between two attributes is the correlation. This statistic gives a single number summary about the **linear** relationship between two quantitative attributes. The correlation ranges between -1 and +1 where 0 means no relationship. The closer the correlation gets to -1 or +1 indicates a stronger linear relationship between the two attributes. A correlation of -1 means the two attributes are inversely related, more specifically this means that as one goes up the other will tend to decrease. The opposite is true for a correlation of +1 indicating a positive relationship, as one attribute increases the other tends to increase as well.
-
-```{r}
-cor(log(Salary) ~ HmRun, data = Hitters)
-```
-### Decision Tree - Regression Tree
+## First Regression Tree
 Another way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. In this case, the regression tree will predict the numeric variable with many potential values rather than just two.
 
-The syntax for fitting a regression tree is very similar in R compared to the classification tree. The same function, `rpart()` is used and the function `rpart.plot()` will be used to visualize the fitted regression tree similar to before. The primary argument to the `rpart()` function is a formula where the left-hand side is the attribute of interest and the right hand side contains attributes that help predict the outcome. In the example below, the log of salary is the outcome and the number of home runs hit during the previous season is used as the sole continuous attribute used to predict the log of the salary. The data argument is also specified and the only difference here between a classification tree and the regression tree here is the `method` argument. In the regression tree the method argument should be set to `method = 'anova'`. This tells the `rpart()` function that the outcome is numeric and that an anova method should be used in the model fitting. The anova stands for Analysis of Variance and we will discuss this in more detail moving forward.
+The syntax for fitting a regression tree is very similar in R compared to the classification tree. The same function, `rpart()` is used and the function `rpart.plot()` will be used to visualize the fitted regression tree similar to before. The primary argument to the `rpart()` function is a formula where the left-hand side is the attribute of interest and the right hand side contains attributes that help predict the outcome. In the example below, the average college ACT score (`actcmmid`) is the outcome attribute and the college admission rate (`adm_rate`) is used as the sole continuous attribute used to predict the average college ACT score. The data argument is also specified and the only difference here between a classification tree and the regression tree here is the `method` argument. In the regression tree the method argument should be set to `method = 'anova'`. This tells the `rpart()` function that the outcome is numeric and that an anova method should be used in the model fitting. The anova stands for Analysis of Variance and we will discuss this in more detail moving forward.
 
 ```{r}
-hit_reg <- rpart(log(Salary) ~ HmRun, data = Hitters, method = "anova")
+act_reg <- rpart(actcmmid ~ adm_rate, data = colleges, method = "anova")
 
-rpart.plot(hit_reg, roundint = FALSE, type = 3, branch = .3)
+rpart.plot(act_reg, roundint = FALSE, type = 3, branch = .3)
 
 ```
+
 The output from the regression tree is similar to that from a classification tree. One major difference however is that the predicted values in the end are numeric quantities instead of classes and the probabilities that were shown previously are not shown here as there is not a probability of being in a class. The percentage of cases in the predicted nodes at the end of the tree are still shown. The logic for following the tree is the same as before where each split can have two new paths to follow and then the variable(s) are re-evaluated after the first split to see if additional splits can help predict the outcome of interest.
 
-Below is a figure that builds on the scatterplot we saw above. Vertical lines are shown that indicate the two splits that were established from the above regression tree. These splits are where the end buckets lie and all of the data points residing in a single area have the same predicted log salary.
+Below is a figure that builds on the scatterplot we saw above. Vertical lines are shown that indicate the two splits that were established from the above regression tree. These splits are where the end buckets lie and all of the data points residing in a single area have the same average ACT score.
 
 ```{r}
-gf_point(log(Salary) ~ HmRun, data = Hitters, color = 'gray55') %>% 
-    gf_vline(xintercept = c(8.5, 19), size = 1) %>% 
-    gf_text(x = 2, y = 4.2, label = "5.6", color = "red", size = 5) %>%
-    gf_text(x = 12, y = 4.2, label = "6.1", color = "red", size = 5) %>%
-    gf_text(x = 32, y = 4.2, label = "6.4", color = "red", size = 5) %>%
-    gf_labs(y = "Log of player salary",
-            x = "Number of Home Runs",
-            title = "Log salary by number of home runs")
-
+gf_point(actcmmid ~ adm_rate, data = colleges, color = 'gray55') %>% 
+    gf_labs(y = "Average college ACT score",
+            x = "Admission Rate",
+            title = "Log salary by number of home runs") +
+  geom_parttree(data = act_reg, aes(fill = actcmmid), alpha = 0.3) + 
+  scale_fill_continuous("ACT")
 ```
 #### Explore another attribute
 Let's explore another attribute, the number of hits in the previous season and how this may be related to the log of the salary. First a scatterplot is shown then the correlation is computed.
 
 ```{r}
-gf_point(log(Salary) ~ Hits, data = Hitters)
-```
+act_reg2 <- rpart(actcmmid ~ adm_rate + ugds, data = colleges, method = "anova")
 
-```{r}
-cor(log(Salary) ~ Hits, data = Hitters)
-
-```
-
-Updating the regression tree with another variable is similar to a classification tree. More than one attribute used to help predict the outcome are separated by `+` signs. In addition, I specified the model to terminate when the complexity parameter (CP) gets smaller than .012.
-
-```{r}
-hit_reg <- rpart(log(Salary) ~ HmRun + Hits, data = Hitters, method = "anova", cp = .012)
-
-rpart.plot(hit_reg, roundint = FALSE, type = 3, branch = .3)
+rpart.plot(act_reg2, roundint = FALSE, type = 3, branch = .3)
 
 ```
 
 The figure below attempts to show the regression tree in a scatterplot. Now there are more predicted buckets and these are represented by the square areas of the figure below. All of the data points within each square would receive the same predicted score.
 
 ```{r}
-gf_point(HmRun ~ Hits, data = Hitters, color = ~ log(Salary)) %>% 
-    gf_vline(xintercept = c(118, 146), size = 1) %>%
-    gf_segment(8.5 + 8.5 ~ 0 + 118, size = 0.75, color = "black") %>%
-    gf_segment(8.5 + 8.5 ~ 146 + 238, size = 0.75, color = "black") %>%
-    gf_text(x = 1, y = 3, label = "5.4", color = "red", size = 5) %>%
-    gf_text(x = 128, y = 3, label = "6.3", color = "red", size = 5) %>%
-    gf_text(x = 170, y = 3, label = "6.1", color = "red", size = 5) %>%
-    gf_text(x = 50, y = 35, label = "5.9", color = "red", size = 5) %>%
-    gf_text(x = 200, y = 35, label = "6.7", color = "red", size = 5) %>%
-    gf_labs(x = "Number of Hits",
-            y = "Number of Home Runs",
-            title = "Log salary by number of home runs and hits")
-
+ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
+  geom_parttree(data = act_reg2, aes(fill = actcmmid), alpha = 0.3) +
+  geom_point(aes(color = actcmmid)) +
+  scale_colour_viridis_c(
+    limits = range(colleges$actcmmid, na.rm = TRUE), 
+    aesthetics = c('colour', 'fill')
+    )
 ```
 
-One thing that can help with interpretation when the data are transformed, in this case by taking the log of the salary variable, is to back-transform to the original salary metric. In this case, the inverse of the log is the exponential function. This can be achieved in R with the `exp()` function. The predicted values from the regression tree are back-transformed to show the salaries in their original metric, in thousands of dollars.
+## Evaluating accuracy
+
+In the classification tree example, a natural metric to evaluate how well the model was doing was the classification accuracy. This was most useful being computed individually for each class that was predicted instead of solely overall. In the regression tree example, there is no class membership, instead the original observed college ACT score and the predicted college ACT scores can be compared. One measure that could be used for accuracy is on average how far do the predicted scores deviate from the observed scores. The below code chunk computes those variables.
 
 ```{r}
-exp(c(5.4, 5.9, 6.3, 6.1, 6.7))
-
-```
-### Evaluating accuracy
-
-In the classification tree example, a natural metric to evaluate how well the model was doing was the classification accuracy. This was most useful being computed individually for each class that was predicted instead of solely overall. In the regression tree example, we do not have class membership, instead we have the original observed salary and the predicted salary. One measure that could be used for accuracy is on average how far do the predicted scores deviate from the observed scores. The below code chunk computes those variables for use, one on the log scale and another on the original back-transformed scale.
-
-```{r}
-Hitters <- Hitters %>%
-  mutate(log_salary_pred = predict(hit_reg),
-         log_salary = log(Salary),
-         log_error = log_salary - log_salary_pred,
-         salary_pred = exp(log_salary_pred),
-         error = Salary - salary_pred)
-head(Hitters)
-
+colleges_pred <- colleges %>%
+  drop_na(actcmmid) %>%
+  mutate(act_pred = predict(act_reg2),
+         error = actcmmid - act_pred) %>%
+  select(instnm, actcmmid, act_pred, error)
+head(colleges_pred, n = 10)
 ```
 
-hen, the `df_stats()` function is used to compute summary statistics for the `log_error` attribute which represented the difference between the observed and predicted log salaries. After this, the same statistics are computed for the error after back-transforming the data. Both of these are not quite what we want here, any idea why?
+The `df_stats()` function is used to compute summary statistics for the `error` attribute which represented the difference between the observed and predicted college ACT score. 
 
 ```{r}
-Hitters %>%
-  df_stats(~ log_error, mean, median, sd, min, max)
-```
-
-```{r}
-Hitters %>%
+colleges_pred %>%
   df_stats(~ error, mean, median, sd, min, max)
-
 ```
 
-Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the log salary scale. In general, lower average distances means the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without some prior standardization.
+Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the average college ACT score scale. In general, lower average distances indicates the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without standardization.
 
 ```{r}
-Hitters %>%
-  df_stats(~ abs(log_error), mean, median, sd, min, max)
+colleges_pred %>%
+  df_stats(~ abs(error), mean, median, sd, min, max)
+```
+
+### Conditional Error
+```{r}
+colleges_pred %>%
+  df_stats(abs(error) ~ actcmmid, mean, median, sd, min, max, length)
 ```
 
 
-
-## Simple Regression continuous predictor
-### Description of the Data
-These data contain information on mother's and baby's health for 1,174 pregnant women.
-
-```{r baby-data}
-baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv")
-head(baby)
-```
-
-
-
-### Scatterplots
-As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between birth weight and gestational days.
-
-```{r scatter-baby}
-gf_point(birth_weight ~ gestational_days, data = baby, size = 3, alpha = .2) %>%
-  gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
-  gf_smooth(size = 1)
-```
-
-The figure shows two types of lines, the dashed line is assuming a linear relationship (specified with `gf_smooth(method = 'lm')`) and the solid line is allowing the relationship to be more flexible to account for any non-linearity. There does appear to be some evidence of non-linearity, particularly in the tails of gestational days distribution. We can attempt to summarize this relationship in a single numeric value by computing the correlation coefficient. The correlation was initially explored when fitting regression trees. The correlation can be calculated with the `cor()` function with the primary argument being a formula depicting the two variables to compute the correlation on.
-
-```{r cor-baby}
-cor(birth_weight ~ gestational_days, data = baby)
-```
-
-Here the correlation represents the degree of **linear** relationship between the two variables. Values closer to 1 in absolute value (i.e. +1 or -1) show a stronger linear relationship and values closer to 0 indicate no relationship or weaker relationship. The correlation between the two variables above was about 0.41 indicating that there is a moderate positive linear relationship between birth weight and gestational days. The correlation is shown to be positive due to the coefficient being positive and the general trend from the scatterplot shows a direction of relationship moving from the lower left of the figure to the upper right of the figure. A negative correlation would have a negative sign associated with it and would trend from the upper left to the lower right of a scatterplot.
-
-### Fitting a linear regression model
-Now that the correlation was computed, we have evidence that there is a relationship between the baby birth weight and the gestational days. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the `lm()` function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: `birth_weight ~ gestational_days`, where birth weight is the outcome of interest (in language we've used previously, this is the attribute we want to predict) and gestational days is the attribute we want to use to do the predicting of birth weight. Another way to think about what these variables represent is to explain variation in the birth weight with gestational days. In other words, the assumption is made that gestational days impacts or explains differences in the baby birth weight.
-
-```{r baby-lm}
-baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
-coef(baby_reg)
-```
-
-he following coefficients represent the linear regression equation that more generally can be show as:
-
-\begin{equation}
-birth\_weight = -10.8 + 0.47 gestational\_days + \epsilon
-\end{equation}
-
-The equation can also be represented without the error, $\epsilon$ as:
-
-begin{equation}
-\hat{birth\_weight} = -10.8 + 0.47 gestational\_days
-\end{equation}
-
-where now the birth weight outcome has a hat (i.e. $\hat{y}$) that denotes mathematically that the equation predicts a value of birth weight given solely the number of gestational days. The first equation above says that the original observed birth weight is a function of gestational days plus some error. Using the equation above, the predicted birth weight can be obtained by including a value inserted for gestational days. Let's pick a few values for gestational days to try.
-
-```{r reg-equations}
--10.8 + 0.47 * 200
--10.8 + 0.47 * 275
--10.8 + 0.47 * 276
-```
-
-You may notice that the predicted value of birth weight increases by 0.47 grams for every one day increase in gestational days, often referred to as the linear slope. The predicted values would fit on the dashed line shown in the scatterplot shown above. This highlights the assumption made here from the linear regression model above in which the relationship between birth weight and gestational days is assumed to be linear. It is possible to relax this assumption with a more complicated model, however this is the assumption being made currently.
-
-### Explore the y-intercept
-So far the discussion has focused on the linear slope, often a term that is of most interest. However, the y-intercept can also be made to be more interesting by adjusting the range of gestational days.
-
-#### Mean center gestational days
-First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of gestational days.
-
-```{r scatter-mean-center}
-gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby, size = 3, alpha = .2) %>%
-  gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
-  gf_smooth(size = 1)
-```
-
-Notice that the relationship is the same as before, but now the scale of gestational days is different. It may be more difficult to interpret now as the number of days a women is pregnant is relatively well known, but now the mean gestational days is represented as 0 in the figure and all the values are in reference to that instead of referencing when a women became pregnant. Using this same approach, a linear regression can be fitted to this newly recentered gestational days variable.
-
-```{r reg-mean-centered}
-baby_reg_centered <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby)
-coef(baby_reg_centered)
-```
-
-he new equation would look like:
-
-begin{equation}
-\hat{birth\_weight} = 119.5 + 0.47 (gestational\_days - mean(gestational\_days))
-\end{equation}
-
-```{r predict-mean-centered}
-119.5 + 0.47 * -3
-119.5 + 0.47 * 0
-```
-
-#### Minimum or Maximum centered gestational days
-A few other options that are common are to subtract the minimum or maximum values from the x attribute.
-
-```{r reg-min-centered}
-baby_reg_min <- lm(birth_weight ~ I(gestational_days - min(gestational_days)), data = baby)
-coef(baby_reg_min)
-```
-
-```{r reg-max-centered}
-baby_reg_max <- lm(birth_weight ~ I(gestational_days - max(gestational_days)), data = baby)
-coef(baby_reg_max)
-```
-
-
-## Conditional Means
-
+## Adding more attributes
+To come ...
