@@ -22,6 +22,7 @@ fig:class-location
 fig:location-accuracy
 fig:location-accuracy-facet
 fig:resample-weather-snow
+fig:prediction-accuracy-resample
 introduction
 statistics-vs-data-science
 experiments-vs-observations

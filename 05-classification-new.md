@@ -650,7 +650,7 @@ class_tree <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max + location,
 rpart.plot(class_tree, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="05-classification-new_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<img src="05-classification-new_files/figure-html/train-classification-model-1.png" width="672" />
 
 This seems like a reasonable model. Let's check the model accuracy.
 
@@ -727,79 +727,75 @@ gf_density(~ mean, data = snow_prop) %>%
 <p class="caption">(\#fig:resample-weather-snow)Density figure of the distribution of the proportion of days in which is snows from the resampled data.</p>
 </div>
 
+One can see from the figure that there is variation in the proportion of days that have snowfall. It is centered just below 0.3, shown by the peak of the density curve. This means that on average, there are just under 30% of days in which snow fell across all of the resampled data. The variation in the proportion of days in which it snowed ranged from just under 0.28 to just over 0.32, meaning that in the resampled data, there were some data cases where it snowed 28% of the time and others it snowed 32% of the time. Proportions of snow days in these extremes are more unlikely to occur as the density curve is much lower for these ranges, compared to the peak around 29% to 30%.
+
 ### Bootstrap variation in prediction accuracy
 
-We can apply these same methods to evaluate the prediction accuracy based on the classification model above. When using the bootstrap, we can get an estimate for how much variation there is in the classification accuracy based on the sample that we have. In addition, we can explore how different the prediction accuracy would be for many samples when using all the data and by splitting the data into training and test sets.
-Bootstrap full data.
+The same methods can be used to evaluate the prediction accuracy based on the classification model above. When using the bootstrap, we can get an estimate for how much variation there is in the classification accuracy based on the sample that we have. In addition, we can explore how different the prediction accuracy would be for many samples when using all the data and by splitting the data into training and test sets.
 
-Let's first explore the full data to see how much variation there is in the prediction accuracy using all of the data. Here we will again use the sample_n() function to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I'm going to write a function to do all of these steps one time.
+The steps to do this resampling/bootstrap are similar to before, but one important step is added. Before the relevant statistic of interest is saved, the statistical model needs to be fitted on the resampled data. 
+
+1. Resample the data, with replacement (assuming the population is representative)
+2. Fit statistical model to resampled data
+3. Compute and save a statistic of interest (e.g., mean accuracy)
+4. Repeat steps 1 through 3 many times (i.e., 5000, 10,000, or more)
+5. Explore the distribution of the statistic of interest
+
+When fitting a classification model, it can often be of interest to split the resampled data into the training and testing data as well as part of this process. This mimics the way in which the model would be used in practice and will help to ensure that the prediction accuracy obtained is not overstated. Therefore, a step 1a could be added such that the steps look like:
+
+1. Resample the data, with replacement (assuming the population is representative)
+    + Split resampled data into training/test data.
+2. Fit statistical model to resampled data
+    + If data are split into training/test, fit to training data
+3. Compute and save a statistic of interest (e.g., mean accuracy)
+    + If data are split into training/test, evaluate performance on testing data
+4. Repeat steps 1 through 3 many times (i.e., 5000, 10,000, or more)
+5. Explore the distribution of the statistic of interest
+
+This process is shown below with the function, `calc_predict_acc()`. Here the `sample_n()` function is used to sample with replacement, then fit the classification model to each of these samples, then calculate the prediction accuracy. First, I'm going to write a function to do all of these steps one time.
 
 
 ```r
 calc_predict_acc <- function(data) {
-  rsamp_titanic <- titanic %>%
-    sample_n(nrow(titanic), replace = TRUE)
+  rsamp <- us_weather %>%
+    sample_n(nrow(us_weather), replace = TRUE)
+  
+  rsamp_split <- initial_split(rsamp, prop = .8)
+  rsamp_train <- training(rsamp_split)
+  rsamp_test <- testing(rsamp_split)
 
-  class_model <- rpart(survived ~ Pclass + Sex + Age + Fare + SibSp + Parch, 
-        method = 'class', data = rsamp_titanic, cp = .02)
+  class_model <- rpart(snow_factor ~ drybulbtemp_min + drybulbtemp_max + location, 
+        method = 'class', data = rsamp_train, cp = .02)
 
-  titanic_predict <- rsamp_titanic %>%
-    mutate(tree_predict = predict(class_model, type = 'class'))
-  titanic_predict %>%
-    mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
+  rsamp_predict <- rsamp_test %>%
+    mutate(tree_predict = predict(class_model, newdata = rsamp_test, type = 'class'))
+  rsamp_predict %>%
+    mutate(same_class = ifelse(snow_factor == tree_predict, 1, 0)) %>%
     df_stats(~ same_class, mean, sum)
 }
 
 calc_predict_acc()
 ```
 
-
- To do the bootstrap, this process can be replicated many times. In this case, I'm going to do 500. In practice, we would likely want to do a few more.
-
-
-
-```r
-predict_accuracy_fulldata <- map(1:2000, calc_predict_acc) %>%
-  bind_rows()
-
-gf_density(~ mean_same_class, data = predict_accuracy_fulldata)
+```
+##     response      mean sum
+## 1 same_class 0.7982327 542
 ```
 
 
-```r
-calc_predict_acc_split <- function(data) {
-  titanic_split <- initial_split(titanic, prop = .7)
-  titanic_train <- training(titanic_split)
-  titanic_test <- testing(titanic_split)
-
-  class_model <- rpart(survived ~ Pclass + Sex + Age + Fare + SibSp + Parch, 
-        method = 'class', data = titanic_train, cp = .02)
-
-  titanic_predict <- titanic_test %>%
-    mutate(tree_predict = predict(class_model, newdata = titanic_test, type = 'class'))
-  titanic_predict %>%
-    mutate(same_class = ifelse(survived == tree_predict, 1, 0)) %>%
-    df_stats(~ same_class, mean, sum)
-}
-
-calc_predict_acc_split()
-```
+The function will then be replicated 10,000 times to generate the prediction accuracy. 
 
 
 ```r
-predict_accuracy_traintest <- map(1:2000, calc_predict_acc_split) %>%
-  bind_rows()
+predict_accuracy_fulldata <- map_dfr(1:10000, calc_predict_acc)
 
-gf_density(~ mean_same_class, data = predict_accuracy_traintest)
+gf_density(~ mean, data = predict_accuracy_fulldata) %>%
+  gf_labs(x = "Classification Accuracy")
 ```
 
-
-```r
-bind_rows(
-  mutate(predict_accuracy_fulldata, type = "Full Data"),
-  mutate(predict_accuracy_traintest, type = "Train/Test")
-) %>%
-  gf_density(~ mean_same_class, color = ~ type, fill = NA, size = 1.25)
-```
+<div class="figure">
+<img src="05-classification-new_files/figure-html/prediction-accuracy-resample-1.png" alt="Prediction accuracy of classification model on resampled data with training/testing split." width="672" />
+<p class="caption">(\#fig:prediction-accuracy-resample)Prediction accuracy of classification model on resampled data with training/testing split.</p>
+</div>
 
 
