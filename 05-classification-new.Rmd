@@ -425,8 +425,8 @@ This process is shown below with the function, `calc_predict_acc()`. Here the `s
 
 ```{r prediction-accuracy-function}
 calc_predict_acc <- function(data) {
-  rsamp <- data %>%
-    sample_n(nrow(data), replace = TRUE)
+  rsamp <- us_weather %>%
+    sample_n(nrow(us_weather), replace = TRUE)
   
   rsamp_split <- initial_split(rsamp, prop = .8)
   rsamp_train <- training(rsamp_split)
@@ -442,16 +442,17 @@ calc_predict_acc <- function(data) {
     df_stats(~ same_class, mean, sum)
 }
 
-calc_predict_acc(us_weather)
+calc_predict_acc()
 ```
 
 
 The function will then be replicated 10,000 times to generate the prediction accuracy. 
 
 ```{r prediction-accuracy-resample, fig.cap = "Prediction accuracy of classification model on resampled data with training/testing split."}
-predict_accuracy_fulldata <- map_dfr(1:10000, calc_predict_acc, data = us_weather)
+predict_accuracy_fulldata <- map_dfr(1:10000, calc_predict_acc)
 
-gf_density(~ mean_same_class, data = predict_accuracy_fulldata)
+gf_density(~ mean, data = predict_accuracy_fulldata) %>%
+  gf_labs(x = "Classification Accuracy")
 ```
 
 
