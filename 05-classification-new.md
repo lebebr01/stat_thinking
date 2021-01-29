@@ -691,7 +691,7 @@ us_weather_predict_test %>%
 For the test data, prediction accuracy was quite a bit lower, about 76.5%. The reason the accuracy tends to be lower when evaluating accuracy on the testing data is that the model has not seen these data, therefore, there could be new patterns in these data that the model has not seen before. Although the accuracy is lower, it would be more realistic to how these models would be used in practice. Commonly, the model is fitted on data on hand and is used to predict future cases. The training/test data setup is more realistic to this scenario in practice where the testing data mimic those future cases that the model would ultimately be used to predict. 
 
 
-## Introduction to resampling/bootstrap
+## Introduction to Resampling/Bootstrap
 
 To explore these ideas in more detail, it will be helpful to use a statistical technique called resampling or the bootstrap. These ideas will be used a lot going forward to explore inference and understand sampling variation. In very simple terminology, resampling or the bootstrap can help to understand uncertainty in model estimates and also allow more flexibility in the statistics that are able to be used. The main drawback of resampling and bootstrap methods is that they can be computationally heavy, therefore depending on the situation, more time is needed to come to the conclusion desired.
 

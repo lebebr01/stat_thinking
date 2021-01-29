@@ -23,6 +23,7 @@ fig:location-accuracy
 fig:location-accuracy-facet
 fig:resample-weather-snow
 fig:prediction-accuracy-resample
+fig:density-act
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -81,11 +82,16 @@ splitting-the-data-into-trainingtest
 evaluate-accuracy-on-the-testing-data
 introduction-to-resamplingbootstrap
 bootstrap-variation-in-prediction-accuracy
-linear-model
 regression-trees
+predicting-act-score
+loading-r-packages
 visualize-distributions
-decision-tree---regression-tree
+continuous-association
+first-regression-tree
 evaluating-accuracy
+conditional-error
+adding-more-attributes
+linear-regression
 simple-regression-continuous-predictor
 description-of-the-data
 scatterplots
