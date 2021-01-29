@@ -5,6 +5,15 @@
 These data contain information on mother's and baby's health for 1,174 pregnant women.
 
 ```{r baby-data}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(rsample)
+library(statthink)
+
+# Set theme for plots
+theme_set(theme_statthinking())
+
 baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv")
 head(baby)
 ```
