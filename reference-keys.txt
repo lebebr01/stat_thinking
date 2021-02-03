@@ -24,6 +24,7 @@ fig:location-accuracy-facet
 fig:resample-weather-snow
 fig:prediction-accuracy-resample
 fig:density-act
+fig:scatter-act
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -87,6 +88,7 @@ predicting-act-score
 loading-r-packages
 visualize-distributions
 continuous-association
+correlation-computation
 first-regression-tree
 evaluating-accuracy
 conditional-error

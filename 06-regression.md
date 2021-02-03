@@ -5,9 +5,9 @@ editor_options:
 ---
 # Regression Trees
 
-Regression trees are an extension of classification trees where the outcome no longer represents categories (e.g., it snowed or did not snow), but instead represents a continuous or interval type outcome. For example, earlier in this book, distributions of college admission rates were explored, this represented a continuous or interval type attribute as the data took on many different values. Regression trees differ from classification trees in that the outcome of the model is a prediction of the continuous quantity rather than predicting if an observation belongs to a specific category. 
+Regression trees are an extension of classification trees where the outcome no longer represents categories (e.g., it snowed or did not snow), but instead the outcome is a continuous or interval type. For example, earlier in this book, distributions of college admission rates were explored, this represented a continuous or interval type attribute as the data took on many different values. Regression trees differ from classification trees in that the outcome of the model is a prediction of the continuous quantity rather than predicting if an observation belongs to a specific category. For example, instead of predicting whether it snows or not, a regression tree would predict how much snow fell, such as 5.5 inches. The difference in the predicted value has a few implications for the model, first, the accuracy measure used to evaluate the model needs to differ as it is unlikely that the prediction will be the same for any of the data in a regression tree, secondly, the prediction task is now much more difficult. These two observations need to be kept in mind when working with a regression tree.
 
-Much of the machinery is similar however. Most notably, the same tree type structure will be used to make the prediction. Also, to parallel the classification trees explored so far, the regression trees used in this text will assume that only two splits can occur at any point along the tree. There are also differences between the classification and regression trees. Already discussed is the outcome attribute is continuous for a regression tree, therefore the predicted value will represent one that is continuous as well instead of representing a category. Furthermore, since the predictions are done on a continuous scale, a different measure of overall model fit or accuracy will have to be used. This chapter will explore those details in turn. But first, an example of a regression tree.
+Much of the machinery is similar between regression and classification trees, however. Most notably, the same tree type structure will be used to make the prediction. Also, to parallel the classification trees explored so far, the regression trees used in this text will assume that only two splits can occur at any point along the tree. There are also differences between the classification and regression trees. Already discussed is the outcome attribute is continuous for a regression tree, therefore the predicted value will represent one that is continuous as well instead of representing a category. Furthermore, since the predictions are done on a continuous scale, a different measure of overall model fit or accuracy will have to be used. This chapter will explore those details in turn. But first, an example of a regression tree.
 
 ## Predicting ACT Score
 The first example of using a regression tree will attempt to predict the median ACT score for a college institution using other attributes that describe the type of college. Before getting into the model, the packages and loading of the data needs to be done.  
@@ -58,12 +58,61 @@ gf_density(~ actcmmid, data = colleges) %>%
 2. Could there be concerns about specific features of this distribution if we are looking to do an analysis on this?
 
 ## Continuous Association
-It is often interesting to estimate whether two continuous/interval attributes are associated or related to one another. This can be done with a statistic called the correlation. The correlation represents ...
+It is often interesting to estimate whether two continuous/interval attributes are associated or related to one another. This can be done with a statistic called the correlation. The correlation measures the degree to which the two attributes move together or not. For example, if one attribute increases does it give information about whether the second attribute increases (ie., a positive correlation) or decreases (ie., a negative correlation)? Before getting to the computation, exploring a sample can be helpful. 
 
-To come...
+First, to get a sense to what the correlation represents, it is useful to explore a scatterplot. The scatterplot depicts two attributes and places a point where the two attributes intersect. For this first example, a scatterplot with median college ACT score and admission rate are explored. 
+
+
+```r
+gf_point(actcmmid ~ adm_rate, data = colleges, size = 3) %>%
+  gf_labs(x = 'Admission Rate',
+          y = 'Median College ACT Score')
+```
+
+```
+## Warning: Removed 730 rows containing missing values (geom_point).
+```
+
+<div class="figure">
+<img src="06-regression_files/figure-html/scatter-act-1.png" alt="Scatterplot of median college ACT score by college admission rate." width="672" />
+<p class="caption">(\#fig:scatter-act)Scatterplot of median college ACT score by college admission rate.</p>
+</div>
+
+Figure \@ref(fig:scatter-act) shows the bivariate relationship between median college ACT score and the college admission rate. If these two attributes are unrelated, it would not be possible to identify a trend in the scatterplot. However, in Figure \@ref(fig:scatter-act), there is a noticeable trend. As median college ACT scores increase, the admission rates tend to decrease. This is an example of a negative trend and would represent a negative relationship, association, or correlation. 
+
+Although there is a trend in the relationship, there are exceptions to this rule. For instance, notice the points that have very low median college ACT scores, there are cases that have lower admission rates (about 0.25 or 25%) and some have higher admission rates (above 0.5 or 50%). Focusing on the single point at about 0.25 admission rate and 9 median college ACT score, most of the median college ACT scores for an admission rate around 0.25 are above 30, with a few clustered around 20. This indicates the variation and imperfect relationship between the two attributes. The mantra, "correlation does not mean causation" is common in statistics courses and this variation and imperfect relationship shows one example of this. In short, it requires very specific designs to the data collection to be able to make very strong statements about causation, most often the data available represent observations that were simply observed rather than being part of a more stringent experimental design. 
+
+The correlation statistic provides a numeric summary of the degree of relationship between two quantitative attributes. These can be estimated with the `cor()` function. The primary argument is a formula like has been used before and is similar to the `gf_point()` function used above. The data argument is specified and one other argument may be helpful when there are data missing. This is the `use = 'complete.obs'` argument. Specifying this argument with `'complete.obs'` tells the `cor()` function to remove any missing data on the two attributes being specified and keep any data where pairs of data are present. 
+
+
+```r
+cor(actcmmid ~ adm_rate, data = colleges, use = 'complete.obs')
+```
+
+```
+## [1] -0.4058855
+```
+
+The correlation estimate depicted here is -0.41, which carries two pieces of information. One, it shows the direction of association, here negative means that as one attribute increases the other tends to decrease (an inverse relationship). This was what was noticed in \@ref(fig:scatter-act). The second element the correlation shows is the magnitude of association. The correlation is standardized, meaning that regardless of the attributes used for the computation, the correlation will always be in the same range. The correlation will exclusively be between -1 to +1. Values of -1 or +1 indicate perfect negative or positive relationships respectively. A correlation of 0 means no relationship. The example above had a correlation of -0.41, which means the relationship is negative/inverse (as one attribute increases, the other tends to decrease) and the magnitude of association is about in between -1 and 0, but slightly closer to 0. What is considered a large, medium, or small association is largely dependent on the industry, but with education or social science data, this type of association would likely be considered a moderate or medium degree of association. 
+
+The correlation makes one other assumption about the data. The correlation computed above and considered in this text is sometimes referred to as the Pearson correlation. This correlation assumes the data are best represented by a straight line or a linear relationship. If the relationship is not linear, but is best represented by a curved line, the correlation used in this course would likely underrepresent the degree of association. 
+
+*Note: Add some more detail on + or close to 0 correlations*.
+
+### Correlation Computation
+
+The correlation can be represented by the following formula. In this formula, $\bar{x}, \bar{y}$ are the means for x and y respectively. THe terms, $x_{i}$, and $y_{i}$, represent the individual data elements for each attribute. The numerator of the formula represents the deviations from the mean for the two attributes, which are multiplied together and added. The numerator is also referred to as the covariance and measures the degree to which the two attributes move together. 
+
+$$
+r = \frac{\sum (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sqrt{\sum(x_{i} - \bar{x})^2}\sqrt{\sum(y_{i} - \bar{y})^2}}
+$$
+
+The denominator of the correlation are the standard deviation of the two attributes. These act to standardize the correlation so that no matter which attributes are entered into the formula, the correlation will always be between -1 and +1. 
+
+*Note: maybe add piece about the covariance graphically*.
 
 ## First Regression Tree
-Another way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. In this case, the regression tree will predict the numeric variable with many potential values rather than just two.
+Another, and related to the correlation, way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. In this case, the regression tree will predict the numeric variable with many potential values rather than just two.
 
 The syntax for fitting a regression tree is very similar in R compared to the classification tree. The same function, `rpart()` is used and the function `rpart.plot()` will be used to visualize the fitted regression tree similar to before. The primary argument to the `rpart()` function is a formula where the left-hand side is the attribute of interest and the right hand side contains attributes that help predict the outcome. In the example below, the median college ACT score (`actcmmid`) is the outcome attribute and the college admission rate (`adm_rate`) is used as the sole continuous attribute used to predict the median college ACT score. The data argument is also specified and the only difference here between a classification tree and the regression tree here is the `method` argument. In the regression tree the method argument should be set to `method = 'anova'`. This tells the `rpart()` function that the outcome is numeric and that an anova method should be used in the model fitting. The anova stands for Analysis of Variance and we will discuss this in more detail moving forward.
 
