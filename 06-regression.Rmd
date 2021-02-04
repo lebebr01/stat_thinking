@@ -86,21 +86,22 @@ The denominator of the correlation are the standard deviation of the two attribu
 *Note: maybe add piece about the covariance graphically*.
 
 ## First Regression Tree
-Another, and related to the correlation, way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. In this case, the regression tree will predict the numeric variable with many potential values rather than just two.
+Another, and related to the correlation, way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. The regression tree, in contrast, will predict the numeric variable with many potential values rather than just two. This will have implications for how the model is evaluated for accuracy as well as how well the model does at predicting specific values. These will be discussed in more detail later. 
 
 The syntax for fitting a regression tree is very similar in R compared to the classification tree. The same function, `rpart()` is used and the function `rpart.plot()` will be used to visualize the fitted regression tree similar to before. The primary argument to the `rpart()` function is a formula where the left-hand side is the attribute of interest and the right hand side contains attributes that help predict the outcome. In the example below, the median college ACT score (`actcmmid`) is the outcome attribute and the college admission rate (`adm_rate`) is used as the sole continuous attribute used to predict the median college ACT score. The data argument is also specified and the only difference here between a classification tree and the regression tree here is the `method` argument. In the regression tree the method argument should be set to `method = 'anova'`. This tells the `rpart()` function that the outcome is numeric and that an anova method should be used in the model fitting. The anova stands for Analysis of Variance and we will discuss this in more detail moving forward.
 
-```{r}
-act_reg <- rpart(actcmmid ~ adm_rate, data = colleges, method = "anova")
+```{r act-regression-tree, fig.cap = "The first regression tree predicting median college ACT score based on the admission rate."}
+act_reg <- rpart(actcmmid ~ adm_rate, data = colleges, 
+                 method = "anova")
 
 rpart.plot(act_reg, roundint = FALSE, type = 3, branch = .3)
 ```
 
 The output from the regression tree is similar to that from a classification tree. One major difference however is that the predicted values in the end are numeric quantities instead of classes and the probabilities that were shown previously are not shown here as there is not a probability of being in a class. The percentage of cases in the predicted nodes at the end of the tree are still shown. The logic for following the tree is the same as before where each split can have two new paths to follow and then the variable(s) are re-evaluated after the first split to see if additional splits can help predict the outcome of interest.
 
-Below is a figure that builds on the scatterplot we saw above. Vertical lines are shown that indicate the two splits that were established from the above regression tree. These splits are where the end buckets lie and all of the data points residing in a single area have the same median ACT score.
+Below is a figure that builds on the scatterplot we saw above. Vertical lines are shown that indicate the splits that were established from the regression tree in Figure \@ref(fig:act-regression-tree). These splits are where the end buckets lie and all of the data points residing in a single area have the same median ACT score. For example, all schools in the left-most quadrant of Figure \@ref(fig:visualize-regression-tree) would all have the same predicted median ACT score of 32. In reality, one can see that the value of 32 is correct for some of the schools, but there are others in this quadrant that have median ACT scores of less than 20. The next section will explore how accuracy for the regression tree can be evaluated.
 
-```{r}
+```{r visualize-regression-tree, fig.cap = "Visual depiction of the regression tree splits."}
 gf_point(actcmmid ~ adm_rate, data = colleges, color = 'gray55') %>% 
     gf_labs(y = "Median college ACT score",
             x = "Admission Rate",
@@ -108,6 +109,70 @@ gf_point(actcmmid ~ adm_rate, data = colleges, color = 'gray55') %>%
   geom_parttree(data = act_reg, aes(fill = actcmmid), alpha = 0.3) + 
   scale_fill_continuous("ACT")
 ```
+
+## Evaluating accuracy
+
+In the classification tree example, a natural metric to evaluate how well the model was doing was the classification accuracy. Classification accuracy was often best computed for each class instead of a single overall accuracy statistic. In the regression tree example, there is no class membership, instead the original observed college ACT score and the predicted college ACT scores can be compared. One measure that could be used for accuracy is on average how far do the predicted scores deviate from the observed scores. Mathematically, this would look like:
+
+$$
+accuracy = predicted - observed
+$$
+
+However, this will have issues, as when the deviation was computed, those values above and below will offset one another. Therefore, simply computing the accuracy as the predicted score minus the observed score will on average be 0. Similarly to the standard deviation, we could square the difference between the predicted and observed values to get the mean square error. We could also take the square root of the mean square error (MSE) to get the root mean square error (RMSE), the benefit of the RMSE over the MSE is that the RMSE will be on the same metric as the outcome of interest. Mathematically, these can be represented as:
+
+$$
+MSE = \frac{\sum (predicted - observed) ^ 2}{n} \\
+
+RMSE = \sqrt{\frac{\sum (predicted - observed) ^ 2}{n}}
+$$
+
+Another statistic can also be useful here, the mean absolute error (MAE). This statistic was first introduced in chapter 3 and is similar to the RMSE above, but except for squaring values and taking the square root, the absolute value is used instead. This has the strength of never squaring values, so the metric is the same as the outcome, but has the weakness of having weaker statistical properties. The mathematical computation can be shown as:
+
+$$ 
+MAE = \frac{\sum |predicted - observed|}{n}
+$$
+
+The below code chunk computes the deviation labeled as error. The first 10 rows are shown along with the institution name (`instnm`), median ACT score (`actcmmid`), and the predicted median ACT score (`act_pred`). Notice within the error column that there are some values above and below zero. You can see the values that have a negative error have an actual median ACT score less than the predicted values. Conversely, those that have positive errors have actual median ACT scores greater than the predicted ACT value. 
+
+```{r}
+colleges_pred <- colleges %>%
+  drop_na(actcmmid) %>%
+  mutate(act_pred = predict(act_reg),
+         error = actcmmid - act_pred) %>%
+  select(instnm, actcmmid, act_pred, error)
+head(colleges_pred, n = 10)
+```
+
+The `df_stats()` function can used to compute summary statistics for the `error` attribute which represented the difference between the observed and predicted college ACT score. A variety of statistics are computed on the `error` attribute including the mean, median, variance (var), standard deviation (sd), minimum (min), and maximum (max). 
+
+```{r}
+colleges_pred %>%
+  df_stats(~ error, mean, median, var, sd, min, max)
+```
+
+Notice from the statistics computed, the mean and median of the deviation or raw error (i.e., $predicted - observed$), the values are very close to zero and are practically zero for the mean. This is occurring due to the positive and negative errors are offsetting one another. The median isn't exactly zero as the distribution of errors are not perfectly symmetric. Figure \@ref(fig:error-dist) shows the distribution of errors. Notice there is a longer tail on the negative side, meaning that there are some predicted values that are much larger than the observed median ACT score. This is also shown by the min and max statistics computed above. 
+
+```{r error-dist, fig.cap = "Distribution of error deviations from the regression tree model."}
+gf_density(~ error, data = colleges_pred) %>%
+  gf_labs(x = "Error = Predicted - Observed")
+```
+
+Circling back to the final statistic computed above, the variance (var) and standard deviation (sd) of the error term represents the MSE and RMSE respectively and are interpretable. In general, larger values of these statistics indicate less accuracy, that is, on average the squared deviations of the predicted minus the observed are larger. In practice, the RMSE is often used more than the MSE as the metric is the same as the outcome, in this case the median ACT scores. The RMSE of `r round(sd(colleges_pred$error), 2)` says that on average the predicted median institution ACT scores are about `r round(sd(colleges_pred$error), 2)` away from the observed median institution ACT score. 
+
+
+Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the median college ACT score scale. In general, lower average distances indicates the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without standardization.
+
+```{r}
+colleges_pred %>%
+  df_stats(~ abs(error), mean, median, sd, min, max)
+```
+
+### Conditional Error
+```{r}
+colleges_pred %>%
+  df_stats(abs(error) ~ actcmmid, mean, median, sd, min, max, length)
+```
+
 #### Explore another attribute
 Let's explore another attribute, the number of hits in the previous season and how this may be related to the log of the salary. First a scatterplot is shown then the correlation is computed.
 
@@ -129,38 +194,7 @@ ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
     )
 ```
 
-## Evaluating accuracy
 
-In the classification tree example, a natural metric to evaluate how well the model was doing was the classification accuracy. This was most useful being computed individually for each class that was predicted instead of solely overall. In the regression tree example, there is no class membership, instead the original observed college ACT score and the predicted college ACT scores can be compared. One measure that could be used for accuracy is on average how far do the predicted scores deviate from the observed scores. The below code chunk computes those variables.
-
-```{r}
-colleges_pred <- colleges %>%
-  drop_na(actcmmid) %>%
-  mutate(act_pred = predict(act_reg2),
-         error = actcmmid - act_pred) %>%
-  select(instnm, actcmmid, act_pred, error)
-head(colleges_pred, n = 10)
-```
-
-The `df_stats()` function is used to compute summary statistics for the `error` attribute which represented the difference between the observed and predicted college ACT score. 
-
-```{r}
-colleges_pred %>%
-  df_stats(~ error, mean, median, sd, min, max)
-```
-
-Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the median college ACT score scale. In general, lower average distances indicates the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without standardization.
-
-```{r}
-colleges_pred %>%
-  df_stats(~ abs(error), mean, median, sd, min, max)
-```
-
-### Conditional Error
-```{r}
-colleges_pred %>%
-  df_stats(abs(error) ~ actcmmid, mean, median, sd, min, max, length)
-```
 
 
 ## Adding more attributes
