@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.4545217
+## gestational_days 0.4665772
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -74,7 +74,7 @@ names(baby_coef) <- 'slope'
 gf_density(~ slope, data = baby_coef)
 ```
 
-<img src="08-estimation_files/figure-html/resample-10k-density-1.png" width="672" />
+<img src="07-estimation_files/figure-html/resample-10k-density-1.png" width="672" />
 
 
 ```r
@@ -84,7 +84,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope 0.3947908 0.4674294 0.5443873
+## 1    slope 0.3938848 0.4670909 0.5419592
 ```
 
 ## Categorical Predictor(s)
@@ -100,7 +100,7 @@ gf_density(~ birth_weight, color = ~ maternal_smoker, size = 1.25, fill = 'gray8
           color = 'Smoked?')
 ```
 
-<img src="08-estimation_files/figure-html/density-smoker-1.png" width="672" />
+<img src="07-estimation_files/figure-html/density-smoker-1.png" width="672" />
 
 
 What are the general take-aways from the distributions above? To give some additional information, a violin plot may be helpful.
@@ -114,7 +114,7 @@ gf_violin(birth_weight ~ maternal_smoker, data = baby, draw_quantiles = c(0.1, 0
           x = "Smoker?")
 ```
 
-<img src="08-estimation_files/figure-html/violin-smoker-1.png" width="672" />
+<img src="07-estimation_files/figure-html/violin-smoker-1.png" width="672" />
 
 Any additional information shown here that shows differences? To finish the descriptive exploration, let's compute some descriptive statistics.
 
@@ -232,8 +232,8 @@ resample_baby()
 ```
 
 ```
-##                             .
-## maternal_smokerTRUE -9.869037
+##                            .
+## maternal_smokerTRUE -10.0088
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -247,7 +247,7 @@ names(baby_coef) <- 'slope'
 gf_density(~ slope, data = baby_coef)
 ```
 
-<img src="08-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" />
+<img src="07-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" />
 
 
 ```r
@@ -256,8 +256,8 @@ baby_coef %>%
 ```
 
 ```
-##   response        5%       50%       95%
-## 1    slope -11.03849 -9.261417 -7.487675
+##   response        5%       50%     95%
+## 1    slope -11.01377 -9.243781 -7.4679
 ```
 
 ## More than 2 categorical groups
@@ -320,7 +320,7 @@ gf_violin(adm_rate ~ preddeg, data = college_score, fill = 'gray85',
           size = 1, draw_quantiles = c(0.1, 0.5, 0.9))
 ```
 
-<img src="08-estimation_files/figure-html/violin-preddeg-1.png" width="672" />
+<img src="07-estimation_files/figure-html/violin-preddeg-1.png" width="672" />
 
 There may be some small differences between these groups, but more formally we can test this to understand the amount of uncertainty in the average of the distributions. This again will make use of the `lm()` function in R and the formula is very similar to what was done before and mimics the formula from the violin plot above.
 
@@ -387,7 +387,7 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
 ## `geom_smooth()` using method = 'loess'
 ```
 
-<img src="08-estimation_files/figure-html/scatter-smoker-1.png" width="672" />
+<img src="07-estimation_files/figure-html/scatter-smoker-1.png" width="672" />
 
 
 
@@ -439,9 +439,9 @@ resample_baby()
 ## # A tibble: 3 x 2
 ##   term                                         estimate
 ##   <chr>                                           <dbl>
-## 1 (Intercept)                                   123.   
-## 2 I(gestational_days - mean(gestational_days))    0.427
-## 3 maternal_smokerTRUE                            -7.90
+## 1 (Intercept)                                   122.   
+## 2 I(gestational_days - mean(gestational_days))    0.472
+## 3 maternal_smokerTRUE                            -7.26
 ```
 
 
@@ -454,7 +454,7 @@ coef_baby %>%
   gf_facet_wrap(~ term, scales = 'free')
 ```
 
-<img src="08-estimation_files/figure-html/mult-reg-dist-1.png" width="672" />
+<img src="07-estimation_files/figure-html/mult-reg-dist-1.png" width="672" />
 
 ### Interactions
 One additional idea that can be quite powerful is the idea of interactions. This was indirectly shown earlier in the course with classification and regression trees, where the models after each split re-evaluated which attributes were most helpful. In this way, the same attribute could be used in different places with different scores identifying the split. A similar idea can be explored in the regression framework, where the idea is that there are differential effects for different groups. This can be shown visually:
@@ -470,7 +470,7 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
 ## `geom_smooth()` using method = 'loess'
 ```
 
-<img src="08-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" />
+<img src="07-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" />
 
 
 ```r
@@ -508,9 +508,9 @@ resample_baby()
 ##   term                                                             estimate
 ##   <chr>                                                               <dbl>
 ## 1 (Intercept)                                                       123.   
-## 2 I(gestational_days - mean(gestational_days))                        0.347
-## 3 maternal_smokerTRUE                                                -9.54 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.312
+## 2 I(gestational_days - mean(gestational_days))                        0.450
+## 3 maternal_smokerTRUE                                                -7.36 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.182
 ```
 
 
@@ -523,7 +523,7 @@ coef_baby %>%
   gf_facet_wrap(~ term, scales = 'free')
 ```
 
-<img src="08-estimation_files/figure-html/interaction-distribution-1.png" width="672" />
+<img src="07-estimation_files/figure-html/interaction-distribution-1.png" width="672" />
 
 ### Evaluating model fit
 As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby's birth weight.
