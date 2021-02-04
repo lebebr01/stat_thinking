@@ -159,13 +159,23 @@ gf_density(~ error, data = colleges_pred) %>%
 
 Circling back to the final statistic computed above, the variance (var) and standard deviation (sd) of the error term represents the MSE and RMSE respectively and are interpretable. In general, larger values of these statistics indicate less accuracy, that is, on average the squared deviations of the predicted minus the observed are larger. In practice, the RMSE is often used more than the MSE as the metric is the same as the outcome, in this case the median ACT scores. The RMSE of `r round(sd(colleges_pred$error), 2)` says that on average the predicted median institution ACT scores are about `r round(sd(colleges_pred$error), 2)` away from the observed median institution ACT score. 
 
-
-Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the median college ACT score scale. In general, lower average distances indicates the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without standardization.
+The mean absolute error can be computed similarly, except instead of using the raw deviations (ie., errors), the absolute value of the deviations needs to be computed first. This is done using the `abs()` function shown below and specified as `abs(error)`. The `error` term represents the errors computed as the difference in the predicted and observed median ACT scores. Similar to the statistics computed above, the mean, median, minimum, and maximum statistics are computed. 
 
 ```{r}
 colleges_pred %>%
-  df_stats(~ abs(error), mean, median, sd, min, max)
+  df_stats(~ abs(error), mean, median, min, max)
 ```
+
+When interpreting these statistics, the mean and median column would represent the mean and median absolute error and are on the same scale as the outcome attribute, in this case the median ACT score. Therefore, the value of `r round(mean(abs(colleges_pred$error)), 2)` states that on average the predicted median ACT scores are within `r round(mean(abs(colleges_pred$error)), 2)` from the observed scores. The median is interpreted similarly, but instead of being the average absolute deviation, this represents the median absolute deviation. Finally, notice how the absolute value worked, the minimum statistic is positive, whereas before it was negative. The largest negative deviation/error from before is now the largest shown in the maximum column. The absolute value of the errors can be shown graphically to fully understand the new distribution. 
+
+```{r absolute-error-dist, fig.cap = "The distribution of errors after taking the absolute value ."}
+gf_density(~ abs(error), data = colleges_pred) %>%
+  gf_labs(x = "Error = |Predicted - Observed|")
+```
+
+This distribution is not symmetric, rather it is more like an exponential distribution with many values close to zero and rather quickly decreasing in the number of errors that are larger. This indicates that much of the predictions are close to the observed value with a few that are further away indicating worse performance.
+
+It is also worth mentioning that these accuracy statistics are scale dependent. Therefore if the scales of two outcomes are different, the MAE, MSE, or RMSE are not directly comparable without standardization. For example, if instead of median ACT scores, the outcome was median SAT scores, the accuracy statistics would naturally be larger due to SAT scores being larger. SAT scores for individual sections range from 200 to 800 instead of ACT scores ranging from 0 to 36. The MAE, MSE, or RMSE statistics would look larger due to scale differences, but that would not necessarily mean the model is doing worse. To compare these two outcomes, the outcomes or the accuracy statistics would need to be put on the same scale.
 
 ### Conditional Error
 ```{r}
@@ -173,8 +183,12 @@ colleges_pred %>%
   df_stats(abs(error) ~ actcmmid, mean, median, sd, min, max, length)
 ```
 
+To come...
+
 #### Explore another attribute
-Let's explore another attribute, the number of hits in the previous season and how this may be related to the log of the salary. First a scatterplot is shown then the correlation is computed.
+Let's explore another attribute, the undergraduate enrollment of institions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
+
+More to come...
 
 ```{r}
 act_reg2 <- rpart(actcmmid ~ adm_rate + ugds, data = colleges, method = "anova")
@@ -193,9 +207,6 @@ ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
     aesthetics = c('colour', 'fill')
     )
 ```
-
-
-
 
 ## Adding more attributes
 To come ...
