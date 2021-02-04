@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -335,13 +335,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">5.1</span> Topic: Decision Trees</h2>
 <p>We will continue to use the United States weather data introduced in Chapter 4. Given that this data was for the winter months in the United States, the classification task we will attempt to perform is to correct predict if it will snow on a particular day that precipitation occurs. To get a sense of how often it rains vs snows in these data, we can use the <code>count()</code> function to do this. For the <code>count()</code> function, the first argument is the name of the data, followed by the attributes we wish to count the number of observations in the unique values of those attributes.</p>
 <div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="classification.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(us_weather, rain, snow)</span></code></pre></div>
-<pre><code>## [90m# A tibble: 4 x 3[39m
+<pre><code>## # A tibble: 4 x 3
 ##   rain  snow      n
-##   [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m
-## [90m1[39m No    No     [4m1[24m571
-## [90m2[39m No    Yes     728
-## [90m3[39m Yes   No      821
-## [90m4[39m Yes   Yes     280</code></pre>
+##   &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+## 1 No    No     1571
+## 2 No    Yes     728
+## 3 Yes   No      821
+## 4 Yes   Yes     280</code></pre>
 <p>The following table counts the number of times that it rains or snows in the data. You may notice that there are days in which it does not rain or snow as shown by the row with No for both the rain and snow columns. There are also days in which it both rains and snows as shown in the row with Yes in both the rain and snow columns. Not surprisingly, a majority of the days it does not rain or snow, occurring about 46% of the time (<span class="math inline">\(1571 / (1571 + 728 + 821 + 280) = 46.2%\)</span>). Using similar logic, about 8% of the days in the data have both snow and rain.</p>
 <!--
 For the current classification, we will focus on days in which it either rains or snows instead of both or none. To do this, we will filter or restrict that data to those cases only, a data task that can be done with the `filter()` function. The `filter()` function works by selecting rows of data that match specific situations. This is similar to how a search engine, such as Google, works. In a search engine, you type is search criteria and the search engine gives you back matches that meet those criteria. The `filter()` function works similarly, we specify the criteria with which we hope to have data match to keep. 
@@ -357,11 +357,11 @@ count(us_weather_rs, rain, snow)
 ```
 
 ```
-## [90m# A tibble: 2 x 3[39m
+## # A tibble: 2 x 3
 ##   rain  snow      n
-##   [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<int>[39m[23m
-## [90m1[39m No    Yes     728
-## [90m2[39m Yes   No      821
+##   <chr> <chr> <int>
+## 1 No    Yes     728
+## 2 Yes   No      821
 ```
 
 We can further check if the filtering command worked by using the `count()` function. Using the `count()` function on the filtered data shows that we only retained rows of the data for the combinations that we wanted, namely days in which it there is some form of precipitation, but only if it snowed or rained, not both.

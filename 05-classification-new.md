@@ -40,13 +40,13 @@ count(us_weather, rain, snow)
 ```
 
 ```
-## [90m# A tibble: 4 x 3[39m
+## # A tibble: 4 x 3
 ##   rain  snow      n
-##   [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<int>[39m[23m
-## [90m1[39m No    No     [4m1[24m571
-## [90m2[39m No    Yes     728
-## [90m3[39m Yes   No      821
-## [90m4[39m Yes   Yes     280
+##   <chr> <chr> <int>
+## 1 No    No     1571
+## 2 No    Yes     728
+## 3 Yes   No      821
+## 4 Yes   Yes     280
 ```
 
 The following table counts the number of times that it rains or snows in the data. You may notice that there are days in which it does not rain or snow as shown by the row with No for both the rain and snow columns. There are also days in which it both rains and snows as shown in the row with Yes in both the rain and snow columns. Not surprisingly, a majority of the days it does not rain or snow, occurring about 46% of the time ($1571 / (1571 + 728 + 821 + 280) = 46.2%$). Using similar logic, about 8% of the days in the data have both snow and rain. 
@@ -65,11 +65,11 @@ count(us_weather_rs, rain, snow)
 ```
 
 ```
-## [90m# A tibble: 2 x 3[39m
+## # A tibble: 2 x 3
 ##   rain  snow      n
-##   [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m [3m[90m<int>[39m[23m
-## [90m1[39m No    Yes     728
-## [90m2[39m Yes   No      821
+##   <chr> <chr> <int>
+## 1 No    Yes     728
+## 2 Yes   No      821
 ```
 
 We can further check if the filtering command worked by using the `count()` function. Using the `count()` function on the filtered data shows that we only retained rows of the data for the combinations that we wanted, namely days in which it there is some form of precipitation, but only if it snowed or rained, not both.

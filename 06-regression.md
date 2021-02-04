@@ -112,22 +112,26 @@ The denominator of the correlation are the standard deviation of the two attribu
 *Note: maybe add piece about the covariance graphically*.
 
 ## First Regression Tree
-Another, and related to the correlation, way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. In this case, the regression tree will predict the numeric variable with many potential values rather than just two.
+Another, and related to the correlation, way to explore the relationship between two quantitative attributes is through the fitting a regression tree. A regression tree is similar to a classification tree, however now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, the focus in this class was predicting if a case belonged to one of two classes. The regression tree, in contrast, will predict the numeric variable with many potential values rather than just two. This will have implications for how the model is evaluated for accuracy as well as how well the model does at predicting specific values. These will be discussed in more detail later. 
 
 The syntax for fitting a regression tree is very similar in R compared to the classification tree. The same function, `rpart()` is used and the function `rpart.plot()` will be used to visualize the fitted regression tree similar to before. The primary argument to the `rpart()` function is a formula where the left-hand side is the attribute of interest and the right hand side contains attributes that help predict the outcome. In the example below, the median college ACT score (`actcmmid`) is the outcome attribute and the college admission rate (`adm_rate`) is used as the sole continuous attribute used to predict the median college ACT score. The data argument is also specified and the only difference here between a classification tree and the regression tree here is the `method` argument. In the regression tree the method argument should be set to `method = 'anova'`. This tells the `rpart()` function that the outcome is numeric and that an anova method should be used in the model fitting. The anova stands for Analysis of Variance and we will discuss this in more detail moving forward.
 
 
 ```r
-act_reg <- rpart(actcmmid ~ adm_rate, data = colleges, method = "anova")
+act_reg <- rpart(actcmmid ~ adm_rate, data = colleges, 
+                 method = "anova")
 
 rpart.plot(act_reg, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="06-regression_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+<div class="figure">
+<img src="06-regression_files/figure-html/act-regression-tree-1.png" alt="The first regression tree predicting median college ACT score based on the admission rate." width="672" />
+<p class="caption">(\#fig:act-regression-tree)The first regression tree predicting median college ACT score based on the admission rate.</p>
+</div>
 
 The output from the regression tree is similar to that from a classification tree. One major difference however is that the predicted values in the end are numeric quantities instead of classes and the probabilities that were shown previously are not shown here as there is not a probability of being in a class. The percentage of cases in the predicted nodes at the end of the tree are still shown. The logic for following the tree is the same as before where each split can have two new paths to follow and then the variable(s) are re-evaluated after the first split to see if additional splits can help predict the outcome of interest.
 
-Below is a figure that builds on the scatterplot we saw above. Vertical lines are shown that indicate the two splits that were established from the above regression tree. These splits are where the end buckets lie and all of the data points residing in a single area have the same median ACT score.
+Below is a figure that builds on the scatterplot we saw above. Vertical lines are shown that indicate the splits that were established from the regression tree in Figure \@ref(fig:act-regression-tree). These splits are where the end buckets lie and all of the data points residing in a single area have the same median ACT score. For example, all schools in the left-most quadrant of Figure \@ref(fig:visualize-regression-tree) would all have the same predicted median ACT score of 32. In reality, one can see that the value of 32 is correct for some of the schools, but there are others in this quadrant that have median ACT scores of less than 20. The next section will explore how accuracy for the regression tree can be evaluated.
 
 
 ```r
@@ -143,89 +147,118 @@ gf_point(actcmmid ~ adm_rate, data = colleges, color = 'gray55') %>%
 ## Warning: Removed 730 rows containing missing values (geom_point).
 ```
 
-<img src="06-regression_files/figure-html/unnamed-chunk-2-1.png" width="672" />
-#### Explore another attribute
-Let's explore another attribute, the number of hits in the previous season and how this may be related to the log of the salary. First a scatterplot is shown then the correlation is computed.
-
-
-```r
-act_reg2 <- rpart(actcmmid ~ adm_rate + ugds, data = colleges, method = "anova")
-
-rpart.plot(act_reg2, roundint = FALSE, type = 3, branch = .3)
-```
-
-<img src="06-regression_files/figure-html/unnamed-chunk-3-1.png" width="672" />
-
-The figure below attempts to show the regression tree in a scatterplot. Now there are more predicted buckets and these are represented by the square areas of the figure below. All of the data points within each square would receive the same predicted score.
-
-
-```r
-ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
-  geom_parttree(data = act_reg2, aes(fill = actcmmid), alpha = 0.3) +
-  geom_point(aes(color = actcmmid)) +
-  scale_colour_viridis_c(
-    limits = range(colleges$actcmmid, na.rm = TRUE), 
-    aesthetics = c('colour', 'fill')
-    )
-```
-
-<img src="06-regression_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<div class="figure">
+<img src="06-regression_files/figure-html/visualize-regression-tree-1.png" alt="Visual depiction of the regression tree splits." width="672" />
+<p class="caption">(\#fig:visualize-regression-tree)Visual depiction of the regression tree splits.</p>
+</div>
 
 ## Evaluating accuracy
 
-In the classification tree example, a natural metric to evaluate how well the model was doing was the classification accuracy. This was most useful being computed individually for each class that was predicted instead of solely overall. In the regression tree example, there is no class membership, instead the original observed college ACT score and the predicted college ACT scores can be compared. One measure that could be used for accuracy is on average how far do the predicted scores deviate from the observed scores. The below code chunk computes those variables.
+In the classification tree example, a natural metric to evaluate how well the model was doing was the classification accuracy. Classification accuracy was often best computed for each class instead of a single overall accuracy statistic. In the regression tree example, there is no class membership, instead the original observed college ACT score and the predicted college ACT scores can be compared. One measure that could be used for accuracy is on average how far do the predicted scores deviate from the observed scores. Mathematically, this would look like:
+
+$$
+accuracy = predicted - observed
+$$
+
+However, this will have issues, as when the deviation was computed, those values above and below will offset one another. Therefore, simply computing the accuracy as the predicted score minus the observed score will on average be 0. Similarly to the standard deviation, we could square the difference between the predicted and observed values to get the mean square error. We could also take the square root of the mean square error (MSE) to get the root mean square error (RMSE), the benefit of the RMSE over the MSE is that the RMSE will be on the same metric as the outcome of interest. Mathematically, these can be represented as:
+
+$$
+MSE = \frac{\sum (predicted - observed) ^ 2}{n} \\
+
+RMSE = \sqrt{\frac{\sum (predicted - observed) ^ 2}{n}}
+$$
+
+Another statistic can also be useful here, the mean absolute error (MAE). This statistic was first introduced in chapter 3 and is similar to the RMSE above, but except for squaring values and taking the square root, the absolute value is used instead. This has the strength of never squaring values, so the metric is the same as the outcome, but has the weakness of having weaker statistical properties. The mathematical computation can be shown as:
+
+$$ 
+MAE = \frac{\sum |predicted - observed|}{n}
+$$
+
+The below code chunk computes the deviation labeled as error. The first 10 rows are shown along with the institution name (`instnm`), median ACT score (`actcmmid`), and the predicted median ACT score (`act_pred`). Notice within the error column that there are some values above and below zero. You can see the values that have a negative error have an actual median ACT score less than the predicted values. Conversely, those that have positive errors have actual median ACT scores greater than the predicted ACT value. 
 
 
 ```r
 colleges_pred <- colleges %>%
   drop_na(actcmmid) %>%
-  mutate(act_pred = predict(act_reg2),
+  mutate(act_pred = predict(act_reg),
          error = actcmmid - act_pred) %>%
   select(instnm, actcmmid, act_pred, error)
 head(colleges_pred, n = 10)
 ```
 
 ```
-## [90m# A tibble: 10 x 4[39m
-##    instnm                              actcmmid act_pred  error
-##    [3m[90m<chr>[39m[23m                                  [3m[90m<dbl>[39m[23m    [3m[90m<dbl>[39m[23m  [3m[90m<dbl>[39m[23m
-## [90m 1[39m Alabama A & M University                  18     21.6 -[31m3[39m[31m.[39m[31m55[39m 
-## [90m 2[39m University of Alabama at Birmingham       25     24.8  0.222
-## [90m 3[39m University of Alabama in Huntsville       28     23.3  4.69 
-## [90m 4[39m Alabama State University                  18     21.6 -[31m3[39m[31m.[39m[31m55[39m 
-## [90m 5[39m The University of Alabama                 28     24.8  3.22 
-## [90m 6[39m Auburn University at Montgomery           22     23.3 -[31m1[39m[31m.[39m[31m31[39m 
-## [90m 7[39m Auburn University                         27     24.8  2.22 
-## [90m 8[39m Birmingham Southern College               26     21.7  4.34 
-## [90m 9[39m Faulkner University                       20     23.3 -[31m3[39m[31m.[39m[31m31[39m 
-## [90m10[39m Huntingdon College                        22     21.7  0.342
+## # A tibble: 10 x 4
+##    instnm                              actcmmid act_pred error
+##    <chr>                                  <dbl>    <dbl> <dbl>
+##  1 Alabama A & M University                  18     21.5 -3.50
+##  2 University of Alabama at Birmingham       25     21.5  3.50
+##  3 University of Alabama in Huntsville       28     23.1  4.89
+##  4 Alabama State University                  18     21.5 -3.50
+##  5 The University of Alabama                 28     23.1  4.89
+##  6 Auburn University at Montgomery           22     23.1 -1.11
+##  7 Auburn University                         27     23.1  3.89
+##  8 Birmingham Southern College               26     23.1  2.89
+##  9 Faulkner University                       20     23.1 -3.11
+## 10 Huntingdon College                        22     23.1 -1.11
 ```
 
-The `df_stats()` function is used to compute summary statistics for the `error` attribute which represented the difference between the observed and predicted college ACT score. 
+The `df_stats()` function can used to compute summary statistics for the `error` attribute which represented the difference between the observed and predicted college ACT score. A variety of statistics are computed on the `error` attribute including the mean, median, variance (var), standard deviation (sd), minimum (min), and maximum (max). 
 
 
 ```r
 colleges_pred %>%
-  df_stats(~ error, mean, median, sd, min, max)
+  df_stats(~ error, mean, median, var, sd, min, max)
 ```
 
 ```
-##   response         mean    median       sd       min      max
-## 1    error 4.682798e-16 0.2222222 2.895112 -15.65835 10.34165
+##   response          mean    median      var       sd       min      max
+## 1    error -5.043527e-16 -0.111001 9.919378 3.149504 -16.68116 7.888999
 ```
 
-Instead of computing the average deviation, we first want to take the absolute value of the difference between the observed and predicted scores then compute the summary statistics. This now represents the mean absolute error that was computed earlier when discussing variation and the interpretation of the mean statistic below would be the average distance the predicted scores are from the observed scores, on the median college ACT score scale. In general, lower average distances indicates the model did a better job of predicting the numeric quantity. However, this value is scale dependent, therefore if the scales of two outcomes are different, the mean absolute error is not directly comparable without standardization.
+Notice from the statistics computed, the mean and median of the deviation or raw error (i.e., $predicted - observed$), the values are very close to zero and are practically zero for the mean. This is occurring due to the positive and negative errors are offsetting one another. The median isn't exactly zero as the distribution of errors are not perfectly symmetric. Figure \@ref(fig:error-dist) shows the distribution of errors. Notice there is a longer tail on the negative side, meaning that there are some predicted values that are much larger than the observed median ACT score. This is also shown by the min and max statistics computed above. 
+
+
+```r
+gf_density(~ error, data = colleges_pred) %>%
+  gf_labs(x = "Error = Predicted - Observed")
+```
+
+<div class="figure">
+<img src="06-regression_files/figure-html/error-dist-1.png" alt="Distribution of error deviations from the regression tree model." width="672" />
+<p class="caption">(\#fig:error-dist)Distribution of error deviations from the regression tree model.</p>
+</div>
+
+Circling back to the final statistic computed above, the variance (var) and standard deviation (sd) of the error term represents the MSE and RMSE respectively and are interpretable. In general, larger values of these statistics indicate less accuracy, that is, on average the squared deviations of the predicted minus the observed are larger. In practice, the RMSE is often used more than the MSE as the metric is the same as the outcome, in this case the median ACT scores. The RMSE of 3.15 says that on average the predicted median institution ACT scores are about 3.15 away from the observed median institution ACT score. 
+
+The mean absolute error can be computed similarly, except instead of using the raw deviations (ie., errors), the absolute value of the deviations needs to be computed first. This is done using the `abs()` function shown below and specified as `abs(error)`. The `error` term represents the errors computed as the difference in the predicted and observed median ACT scores. Similar to the statistics computed above, the mean, median, minimum, and maximum statistics are computed. 
 
 
 ```r
 colleges_pred %>%
-  df_stats(~ abs(error), mean, median, sd, min, max)
+  df_stats(~ abs(error), mean, median, min, max)
 ```
 
 ```
-##     response     mean   median       sd       min      max
-## 1 abs(error) 2.175864 1.658354 1.908825 0.1538462 15.65835
+##     response     mean   median      min      max
+## 1 abs(error) 2.396454 1.888999 0.111001 16.68116
 ```
+
+When interpreting these statistics, the mean and median column would represent the mean and median absolute error and are on the same scale as the outcome attribute, in this case the median ACT score. Therefore, the value of 2.4 states that on average the predicted median ACT scores are within 2.4 from the observed scores. The median is interpreted similarly, but instead of being the average absolute deviation, this represents the median absolute deviation. Finally, notice how the absolute value worked, the minimum statistic is positive, whereas before it was negative. The largest negative deviation/error from before is now the largest shown in the maximum column. The absolute value of the errors can be shown graphically to fully understand the new distribution. 
+
+
+```r
+gf_density(~ abs(error), data = colleges_pred) %>%
+  gf_labs(x = "Error = |Predicted - Observed|")
+```
+
+<div class="figure">
+<img src="06-regression_files/figure-html/absolute-error-dist-1.png" alt="The distribution of errors after taking the absolute value ." width="672" />
+<p class="caption">(\#fig:absolute-error-dist)The distribution of errors after taking the absolute value .</p>
+</div>
+
+This distribution is not symmetric, rather it is more like an exponential distribution with many values close to zero and rather quickly decreasing in the number of errors that are larger. This indicates that much of the predictions are close to the observed value with a few that are further away indicating worse performance.
+
+It is also worth mentioning that these accuracy statistics are scale dependent. Therefore if the scales of two outcomes are different, the MAE, MSE, or RMSE are not directly comparable without standardization. For example, if instead of median ACT scores, the outcome was median SAT scores, the accuracy statistics would naturally be larger due to SAT scores being larger. SAT scores for individual sections range from 200 to 800 instead of ACT scores ranging from 0 to 36. The MAE, MSE, or RMSE statistics would look larger due to scale differences, but that would not necessarily mean the model is doing worse. To compare these two outcomes, the outcomes or the accuracy statistics would need to be put on the same scale.
 
 ### Conditional Error
 
@@ -236,29 +269,29 @@ colleges_pred %>%
 
 ```
 ##      response actcmmid       mean     median        sd        min       max
-## 1  abs(error)        6 15.6583541 15.6583541        NA 15.6583541 15.658354
-## 2  abs(error)        7 14.6583541 14.6583541        NA 14.6583541 14.658354
-## 3  abs(error)        9 12.6583541 12.6583541        NA 12.6583541 12.658354
-## 4  abs(error)       11 15.1538462 15.1538462        NA 15.1538462 15.153846
-## 5  abs(error)       15  6.6583541  6.6583541 0.0000000  6.6583541  6.658354
-## 6  abs(error)       16  5.9580028  5.6583541 0.6666763  5.6583541  7.306422
-## 7  abs(error)       17  5.4041307  4.6583541 1.2009643  4.5512821  9.153846
-## 8  abs(error)       18  4.9394393  3.6583541 2.1404154  3.5512821 13.642857
-## 9  abs(error)       19  3.6881805  2.6583541 1.6666583  2.5512821 12.642857
-## 10 abs(error)       20  2.3972274  1.6583541 0.9834885  1.5512821  6.153846
-## 11 abs(error)       21  1.4072426  0.6583541 1.0161218  0.5512821  5.153846
-## 12 abs(error)       22  1.0661678  1.3064220 0.8946522  0.3416459  4.153846
-## 13 abs(error)       23  0.8835657  0.3064220 0.7303649  0.3064220  6.590909
-## 14 abs(error)       24  1.2956011  0.6935780 0.9820537  0.6935780  7.642857
-## 15 abs(error)       25  1.7661025  1.6935780 1.0169400  0.2222222  3.448718
-## 16 abs(error)       26  2.6643144  2.6935780 1.1934238  0.1538462  5.642857
-## 17 abs(error)       27  3.6386582  3.6935780 0.8296033  2.2222222  5.341646
-## 18 abs(error)       28  4.3625148  4.6935780 1.2600346  1.8461538  6.341646
-## 19 abs(error)       29  4.0390696  4.2222222 1.9600094  0.5909091  7.341646
-## 20 abs(error)       30  4.0587815  3.8461538 2.3995578  0.4090909  6.693578
-## 21 abs(error)       31  4.4734457  4.8461538 3.0245455  0.6428571  9.341646
-## 22 abs(error)       32  1.9545834  0.3571429 2.7742406  0.3571429 10.341646
-## 23 abs(error)       33  1.4939394  1.3571429 0.5298107  1.3571429  3.409091
+## 1  abs(error)        6 15.5032258 15.5032258        NA 15.5032258 15.503226
+## 2  abs(error)        7 16.1110010 16.1110010        NA 16.1110010 16.111001
+## 3  abs(error)        9 16.6811594 16.6811594        NA 16.6811594 16.681159
+## 4  abs(error)       11 12.1110010 12.1110010        NA 12.1110010 12.111001
+## 5  abs(error)       15  9.3960802  9.3960802 1.8173765  8.1110010 10.681159
+## 6  abs(error)       16  7.0523290  7.1110010 1.0834080  5.5032258  9.681159
+## 7  abs(error)       17  6.1276847  6.1110010 1.0791191  4.5032258  8.681159
+## 8  abs(error)       18  5.4476764  5.1110010 1.8709401  3.5032258 13.642857
+## 9  abs(error)       19  4.0157276  4.1110010 1.4171836  2.5032258 12.642857
+## 10 abs(error)       20  2.9102946  3.1110010 0.8093926  1.5032258  5.681159
+## 11 abs(error)       21  1.8594407  2.1110010 0.8712253  0.5032258  4.681159
+## 12 abs(error)       22  1.0878288  1.1110010 0.4606388  0.4967742  3.681159
+## 13 abs(error)       23  0.3555768  0.1110010 0.5620623  0.1110010  2.681159
+## 14 abs(error)       24  1.0982335  0.8889990 0.7095274  0.8889990  7.642857
+## 15 abs(error)       25  2.0242671  1.8889990 0.5188364  0.6811594  3.496774
+## 16 abs(error)       26  2.9769006  2.8889990 0.6185795  0.3188406  5.642857
+## 17 abs(error)       27  3.9392465  3.8889990 0.2568444  3.8889990  5.496774
+## 18 abs(error)       28  4.7721736  4.8889990 0.5415505  2.3188406  4.888999
+## 19 abs(error)       29  5.5355597  5.8889990 0.9395403  2.6428571  5.888999
+## 20 abs(error)       30  5.7496633  6.8889990 1.6935154  1.6428571  6.888999
+## 21 abs(error)       31  5.5947035  5.3188406 1.9723049  0.6428571  7.888999
+## 22 abs(error)       32  2.1915114  0.3571429 2.8060443  0.3571429  6.318841
+## 23 abs(error)       33  1.7545894  1.3571429 1.5393037  1.3571429  7.318841
 ## 24 abs(error)       34  2.3571429  2.3571429 0.0000000  2.3571429  2.357143
 ## 25 abs(error)       35  3.3571429  3.3571429        NA  3.3571429  3.357143
 ##    length
@@ -289,6 +322,36 @@ colleges_pred %>%
 ## 25      1
 ```
 
+To come...
+
+#### Explore another attribute
+Let's explore another attribute, the undergraduate enrollment of intuitions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
+
+More to come...
+
+
+```r
+act_reg2 <- rpart(actcmmid ~ adm_rate + ugds, data = colleges, method = "anova")
+
+rpart.plot(act_reg2, roundint = FALSE, type = 3, branch = .3)
+```
+
+<img src="06-regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+
+The figure below attempts to show the regression tree in a scatterplot. Now there are more predicted buckets and these are represented by the square areas of the figure below. All of the data points within each square would receive the same predicted score.
+
+
+```r
+ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
+  geom_parttree(data = act_reg2, aes(fill = actcmmid), alpha = 0.3) +
+  geom_point(aes(color = actcmmid)) +
+  scale_colour_viridis_c(
+    limits = range(colleges$actcmmid, na.rm = TRUE), 
+    aesthetics = c('colour', 'fill')
+    )
+```
+
+<img src="06-regression_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 ## Adding more attributes
 To come ...

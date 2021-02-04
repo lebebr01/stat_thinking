@@ -16,16 +16,16 @@ head(baby)
 ```
 
 ```
-## [90m# A tibble: 6 x 6[39m
+## # A tibble: 6 x 6
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m        [3m[90m<dbl>[39m[23m           [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m
-## [90m1[39m          120              284           27              62              100
-## [90m2[39m          113              282           33              64              135
-## [90m3[39m          128              279           28              64              115
-## [90m4[39m          108              282           23              67              125
-## [90m5[39m          136              286           25              62               93
-## [90m6[39m          138              244           33              62              178
-## [90m# … with 1 more variable: maternal_smoker [3m[90m<lgl>[90m[23m[39m
+##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
+## 1          120              284           27              62              100
+## 2          113              282           33              64              135
+## 3          128              279           28              64              115
+## 4          108              282           23              67              125
+## 5          136              286           25              62               93
+## 6          138              244           33              62              178
+## # … with 1 more variable: maternal_smoker <lgl>
 ```
 
 
@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.4936533
+## gestational_days 0.4545217
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -74,7 +74,7 @@ names(baby_coef) <- 'slope'
 gf_density(~ slope, data = baby_coef)
 ```
 
-<img src="07-estimation_files/figure-html/resample-10k-density-1.png" width="672" />
+<img src="08-estimation_files/figure-html/resample-10k-density-1.png" width="672" />
 
 
 ```r
@@ -84,7 +84,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope 0.3942474 0.4676083 0.5446251
+## 1    slope 0.3947908 0.4674294 0.5443873
 ```
 
 ## Categorical Predictor(s)
@@ -100,7 +100,7 @@ gf_density(~ birth_weight, color = ~ maternal_smoker, size = 1.25, fill = 'gray8
           color = 'Smoked?')
 ```
 
-<img src="07-estimation_files/figure-html/density-smoker-1.png" width="672" />
+<img src="08-estimation_files/figure-html/density-smoker-1.png" width="672" />
 
 
 What are the general take-aways from the distributions above? To give some additional information, a violin plot may be helpful.
@@ -114,7 +114,7 @@ gf_violin(birth_weight ~ maternal_smoker, data = baby, draw_quantiles = c(0.1, 0
           x = "Smoker?")
 ```
 
-<img src="07-estimation_files/figure-html/violin-smoker-1.png" width="672" />
+<img src="08-estimation_files/figure-html/violin-smoker-1.png" width="672" />
 
 Any additional information shown here that shows differences? To finish the descriptive exploration, let's compute some descriptive statistics.
 
@@ -154,16 +154,16 @@ head(baby)
 ```
 
 ```
-## [90m# A tibble: 6 x 7[39m
+## # A tibble: 6 x 7
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m        [3m[90m<dbl>[39m[23m           [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m
-## [90m1[39m          120              284           27              62              100
-## [90m2[39m          113              282           33              64              135
-## [90m3[39m          128              279           28              64              115
-## [90m4[39m          108              282           23              67              125
-## [90m5[39m          136              286           25              62               93
-## [90m6[39m          138              244           33              62              178
-## [90m# … with 2 more variables: maternal_smoker [3m[90m<lgl>[90m[23m, smoker [3m[90m<dbl>[90m[23m[39m
+##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
+## 1          120              284           27              62              100
+## 2          113              282           33              64              135
+## 3          128              279           28              64              115
+## 4          108              282           23              67              125
+## 5          136              286           25              62               93
+## 6          138              244           33              62              178
+## # … with 2 more variables: maternal_smoker <lgl>, smoker <dbl>
 ```
 
 Instead of using the `maternal_smoker` attribute, instead let's run the model with the `smoker` attribute.
@@ -233,7 +233,7 @@ resample_baby()
 
 ```
 ##                             .
-## maternal_smokerTRUE -10.73389
+## maternal_smokerTRUE -9.869037
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -247,7 +247,7 @@ names(baby_coef) <- 'slope'
 gf_density(~ slope, data = baby_coef)
 ```
 
-<img src="07-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" />
+<img src="08-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" />
 
 
 ```r
@@ -257,7 +257,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope -11.02358 -9.276141 -7.562883
+## 1    slope -11.03849 -9.261417 -7.487675
 ```
 
 ## More than 2 categorical groups
@@ -270,25 +270,25 @@ college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/
 
 ```
 ## 
-## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
-##   instnm = [31mcol_character()[39m,
-##   city = [31mcol_character()[39m,
-##   stabbr = [31mcol_character()[39m,
-##   preddeg = [31mcol_character()[39m,
-##   region = [31mcol_character()[39m,
-##   locale = [31mcol_character()[39m,
-##   adm_rate = [32mcol_double()[39m,
-##   actcmmid = [32mcol_double()[39m,
-##   ugds = [32mcol_double()[39m,
-##   costt4_a = [32mcol_double()[39m,
-##   costt4_p = [32mcol_double()[39m,
-##   tuitionfee_in = [32mcol_double()[39m,
-##   tuitionfee_out = [32mcol_double()[39m,
-##   debt_mdn = [32mcol_double()[39m,
-##   grad_debt_mdn = [32mcol_double()[39m,
-##   female = [32mcol_double()[39m,
-##   bachelor_degree = [32mcol_double()[39m
+##   instnm = col_character(),
+##   city = col_character(),
+##   stabbr = col_character(),
+##   preddeg = col_character(),
+##   region = col_character(),
+##   locale = col_character(),
+##   adm_rate = col_double(),
+##   actcmmid = col_double(),
+##   ugds = col_double(),
+##   costt4_a = col_double(),
+##   costt4_p = col_double(),
+##   tuitionfee_in = col_double(),
+##   tuitionfee_out = col_double(),
+##   debt_mdn = col_double(),
+##   grad_debt_mdn = col_double(),
+##   female = col_double(),
+##   bachelor_degree = col_double()
 ## )
 ```
 
@@ -297,18 +297,18 @@ head(college_score)
 ```
 
 ```
-## [90m# A tibble: 6 x 17[39m
+## # A tibble: 6 x 17
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m   [3m[90m<chr>[39m[23m  [3m[90m<chr>[39m[23m     [3m[90m<dbl>[39m[23m    [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m    [3m[90m<dbl>[39m[23m
-## [90m1[39m Alaba… Norm… AL     Bachel… South… City:…    0.903       18  [4m4[24m824    [4m2[24m[4m2[24m886
-## [90m2[39m Unive… Birm… AL     Bachel… South… City:…    0.918       25 [4m1[24m[4m2[24m866    [4m2[24m[4m4[24m129
-## [90m3[39m Unive… Hunt… AL     Bachel… South… City:…    0.812       28  [4m6[24m917    [4m2[24m[4m2[24m108
-## [90m4[39m Alaba… Mont… AL     Bachel… South… City:…    0.979       18  [4m4[24m189    [4m1[24m[4m9[24m413
-## [90m5[39m The U… Tusc… AL     Bachel… South… City:…    0.533       28 [4m3[24m[4m2[24m387    [4m2[24m[4m8[24m836
-## [90m6[39m Aubur… Mont… AL     Bachel… South… City:…    0.825       22  [4m4[24m211    [4m1[24m[4m9[24m892
-## [90m# … with 7 more variables: costt4_p [3m[90m<dbl>[90m[23m, tuitionfee_in [3m[90m<dbl>[90m[23m,[39m
-## [90m#   tuitionfee_out [3m[90m<dbl>[90m[23m, debt_mdn [3m[90m<dbl>[90m[23m, grad_debt_mdn [3m[90m<dbl>[90m[23m, female [3m[90m<dbl>[90m[23m,[39m
-## [90m#   bachelor_degree [3m[90m<dbl>[90m[23m[39m
+##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
+## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
+## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
+## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
+## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
+## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
+## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
+## # … with 7 more variables: costt4_p <dbl>, tuitionfee_in <dbl>,
+## #   tuitionfee_out <dbl>, debt_mdn <dbl>, grad_debt_mdn <dbl>, female <dbl>,
+## #   bachelor_degree <dbl>
 ```
 
 ### Explore distribution 3 groups
@@ -320,7 +320,7 @@ gf_violin(adm_rate ~ preddeg, data = college_score, fill = 'gray85',
           size = 1, draw_quantiles = c(0.1, 0.5, 0.9))
 ```
 
-<img src="07-estimation_files/figure-html/violin-preddeg-1.png" width="672" />
+<img src="08-estimation_files/figure-html/violin-preddeg-1.png" width="672" />
 
 There may be some small differences between these groups, but more formally we can test this to understand the amount of uncertainty in the average of the distributions. This again will make use of the `lm()` function in R and the formula is very similar to what was done before and mimics the formula from the violin plot above.
 
@@ -387,7 +387,7 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
 ## `geom_smooth()` using method = 'loess'
 ```
 
-<img src="07-estimation_files/figure-html/scatter-smoker-1.png" width="672" />
+<img src="08-estimation_files/figure-html/scatter-smoker-1.png" width="672" />
 
 
 
@@ -436,12 +436,12 @@ resample_baby()
 ```
 
 ```
-## [90m# A tibble: 3 x 2[39m
+## # A tibble: 3 x 2
 ##   term                                         estimate
-##   [3m[90m<chr>[39m[23m                                           [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                                   123.   
-## [90m2[39m I(gestational_days - mean(gestational_days))    0.409
-## [90m3[39m maternal_smokerTRUE                            -[31m9[39m[31m.[39m[31m67[39m
+##   <chr>                                           <dbl>
+## 1 (Intercept)                                   123.   
+## 2 I(gestational_days - mean(gestational_days))    0.427
+## 3 maternal_smokerTRUE                            -7.90
 ```
 
 
@@ -454,7 +454,7 @@ coef_baby %>%
   gf_facet_wrap(~ term, scales = 'free')
 ```
 
-<img src="07-estimation_files/figure-html/mult-reg-dist-1.png" width="672" />
+<img src="08-estimation_files/figure-html/mult-reg-dist-1.png" width="672" />
 
 ### Interactions
 One additional idea that can be quite powerful is the idea of interactions. This was indirectly shown earlier in the course with classification and regression trees, where the models after each split re-evaluated which attributes were most helpful. In this way, the same attribute could be used in different places with different scores identifying the split. A similar idea can be explored in the regression framework, where the idea is that there are differential effects for different groups. This can be shown visually:
@@ -470,7 +470,7 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
 ## `geom_smooth()` using method = 'loess'
 ```
 
-<img src="07-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" />
+<img src="08-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" />
 
 
 ```r
@@ -504,13 +504,13 @@ resample_baby()
 ```
 
 ```
-## [90m# A tibble: 4 x 2[39m
+## # A tibble: 4 x 2
 ##   term                                                             estimate
-##   [3m[90m<chr>[39m[23m                                                               [3m[90m<dbl>[39m[23m
-## [90m1[39m (Intercept)                                                       124.   
-## [90m2[39m I(gestational_days - mean(gestational_days))                        0.320
-## [90m3[39m maternal_smokerTRUE                                                -[31m8[39m[31m.[39m[31m82[39m 
-## [90m4[39m I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.315
+##   <chr>                                                               <dbl>
+## 1 (Intercept)                                                       123.   
+## 2 I(gestational_days - mean(gestational_days))                        0.347
+## 3 maternal_smokerTRUE                                                -9.54 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.312
 ```
 
 
@@ -523,7 +523,7 @@ coef_baby %>%
   gf_facet_wrap(~ term, scales = 'free')
 ```
 
-<img src="07-estimation_files/figure-html/interaction-distribution-1.png" width="672" />
+<img src="08-estimation_files/figure-html/interaction-distribution-1.png" width="672" />
 
 ### Evaluating model fit
 As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby's birth weight.

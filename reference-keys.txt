@@ -25,6 +25,10 @@ fig:resample-weather-snow
 fig:prediction-accuracy-resample
 fig:density-act
 fig:scatter-act
+fig:act-regression-tree
+fig:visualize-regression-tree
+fig:error-dist
+fig:absolute-error-dist
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -92,6 +96,7 @@ correlation-computation
 first-regression-tree
 evaluating-accuracy
 conditional-error
+explore-another-attribute
 adding-more-attributes
 linear-regression
 simple-regression-continuous-predictor

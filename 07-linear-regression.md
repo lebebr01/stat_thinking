@@ -10,20 +10,20 @@ library(tidyverse)
 ```
 
 ```
-## ── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## [32m✔[39m [34mggplot2[39m 3.3.3     [32m✔[39m [34mpurrr  [39m 0.3.4
-## [32m✔[39m [34mtibble [39m 3.0.6     [32m✔[39m [34mdplyr  [39m 1.0.4
-## [32m✔[39m [34mtidyr  [39m 1.1.2     [32m✔[39m [34mstringr[39m 1.4.0
-## [32m✔[39m [34mreadr  [39m 1.4.0     [32m✔[39m [34mforcats[39m 0.5.1
+## ✔ ggplot2 3.3.3     ✔ purrr   0.3.4
+## ✔ tibble  3.0.6     ✔ dplyr   1.0.4
+## ✔ tidyr   1.1.2     ✔ stringr 1.4.0
+## ✔ readr   1.4.0     ✔ forcats 0.5.1
 ```
 
 ```
-## ── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
-## [31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-## [31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 ```r
@@ -153,14 +153,14 @@ baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/da
 
 ```
 ## 
-## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
-##   birth_weight = [32mcol_double()[39m,
-##   gestational_days = [32mcol_double()[39m,
-##   maternal_age = [32mcol_double()[39m,
-##   maternal_height = [32mcol_double()[39m,
-##   maternal_pregnancy_weight = [32mcol_double()[39m,
-##   maternal_smoker = [33mcol_logical()[39m
+##   birth_weight = col_double(),
+##   gestational_days = col_double(),
+##   maternal_age = col_double(),
+##   maternal_height = col_double(),
+##   maternal_pregnancy_weight = col_double(),
+##   maternal_smoker = col_logical()
 ## )
 ```
 
@@ -169,16 +169,16 @@ head(baby)
 ```
 
 ```
-## [90m# A tibble: 6 x 6[39m
+## # A tibble: 6 x 6
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m        [3m[90m<dbl>[39m[23m           [3m[90m<dbl>[39m[23m            [3m[90m<dbl>[39m[23m
-## [90m1[39m          120              284           27              62              100
-## [90m2[39m          113              282           33              64              135
-## [90m3[39m          128              279           28              64              115
-## [90m4[39m          108              282           23              67              125
-## [90m5[39m          136              286           25              62               93
-## [90m6[39m          138              244           33              62              178
-## [90m# … with 1 more variable: maternal_smoker [3m[90m<lgl>[90m[23m[39m
+##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
+## 1          120              284           27              62              100
+## 2          113              282           33              64              135
+## 3          128              279           28              64              115
+## 4          108              282           23              67              125
+## 5          136              286           25              62               93
+## 6          138              244           33              62              178
+## # … with 1 more variable: maternal_smoker <lgl>
 ```
 
 <!--
