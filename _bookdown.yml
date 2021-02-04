@@ -10,7 +10,7 @@ rmd_files: ["index.Rmd",
     "05-classification-new.Rmd",
     "06-regression.Rmd",
     "07-linear-regression.Rmd",
-    "07-estimation.Rmd",
-    "08-prediction.Rmd"]
+    "08-estimation.Rmd",
+    "09-prediction.Rmd"]
 clean: [packages.bib, bookdown.bbl]
 new_session: yes
