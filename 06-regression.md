@@ -325,7 +325,7 @@ colleges_pred %>%
 To come...
 
 #### Explore another attribute
-Let's explore another attribute, the undergraduate enrollment of institions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
+Let's explore another attribute, the undergraduate enrollment of intuitions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
 
 More to come...
 
