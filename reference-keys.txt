@@ -29,6 +29,7 @@ fig:act-regression-tree
 fig:visualize-regression-tree
 fig:error-dist
 fig:absolute-error-dist
+fig:cond-error-figure
 introduction
 statistics-vs-data-science
 experiments-vs-observations

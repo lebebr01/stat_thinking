@@ -171,7 +171,7 @@ $$
 Another statistic can also be useful here, the mean absolute error (MAE). This statistic was first introduced in chapter 3 and is similar to the RMSE above, but except for squaring values and taking the square root, the absolute value is used instead. This has the strength of never squaring values, so the metric is the same as the outcome, but has the weakness of having weaker statistical properties. The mathematical computation can be shown as:
 
 $$ 
-MAE = \frac{\sum |predicted - observed|}{n}
+MAE = \frac{\sum \left|predicted - observed \right| }{n}
 $$
 
 The below code chunk computes the deviation labeled as error. The first 10 rows are shown along with the institution name (`instnm`), median ACT score (`actcmmid`), and the predicted median ACT score (`act_pred`). Notice within the error column that there are some values above and below zero. You can see the values that have a negative error have an actual median ACT score less than the predicted values. Conversely, those that have positive errors have actual median ACT scores greater than the predicted ACT value. 
@@ -262,67 +262,106 @@ It is also worth mentioning that these accuracy statistics are scale dependent. 
 
 ### Conditional Error
 
+Similar to problems with just using the overall classification accuracy with classification trees, it can be helpful to use conditional error with regression trees. The conditional error can help to identify areas of the model that are performing worse, more specifically, to understand where the model has larger errors. To do this with some descriptive statistics, the `df_stats()` function can be used where the formula input can include two attributes, the error on the left side of the `~` and the attribute to explore the conditional error by on the right hand side. The formula used below explores the MAE across different median ACT scores using the formula, `abs(error) ~ actcmmid`. The function `length` is used to calculate how many schools are in each of the computations. 
+
+
 ```r
 colleges_pred %>%
-  df_stats(abs(error) ~ actcmmid, mean, median, sd, min, max, length)
+  df_stats(abs(error) ~ actcmmid, mean, median, min, max, length)
 ```
 
 ```
-##      response actcmmid       mean     median        sd        min       max
-## 1  abs(error)        6 15.5032258 15.5032258        NA 15.5032258 15.503226
-## 2  abs(error)        7 16.1110010 16.1110010        NA 16.1110010 16.111001
-## 3  abs(error)        9 16.6811594 16.6811594        NA 16.6811594 16.681159
-## 4  abs(error)       11 12.1110010 12.1110010        NA 12.1110010 12.111001
-## 5  abs(error)       15  9.3960802  9.3960802 1.8173765  8.1110010 10.681159
-## 6  abs(error)       16  7.0523290  7.1110010 1.0834080  5.5032258  9.681159
-## 7  abs(error)       17  6.1276847  6.1110010 1.0791191  4.5032258  8.681159
-## 8  abs(error)       18  5.4476764  5.1110010 1.8709401  3.5032258 13.642857
-## 9  abs(error)       19  4.0157276  4.1110010 1.4171836  2.5032258 12.642857
-## 10 abs(error)       20  2.9102946  3.1110010 0.8093926  1.5032258  5.681159
-## 11 abs(error)       21  1.8594407  2.1110010 0.8712253  0.5032258  4.681159
-## 12 abs(error)       22  1.0878288  1.1110010 0.4606388  0.4967742  3.681159
-## 13 abs(error)       23  0.3555768  0.1110010 0.5620623  0.1110010  2.681159
-## 14 abs(error)       24  1.0982335  0.8889990 0.7095274  0.8889990  7.642857
-## 15 abs(error)       25  2.0242671  1.8889990 0.5188364  0.6811594  3.496774
-## 16 abs(error)       26  2.9769006  2.8889990 0.6185795  0.3188406  5.642857
-## 17 abs(error)       27  3.9392465  3.8889990 0.2568444  3.8889990  5.496774
-## 18 abs(error)       28  4.7721736  4.8889990 0.5415505  2.3188406  4.888999
-## 19 abs(error)       29  5.5355597  5.8889990 0.9395403  2.6428571  5.888999
-## 20 abs(error)       30  5.7496633  6.8889990 1.6935154  1.6428571  6.888999
-## 21 abs(error)       31  5.5947035  5.3188406 1.9723049  0.6428571  7.888999
-## 22 abs(error)       32  2.1915114  0.3571429 2.8060443  0.3571429  6.318841
-## 23 abs(error)       33  1.7545894  1.3571429 1.5393037  1.3571429  7.318841
-## 24 abs(error)       34  2.3571429  2.3571429 0.0000000  2.3571429  2.357143
-## 25 abs(error)       35  3.3571429  3.3571429        NA  3.3571429  3.357143
-##    length
-## 1       1
-## 2       1
-## 3       1
-## 4       1
-## 5       2
-## 6      11
-## 7      19
-## 8      32
-## 9      59
-## 10    117
-## 11    156
-## 12    166
-## 13    174
-## 14    155
-## 15    101
-## 16     70
-## 17     47
-## 18     44
-## 19     31
-## 20     25
-## 21     22
-## 22     26
-## 23     15
-## 24     12
-## 25      1
+##      response actcmmid       mean     median        min       max length
+## 1  abs(error)        6 15.5032258 15.5032258 15.5032258 15.503226      1
+## 2  abs(error)        7 16.1110010 16.1110010 16.1110010 16.111001      1
+## 3  abs(error)        9 16.6811594 16.6811594 16.6811594 16.681159      1
+## 4  abs(error)       11 12.1110010 12.1110010 12.1110010 12.111001      1
+## 5  abs(error)       15  9.3960802  9.3960802  8.1110010 10.681159      2
+## 6  abs(error)       16  7.0523290  7.1110010  5.5032258  9.681159     11
+## 7  abs(error)       17  6.1276847  6.1110010  4.5032258  8.681159     19
+## 8  abs(error)       18  5.4476764  5.1110010  3.5032258 13.642857     32
+## 9  abs(error)       19  4.0157276  4.1110010  2.5032258 12.642857     59
+## 10 abs(error)       20  2.9102946  3.1110010  1.5032258  5.681159    117
+## 11 abs(error)       21  1.8594407  2.1110010  0.5032258  4.681159    156
+## 12 abs(error)       22  1.0878288  1.1110010  0.4967742  3.681159    166
+## 13 abs(error)       23  0.3555768  0.1110010  0.1110010  2.681159    174
+## 14 abs(error)       24  1.0982335  0.8889990  0.8889990  7.642857    155
+## 15 abs(error)       25  2.0242671  1.8889990  0.6811594  3.496774    101
+## 16 abs(error)       26  2.9769006  2.8889990  0.3188406  5.642857     70
+## 17 abs(error)       27  3.9392465  3.8889990  3.8889990  5.496774     47
+## 18 abs(error)       28  4.7721736  4.8889990  2.3188406  4.888999     44
+## 19 abs(error)       29  5.5355597  5.8889990  2.6428571  5.888999     31
+## 20 abs(error)       30  5.7496633  6.8889990  1.6428571  6.888999     25
+## 21 abs(error)       31  5.5947035  5.3188406  0.6428571  7.888999     22
+## 22 abs(error)       32  2.1915114  0.3571429  0.3571429  6.318841     26
+## 23 abs(error)       33  1.7545894  1.3571429  1.3571429  7.318841     15
+## 24 abs(error)       34  2.3571429  2.3571429  2.3571429  2.357143     12
+## 25 abs(error)       35  3.3571429  3.3571429  3.3571429  3.357143      1
 ```
 
-To come...
+Notice that there is a row for each median ACT score found in the data and that each statistic is computed for each unique median ACT score. Procedurally, the data are split into compartments and the statistics are computed on the data that fit into those compartments. The MAE (shown by the mean column) shows larger errors at low values of median ACT score, which decreases quickly until a median ACT score of 23, then increases slightly, then decreases again for higher values. 
+
+Before spending too much time with this table, take a peak at the last column, labeled length. This column tells how many data points are in each of the compartments to do the calculation. In general, compartments with less data in them will produce statistics that are more unstable. For instance, there are very few schools with very low ACT scores, for example, scores of 15 and under. Furthermore, there is only 1 school with a median ACT score of 35. When there are small numbers for some of these categories, it can be helpful to combine them for evaluation of model accuracy. In this example, I'm going to collapse scores less than 15 into one category and 34 and higher into another. The other median ACT scores I'm going to leave by themselves.
+
+
+```r
+colleges_pred <- colleges_pred %>%
+  mutate(act_recode = ifelse(actcmmid <= 15, '15 or smaller', 
+                             ifelse(actcmmid >= 34, '34 or larger', actcmmid)))
+```
+
+The `mutate()` function above is used to collapse the categories and create a new attribute named `act_recode`. Then, this new attribute is used to compute the MAE and other statistics to evaluate conditional model performance. Notice that the length column at the end no longer has categories with a single data point in them, rather the smallest is now 6, which is still small, but at least there are more than one data point in them. Similar trends to those discussed above pertain here. 
+
+
+```r
+conditional_error <- colleges_pred %>%
+  df_stats(abs(error) ~ act_recode, mean, median, min, max, length)
+
+conditional_error
+```
+
+```
+##      response    act_recode       mean     median       min       max length
+## 1  abs(error) 15 or smaller 13.1997579 13.8071134 8.1110010 16.681159      6
+## 2  abs(error)            16  7.0523290  7.1110010 5.5032258  9.681159     11
+## 3  abs(error)            17  6.1276847  6.1110010 4.5032258  8.681159     19
+## 4  abs(error)            18  5.4476764  5.1110010 3.5032258 13.642857     32
+## 5  abs(error)            19  4.0157276  4.1110010 2.5032258 12.642857     59
+## 6  abs(error)            20  2.9102946  3.1110010 1.5032258  5.681159    117
+## 7  abs(error)            21  1.8594407  2.1110010 0.5032258  4.681159    156
+## 8  abs(error)            22  1.0878288  1.1110010 0.4967742  3.681159    166
+## 9  abs(error)            23  0.3555768  0.1110010 0.1110010  2.681159    174
+## 10 abs(error)            24  1.0982335  0.8889990 0.8889990  7.642857    155
+## 11 abs(error)            25  2.0242671  1.8889990 0.6811594  3.496774    101
+## 12 abs(error)            26  2.9769006  2.8889990 0.3188406  5.642857     70
+## 13 abs(error)            27  3.9392465  3.8889990 3.8889990  5.496774     47
+## 14 abs(error)            28  4.7721736  4.8889990 2.3188406  4.888999     44
+## 15 abs(error)            29  5.5355597  5.8889990 2.6428571  5.888999     31
+## 16 abs(error)            30  5.7496633  6.8889990 1.6428571  6.888999     25
+## 17 abs(error)            31  5.5947035  5.3188406 0.6428571  7.888999     22
+## 18 abs(error)            32  2.1915114  0.3571429 0.3571429  6.318841     26
+## 19 abs(error)            33  1.7545894  1.3571429 1.3571429  7.318841     15
+## 20 abs(error)  34 or larger  2.4340659  2.3571429 2.3571429  3.357143     13
+```
+
+It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A pointrange plot is used to show the average mean absolute error and also the minimum and maximum absolute error values for each median ACT score, using the `gf_pointrangeh()` function. The formula input for this function takes the following form, `y-scores ~ mean-value + min-value + max-value`. 
+
+
+```r
+gf_pointrangeh(act_recode ~ mean + min + max, 
+               data = conditional_error) %>% 
+  gf_labs(y = "Median ACT Score",
+          x = "Absolute Error")
+```
+
+<div class="figure">
+<img src="06-regression_files/figure-html/cond-error-figure-1.png" alt="Ranges of absolute errors across different median ACT scores with mean absolute error." width="672" />
+<p class="caption">(\#fig:cond-error-figure)Ranges of absolute errors across different median ACT scores with mean absolute error.</p>
+</div>
+
+Figure \@ref(fig:cond-error-figure) shows these values with the MAE shown with the circles and the horizontal lines extend to the minimum and maximum absolute values for each median ACT score. The trend of decreasing absolute error from small median ACT scores up to a score of 23 is shown. Then the error tends to increase, then decrease again for higher median ACT scores. This shows that the regression tree model is doing well for median ACT scores around 23 and also for median ACT scores around 33. 
+
+Another notable feature this figure helps to articulate is the range of absolute errors, for instance, with median ACT scores of 18 or 19, the range of absolute errors range from less than 5 to about 13 or 14. These large range of errors are not as surprising here as the regression tree used to generate these errors is only using a single attribute to help predict median ACT score for institutions, the admission rate. It would make sense that other attributes may help to reduce the error and increase the utility of the model, but this is a good baseline to compare how well other models perform. 
 
 #### Explore another attribute
 Let's explore another attribute, the undergraduate enrollment of intuitions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
@@ -336,7 +375,7 @@ act_reg2 <- rpart(actcmmid ~ adm_rate + ugds, data = colleges, method = "anova")
 rpart.plot(act_reg2, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="06-regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="06-regression_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 The figure below attempts to show the regression tree in a scatterplot. Now there are more predicted buckets and these are represented by the square areas of the figure below. All of the data points within each square would receive the same predicted score.
 
@@ -351,7 +390,7 @@ ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
     )
 ```
 
-<img src="06-regression_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="06-regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 ## Adding more attributes
 To come ...

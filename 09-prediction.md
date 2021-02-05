@@ -68,11 +68,11 @@ resample_admrate()
 
 ```
 ## # A tibble: 3 x 2
-##   term                       estimate
-##   <chr>                         <dbl>
-## 1 (Intercept)                0.721   
-## 2 preddegBachelor Degree    -0.0438  
-## 3 preddegCertificate Degree  0.000368
+##   term                      estimate
+##   <chr>                        <dbl>
+## 1 (Intercept)                 0.704 
+## 2 preddegBachelor Degree     -0.0319
+## 3 preddegCertificate Degree   0.0474
 ```
 
 
@@ -85,7 +85,7 @@ admrate_coef %>%
   gf_facet_wrap(~ term, scales = 'free_x')
 ```
 
-<img src="08-prediction_files/figure-html/replicate-adm-rate-1.png" width="672" />
+<img src="09-prediction_files/figure-html/replicate-adm-rate-1.png" width="672" />
 
 ### Bootstrap Median
 he bootstrap for the median will take much of a similar process as before, the major difference being that a model will not be fitted. Instead, we will compute statistics for the median of each group, take differences of the median to represent the median difference between the groups and then replicate.
