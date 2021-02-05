@@ -129,7 +129,7 @@ $$
 Another statistic can also be useful here, the mean absolute error (MAE). This statistic was first introduced in chapter 3 and is similar to the RMSE above, but except for squaring values and taking the square root, the absolute value is used instead. This has the strength of never squaring values, so the metric is the same as the outcome, but has the weakness of having weaker statistical properties. The mathematical computation can be shown as:
 
 $$ 
-MAE = \frac{\sum |predicted - observed|}{n}
+MAE = \frac{\sum \left|predicted - observed \right| }{n}
 $$
 
 The below code chunk computes the deviation labeled as error. The first 10 rows are shown along with the institution name (`instnm`), median ACT score (`actcmmid`), and the predicted median ACT score (`act_pred`). Notice within the error column that there are some values above and below zero. You can see the values that have a negative error have an actual median ACT score less than the predicted values. Conversely, those that have positive errors have actual median ACT scores greater than the predicted ACT value. 
@@ -178,12 +178,45 @@ This distribution is not symmetric, rather it is more like an exponential distri
 It is also worth mentioning that these accuracy statistics are scale dependent. Therefore if the scales of two outcomes are different, the MAE, MSE, or RMSE are not directly comparable without standardization. For example, if instead of median ACT scores, the outcome was median SAT scores, the accuracy statistics would naturally be larger due to SAT scores being larger. SAT scores for individual sections range from 200 to 800 instead of ACT scores ranging from 0 to 36. The MAE, MSE, or RMSE statistics would look larger due to scale differences, but that would not necessarily mean the model is doing worse. To compare these two outcomes, the outcomes or the accuracy statistics would need to be put on the same scale.
 
 ### Conditional Error
-```{r}
+
+Similar to problems with just using the overall classification accuracy with classification trees, it can be helpful to use conditional error with regression trees. The conditional error can help to identify areas of the model that are performing worse, more specifically, to understand where the model has larger errors. To do this with some descriptive statistics, the `df_stats()` function can be used where the formula input can include two attributes, the error on the left side of the `~` and the attribute to explore the conditional error by on the right hand side. The formula used below explores the MAE across different median ACT scores using the formula, `abs(error) ~ actcmmid`. The function `length` is used to calculate how many schools are in each of the computations. 
+
+```{r conditional-error-rt}
 colleges_pred %>%
-  df_stats(abs(error) ~ actcmmid, mean, median, sd, min, max, length)
+  df_stats(abs(error) ~ actcmmid, mean, median, min, max, length)
 ```
 
-To come...
+Notice that there is a row for each median ACT score found in the data and that each statistic is computed for each unique median ACT score. Procedurally, the data are split into compartments and the statistics are computed on the data that fit into those compartments. The MAE (shown by the mean column) shows larger errors at low values of median ACT score, which decreases quickly until a median ACT score of 23, then increases slightly, then decreases again for higher values. 
+
+Before spending too much time with this table, take a peak at the last column, labeled length. This column tells how many data points are in each of the compartments to do the calculation. In general, compartments with less data in them will produce statistics that are more unstable. For instance, there are very few schools with very low ACT scores, for example, scores of 15 and under. Furthermore, there is only 1 school with a median ACT score of 35. When there are small numbers for some of these categories, it can be helpful to combine them for evaluation of model accuracy. In this example, I'm going to collapse scores less than 15 into one category and 34 and higher into another. The other median ACT scores I'm going to leave by themselves.
+
+```{r recode-median-act}
+colleges_pred <- colleges_pred %>%
+  mutate(act_recode = ifelse(actcmmid <= 15, '15 or smaller', 
+                             ifelse(actcmmid >= 34, '34 or larger', actcmmid)))
+```
+
+The `mutate()` function above is used to collapse the categories and create a new attribute named `act_recode`. Then, this new attribute is used to compute the MAE and other statistics to evaluate conditional model performance. Notice that the length column at the end no longer has categories with a single data point in them, rather the smallest is now 6, which is still small, but at least there are more than one data point in them. Similar trends to those discussed above pertain here. 
+
+```{r cond-error-collapse}
+conditional_error <- colleges_pred %>%
+  df_stats(abs(error) ~ act_recode, mean, median, min, max, length)
+
+conditional_error
+```
+
+It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A pointrange plot is used to show the average mean absolute error and also the minimum and maximum absolute error values for each median ACT score, using the `gf_pointrangeh()` function. The formula input for this function takes the following form, `y-scores ~ mean-value + min-value + max-value`. 
+
+```{r cond-error-figure, fig.cap = "Ranges of absolute errors across different median ACT scores with mean absolute error."}
+gf_pointrangeh(act_recode ~ mean + min + max, 
+               data = conditional_error) %>% 
+  gf_labs(y = "Median ACT Score",
+          x = "Absolute Error")
+```
+
+Figure \@ref(fig:cond-error-figure) shows these values with the MAE shown with the circles and the horizontal lines extend to the minimum and maximum absolute values for each median ACT score. The trend of decreasing absolute error from small median ACT scores up to a score of 23 is shown. Then the error tends to increase, then decrease again for higher median ACT scores. This shows that the regression tree model is doing well for median ACT scores around 23 and also for median ACT scores around 33. 
+
+Another notable feature this figure helps to articulate is the range of absolute errors, for instance, with median ACT scores of 18 or 19, the range of absolute errors range from less than 5 to about 13 or 14. These large range of errors are not as surprising here as the regression tree used to generate these errors is only using a single attribute to help predict median ACT score for institutions, the admission rate. It would make sense that other attributes may help to reduce the error and increase the utility of the model, but this is a good baseline to compare how well other models perform. 
 
 #### Explore another attribute
 Let's explore another attribute, the undergraduate enrollment of intuitions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
