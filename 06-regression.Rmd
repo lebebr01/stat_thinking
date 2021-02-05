@@ -219,27 +219,84 @@ Figure \@ref(fig:cond-error-figure) shows these values with the MAE shown with t
 Another notable feature this figure helps to articulate is the range of absolute errors, for instance, with median ACT scores of 18 or 19, the range of absolute errors range from less than 5 to about 13 or 14. These large range of errors are not as surprising here as the regression tree used to generate these errors is only using a single attribute to help predict median ACT score for institutions, the admission rate. It would make sense that other attributes may help to reduce the error and increase the utility of the model, but this is a good baseline to compare how well other models perform. 
 
 #### Explore another attribute
-Let's explore another attribute, the undergraduate enrollment of intuitions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
-
-More to come...
+Let's explore another attribute, the undergraduate enrollment of institutions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
 
 ```{r}
+gf_point(actcmmid ~ ugds, data = colleges, size = 3) %>%
+  gf_labs(x = "Undergraduate Enrollment",
+          y = "Median ACT Score")
+```
+
+The correlation is `r round(cor(actcmmid ~ ugds, data = colleges, use = 'complete.obs'), 2)` between median ACT score and the undergraduate enrollment of institutions. 
+
+
+```{r two-attr-regtree, fig.cap = "Regression tree with admission rates and ungraduate enrollments predicting median ACT score"}
 act_reg2 <- rpart(actcmmid ~ adm_rate + ugds, data = colleges, method = "anova")
 
 rpart.plot(act_reg2, roundint = FALSE, type = 3, branch = .3)
 ```
 
-The figure below attempts to show the regression tree in a scatterplot. Now there are more predicted buckets and these are represented by the square areas of the figure below. All of the data points within each square would receive the same predicted score.
+Figure \@ref(fig:two-attr-regtree) shows the regression tree when adding in the undergraduate enrollment attribute in addition to the admission rate. The regression tree shows that the admission rate is the most important attribute in predicting median ACT score (it is the first split in the regression tree), however undergraduate enrollment is important as this is the second split for those with admission rates greater than 25%. 
 
-```{r}
-ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
-  geom_parttree(data = act_reg2, aes(fill = actcmmid), alpha = 0.3) +
-  geom_point(aes(color = actcmmid)) +
-  scale_colour_viridis_c(
-    limits = range(colleges$actcmmid, na.rm = TRUE), 
-    aesthetics = c('colour', 'fill')
-    )
+To fully understand how much better this model is from the one with only admission rates included, we can use MAE to evaluate the prediction accuracy. First, the predicted values from the new model and the new errors (predicted - observed) need to be added to the data. 
+
+```{r pred-mod2}
+colleges_pred <- colleges_pred %>%
+  mutate(act_pred2 = predict(act_reg2),
+         error2 = actcmmid - act_pred2)
+
+colleges_pred
 ```
 
+```{r cond-error2}
+conditional_error2 <- colleges_pred %>%
+  df_stats(abs(error2) ~ act_recode, mean, median, min, max, length)
+
+conditional_error2
+```
+
+```{r cond-error-compare, fig.cap = "Compared absolute error across the two regression tree models fitted."}
+bind_rows(
+  mutate(conditional_error, model = 'model1'),
+  mutate(conditional_error2, model = 'model2')
+) %>%
+  gf_pointrangeh(act_recode ~ mean + min + max, 
+                 color = ~ model,
+               position = position_dodge(width = 0.5)) %>% 
+  gf_labs(y = "Median ACT Score",
+          x = "Absolute Error")
+```
+
+Comparison of the conditional error can be helpful to evaluate areas of the model that improved and if any other areas did not improve or were worse. 
+
+
+
 ## Adding more attributes
-To come ...
+
+To evaluate how well this model can do, all of the attributes will be open to be included in the final model. This can be done with the `.` character after the `~` in the model formula. The model is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. 
+
+```{r saturated-model}
+act_reg_sat <- rpart(actcmmid ~ ., data = colleges, method = "anova")
+
+colleges_pred <- colleges_pred %>%
+  mutate(act_pred_sat = predict(act_reg_sat),
+         error_sat = actcmmid - act_pred_sat)
+
+conditional_error_sat <- colleges_pred %>%
+  df_stats(abs(error_sat) ~ act_recode, mean, median, min, max, length)
+```
+
+
+```{r sat-eval-acc, fig.cap = "Evaluation of model accuracy across the three models fitted."}
+bind_rows(
+  mutate(conditional_error, model = 'model1'),
+  mutate(conditional_error2, model = 'model2'),
+  mutate(conditional_error_sat, model = 'model_sat')
+) %>%
+  gf_pointrangeh(act_recode ~ mean + min + max, 
+                 color = ~ model,
+               position = position_dodge(width = 0.5)) %>% 
+  gf_labs(y = "Median ACT Score",
+          x = "Absolute Error")
+```
+
