@@ -364,9 +364,23 @@ Figure \@ref(fig:cond-error-figure) shows these values with the MAE shown with t
 Another notable feature this figure helps to articulate is the range of absolute errors, for instance, with median ACT scores of 18 or 19, the range of absolute errors range from less than 5 to about 13 or 14. These large range of errors are not as surprising here as the regression tree used to generate these errors is only using a single attribute to help predict median ACT score for institutions, the admission rate. It would make sense that other attributes may help to reduce the error and increase the utility of the model, but this is a good baseline to compare how well other models perform. 
 
 #### Explore another attribute
-Let's explore another attribute, the undergraduate enrollment of intuitions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
+Let's explore another attribute, the undergraduate enrollment of institutions to see if it is related to the median ACT score. First a scatterplot is shown then the correlation is computed.
 
-More to come...
+
+```r
+gf_point(actcmmid ~ ugds, data = colleges, size = 3) %>%
+  gf_labs(x = "Undergraduate Enrollment",
+          y = "Median ACT Score")
+```
+
+```
+## Warning: Removed 730 rows containing missing values (geom_point).
+```
+
+<img src="06-regression_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+
+The correlation is 0.27 between median ACT score and the undergraduate enrollment of institutions. 
+
 
 
 ```r
@@ -375,22 +389,128 @@ act_reg2 <- rpart(actcmmid ~ adm_rate + ugds, data = colleges, method = "anova")
 rpart.plot(act_reg2, roundint = FALSE, type = 3, branch = .3)
 ```
 
-<img src="06-regression_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<div class="figure">
+<img src="06-regression_files/figure-html/two-attr-regtree-1.png" alt="Regression tree with admission rates and ungraduate enrollments predicting median ACT score" width="672" />
+<p class="caption">(\#fig:two-attr-regtree)Regression tree with admission rates and ungraduate enrollments predicting median ACT score</p>
+</div>
 
-The figure below attempts to show the regression tree in a scatterplot. Now there are more predicted buckets and these are represented by the square areas of the figure below. All of the data points within each square would receive the same predicted score.
+Figure \@ref(fig:two-attr-regtree) shows the regression tree when adding in the undergraduate enrollment attribute in addition to the admission rate. The regression tree shows that the admission rate is the most important attribute in predicting median ACT score (it is the first split in the regression tree), however undergraduate enrollment is important as this is the second split for those with admission rates greater than 25%. 
+
+To fully understand how much better this model is from the one with only admission rates included, we can use MAE to evaluate the prediction accuracy. First, the predicted values from the new model and the new errors (predicted - observed) need to be added to the data. 
 
 
 ```r
-ggplot(data = colleges, aes(x = adm_rate, y = ugds)) +
-  geom_parttree(data = act_reg2, aes(fill = actcmmid), alpha = 0.3) +
-  geom_point(aes(color = actcmmid)) +
-  scale_colour_viridis_c(
-    limits = range(colleges$actcmmid, na.rm = TRUE), 
-    aesthetics = c('colour', 'fill')
-    )
+colleges_pred <- colleges_pred %>%
+  mutate(act_pred2 = predict(act_reg2),
+         error2 = actcmmid - act_pred2)
+
+colleges_pred
 ```
 
-<img src="06-regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+```
+## # A tibble: 1,289 x 7
+##    instnm                    actcmmid act_pred error act_recode act_pred2 error2
+##    <chr>                        <dbl>    <dbl> <dbl> <chr>          <dbl>  <dbl>
+##  1 Alabama A & M University        18     21.5 -3.50 18              21.6 -3.55 
+##  2 University of Alabama at…       25     21.5  3.50 25              24.8  0.222
+##  3 University of Alabama in…       28     23.1  4.89 28              23.3  4.69 
+##  4 Alabama State University        18     21.5 -3.50 18              21.6 -3.55 
+##  5 The University of Alabama       28     23.1  4.89 28              24.8  3.22 
+##  6 Auburn University at Mon…       22     23.1 -1.11 22              23.3 -1.31 
+##  7 Auburn University               27     23.1  3.89 27              24.8  2.22 
+##  8 Birmingham Southern Coll…       26     23.1  2.89 26              21.7  4.34 
+##  9 Faulkner University             20     23.1 -3.11 20              23.3 -3.31 
+## 10 Huntingdon College              22     23.1 -1.11 22              21.7  0.342
+## # … with 1,279 more rows
+```
+
+
+```r
+conditional_error2 <- colleges_pred %>%
+  df_stats(abs(error2) ~ act_recode, mean, median, min, max, length)
+
+conditional_error2
+```
+
+```
+##       response    act_recode       mean     median       min       max length
+## 1  abs(error2) 15 or smaller 11.9076028 13.6583541 6.6583541 15.658354      6
+## 2  abs(error2)            16  5.9580028  5.6583541 5.6583541  7.306422     11
+## 3  abs(error2)            17  5.4041307  4.6583541 4.5512821  9.153846     19
+## 4  abs(error2)            18  4.9394393  3.6583541 3.5512821 13.642857     32
+## 5  abs(error2)            19  3.6881805  2.6583541 2.5512821 12.642857     59
+## 6  abs(error2)            20  2.3972274  1.6583541 1.5512821  6.153846    117
+## 7  abs(error2)            21  1.4072426  0.6583541 0.5512821  5.153846    156
+## 8  abs(error2)            22  1.0661678  1.3064220 0.3416459  4.153846    166
+## 9  abs(error2)            23  0.8835657  0.3064220 0.3064220  6.590909    174
+## 10 abs(error2)            24  1.2956011  0.6935780 0.6935780  7.642857    155
+## 11 abs(error2)            25  1.7661025  1.6935780 0.2222222  3.448718    101
+## 12 abs(error2)            26  2.6643144  2.6935780 0.1538462  5.642857     70
+## 13 abs(error2)            27  3.6386582  3.6935780 2.2222222  5.341646     47
+## 14 abs(error2)            28  4.3625148  4.6935780 1.8461538  6.341646     44
+## 15 abs(error2)            29  4.0390696  4.2222222 0.5909091  7.341646     31
+## 16 abs(error2)            30  4.0587815  3.8461538 0.4090909  6.693578     25
+## 17 abs(error2)            31  4.4734457  4.8461538 0.6428571  9.341646     22
+## 18 abs(error2)            32  1.9545834  0.3571429 0.3571429 10.341646     26
+## 19 abs(error2)            33  1.4939394  1.3571429 1.3571429  3.409091     15
+## 20 abs(error2)  34 or larger  2.4340659  2.3571429 2.3571429  3.357143     13
+```
+
+
+```r
+bind_rows(
+  mutate(conditional_error, model = 'model1'),
+  mutate(conditional_error2, model = 'model2')
+) %>%
+  gf_pointrangeh(act_recode ~ mean + min + max, 
+                 color = ~ model,
+               position = position_dodge(width = 0.5)) %>% 
+  gf_labs(y = "Median ACT Score",
+          x = "Absolute Error")
+```
+
+<div class="figure">
+<img src="06-regression_files/figure-html/cond-error-compare-1.png" alt="Compared absolute error across the two regression tree models fitted." width="672" />
+<p class="caption">(\#fig:cond-error-compare)Compared absolute error across the two regression tree models fitted.</p>
+</div>
+
+Comparison of the conditional error can be helpful to evaluate areas of the model that improved and if any other areas did not improve or were worse. 
+
+
 
 ## Adding more attributes
-To come ...
+
+To evaluate how well this model can do, all of the attributes will be open to be included in the final model. This can be done with the `.` character after the `~` in the model formula. The model is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. 
+
+
+```r
+act_reg_sat <- rpart(actcmmid ~ ., data = colleges, method = "anova")
+
+colleges_pred <- colleges_pred %>%
+  mutate(act_pred_sat = predict(act_reg_sat),
+         error_sat = actcmmid - act_pred_sat)
+
+conditional_error_sat <- colleges_pred %>%
+  df_stats(abs(error_sat) ~ act_recode, mean, median, min, max, length)
+```
+
+
+
+```r
+bind_rows(
+  mutate(conditional_error, model = 'model1'),
+  mutate(conditional_error2, model = 'model2'),
+  mutate(conditional_error_sat, model = 'model_sat')
+) %>%
+  gf_pointrangeh(act_recode ~ mean + min + max, 
+                 color = ~ model,
+               position = position_dodge(width = 0.5)) %>% 
+  gf_labs(y = "Median ACT Score",
+          x = "Absolute Error")
+```
+
+<div class="figure">
+<img src="06-regression_files/figure-html/sat-eval-acc-1.png" alt="Evaluation of model accuracy across the three models fitted." width="672" />
+<p class="caption">(\#fig:sat-eval-acc)Evaluation of model accuracy across the three models fitted.</p>
+</div>
+

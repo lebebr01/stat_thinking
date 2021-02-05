@@ -30,6 +30,9 @@ fig:visualize-regression-tree
 fig:error-dist
 fig:absolute-error-dist
 fig:cond-error-figure
+fig:two-attr-regtree
+fig:cond-error-compare
+fig:sat-eval-acc
 introduction
 statistics-vs-data-science
 experiments-vs-observations
