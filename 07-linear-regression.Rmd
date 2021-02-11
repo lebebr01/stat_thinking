@@ -44,7 +44,7 @@ Here the correlation represents the degree of **linear** relationship between th
 ### Fitting a linear regression model
 Now that the correlation was computed, we have evidence that there is a relationship between the baby birth weight and the gestational days. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the `lm()` function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: `birth_weight ~ gestational_days`, where birth weight is the outcome of interest (in language we've used previously, this is the attribute we want to predict) and gestational days is the attribute we want to use to do the predicting of birth weight. Another way to think about what these variables represent is to explain variation in the birth weight with gestational days. In other words, the assumption is made that gestational days impacts or explains differences in the baby birth weight.
 
-```{r baby-lm}
+```{r baby-lm, eval = FALSE}
 baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
 coef(baby_reg)
 ```
@@ -77,7 +77,7 @@ So far the discussion has focused on the linear slope, often a term that is of m
 #### Mean center gestational days
 First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of gestational days.
 
-```{r scatter-mean-center}
+```{r scatter-mean-center, eval = FALSE}
 gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby, size = 3, alpha = .2) %>%
   gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
   gf_smooth(size = 1)
@@ -85,7 +85,7 @@ gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = bab
 
 Notice that the relationship is the same as before, but now the scale of gestational days is different. It may be more difficult to interpret now as the number of days a women is pregnant is relatively well known, but now the mean gestational days is represented as 0 in the figure and all the values are in reference to that instead of referencing when a women became pregnant. Using this same approach, a linear regression can be fitted to this newly recentered gestational days variable.
 
-```{r reg-mean-centered}
+```{r reg-mean-centered, eval = FALSE}
 baby_reg_centered <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby)
 coef(baby_reg_centered)
 ```
@@ -104,12 +104,12 @@ begin{equation}
 #### Minimum or Maximum centered gestational days
 A few other options that are common are to subtract the minimum or maximum values from the x attribute.
 
-```{r reg-min-centered}
+```{r reg-min-centered, eval = FALSE}
 baby_reg_min <- lm(birth_weight ~ I(gestational_days - min(gestational_days)), data = baby)
 coef(baby_reg_min)
 ```
 
-```{r reg-max-centered}
+```{r reg-max-centered, eval = FALSE}
 baby_reg_max <- lm(birth_weight ~ I(gestational_days - max(gestational_days)), data = baby)
 coef(baby_reg_max)
 ```
