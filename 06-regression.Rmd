@@ -273,10 +273,12 @@ Comparison of the conditional error can be helpful to evaluate areas of the mode
 
 ## Adding more attributes
 
-To evaluate how well this model can do, all of the attributes will be open to be included in the final model. This can be done with the `.` character after the `~` in the model formula. The model is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. 
+To evaluate how well this model can do, all of the attributes will be open to be included in the final model. The only one that is removed from the main data is the institution name. This can be done with the `.` character after the `~` in the model formula. The model tree is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. The attributes included in the final model though can be accessed and ranked by those that are the most important. 
 
-```{r saturated-model}
-act_reg_sat <- rpart(actcmmid ~ ., data = colleges, method = "anova")
+```{r saturated-model, results = 'none'}
+act_reg_sat <- rpart(actcmmid ~ ., 
+                     data = select(colleges, -instnm),
+                                   method = "anova")
 
 colleges_pred <- colleges_pred %>%
   mutate(act_pred_sat = predict(act_reg_sat),
@@ -284,8 +286,17 @@ colleges_pred <- colleges_pred %>%
 
 conditional_error_sat <- colleges_pred %>%
   df_stats(abs(error_sat) ~ act_recode, mean, median, min, max, length)
+
+act_reg_sat$variable.importance
 ```
 
+The table below shows the attributes that are the most important, with those at the top of the table being more important than those at the bottom of the table. Notice that the most important seems to be the city, followed by the tuition, then cost, and so on. 
+
+```{r import-variables, echo = FALSE, results = 'asis'}
+knitr::kable(act_reg_sat$variable.importance)
+```
+
+The evaluation accuracy of this model that could contain most of the attributes in the data is shown in Figure \@ref(fig:sat-eval-acc). The figure also shows the comparisons to the other two models explore in this chapter, labeled as 'model1' and 'model2' respectively. Notice the improvement across all of the median ACT scores for the model that was fitted with the ability to include all of the attributes. 
 
 ```{r sat-eval-acc, fig.cap = "Evaluation of model accuracy across the three models fitted."}
 bind_rows(
@@ -293,6 +304,7 @@ bind_rows(
   mutate(conditional_error2, model = 'model2'),
   mutate(conditional_error_sat, model = 'model_sat')
 ) %>%
+  mutate(model = factor(model, levels = c('model1', 'model2', 'model_sat'))) %>%
   gf_pointrangeh(act_recode ~ mean + min + max, 
                  color = ~ model,
                position = position_dodge(width = 0.5)) %>% 

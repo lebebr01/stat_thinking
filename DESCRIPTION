@@ -14,6 +14,7 @@ Imports:
   ISLR,
   broom,
   DT,
-  parttree
+  parttree,
+  knitr
 Remotes: lebebr01/statthink,
   grantmcdermott/parttree
