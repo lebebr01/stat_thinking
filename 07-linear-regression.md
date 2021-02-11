@@ -1,5 +1,9 @@
 # Linear Regression 
 
+Linear regression is another statistical model that can be used when the outcome is an integer or continuous, similar to that of the regression tree. There are similarities between linear regression and regression trees, however there are also very notable differences. 
+
+Linear regression and regression trees are both used when the outcome is continuous or continuous. These methods are both able to make predictions for the outcome and identify which attributes are most important in aiding in making those predictions. There are differences though in the two methods that are important to distinguish. Linear regression makes an assumption on the relationship between the outcome and attributes entered into the model. Linear regression, as in the name, assumes that the relationship between the outcome and an attribute is linearly related.^[Although there is an assumption that the outcome and attribute are linearly related in linear regression, it is possible to specify the model to explore non-linear trends.] Regression trees however do not directly make this linear assumption between the outcome and an attribute. This assumption can make linear regression more parsimonious, meaning that the model can be simpler, which is often a goal of science, to explain the phenomenon of interest with the simplest possible explanation. 
+
 ## Simple Regression continuous predictor
 ### Description of the Data
 These data contain information on mother's and baby's health for 1,174 pregnant women.
@@ -148,62 +152,34 @@ library(statthink)
 # Set theme for plots
 theme_set(theme_statthinking())
 
-baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv")
+us_weather <- mutate(us_weather, snow_factor = factor(snow), 
+                     snow_numeric = ifelse(snow == 'Yes', 1, 0))
 ```
-
-```
-## 
-## ── Column specification ────────────────────────────────────────────────────────
-## cols(
-##   birth_weight = col_double(),
-##   gestational_days = col_double(),
-##   maternal_age = col_double(),
-##   maternal_height = col_double(),
-##   maternal_pregnancy_weight = col_double(),
-##   maternal_smoker = col_logical()
-## )
-```
-
-```r
-head(baby)
-```
-
-```
-## # A tibble: 6 x 6
-##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
-## 1          120              284           27              62              100
-## 2          113              282           33              64              135
-## 3          128              279           28              64              115
-## 4          108              282           23              67              125
-## 5          136              286           25              62               93
-## 6          138              244           33              62              178
-## # … with 1 more variable: maternal_smoker <lgl>
-```
-
-<!--
-### Explore relationships between two quantitative attributes
-So far, the course has focused on exploring relationships between a quantitative and various qualitative (i.e. categorical or grouping) attributes. It is also common to want to explore relationships between two quantitative attributes. One way to visualize this type of relationship is with a scatterplot and this can be done with the `gf_point()` function. Similar to other multivariate figures, this function takes a formula as the input where the attribute of interest (log of salary here) is placed on the left hand side of the equation and the second attribute is placed on the right hand side of the equation. Below, the equation `log(Salary) ~ HmRun` means that the log salary is the attribute of interest (placed on the y-axis) is going to be plotted in conjunction with the number of home runs the player hit (placed on the x-axis). Let's look at the figure.
-
-
-
-Another measure of association between two attributes is the correlation. This statistic gives a single number summary about the **linear** relationship between two quantitative attributes. The correlation ranges between -1 and +1 where 0 means no relationship. The closer the correlation gets to -1 or +1 indicates a stronger linear relationship between the two attributes. A correlation of -1 means the two attributes are inversely related, more specifically this means that as one goes up the other will tend to decrease. The opposite is true for a correlation of +1 indicating a positive relationship, as one attribute increases the other tends to increase as well.
-
-
--->
 
 ### Scatterplots
-As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between birth weight and gestational days.
+As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between the peak (i.e., highest) wind speed and the average daily dew point.^[Dew point is the temperature to which air must be cooled to become saturated with water vapor. [Wikipedia](https://en.wikipedia.org/wiki/Dew_point)]
 
 
 ```r
-gf_point(birth_weight ~ gestational_days, data = baby, size = 3, alpha = .2) %>%
+gf_point(wind_speed ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2) %>%
   gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
   gf_smooth(size = 1)
 ```
 
 ```
+## Warning: Removed 682 rows containing non-finite values (stat_smooth).
+```
+
+```
 ## `geom_smooth()` using method = 'gam'
+```
+
+```
+## Warning: Removed 682 rows containing non-finite values (stat_smooth).
+```
+
+```
+## Warning: Removed 682 rows containing missing values (geom_point).
 ```
 
 <img src="07-linear-regression_files/figure-html/scatter-baby-1.png" width="672" />
@@ -212,11 +188,12 @@ The figure shows two types of lines, the dashed line is assuming a linear relati
 
 
 ```r
-cor(birth_weight ~ gestational_days, data = baby)
+cor(wind_speed ~ dewpoint_avg, data = us_weather, 
+    use = 'complete.obs')
 ```
 
 ```
-## [1] 0.4075428
+## [1] 0.09572479
 ```
 
 Here the correlation represents the degree of **linear** relationship between the two variables. Values closer to 1 in absolute value (i.e. +1 or -1) show a stronger linear relationship and values closer to 0 indicate no relationship or weaker relationship. The correlation between the two variables above was about 0.41 indicating that there is a moderate positive linear relationship between birth weight and gestational days. The correlation is shown to be positive due to the coefficient being positive and the general trend from the scatterplot shows a direction of relationship moving from the lower left of the figure to the upper right of the figure. A negative correlation would have a negative sign associated with it and would trend from the upper left to the lower right of a scatterplot.
@@ -229,11 +206,6 @@ Now that the correlation was computed, we have evidence that there is a relation
 ```r
 baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
 coef(baby_reg)
-```
-
-```
-##      (Intercept) gestational_days 
-##      -10.7541389        0.4665569
 ```
 
 he following coefficients represent the linear regression equation that more generally can be show as:
@@ -290,25 +262,12 @@ gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = bab
   gf_smooth(size = 1)
 ```
 
-```
-## `geom_smooth()` using method = 'gam'
-```
-
-<img src="07-linear-regression_files/figure-html/scatter-mean-center-1.png" width="672" />
-
 Notice that the relationship is the same as before, but now the scale of gestational days is different. It may be more difficult to interpret now as the number of days a women is pregnant is relatively well known, but now the mean gestational days is represented as 0 in the figure and all the values are in reference to that instead of referencing when a women became pregnant. Using this same approach, a linear regression can be fitted to this newly recentered gestational days variable.
 
 
 ```r
 baby_reg_centered <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby)
 coef(baby_reg_centered)
-```
-
-```
-##                                  (Intercept) 
-##                                  119.4625213 
-## I(gestational_days - mean(gestational_days)) 
-##                                    0.4665569
 ```
 
 he new equation would look like:
@@ -343,24 +302,10 @@ baby_reg_min <- lm(birth_weight ~ I(gestational_days - min(gestational_days)), d
 coef(baby_reg_min)
 ```
 
-```
-##                                 (Intercept) 
-##                                  58.2962789 
-## I(gestational_days - min(gestational_days)) 
-##                                   0.4665569
-```
-
 
 ```r
 baby_reg_max <- lm(birth_weight ~ I(gestational_days - max(gestational_days)), data = baby)
 coef(baby_reg_max)
-```
-
-```
-##                                 (Intercept) 
-##                                 153.9404386 
-## I(gestational_days - max(gestational_days)) 
-##                                   0.4665569
 ```
 
 
