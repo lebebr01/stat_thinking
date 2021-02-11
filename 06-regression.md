@@ -480,11 +480,13 @@ Comparison of the conditional error can be helpful to evaluate areas of the mode
 
 ## Adding more attributes
 
-To evaluate how well this model can do, all of the attributes will be open to be included in the final model. This can be done with the `.` character after the `~` in the model formula. The model is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. 
+To evaluate how well this model can do, all of the attributes will be open to be included in the final model. The only one that is removed from the main data is the institution name. This can be done with the `.` character after the `~` in the model formula. The model tree is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. The attributes included in the final model though can be accessed and ranked by those that are the most important. 
 
 
 ```r
-act_reg_sat <- rpart(actcmmid ~ ., data = colleges, method = "anova")
+act_reg_sat <- rpart(actcmmid ~ ., 
+                     data = select(colleges, -instnm),
+                                   method = "anova")
 
 colleges_pred <- colleges_pred %>%
   mutate(act_pred_sat = predict(act_reg_sat),
@@ -492,8 +494,37 @@ colleges_pred <- colleges_pred %>%
 
 conditional_error_sat <- colleges_pred %>%
   df_stats(abs(error_sat) ~ act_recode, mean, median, min, max, length)
+
+act_reg_sat$variable.importance
 ```
 
+```
+##           city tuitionfee_out  tuitionfee_in       costt4_a       adm_rate 
+##    10608.27504     8438.13169     7869.78358     6700.46334     2858.66475 
+##         stabbr       debt_mdn  grad_debt_mdn           ugds         region 
+##     1420.67466      696.36673      570.77579      210.91393       76.49506 
+##         locale 
+##       53.73178
+```
+
+The table below shows the attributes that are the most important, with those at the top of the table being more important than those at the bottom of the table. Notice that the most important seems to be the city, followed by the tuition, then cost, and so on. 
+
+
+|               |           x|
+|:--------------|-----------:|
+|city           | 10608.27504|
+|tuitionfee_out |  8438.13169|
+|tuitionfee_in  |  7869.78358|
+|costt4_a       |  6700.46334|
+|adm_rate       |  2858.66475|
+|stabbr         |  1420.67466|
+|debt_mdn       |   696.36673|
+|grad_debt_mdn  |   570.77579|
+|ugds           |   210.91393|
+|region         |    76.49506|
+|locale         |    53.73178|
+
+The evaluation accuracy of this model that could contain most of the attributes in the data is shown in Figure \@ref(fig:sat-eval-acc). The figure also shows the comparisons to the other two models explore in this chapter, labeled as 'model1' and 'model2' respectively. Notice the improvement across all of the median ACT scores for the model that was fitted with the ability to include all of the attributes. 
 
 
 ```r
@@ -502,6 +533,7 @@ bind_rows(
   mutate(conditional_error2, model = 'model2'),
   mutate(conditional_error_sat, model = 'model_sat')
 ) %>%
+  mutate(model = factor(model, levels = c('model1', 'model2', 'model_sat'))) %>%
   gf_pointrangeh(act_recode ~ mean + min + max, 
                  color = ~ model,
                position = position_dodge(width = 0.5)) %>% 

@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-02-05" />
+<meta name="date" content="2021-02-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -318,7 +318,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="description-of-the-data" class="section level3" number="7.1.1">
 <h3><span class="header-section-number">7.1.1</span> Description of the Data</h3>
 <p>These data contain information on mother’s and baby’s health for 1,174 pregnant women.</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="linear-regression.html#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="linear-regression.html#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.3.3     ✔ purrr   0.3.4
 ## ✔ tibble  3.0.6     ✔ dplyr   1.0.4
@@ -327,7 +327,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="linear-regression.html#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="linear-regression.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span></code></pre></div>
 <pre><code>## Loading required package: ggstance</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;ggstance&#39;</code></pre>
@@ -348,7 +348,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## New to ggformula?  Try the tutorials: 
 ##  learnr::run_tutorial(&quot;introduction&quot;, package = &quot;ggformula&quot;)
 ##  learnr::run_tutorial(&quot;refining&quot;, package = &quot;ggformula&quot;)</code></pre>
-<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="linear-regression.html#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="linear-regression.html#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span></code></pre></div>
 <pre><code>## Registered S3 method overwritten by &#39;mosaic&#39;:
 ##   method                           from   
 ##   fortify.SpatialPolygonsDataFrame ggplot2</code></pre>
@@ -379,13 +379,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     max, mean, min, prod, range, sample, sum</code></pre>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="linear-regression.html#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
-<span id="cb190-2"><a href="linear-regression.html#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
-<span id="cb190-3"><a href="linear-regression.html#cb190-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb190-4"><a href="linear-regression.html#cb190-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
-<span id="cb190-5"><a href="linear-regression.html#cb190-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>())</span>
-<span id="cb190-6"><a href="linear-regression.html#cb190-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb190-7"><a href="linear-regression.html#cb190-7" aria-hidden="true" tabindex="-1"></a>baby <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="linear-regression.html#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb191-2"><a href="linear-regression.html#cb191-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
+<span id="cb191-3"><a href="linear-regression.html#cb191-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb191-4"><a href="linear-regression.html#cb191-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb191-5"><a href="linear-regression.html#cb191-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>())</span>
+<span id="cb191-6"><a href="linear-regression.html#cb191-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb191-7"><a href="linear-regression.html#cb191-7" aria-hidden="true" tabindex="-1"></a>baby <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
@@ -396,7 +396,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   maternal_pregnancy_weight = col_double(),
 ##   maternal_smoker = col_logical()
 ## )</code></pre>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="linear-regression.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(baby)</span></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="linear-regression.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(baby)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 6
 ##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
 ##          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
@@ -421,21 +421,21 @@ Another measure of association between two attributes is the correlation. This s
 <div id="scatterplots" class="section level3" number="7.1.2">
 <h3><span class="header-section-number">7.1.2</span> Scatterplots</h3>
 <p>As we’ve explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the <code>gf_point()</code> function and adding lines to the figure to provide some guidance to the relationship can be done with the <code>gf_smooth()</code> function. Below, a scatterplot is created that explores the relationship between birth weight and gestational days.</p>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="linear-regression.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb194-2"><a href="linear-regression.html#cb194-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb194-3"><a href="linear-regression.html#cb194-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="linear-regression.html#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb195-2"><a href="linear-regression.html#cb195-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb195-3"><a href="linear-regression.html#cb195-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39;</code></pre>
 <p><img src="07-linear-regression_files/figure-html/scatter-baby-1.png" width="672" /></p>
 <p>The figure shows two types of lines, the dashed line is assuming a linear relationship (specified with <code>gf_smooth(method = 'lm')</code>) and the solid line is allowing the relationship to be more flexible to account for any non-linearity. There does appear to be some evidence of non-linearity, particularly in the tails of gestational days distribution. We can attempt to summarize this relationship in a single numeric value by computing the correlation coefficient. The correlation was initially explored when fitting regression trees. The correlation can be calculated with the <code>cor()</code> function with the primary argument being a formula depicting the two variables to compute the correlation on.</p>
-<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="linear-regression.html#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby)</span></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="linear-regression.html#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby)</span></code></pre></div>
 <pre><code>## [1] 0.4075428</code></pre>
 <p>Here the correlation represents the degree of <strong>linear</strong> relationship between the two variables. Values closer to 1 in absolute value (i.e. +1 or -1) show a stronger linear relationship and values closer to 0 indicate no relationship or weaker relationship. The correlation between the two variables above was about 0.41 indicating that there is a moderate positive linear relationship between birth weight and gestational days. The correlation is shown to be positive due to the coefficient being positive and the general trend from the scatterplot shows a direction of relationship moving from the lower left of the figure to the upper right of the figure. A negative correlation would have a negative sign associated with it and would trend from the upper left to the lower right of a scatterplot.</p>
 </div>
 <div id="fitting-a-linear-regression-model" class="section level3" number="7.1.3">
 <h3><span class="header-section-number">7.1.3</span> Fitting a linear regression model</h3>
 <p>Now that the correlation was computed, we have evidence that there is a relationship between the baby birth weight and the gestational days. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the <code>lm()</code> function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: <code>birth_weight ~ gestational_days</code>, where birth weight is the outcome of interest (in language we’ve used previously, this is the attribute we want to predict) and gestational days is the attribute we want to use to do the predicting of birth weight. Another way to think about what these variables represent is to explain variation in the birth weight with gestational days. In other words, the assumption is made that gestational days impacts or explains differences in the baby birth weight.</p>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="linear-regression.html#cb198-1" aria-hidden="true" tabindex="-1"></a>baby_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby)</span>
-<span id="cb198-2"><a href="linear-regression.html#cb198-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg)</span></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="linear-regression.html#cb199-1" aria-hidden="true" tabindex="-1"></a>baby_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby)</span>
+<span id="cb199-2"><a href="linear-regression.html#cb199-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg)</span></code></pre></div>
 <pre><code>##      (Intercept) gestational_days 
 ##      -10.7541389        0.4665569</code></pre>
 <p>he following coefficients represent the linear regression equation that more generally can be show as:</p>
@@ -447,11 +447,11 @@ birth\_weight = -10.8 + 0.47 gestational\_days + \epsilon
  = -10.8 + 0.47 gestational_days
 \end{equation}</p>
 <p>where now the birth weight outcome has a hat (i.e. <span class="math inline">\(\hat{y}\)</span>) that denotes mathematically that the equation predicts a value of birth weight given solely the number of gestational days. The first equation above says that the original observed birth weight is a function of gestational days plus some error. Using the equation above, the predicted birth weight can be obtained by including a value inserted for gestational days. Let’s pick a few values for gestational days to try.</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="linear-regression.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">10.8</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">200</span></span></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="linear-regression.html#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">10.8</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">200</span></span></code></pre></div>
 <pre><code>## [1] 83.2</code></pre>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="linear-regression.html#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">10.8</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">275</span></span></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="linear-regression.html#cb203-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">10.8</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">275</span></span></code></pre></div>
 <pre><code>## [1] 118.45</code></pre>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="linear-regression.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">10.8</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">276</span></span></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="linear-regression.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">10.8</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">276</span></span></code></pre></div>
 <pre><code>## [1] 118.92</code></pre>
 <p>You may notice that the predicted value of birth weight increases by 0.47 grams for every one day increase in gestational days, often referred to as the linear slope. The predicted values would fit on the dashed line shown in the scatterplot shown above. This highlights the assumption made here from the linear regression model above in which the relationship between birth weight and gestational days is assumed to be linear. It is possible to relax this assumption with a more complicated model, however this is the assumption being made currently.</p>
 </div>
@@ -461,14 +461,14 @@ birth\_weight = -10.8 + 0.47 gestational\_days + \epsilon
 <div id="mean-center-gestational-days" class="section level4" number="7.1.4.1">
 <h4><span class="header-section-number">7.1.4.1</span> Mean center gestational days</h4>
 <p>First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of gestational days.</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="linear-regression.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)), <span class="at">data =</span> baby, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb206-2"><a href="linear-regression.html#cb206-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb206-3"><a href="linear-regression.html#cb206-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="linear-regression.html#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)), <span class="at">data =</span> baby, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb207-2"><a href="linear-regression.html#cb207-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb207-3"><a href="linear-regression.html#cb207-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>(<span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39;</code></pre>
 <p><img src="07-linear-regression_files/figure-html/scatter-mean-center-1.png" width="672" /></p>
 <p>Notice that the relationship is the same as before, but now the scale of gestational days is different. It may be more difficult to interpret now as the number of days a women is pregnant is relatively well known, but now the mean gestational days is represented as 0 in the figure and all the values are in reference to that instead of referencing when a women became pregnant. Using this same approach, a linear regression can be fitted to this newly recentered gestational days variable.</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="linear-regression.html#cb208-1" aria-hidden="true" tabindex="-1"></a>baby_reg_centered <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)), <span class="at">data =</span> baby)</span>
-<span id="cb208-2"><a href="linear-regression.html#cb208-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_centered)</span></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="linear-regression.html#cb209-1" aria-hidden="true" tabindex="-1"></a>baby_reg_centered <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)), <span class="at">data =</span> baby)</span>
+<span id="cb209-2"><a href="linear-regression.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_centered)</span></code></pre></div>
 <pre><code>##                                  (Intercept) 
 ##                                  119.4625213 
 ## I(gestational_days - mean(gestational_days)) 
@@ -477,22 +477,22 @@ birth\_weight = -10.8 + 0.47 gestational\_days + \epsilon
 <p>begin{equation}
  = 119.5 + 0.47 (gestational_days - mean(gestational_days))
 \end{equation}</p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="linear-regression.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="fl">119.5</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="sc">-</span><span class="dv">3</span></span></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="linear-regression.html#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="fl">119.5</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="sc">-</span><span class="dv">3</span></span></code></pre></div>
 <pre><code>## [1] 118.09</code></pre>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="linear-regression.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fl">119.5</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">0</span></span></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="linear-regression.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fl">119.5</span> <span class="sc">+</span> <span class="fl">0.47</span> <span class="sc">*</span> <span class="dv">0</span></span></code></pre></div>
 <pre><code>## [1] 119.5</code></pre>
 </div>
 <div id="minimum-or-maximum-centered-gestational-days" class="section level4" number="7.1.4.2">
 <h4><span class="header-section-number">7.1.4.2</span> Minimum or Maximum centered gestational days</h4>
 <p>A few other options that are common are to subtract the minimum or maximum values from the x attribute.</p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="linear-regression.html#cb214-1" aria-hidden="true" tabindex="-1"></a>baby_reg_min <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">min</span>(gestational_days)), <span class="at">data =</span> baby)</span>
-<span id="cb214-2"><a href="linear-regression.html#cb214-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_min)</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="linear-regression.html#cb215-1" aria-hidden="true" tabindex="-1"></a>baby_reg_min <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">min</span>(gestational_days)), <span class="at">data =</span> baby)</span>
+<span id="cb215-2"><a href="linear-regression.html#cb215-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_min)</span></code></pre></div>
 <pre><code>##                                 (Intercept) 
 ##                                  58.2962789 
 ## I(gestational_days - min(gestational_days)) 
 ##                                   0.4665569</code></pre>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="linear-regression.html#cb216-1" aria-hidden="true" tabindex="-1"></a>baby_reg_max <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">max</span>(gestational_days)), <span class="at">data =</span> baby)</span>
-<span id="cb216-2"><a href="linear-regression.html#cb216-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_max)</span></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="linear-regression.html#cb217-1" aria-hidden="true" tabindex="-1"></a>baby_reg_max <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">max</span>(gestational_days)), <span class="at">data =</span> baby)</span>
+<span id="cb217-2"><a href="linear-regression.html#cb217-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_max)</span></code></pre></div>
 <pre><code>##                                 (Intercept) 
 ##                                 153.9404386 
 ## I(gestational_days - max(gestational_days)) 

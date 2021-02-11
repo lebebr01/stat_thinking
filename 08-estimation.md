@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.4974903
+## gestational_days 0.4211914
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -84,7 +84,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope 0.3949156 0.4679069 0.5437388
+## 1    slope 0.3926731 0.4676354 0.5438102
 ```
 
 ## Categorical Predictor(s)
@@ -233,7 +233,7 @@ resample_baby()
 
 ```
 ##                             .
-## maternal_smokerTRUE -9.613296
+## maternal_smokerTRUE -8.954404
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -257,7 +257,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope -11.06004 -9.275814 -7.523534
+## 1    slope -11.01887 -9.265499 -7.486886
 ```
 
 ## More than 2 categorical groups
@@ -440,8 +440,8 @@ resample_baby()
 ##   term                                         estimate
 ##   <chr>                                           <dbl>
 ## 1 (Intercept)                                   123.   
-## 2 I(gestational_days - mean(gestational_days))    0.448
-## 3 maternal_smokerTRUE                            -7.67
+## 2 I(gestational_days - mean(gestational_days))    0.411
+## 3 maternal_smokerTRUE                            -7.95
 ```
 
 
@@ -507,10 +507,10 @@ resample_baby()
 ## # A tibble: 4 x 2
 ##   term                                                             estimate
 ##   <chr>                                                               <dbl>
-## 1 (Intercept)                                                       123.   
-## 2 I(gestational_days - mean(gestational_days))                        0.368
-## 3 maternal_smokerTRUE                                                -9.12 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.279
+## 1 (Intercept)                                                       122.   
+## 2 I(gestational_days - mean(gestational_days))                        0.307
+## 3 maternal_smokerTRUE                                                -8.05 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.302
 ```
 
 

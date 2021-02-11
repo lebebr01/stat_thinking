@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-02-05" />
+<meta name="date" content="2021-02-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -645,25 +645,92 @@ Figure 6.9: Compared absolute error across the two regression tree models fitted
 </div>
 <div id="adding-more-attributes" class="section level2" number="6.5">
 <h2><span class="header-section-number">6.5</span> Adding more attributes</h2>
-<p>To evaluate how well this model can do, all of the attributes will be open to be included in the final model. This can be done with the <code>.</code> character after the <code>~</code> in the model formula. The model is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted.</p>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="regression-trees.html#cb163-1" aria-hidden="true" tabindex="-1"></a>act_reg_sat <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> ., <span class="at">data =</span> colleges, <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
-<span id="cb163-2"><a href="regression-trees.html#cb163-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb163-3"><a href="regression-trees.html#cb163-3" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb163-4"><a href="regression-trees.html#cb163-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred_sat =</span> <span class="fu">predict</span>(act_reg_sat),</span>
-<span id="cb163-5"><a href="regression-trees.html#cb163-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">error_sat =</span> actcmmid <span class="sc">-</span> act_pred_sat)</span>
-<span id="cb163-6"><a href="regression-trees.html#cb163-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb163-7"><a href="regression-trees.html#cb163-7" aria-hidden="true" tabindex="-1"></a>conditional_error_sat <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb163-8"><a href="regression-trees.html#cb163-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error_sat) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span></code></pre></div>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="regression-trees.html#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
-<span id="cb164-2"><a href="regression-trees.html#cb164-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error, <span class="at">model =</span> <span class="st">&#39;model1&#39;</span>),</span>
-<span id="cb164-3"><a href="regression-trees.html#cb164-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error2, <span class="at">model =</span> <span class="st">&#39;model2&#39;</span>),</span>
-<span id="cb164-4"><a href="regression-trees.html#cb164-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error_sat, <span class="at">model =</span> <span class="st">&#39;model_sat&#39;</span>)</span>
-<span id="cb164-5"><a href="regression-trees.html#cb164-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb164-6"><a href="regression-trees.html#cb164-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_pointrangeh</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
-<span id="cb164-7"><a href="regression-trees.html#cb164-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="sc">~</span> model,</span>
-<span id="cb164-8"><a href="regression-trees.html#cb164-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb164-9"><a href="regression-trees.html#cb164-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
-<span id="cb164-10"><a href="regression-trees.html#cb164-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
+<p>To evaluate how well this model can do, all of the attributes will be open to be included in the final model. The only one that is removed from the main data is the institution name. This can be done with the <code>.</code> character after the <code>~</code> in the model formula. The model tree is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. The attributes included in the final model though can be accessed and ranked by those that are the most important.</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="regression-trees.html#cb163-1" aria-hidden="true" tabindex="-1"></a>act_reg_sat <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> ., </span>
+<span id="cb163-2"><a href="regression-trees.html#cb163-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> <span class="fu">select</span>(colleges, <span class="sc">-</span>instnm),</span>
+<span id="cb163-3"><a href="regression-trees.html#cb163-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
+<span id="cb163-4"><a href="regression-trees.html#cb163-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-5"><a href="regression-trees.html#cb163-5" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb163-6"><a href="regression-trees.html#cb163-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred_sat =</span> <span class="fu">predict</span>(act_reg_sat),</span>
+<span id="cb163-7"><a href="regression-trees.html#cb163-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">error_sat =</span> actcmmid <span class="sc">-</span> act_pred_sat)</span>
+<span id="cb163-8"><a href="regression-trees.html#cb163-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-9"><a href="regression-trees.html#cb163-9" aria-hidden="true" tabindex="-1"></a>conditional_error_sat <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb163-10"><a href="regression-trees.html#cb163-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error_sat) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span>
+<span id="cb163-11"><a href="regression-trees.html#cb163-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-12"><a href="regression-trees.html#cb163-12" aria-hidden="true" tabindex="-1"></a>act_reg_sat<span class="sc">$</span>variable.importance</span></code></pre></div>
+<pre><code>##           city tuitionfee_out  tuitionfee_in       costt4_a       adm_rate 
+##    10608.27504     8438.13169     7869.78358     6700.46334     2858.66475 
+##         stabbr       debt_mdn  grad_debt_mdn           ugds         region 
+##     1420.67466      696.36673      570.77579      210.91393       76.49506 
+##         locale 
+##       53.73178</code></pre>
+<p>The table below shows the attributes that are the most important, with those at the top of the table being more important than those at the bottom of the table. Notice that the most important seems to be the city, followed by the tuition, then cost, and so on.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">city</td>
+<td align="right">10608.27504</td>
+</tr>
+<tr class="even">
+<td align="left">tuitionfee_out</td>
+<td align="right">8438.13169</td>
+</tr>
+<tr class="odd">
+<td align="left">tuitionfee_in</td>
+<td align="right">7869.78358</td>
+</tr>
+<tr class="even">
+<td align="left">costt4_a</td>
+<td align="right">6700.46334</td>
+</tr>
+<tr class="odd">
+<td align="left">adm_rate</td>
+<td align="right">2858.66475</td>
+</tr>
+<tr class="even">
+<td align="left">stabbr</td>
+<td align="right">1420.67466</td>
+</tr>
+<tr class="odd">
+<td align="left">debt_mdn</td>
+<td align="right">696.36673</td>
+</tr>
+<tr class="even">
+<td align="left">grad_debt_mdn</td>
+<td align="right">570.77579</td>
+</tr>
+<tr class="odd">
+<td align="left">ugds</td>
+<td align="right">210.91393</td>
+</tr>
+<tr class="even">
+<td align="left">region</td>
+<td align="right">76.49506</td>
+</tr>
+<tr class="odd">
+<td align="left">locale</td>
+<td align="right">53.73178</td>
+</tr>
+</tbody>
+</table>
+<p>The evaluation accuracy of this model that could contain most of the attributes in the data is shown in Figure <a href="regression-trees.html#fig:sat-eval-acc">6.10</a>. The figure also shows the comparisons to the other two models explore in this chapter, labeled as ‘model1’ and ‘model2’ respectively. Notice the improvement across all of the median ACT scores for the model that was fitted with the ability to include all of the attributes.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="regression-trees.html#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb165-2"><a href="regression-trees.html#cb165-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error, <span class="at">model =</span> <span class="st">&#39;model1&#39;</span>),</span>
+<span id="cb165-3"><a href="regression-trees.html#cb165-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error2, <span class="at">model =</span> <span class="st">&#39;model2&#39;</span>),</span>
+<span id="cb165-4"><a href="regression-trees.html#cb165-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error_sat, <span class="at">model =</span> <span class="st">&#39;model_sat&#39;</span>)</span>
+<span id="cb165-5"><a href="regression-trees.html#cb165-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb165-6"><a href="regression-trees.html#cb165-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">factor</span>(model, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&#39;model1&#39;</span>, <span class="st">&#39;model2&#39;</span>, <span class="st">&#39;model_sat&#39;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb165-7"><a href="regression-trees.html#cb165-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_pointrangeh</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
+<span id="cb165-8"><a href="regression-trees.html#cb165-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="sc">~</span> model,</span>
+<span id="cb165-9"><a href="regression-trees.html#cb165-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb165-10"><a href="regression-trees.html#cb165-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
+<span id="cb165-11"><a href="regression-trees.html#cb165-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:sat-eval-acc"></span>
 <img src="06-regression_files/figure-html/sat-eval-acc-1.png" alt="Evaluation of model accuracy across the three models fitted." width="672" />
 <p class="caption">
