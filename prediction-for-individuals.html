@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-02-11" />
+<meta name="date" content="2021-02-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -321,17 +321,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="skewed-data---inference" class="section level3" number="9.2.1">
 <h3><span class="header-section-number">9.2.1</span> Skewed Data - Inference</h3>
 <p>In one example, a skewed distribution was transformed prior to conducting the analysis with a regression tree. Another approach could be to use a more robust statistic such as the median. One limitation of the median, is that a linear regression model as we have covered so far, does not allow you to fit the model while using the median.</p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="prediction-for-individuals.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb275-2"><a href="prediction-for-individuals.html#cb275-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
-<span id="cb275-3"><a href="prediction-for-individuals.html#cb275-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span>
-<span id="cb275-4"><a href="prediction-for-individuals.html#cb275-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb275-5"><a href="prediction-for-individuals.html#cb275-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
-<span id="cb275-6"><a href="prediction-for-individuals.html#cb275-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb275-7"><a href="prediction-for-individuals.html#cb275-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
-<span id="cb275-8"><a href="prediction-for-individuals.html#cb275-8" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>())</span>
-<span id="cb275-9"><a href="prediction-for-individuals.html#cb275-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb275-10"><a href="prediction-for-individuals.html#cb275-10" aria-hidden="true" tabindex="-1"></a>college_score <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="at">guess_max =</span> <span class="dv">10000</span>)</span>
-<span id="cb275-11"><a href="prediction-for-individuals.html#cb275-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(college_score)</span></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="prediction-for-individuals.html#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb274-2"><a href="prediction-for-individuals.html#cb274-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
+<span id="cb274-3"><a href="prediction-for-individuals.html#cb274-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span>
+<span id="cb274-4"><a href="prediction-for-individuals.html#cb274-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb274-5"><a href="prediction-for-individuals.html#cb274-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
+<span id="cb274-6"><a href="prediction-for-individuals.html#cb274-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-7"><a href="prediction-for-individuals.html#cb274-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb274-8"><a href="prediction-for-individuals.html#cb274-8" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>())</span>
+<span id="cb274-9"><a href="prediction-for-individuals.html#cb274-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-10"><a href="prediction-for-individuals.html#cb274-10" aria-hidden="true" tabindex="-1"></a>college_score <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="at">guess_max =</span> <span class="dv">10000</span>)</span>
+<span id="cb274-11"><a href="prediction-for-individuals.html#cb274-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(college_score)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 17
 ##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
 ##   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
@@ -344,34 +344,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # … with 7 more variables: costt4_p &lt;dbl&gt;, tuitionfee_in &lt;dbl&gt;,
 ## #   tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;, grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;,
 ## #   bachelor_degree &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="prediction-for-individuals.html#cb277-1" aria-hidden="true" tabindex="-1"></a>adm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(adm_rate <span class="sc">~</span> preddeg, <span class="at">data =</span> college_score)</span>
-<span id="cb277-2"><a href="prediction-for-individuals.html#cb277-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(adm_model)</span></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="prediction-for-individuals.html#cb276-1" aria-hidden="true" tabindex="-1"></a>adm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(adm_rate <span class="sc">~</span> preddeg, <span class="at">data =</span> college_score)</span>
+<span id="cb276-2"><a href="prediction-for-individuals.html#cb276-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(adm_model)</span></code></pre></div>
 <pre><code>##               (Intercept)    preddegBachelor Degree preddegCertificate Degree 
 ##                0.72296993               -0.05170254                0.02193828</code></pre>
 <p>Prior to doing the median, we can bootstrap the mean difference from the model above.</p>
-<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="prediction-for-individuals.html#cb279-1" aria-hidden="true" tabindex="-1"></a>resample_admrate <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb279-2"><a href="prediction-for-individuals.html#cb279-2" aria-hidden="true" tabindex="-1"></a>  college_resample <span class="ot">&lt;-</span> college_score <span class="sc">%&gt;%</span></span>
-<span id="cb279-3"><a href="prediction-for-individuals.html#cb279-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(college_score), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb279-4"><a href="prediction-for-individuals.html#cb279-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb279-5"><a href="prediction-for-individuals.html#cb279-5" aria-hidden="true" tabindex="-1"></a>  college_resample <span class="sc">%&gt;%</span></span>
-<span id="cb279-6"><a href="prediction-for-individuals.html#cb279-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(adm_rate <span class="sc">~</span> preddeg, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb279-7"><a href="prediction-for-individuals.html#cb279-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>(.) <span class="sc">%&gt;%</span></span>
-<span id="cb279-8"><a href="prediction-for-individuals.html#cb279-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(term, estimate)</span>
-<span id="cb279-9"><a href="prediction-for-individuals.html#cb279-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb279-10"><a href="prediction-for-individuals.html#cb279-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb279-11"><a href="prediction-for-individuals.html#cb279-11" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_admrate</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="prediction-for-individuals.html#cb278-1" aria-hidden="true" tabindex="-1"></a>resample_admrate <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb278-2"><a href="prediction-for-individuals.html#cb278-2" aria-hidden="true" tabindex="-1"></a>  college_resample <span class="ot">&lt;-</span> college_score <span class="sc">%&gt;%</span></span>
+<span id="cb278-3"><a href="prediction-for-individuals.html#cb278-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(college_score), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb278-4"><a href="prediction-for-individuals.html#cb278-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb278-5"><a href="prediction-for-individuals.html#cb278-5" aria-hidden="true" tabindex="-1"></a>  college_resample <span class="sc">%&gt;%</span></span>
+<span id="cb278-6"><a href="prediction-for-individuals.html#cb278-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(adm_rate <span class="sc">~</span> preddeg, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb278-7"><a href="prediction-for-individuals.html#cb278-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>(.) <span class="sc">%&gt;%</span></span>
+<span id="cb278-8"><a href="prediction-for-individuals.html#cb278-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(term, estimate)</span>
+<span id="cb278-9"><a href="prediction-for-individuals.html#cb278-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb278-10"><a href="prediction-for-individuals.html#cb278-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb278-11"><a href="prediction-for-individuals.html#cb278-11" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_admrate</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   term                      estimate
 ##   &lt;chr&gt;                        &lt;dbl&gt;
-## 1 (Intercept)                0.718  
-## 2 preddegBachelor Degree    -0.0455 
-## 3 preddegCertificate Degree  0.00850</code></pre>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="prediction-for-individuals.html#cb281-1" aria-hidden="true" tabindex="-1"></a>admrate_coef <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_admrate) <span class="sc">%&gt;%</span></span>
-<span id="cb281-2"><a href="prediction-for-individuals.html#cb281-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
-<span id="cb281-3"><a href="prediction-for-individuals.html#cb281-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb281-4"><a href="prediction-for-individuals.html#cb281-4" aria-hidden="true" tabindex="-1"></a>admrate_coef <span class="sc">%&gt;%</span></span>
-<span id="cb281-5"><a href="prediction-for-individuals.html#cb281-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span> estimate) <span class="sc">%&gt;%</span> </span>
-<span id="cb281-6"><a href="prediction-for-individuals.html#cb281-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
+## 1 (Intercept)                 0.730 
+## 2 preddegBachelor Degree     -0.0629
+## 3 preddegCertificate Degree   0.0394</code></pre>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="prediction-for-individuals.html#cb280-1" aria-hidden="true" tabindex="-1"></a>admrate_coef <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_admrate) <span class="sc">%&gt;%</span></span>
+<span id="cb280-2"><a href="prediction-for-individuals.html#cb280-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
+<span id="cb280-3"><a href="prediction-for-individuals.html#cb280-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb280-4"><a href="prediction-for-individuals.html#cb280-4" aria-hidden="true" tabindex="-1"></a>admrate_coef <span class="sc">%&gt;%</span></span>
+<span id="cb280-5"><a href="prediction-for-individuals.html#cb280-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span> estimate) <span class="sc">%&gt;%</span> </span>
+<span id="cb280-6"><a href="prediction-for-individuals.html#cb280-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
 <p><img src="09-prediction_files/figure-html/replicate-adm-rate-1.png" width="672" /></p>
 </div>
 <div id="bootstrap-median" class="section level3" number="9.2.2">
@@ -384,33 +384,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Repeat steps 1 - 3 many times</li>
 <li>Explore the distribution of median differences from the many resampled data sets.</li>
 </ol>
-<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="prediction-for-individuals.html#cb282-1" aria-hidden="true" tabindex="-1"></a>resample_admrate_median <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb282-2"><a href="prediction-for-individuals.html#cb282-2" aria-hidden="true" tabindex="-1"></a>  college_resample <span class="ot">&lt;-</span> college_score <span class="sc">%&gt;%</span></span>
-<span id="cb282-3"><a href="prediction-for-individuals.html#cb282-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(college_score), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb282-4"><a href="prediction-for-individuals.html#cb282-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb282-5"><a href="prediction-for-individuals.html#cb282-5" aria-hidden="true" tabindex="-1"></a>  med_est <span class="ot">&lt;-</span> college_resample <span class="sc">%&gt;%</span></span>
-<span id="cb282-6"><a href="prediction-for-individuals.html#cb282-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">df_stats</span>(adm_rate <span class="sc">~</span> preddeg, median) <span class="sc">%&gt;%</span></span>
-<span id="cb282-7"><a href="prediction-for-individuals.html#cb282-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> preddeg, <span class="at">values_from =</span> median_adm_rate)</span>
-<span id="cb282-8"><a href="prediction-for-individuals.html#cb282-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb282-9"><a href="prediction-for-individuals.html#cb282-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(med_est) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Associate&quot;</span>, <span class="st">&quot;Bachelor&quot;</span>, <span class="st">&quot;Certificate&quot;</span>)</span>
-<span id="cb282-10"><a href="prediction-for-individuals.html#cb282-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb282-11"><a href="prediction-for-individuals.html#cb282-11" aria-hidden="true" tabindex="-1"></a>  med_est <span class="sc">%&gt;%</span> </span>
-<span id="cb282-12"><a href="prediction-for-individuals.html#cb282-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">bachelor_associate =</span> Bachelor <span class="sc">-</span> Associate,</span>
-<span id="cb282-13"><a href="prediction-for-individuals.html#cb282-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">certificate_associate =</span> Certificate <span class="sc">-</span> Associate,</span>
-<span id="cb282-14"><a href="prediction-for-individuals.html#cb282-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">bachelor_certificate =</span> Bachelor <span class="sc">-</span> Certificate) <span class="sc">%&gt;%</span></span>
-<span id="cb282-15"><a href="prediction-for-individuals.html#cb282-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(Associate<span class="sc">:</span>bachelor_certificate, </span>
-<span id="cb282-16"><a href="prediction-for-individuals.html#cb282-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">names_to =</span> <span class="st">&quot;Term&quot;</span>, </span>
-<span id="cb282-17"><a href="prediction-for-individuals.html#cb282-17" aria-hidden="true" tabindex="-1"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Median_Difference&quot;</span>)</span>
-<span id="cb282-18"><a href="prediction-for-individuals.html#cb282-18" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb282-19"><a href="prediction-for-individuals.html#cb282-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb282-20"><a href="prediction-for-individuals.html#cb282-20" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_admrate_median</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="prediction-for-individuals.html#cb283-1" aria-hidden="true" tabindex="-1"></a>admrate_median <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="sc">%&gt;%</span></span>
-<span id="cb283-2"><a href="prediction-for-individuals.html#cb283-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
-<span id="cb283-3"><a href="prediction-for-individuals.html#cb283-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb283-4"><a href="prediction-for-individuals.html#cb283-4" aria-hidden="true" tabindex="-1"></a>admrate_median <span class="sc">%&gt;%</span></span>
-<span id="cb283-5"><a href="prediction-for-individuals.html#cb283-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;bachelor_associate&#39;</span>, <span class="st">&#39;certificate_associate&#39;</span>, <span class="st">&#39;bachelor_certificate&#39;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb283-6"><a href="prediction-for-individuals.html#cb283-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_density</span>(<span class="sc">~</span> Median_Difference) <span class="sc">%&gt;%</span> </span>
-<span id="cb283-7"><a href="prediction-for-individuals.html#cb283-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> Term, <span class="at">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="prediction-for-individuals.html#cb281-1" aria-hidden="true" tabindex="-1"></a>resample_admrate_median <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb281-2"><a href="prediction-for-individuals.html#cb281-2" aria-hidden="true" tabindex="-1"></a>  college_resample <span class="ot">&lt;-</span> college_score <span class="sc">%&gt;%</span></span>
+<span id="cb281-3"><a href="prediction-for-individuals.html#cb281-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(college_score), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb281-4"><a href="prediction-for-individuals.html#cb281-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-5"><a href="prediction-for-individuals.html#cb281-5" aria-hidden="true" tabindex="-1"></a>  med_est <span class="ot">&lt;-</span> college_resample <span class="sc">%&gt;%</span></span>
+<span id="cb281-6"><a href="prediction-for-individuals.html#cb281-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">df_stats</span>(adm_rate <span class="sc">~</span> preddeg, median) <span class="sc">%&gt;%</span></span>
+<span id="cb281-7"><a href="prediction-for-individuals.html#cb281-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> preddeg, <span class="at">values_from =</span> median_adm_rate)</span>
+<span id="cb281-8"><a href="prediction-for-individuals.html#cb281-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-9"><a href="prediction-for-individuals.html#cb281-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(med_est) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Associate&quot;</span>, <span class="st">&quot;Bachelor&quot;</span>, <span class="st">&quot;Certificate&quot;</span>)</span>
+<span id="cb281-10"><a href="prediction-for-individuals.html#cb281-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb281-11"><a href="prediction-for-individuals.html#cb281-11" aria-hidden="true" tabindex="-1"></a>  med_est <span class="sc">%&gt;%</span> </span>
+<span id="cb281-12"><a href="prediction-for-individuals.html#cb281-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">bachelor_associate =</span> Bachelor <span class="sc">-</span> Associate,</span>
+<span id="cb281-13"><a href="prediction-for-individuals.html#cb281-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">certificate_associate =</span> Certificate <span class="sc">-</span> Associate,</span>
+<span id="cb281-14"><a href="prediction-for-individuals.html#cb281-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">bachelor_certificate =</span> Bachelor <span class="sc">-</span> Certificate) <span class="sc">%&gt;%</span></span>
+<span id="cb281-15"><a href="prediction-for-individuals.html#cb281-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(Associate<span class="sc">:</span>bachelor_certificate, </span>
+<span id="cb281-16"><a href="prediction-for-individuals.html#cb281-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">names_to =</span> <span class="st">&quot;Term&quot;</span>, </span>
+<span id="cb281-17"><a href="prediction-for-individuals.html#cb281-17" aria-hidden="true" tabindex="-1"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Median_Difference&quot;</span>)</span>
+<span id="cb281-18"><a href="prediction-for-individuals.html#cb281-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb281-19"><a href="prediction-for-individuals.html#cb281-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-20"><a href="prediction-for-individuals.html#cb281-20" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_admrate_median</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="prediction-for-individuals.html#cb282-1" aria-hidden="true" tabindex="-1"></a>admrate_median <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="sc">%&gt;%</span></span>
+<span id="cb282-2"><a href="prediction-for-individuals.html#cb282-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
+<span id="cb282-3"><a href="prediction-for-individuals.html#cb282-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb282-4"><a href="prediction-for-individuals.html#cb282-4" aria-hidden="true" tabindex="-1"></a>admrate_median <span class="sc">%&gt;%</span></span>
+<span id="cb282-5"><a href="prediction-for-individuals.html#cb282-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;bachelor_associate&#39;</span>, <span class="st">&#39;certificate_associate&#39;</span>, <span class="st">&#39;bachelor_certificate&#39;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb282-6"><a href="prediction-for-individuals.html#cb282-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_density</span>(<span class="sc">~</span> Median_Difference) <span class="sc">%&gt;%</span> </span>
+<span id="cb282-7"><a href="prediction-for-individuals.html#cb282-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> Term, <span class="at">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
 
 </div>
 </div>
