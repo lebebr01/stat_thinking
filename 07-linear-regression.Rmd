@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Linear Regression 
 
 Linear regression is another statistical model that can be used when the outcome is an integer or continuous, similar to that of the regression tree. There are similarities between linear regression and regression trees, however there are also very notable differences. 
@@ -23,56 +28,60 @@ us_weather <- mutate(us_weather, snow_factor = factor(snow),
 ```
 
 ### Scatterplots
-As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between the peak (i.e., highest) wind speed and the average daily dew point.^[Dew point is the temperature to which air must be cooled to become saturated with water vapor. [Wikipedia](https://en.wikipedia.org/wiki/Dew_point)]
+As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between the low temperature and the average daily dew point.^[Dew point is the temperature to which air must be cooled to become saturated with water vapor. [Wikipedia](https://en.wikipedia.org/wiki/Dew_point)]
 
-```{r scatter-baby}
-gf_point(wind_speed ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2) %>%
-  gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
-  gf_smooth(size = 1)
+```{r scatter-temp, message = FALSE, warning = FALSE}
+gf_point(drybulbtemp_min ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2) %>%
+  gf_smooth(method = 'lm', size = 1) %>%
+  gf_labs(x = "Average daily dew point",
+          y = "Minimum daily temperature (in F)")
 ```
 
-The figure shows two types of lines, the dashed line is assuming a linear relationship (specified with `gf_smooth(method = 'lm')`) and the solid line is allowing the relationship to be more flexible to account for any non-linearity. There does appear to be some evidence of non-linearity, particularly in the tails of gestational days distribution. We can attempt to summarize this relationship in a single numeric value by computing the correlation coefficient. The correlation was initially explored when fitting regression trees. The correlation can be calculated with the `cor()` function with the primary argument being a formula depicting the two variables to compute the correlation on.
+Figure \@ref(fig:scatter-temp) shows the relationship between minimum temperature and average daily dew point assuming a linear relationship (specified with `gf_smooth(method = 'lm')`) between the two attributes. In this example, the relationship between the two attributes goes from the lower left to the upper right, indicating a positive relationship. That is, as the average daily dew point tends to increase, the minimum daily temperature also tends to increase. The relationship is not perfect, which is shown by the points not falling perfectly on the blue line, but the data are clustered relatively closely to this blue line. This would suggest that the relationship is stronger rather than being weaker and closer to +1 than 0. 
+
+To estimate as a single quantity the relationship between the two attributes, the correlation can be calculated with the `cor()` function with the primary argument being a formula depicting the two variables to compute the correlation. The optional argument, `use = 'complete.obs'` is used as there are some missing data on these attributes and these data are removed prior to the calculation. 
 
 ```{r cor-baby}
-cor(wind_speed ~ dewpoint_avg, data = us_weather, 
+cor(drybulbtemp_min ~ dewpoint_avg, data = us_weather, 
     use = 'complete.obs')
 ```
 
-Here the correlation represents the degree of **linear** relationship between the two variables. Values closer to 1 in absolute value (i.e. +1 or -1) show a stronger linear relationship and values closer to 0 indicate no relationship or weaker relationship. The correlation between the two variables above was about 0.41 indicating that there is a moderate positive linear relationship between birth weight and gestational days. The correlation is shown to be positive due to the coefficient being positive and the general trend from the scatterplot shows a direction of relationship moving from the lower left of the figure to the upper right of the figure. A negative correlation would have a negative sign associated with it and would trend from the upper left to the lower right of a scatterplot.
-
+Here the correlation represents the degree of **linear** relationship between the two variables. Values closer to 1 in absolute value (i.e. +1 or -1) show a stronger linear relationship and values closer to 0 indicate no relationship or weaker relationship. The correlation between the two variables above was about `r round(cor(drybulbtemp_min ~ dewpoint_avg, data = us_weather, use = 'complete.obs'), 2)` indicating that there is a strong positive linear relationship between the minimum temperature and the daily dew point. The correlation is shown to be positive due to the coefficient being positive and the general trend from the scatterplot shows a direction of relationship moving from the lower left of the figure to the upper right of the figure. A negative correlation would have a negative sign associated with it and would trend from the upper left to the lower right of a scatterplot.
 
 ### Fitting a linear regression model
-Now that the correlation was computed, we have evidence that there is a relationship between the baby birth weight and the gestational days. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the `lm()` function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: `birth_weight ~ gestational_days`, where birth weight is the outcome of interest (in language we've used previously, this is the attribute we want to predict) and gestational days is the attribute we want to use to do the predicting of birth weight. Another way to think about what these variables represent is to explain variation in the birth weight with gestational days. In other words, the assumption is made that gestational days impacts or explains differences in the baby birth weight.
+Now that the correlation was computed, we have evidence that there is a relationship between the minimum temperature and the average daily dewpoint. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the `lm()` function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: `drybulbtemp_min ~ dewpoint_avg`, where the minimum temperature is the outcome of interest (in language we've used previously, this is the attribute we want to predict) and the average daily dew point is the attribute we want to use to help to predict the minimum temperature. Another way to think about what these variables represent is to explain variation in the minimum temperature with the average daily dew point. In other words, the assumption is made that the average daily dew point impacts or explains differences in the minimum temperature.
 
-```{r baby-lm, eval = FALSE}
-baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
-coef(baby_reg)
+```{r min-temp-lm}
+temp_reg <- lm(drybulbtemp_min ~ dewpoint_avg, 
+               data = us_weather)
+coef(temp_reg)
 ```
 
-he following coefficients represent the linear regression equation that more generally can be show as:
+The following coefficients represent the linear regression equation that more generally can be show as:
 
 \begin{equation}
-birth\_weight = -10.8 + 0.47 gestational\_days + \epsilon
+drybulbtemp\_min = 4.83 + 0.90 dewpoint\_avg + \epsilon
 \end{equation}
 
 The equation can also be represented without the error, $\epsilon$ as:
 
 begin{equation}
-\hat{birth\_weight} = -10.8 + 0.47 gestational\_days
+\hat{drybulbtemp\_min} = 4.83 + 0.90 dewpoint\_avg 
 \end{equation}
 
-where now the birth weight outcome has a hat (i.e. $\hat{y}$) that denotes mathematically that the equation predicts a value of birth weight given solely the number of gestational days. The first equation above says that the original observed birth weight is a function of gestational days plus some error. Using the equation above, the predicted birth weight can be obtained by including a value inserted for gestational days. Let's pick a few values for gestational days to try.
+where now the minimum temperature outcome has a hat (i.e. $\hat{y}$) that denotes mathematically that the equation predicts a value of minimum temperature given solely the average daily dew point. The first equation above says that the original observed minimum temperature is a function of the average daily dew point plus some error. Using the equation above, the predicted minimum temperature can be obtained by including a value inserted for the average daily dew point. Let's pick a few values for the average daily dew point to try.
 
 ```{r reg-equations}
--10.8 + 0.47 * 200
--10.8 + 0.47 * 275
--10.8 + 0.47 * 276
+4.83 + 0.90 * -15
+4.83 + 0.90 * 0
+4.83 + 0.90 * 25
+4.83 + 0.90 * 26
 ```
 
-You may notice that the predicted value of birth weight increases by 0.47 grams for every one day increase in gestational days, often referred to as the linear slope. The predicted values would fit on the dashed line shown in the scatterplot shown above. This highlights the assumption made here from the linear regression model above in which the relationship between birth weight and gestational days is assumed to be linear. It is possible to relax this assumption with a more complicated model, however this is the assumption being made currently.
+You may notice that the predicted value of minimum temperature increases by 0.90 degrees Fahrenheit for every one degree increase in average daily dew point, often referred to as the linear slope. The predicted values would fit on the line shown in Figure \@ref(fig:scatter-temp). This highlights the assumption made from the linear regression model in which the relationship between the minimum temperature and the average daily dew point is assumed to be linear. It is possible to relax this assumption with a more complicated model, however that is not explore here.
 
 ### Explore the y-intercept
-So far the discussion has focused on the linear slope, often a term that is of most interest. However, the y-intercept can also be made to be more interesting by adjusting the range of gestational days.
+So far the discussion has focused on the linear slope, often a term that is of most interest. However, the y-intercept can also be made to be more interesting by adjusting the range of average daily dew point.
 
 #### Mean center gestational days
 First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of gestational days.
