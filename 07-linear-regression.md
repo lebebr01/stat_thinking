@@ -191,7 +191,7 @@ cor(drybulbtemp_min ~ dewpoint_avg, data = us_weather,
 Here the correlation represents the degree of **linear** relationship between the two variables. Values closer to 1 in absolute value (i.e. +1 or -1) show a stronger linear relationship and values closer to 0 indicate no relationship or weaker relationship. The correlation between the two variables above was about 0.91 indicating that there is a strong positive linear relationship between the minimum temperature and the daily dew point. The correlation is shown to be positive due to the coefficient being positive and the general trend from the scatterplot shows a direction of relationship moving from the lower left of the figure to the upper right of the figure. A negative correlation would have a negative sign associated with it and would trend from the upper left to the lower right of a scatterplot.
 
 ### Fitting a linear regression model
-Now that the correlation was computed, we have evidence that there is a relationship between the minimum temperature and the average daily dewpoint. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the `lm()` function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: `drybulbtemp_min ~ dewpoint_avg`, where the minimum temperature is the outcome of interest (in language we've used previously, this is the attribute we want to predict) and the average daily dew point is the attribute we want to use to help to predict the minimum temperature. Another way to think about what these variables represent is to explain variation in the minimum temperature with the average daily dew point. In other words, the assumption is made that the average daily dew point impacts or explains differences in the minimum temperature.
+Now that the correlation was computed, we have evidence that there is a relationship between the minimum temperature and the average daily dew point. To provide some more evidence about the strength of this relationship and how much error is involved, fitting a linear regression model is often done. This can be done with the `lm()` function where the two arguments that need to be specified are a formula and the data to use for the model fitting. The formula takes the following form: `drybulbtemp_min ~ dewpoint_avg`, where the minimum temperature is the outcome of interest (in language we've used previously, this is the attribute we want to predict) and the average daily dew point is the attribute we want to use to help to predict the minimum temperature. Another way to think about what these variables represent is to explain variation in the minimum temperature with the average daily dew point. In other words, the assumption is made that the average daily dew point impacts or explains differences in the minimum temperature.
 
 
 ```r
@@ -252,50 +252,112 @@ where now the minimum temperature outcome has a hat (i.e. $\hat{y}$) that denote
 ## [1] 28.23
 ```
 
-You may notice that the predicted value of minimum temperature increases by 0.90 degrees Fahrenheit for every one degree increase in average daily dew point, often referred to as the linear slope. The predicted values would fit on the line shown in Figure \@ref(fig:scatter-temp). This highlights the assumption made from the linear regression model in which the relationship between the minimum temperature and the average daily dew point is assumed to be linear. It is possible to relax this assumption with a more complicated model, however that is not explore here.
+You may notice that the predicted value of minimum temperature increases by 0.90 degrees Fahrenheit for every one degree increase in average daily dew point, often referred to as the linear slope. The predicted values would fit on the line shown in Figure \@ref(fig:scatter-temp). This highlights the assumption made from the linear regression model in which the relationship between the minimum temperature and the average daily dew point is assumed to be linear. It is possible to relax this assumption with a more complicated model, however that is not explored here. The y-intercept, shown as 4.83 in the equations above will be explored in the next section. 
 
 ### Explore the y-intercept
-So far the discussion has focused on the linear slope, often a term that is of most interest. However, the y-intercept can also be made to be more interesting by adjusting the range of average daily dew point.
+So far the discussion has focused on the linear slope, often a term that is of most interest. However, the y-intercept can also be an important term. The y-intercept from the equations above when the minimum temperature was predicted or explained by the average daily dew point was 4.83. What does this term mean? Exploring the scatterplot can provide some insight to the interpretation of the intercept.
 
-#### Mean center gestational days
-First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of gestational days.
-
-
-```r
-gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby, size = 3, alpha = .2) %>%
-  gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
-  gf_smooth(size = 1)
-```
-
-Notice that the relationship is the same as before, but now the scale of gestational days is different. It may be more difficult to interpret now as the number of days a women is pregnant is relatively well known, but now the mean gestational days is represented as 0 in the figure and all the values are in reference to that instead of referencing when a women became pregnant. Using this same approach, a linear regression can be fitted to this newly recentered gestational days variable.
+Figure \@ref(fig:scatter-temp-int) shows a scatterplot where the y-axis is the minimum temperature and the x-axis is the average daily dew point. This figure shows a horizontal and vertical line that cross on the blue line shown in the figure. The vertical line is shown at an average daily dew point of 0 and the horizontal line is at a minimum temperature at 4.83. These cross or intersect on the blue line which represents the relationship between the average daily dew point and the minimum temperature. This depicts what the y-intercept is, the y-intercept represents the average minimum temperature for an average daily dew point of 0. More generally, the y-intercept is the *average value of the outcome when all of the attributes included in the linear regression are 0*. 
 
 
 ```r
-baby_reg_centered <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby)
-coef(baby_reg_centered)
+gf_point(drybulbtemp_min ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2) %>%
+  gf_smooth(method = 'lm', size = 1) %>%
+  gf_vline(xintercept = 0) %>%
+  gf_hline(yintercept = 4.83) %>%
+  gf_labs(x = "Average daily dew point",
+          y = "Minimum daily temperature (in F)")
 ```
 
-he new equation would look like:
+<img src="07-linear-regression_files/figure-html/scatter-temp-int-1.png" width="672" />
+
+In the example that has been explored so far, a value of 0 for the average daily dew point occurs within the sample of data. That is, an average daily dew point of 0 occurs in the data are is directly interpretable. This would mean that when an average daily dew point of 0 happens in real life, the minimum temperature is 4.83 degrees Fahrenheit on average for the data that is included in this sample. There are situations where a value of 0 for an attribute is not plausible to occur. An example could be predicting a baby's birth weight based on the number of gestation days.^[Gestational days is the number of days that the baby is in the womb before being born, see [gestation on Wikipedia](https://en.wikipedia.org/wiki/Gestation)] In situations where the value of 0 is not plausible or meaningful, the data can be centered on a value that is more meaningful or plausible to help with the interpretation of the y-intercept. 
+
+Before this is done, below is a more concrete example that still tries to predict/explain minimum temperature, but now the attribute to explain differences in the minimum temperature is the average daily sea level pressure. Sea-level pressure is a way to measure atmospheric pressure and is measured in inches of mercury^[See [atmospheric pressure on Wikipedia](https://en.wikipedia.org/wiki/Atmospheric_pressure#Mean_sea-level_pressure)]. Figure \@ref(fig:scatter-temp-pressure) shows a scatterplot of this relationship. First, notice that the direction of the blue line is different than before, it starts in the upper left quadrant and decreases as the sea level pressure increases. This is indicative of a negative relationship between the two attributes. The correlation can be estimated to be -0.38, a moderate negative relationship. This relationship is not as strong as the relationship between minimum temperature and average daily dew point. The variation around the blue line in \@ref(fig:scatter-temp-pressure) is much larger which depicts a weaker relationship (ie., more error) compared to the minimum temperature and dew point relationship (see Figure \@ref(fig:scatter-temp)).
+
+
+```r
+gf_point(drybulbtemp_min ~ sealevelpressure_avg, data = us_weather, size = 3, alpha = .2) %>%
+  gf_smooth(method = 'lm', size = 1) %>%
+  gf_labs(x = "Average daily sea level pressure",
+          y = "Minimum daily temperature (in F)")
+```
+
+<img src="07-linear-regression_files/figure-html/scatter-temp-pressure-1.png" width="672" />
+
+If a linear regression is estimated with these two attributes, the following coefficients and resulting regression equation can be generated.
+
+
+```r
+sea_temp <- lm(drybulbtemp_min ~ sealevelpressure_avg, data = us_weather)
+coef(sea_temp)
+```
+
+```
+##          (Intercept) sealevelpressure_avg 
+##            660.05123            -21.05011
+```
+
+\begin{equation}
+drybulbtemp\_min = 660.05 - 21.05 sealevelpressure\_avg + \epsilon
+\end{equation}
+
+For these, the y-intercept is about 660 degrees Fahrenheit and the linear slope is about -21 degrees Fahrenheit. How are these interpreted? Starting first with the linear slope, the -21 means that for every one unit increase in sea level pressure (ie., moving from 29 to 30 inches of mercury), the average minimum temperature decreases by 21 degrees Fahrenheit. 
+
+Why is the y-intercept 660 degrees Fahrenheit, a temperature that is much above the boiling point of water and is hotter than most ovens. Furthermore, this is not an atmospheric temperature that we have seen in the data, so why is the y-intercept 660 degrees Fahrenheit? Ultimately, this comes down to the range of sea level pressure, where the minimum value in the data is 29.02, a value very far from 0. Therefore, the linear relationship depicted above is extrapolated outside the range of the data (ie, decreased by 29.02 sea level units) which increases the temperature by 610.871 degrees Fahrenheit units. This value is not interpretable or meaningful as it would not be possible to get a sea level pressure of 0 in the metric of inches of mercury. It is possible to modify the data, but not change the overall relationship between minimum temperature and sea level pressure to help increase the interpretation of the y-intercept. Three options will be explored, mean value centered, minimum value centered, and maximum value centered, although there are many other potential options. 
+
+#### Mean center sea level pressure
+First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of sea level pressure. More explicitly, the value of 30.04 was subtracted from each sea level pressure value in the data. 
+
+
+```r
+gf_point(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)), 
+         data = us_weather, size = 3, alpha = .2) %>%
+  gf_smooth(method = 'lm', size = 1) %>%
+  gf_labs(x = "Average daily sea level pressure",
+          y = "Minimum daily temperature (in F)")
+```
+
+<img src="07-linear-regression_files/figure-html/scatter-mean-center-1.png" width="672" />
+
+Notice that the relationship is the same as before, but now the scale of sea level pressure is different. From the coefficients shown below, notice that the linear slope is the same as before, -21.05, showing that the subtraction of the mean for each value did not impact the overall relationship between the two attributes. The difference, is now the y-intercept is much smaller and would represent the mean minimum temperature when the mean-centered sea level pressure is 0 (ie., a value of 30.04 in the original metric). 
+
+
+```r
+sealevel_reg_centered <- lm(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)), 
+         data = us_weather)
+coef(sealevel_reg_centered)
+```
+
+The new equation would look like:
 
 begin{equation}
-\hat{birth\_weight} = 119.5 + 0.47 (gestational\_days - mean(gestational\_days))
+\hat{drybulbtemp\_min} = 27.63 - 21.05 (sealevelpressure\_avg - mean(sealevelpressure\_avg))
 \end{equation}
 
 
 ```r
-119.5 + 0.47 * -3
+27.63 - 21.05 * -1
 ```
 
 ```
-## [1] 118.09
+## [1] 48.68
 ```
 
 ```r
-119.5 + 0.47 * 0
+27.63 - 21.05 * 0
 ```
 
 ```
-## [1] 119.5
+## [1] 27.63
+```
+
+```r
+27.63 - 21.05 * .5
+```
+
+```
+## [1] 17.105
 ```
 
 #### Minimum or Maximum centered gestational days
