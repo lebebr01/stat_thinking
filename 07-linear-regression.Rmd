@@ -120,31 +120,35 @@ For these, the y-intercept is about 660 degrees Fahrenheit and the linear slope 
 
 Why is the y-intercept 660 degrees Fahrenheit, a temperature that is much above the boiling point of water and is hotter than most ovens. Furthermore, this is not an atmospheric temperature that we have seen in the data, so why is the y-intercept 660 degrees Fahrenheit? Ultimately, this comes down to the range of sea level pressure, where the minimum value in the data is `r min(us_weather$sealevelpressure_avg, na.rm = TRUE)`, a value very far from 0. Therefore, the linear relationship depicted above is extrapolated outside the range of the data (ie, decreased by `r min(us_weather$sealevelpressure_avg, na.rm = TRUE)` sea level units) which increases the temperature by `r min(us_weather$sealevelpressure_avg, na.rm = TRUE) * 21.05` degrees Fahrenheit units. This value is not interpretable or meaningful as it would not be possible to get a sea level pressure of 0 in the metric of inches of mercury. It is possible to modify the data, but not change the overall relationship between minimum temperature and sea level pressure to help increase the interpretation of the y-intercept. Three options will be explored, mean value centered, minimum value centered, and maximum value centered, although there are many other potential options. 
 
-#### Mean center gestational days
-First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of gestational days.
+#### Mean center sea level pressure
+First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of sea level pressure. More explicitly, the value of `r round(mean(us_weather$sealevelpressure_avg, na.rm = TRUE), 2)` was subtracted from each sea level pressure value in the data. 
 
-```{r scatter-mean-center, eval = FALSE}
-gf_point(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby, size = 3, alpha = .2) %>%
-  gf_smooth(method = 'lm', linetype = 2, size = 1) %>%
-  gf_smooth(size = 1)
+```{r scatter-mean-center, message = FALSE, warning = FALSE}
+gf_point(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)), 
+         data = us_weather, size = 3, alpha = .2) %>%
+  gf_smooth(method = 'lm', size = 1) %>%
+  gf_labs(x = "Average daily sea level pressure",
+          y = "Minimum daily temperature (in F)")
 ```
 
-Notice that the relationship is the same as before, but now the scale of gestational days is different. It may be more difficult to interpret now as the number of days a women is pregnant is relatively well known, but now the mean gestational days is represented as 0 in the figure and all the values are in reference to that instead of referencing when a women became pregnant. Using this same approach, a linear regression can be fitted to this newly recentered gestational days variable.
+Notice that the relationship is the same as before, but now the scale of sea level pressure is different. From the coefficients shown below, notice that the linear slope is the same as before, -21.05, showing that the subtraction of the mean for each value did not impact the overall relationship between the two attributes. The difference, is now the y-intercept is much smaller and would represent the mean minimum temperature when the mean-centered sea level pressure is 0 (ie., a value of `r round(mean(us_weather$sealevelpressure_avg, na.rm = TRUE), 2)` in the original metric). 
 
 ```{r reg-mean-centered, eval = FALSE}
-baby_reg_centered <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)), data = baby)
-coef(baby_reg_centered)
+sealevel_reg_centered <- lm(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)), 
+         data = us_weather)
+coef(sealevel_reg_centered)
 ```
 
-he new equation would look like:
+The new equation would look like:
 
 begin{equation}
-\hat{birth\_weight} = 119.5 + 0.47 (gestational\_days - mean(gestational\_days))
+\hat{drybulbtemp\_min} = 27.63 - 21.05 (sealevelpressure\_avg - mean(sealevelpressure\_avg))
 \end{equation}
 
 ```{r predict-mean-centered}
-119.5 + 0.47 * -3
-119.5 + 0.47 * 0
+27.63 - 21.05 * -1
+27.63 - 21.05 * 0
+27.63 - 21.05 * .5
 ```
 
 #### Minimum or Maximum centered gestational days
