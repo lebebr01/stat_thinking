@@ -25,14 +25,14 @@ head(college_score)
 
 ```
 ## # A tibble: 6 x 17
-##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
+##   instnm    city   stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
+##   <chr>     <chr>  <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
+## 1 Alabama … Normal AL     Bachel… South… City:…    0.903       18  4824    22886
+## 2 Universi… Birmi… AL     Bachel… South… City:…    0.918       25 12866    24129
+## 3 Universi… Hunts… AL     Bachel… South… City:…    0.812       28  6917    22108
+## 4 Alabama … Montg… AL     Bachel… South… City:…    0.979       18  4189    19413
+## 5 The Univ… Tusca… AL     Bachel… South… City:…    0.533       28 32387    28836
+## 6 Auburn U… Montg… AL     Bachel… South… City:…    0.825       22  4211    19892
 ## # … with 7 more variables: costt4_p <dbl>, tuitionfee_in <dbl>,
 ## #   tuitionfee_out <dbl>, debt_mdn <dbl>, grad_debt_mdn <dbl>, female <dbl>,
 ## #   bachelor_degree <dbl>
@@ -70,9 +70,9 @@ resample_admrate()
 ## # A tibble: 3 x 2
 ##   term                      estimate
 ##   <chr>                        <dbl>
-## 1 (Intercept)                 0.704 
-## 2 preddegBachelor Degree     -0.0304
-## 3 preddegCertificate Degree   0.0318
+## 1 (Intercept)                 0.705 
+## 2 preddegBachelor Degree     -0.0360
+## 3 preddegCertificate Degree   0.0520
 ```
 
 

@@ -17,14 +17,14 @@ head(baby)
 
 ```
 ## # A tibble: 6 x 6
-##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
-## 1          120              284           27              62              100
-## 2          113              282           33              64              135
-## 3          128              279           28              64              115
-## 4          108              282           23              67              125
-## 5          136              286           25              62               93
-## 6          138              244           33              62              178
+##   birth_weight gestational_days maternal_age maternal_height maternal_pregnancy…
+##          <dbl>            <dbl>        <dbl>           <dbl>               <dbl>
+## 1          120              284           27              62                 100
+## 2          113              282           33              64                 135
+## 3          128              279           28              64                 115
+## 4          108              282           23              67                 125
+## 5          136              286           25              62                  93
+## 6          138              244           33              62                 178
 ## # … with 1 more variable: maternal_smoker <lgl>
 ```
 
@@ -60,7 +60,7 @@ resample_baby()
 
 ```
 ##                          .
-## gestational_days 0.4548159
+## gestational_days 0.4813612
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -84,7 +84,7 @@ baby_coef %>%
 
 ```
 ##   response        5%       50%       95%
-## 1    slope 0.3961621 0.4688621 0.5431952
+## 1    slope 0.3944778 0.4688362 0.5438366
 ```
 
 ## Categorical Predictor(s)
@@ -155,14 +155,14 @@ head(baby)
 
 ```
 ## # A tibble: 6 x 7
-##   birth_weight gestational_days maternal_age maternal_height maternal_pregna…
-##          <dbl>            <dbl>        <dbl>           <dbl>            <dbl>
-## 1          120              284           27              62              100
-## 2          113              282           33              64              135
-## 3          128              279           28              64              115
-## 4          108              282           23              67              125
-## 5          136              286           25              62               93
-## 6          138              244           33              62              178
+##   birth_weight gestational_days maternal_age maternal_height maternal_pregnancy…
+##          <dbl>            <dbl>        <dbl>           <dbl>               <dbl>
+## 1          120              284           27              62                 100
+## 2          113              282           33              64                 135
+## 3          128              279           28              64                 115
+## 4          108              282           23              67                 125
+## 5          136              286           25              62                  93
+## 6          138              244           33              62                 178
 ## # … with 2 more variables: maternal_smoker <lgl>, smoker <dbl>
 ```
 
@@ -233,7 +233,7 @@ resample_baby()
 
 ```
 ##                             .
-## maternal_smokerTRUE -8.861488
+## maternal_smokerTRUE -8.315132
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -256,8 +256,8 @@ baby_coef %>%
 ```
 
 ```
-##   response        5%       50%       95%
-## 1    slope -11.04152 -9.240214 -7.506416
+##   response        5%      50%       95%
+## 1    slope -11.02819 -9.26355 -7.495601
 ```
 
 ## More than 2 categorical groups
@@ -298,14 +298,14 @@ head(college_score)
 
 ```
 ## # A tibble: 6 x 17
-##   instnm city  stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
-##   <chr>  <chr> <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
-## 1 Alaba… Norm… AL     Bachel… South… City:…    0.903       18  4824    22886
-## 2 Unive… Birm… AL     Bachel… South… City:…    0.918       25 12866    24129
-## 3 Unive… Hunt… AL     Bachel… South… City:…    0.812       28  6917    22108
-## 4 Alaba… Mont… AL     Bachel… South… City:…    0.979       18  4189    19413
-## 5 The U… Tusc… AL     Bachel… South… City:…    0.533       28 32387    28836
-## 6 Aubur… Mont… AL     Bachel… South… City:…    0.825       22  4211    19892
+##   instnm    city   stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
+##   <chr>     <chr>  <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
+## 1 Alabama … Normal AL     Bachel… South… City:…    0.903       18  4824    22886
+## 2 Universi… Birmi… AL     Bachel… South… City:…    0.918       25 12866    24129
+## 3 Universi… Hunts… AL     Bachel… South… City:…    0.812       28  6917    22108
+## 4 Alabama … Montg… AL     Bachel… South… City:…    0.979       18  4189    19413
+## 5 The Univ… Tusca… AL     Bachel… South… City:…    0.533       28 32387    28836
+## 6 Auburn U… Montg… AL     Bachel… South… City:…    0.825       22  4211    19892
 ## # … with 7 more variables: costt4_p <dbl>, tuitionfee_in <dbl>,
 ## #   tuitionfee_out <dbl>, debt_mdn <dbl>, grad_debt_mdn <dbl>, female <dbl>,
 ## #   bachelor_degree <dbl>
@@ -439,9 +439,9 @@ resample_baby()
 ## # A tibble: 3 x 2
 ##   term                                         estimate
 ##   <chr>                                           <dbl>
-## 1 (Intercept)                                   124.   
-## 2 I(gestational_days - mean(gestational_days))    0.504
-## 3 maternal_smokerTRUE                            -8.83
+## 1 (Intercept)                                   123.   
+## 2 I(gestational_days - mean(gestational_days))    0.480
+## 3 maternal_smokerTRUE                            -9.57
 ```
 
 
@@ -507,10 +507,10 @@ resample_baby()
 ## # A tibble: 4 x 2
 ##   term                                                             estimate
 ##   <chr>                                                               <dbl>
-## 1 (Intercept)                                                       124.   
-## 2 I(gestational_days - mean(gestational_days))                        0.278
-## 3 maternal_smokerTRUE                                                -7.32 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.454
+## 1 (Intercept)                                                       122.   
+## 2 I(gestational_days - mean(gestational_days))                        0.424
+## 3 maternal_smokerTRUE                                                -8.63 
+## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.189
 ```
 
 

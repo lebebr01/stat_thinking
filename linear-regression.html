@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-02-19" />
+<meta name="date" content="2021-02-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -425,14 +425,25 @@ drybulbtemp\_min = 660.05 - 21.05 sealevelpressure\_avg + \epsilon
 <pre><code>## [1] 27.63</code></pre>
 <div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="linear-regression.html#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="fl">27.63</span> <span class="sc">-</span> <span class="fl">21.05</span> <span class="sc">*</span> .<span class="dv">5</span></span></code></pre></div>
 <pre><code>## [1] 17.105</code></pre>
+<p>This can provide an intercept that is more interpretable and can be a model parameter that is of direct interest. The value for the y-intercept also makes more intuitive sense, which can aid in model interpretation. It should be kept in mind that this model would fit the data the same as before, that is, this model is not inherently better. Instead the benefits of this model is simply in the interpretation and intuitiveness of the y-intercept. The regression line that has been shown in the scatterplots in Figures <a href="#fig:scatter-temp-pressure"><strong>??</strong></a> and <a href="#fig:scatter-mean-center"><strong>??</strong></a> are the same ones.</p>
 </div>
-<div id="minimum-or-maximum-centered-gestational-days" class="section level4" number="7.1.4.2">
-<h4><span class="header-section-number">7.1.4.2</span> Minimum or Maximum centered gestational days</h4>
-<p>A few other options that are common are to subtract the minimum or maximum values from the x attribute.</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="linear-regression.html#cb192-1" aria-hidden="true" tabindex="-1"></a>baby_reg_min <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">min</span>(gestational_days)), <span class="at">data =</span> baby)</span>
-<span id="cb192-2"><a href="linear-regression.html#cb192-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_min)</span></code></pre></div>
-<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="linear-regression.html#cb193-1" aria-hidden="true" tabindex="-1"></a>baby_reg_max <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">max</span>(gestational_days)), <span class="at">data =</span> baby)</span>
-<span id="cb193-2"><a href="linear-regression.html#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_max)</span></code></pre></div>
+<div id="minimum-or-maximum-centered-sea-level-pressure" class="section level4" number="7.1.4.2">
+<h4><span class="header-section-number">7.1.4.2</span> Minimum or Maximum centered sea level pressure</h4>
+<p>Mean centering an attribute can be an attractive way to make the y-intercept more intuitive and interpretable, but it is not the only option. A few other options that are common include subtracting the minimum or maximum values from the predictor attribute. These are shown below</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="linear-regression.html#cb192-1" aria-hidden="true" tabindex="-1"></a>sealevel_reg_min <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> <span class="fu">I</span>(sealevelpressure_avg <span class="sc">-</span> <span class="fu">min</span>(sealevelpressure_avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb192-2"><a href="linear-regression.html#cb192-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> us_weather)</span>
+<span id="cb192-3"><a href="linear-regression.html#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(sealevel_reg_min)</span></code></pre></div>
+<pre><code>##                                                       (Intercept) 
+##                                                          49.17705 
+## I(sealevelpressure_avg - min(sealevelpressure_avg, na.rm = TRUE)) 
+##                                                         -21.05011</code></pre>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="linear-regression.html#cb194-1" aria-hidden="true" tabindex="-1"></a>sealevel_reg_max <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> <span class="fu">I</span>(sealevelpressure_avg <span class="sc">-</span> <span class="fu">max</span>(sealevelpressure_avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb194-2"><a href="linear-regression.html#cb194-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> us_weather)</span>
+<span id="cb194-3"><a href="linear-regression.html#cb194-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(sealevel_reg_max)</span></code></pre></div>
+<pre><code>##                                                       (Intercept) 
+##                                                          11.28686 
+## I(sealevelpressure_avg - max(sealevelpressure_avg, na.rm = TRUE)) 
+##                                                         -21.05011</code></pre>
 </div>
 </div>
 </div>

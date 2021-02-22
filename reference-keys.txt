@@ -109,7 +109,7 @@ scatterplots
 fitting-a-linear-regression-model
 explore-the-y-intercept
 mean-center-sea-level-pressure
-minimum-or-maximum-centered-gestational-days
+minimum-or-maximum-centered-sea-level-pressure
 conditional-means
 estimation-bootstrap-uncertainty
 estimating-error

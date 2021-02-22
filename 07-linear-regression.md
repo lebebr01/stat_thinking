@@ -227,19 +227,37 @@ begin{equation}
 ## [1] 17.105
 ```
 
-#### Minimum or Maximum centered gestational days
-A few other options that are common are to subtract the minimum or maximum values from the x attribute.
+This can provide an intercept that is more interpretable and can be a model parameter that is of direct interest. The value for the y-intercept also makes more intuitive sense, which can aid in model interpretation. It should be kept in mind that this model would fit the data the same as before, that is, this model is not inherently better. Instead the benefits of this model is simply in the interpretation and intuitiveness of the y-intercept. The regression line that has been shown in the scatterplots in Figures \@ref(fig:scatter-temp-pressure) and \@ref(fig:scatter-mean-center) are the same ones. 
+
+#### Minimum or Maximum centered sea level pressure
+Mean centering an attribute can be an attractive way to make the y-intercept more intuitive and interpretable, but it is not the only option. A few other options that are common include subtracting the minimum or maximum values from the predictor attribute. These are shown below
 
 
 ```r
-baby_reg_min <- lm(birth_weight ~ I(gestational_days - min(gestational_days)), data = baby)
-coef(baby_reg_min)
+sealevel_reg_min <- lm(drybulbtemp_min ~ I(sealevelpressure_avg - min(sealevelpressure_avg, na.rm = TRUE)), 
+         data = us_weather)
+coef(sealevel_reg_min)
+```
+
+```
+##                                                       (Intercept) 
+##                                                          49.17705 
+## I(sealevelpressure_avg - min(sealevelpressure_avg, na.rm = TRUE)) 
+##                                                         -21.05011
 ```
 
 
 ```r
-baby_reg_max <- lm(birth_weight ~ I(gestational_days - max(gestational_days)), data = baby)
-coef(baby_reg_max)
+sealevel_reg_max <- lm(drybulbtemp_min ~ I(sealevelpressure_avg - max(sealevelpressure_avg, na.rm = TRUE)), 
+         data = us_weather)
+coef(sealevel_reg_max)
+```
+
+```
+##                                                       (Intercept) 
+##                                                          11.28686 
+## I(sealevelpressure_avg - max(sealevelpressure_avg, na.rm = TRUE)) 
+##                                                         -21.05011
 ```
 
 
