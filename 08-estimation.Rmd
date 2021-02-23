@@ -198,14 +198,14 @@ summary(adm_model)$r.squared
 
 Another one can be computed from the baby data where the birth weight was the outcome and gestational days was the primary attribute used as a predictor.
 
-```{r baby-reg-again}
+```{r baby-reg-again, eval = FALSE}
 baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
 summary(baby_reg)$r.squared
 ```
 
 For models with a single predictor variable, R-squared is the correlation coefficient squared. For example:
 
-```{r}
+```{r eval = FALSE}
 cor(birth_weight ~ gestational_days, data = baby) ^ 2
 ```
 
