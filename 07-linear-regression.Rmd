@@ -133,7 +133,7 @@ gf_point(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, n
 
 Notice that the relationship is the same as before, but now the scale of sea level pressure is different. From the coefficients shown below, notice that the linear slope is the same as before, -21.05, showing that the subtraction of the mean for each value did not impact the overall relationship between the two attributes. The difference, is now the y-intercept is much smaller and would represent the mean minimum temperature when the mean-centered sea level pressure is 0 (ie., a value of `r round(mean(us_weather$sealevelpressure_avg, na.rm = TRUE), 2)` in the original metric). 
 
-```{r reg-mean-centered, eval = FALSE}
+```{r reg-mean-centered}
 sealevel_reg_centered <- lm(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)), 
          data = us_weather)
 coef(sealevel_reg_centered)
