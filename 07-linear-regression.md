@@ -196,6 +196,13 @@ sealevel_reg_centered <- lm(drybulbtemp_min ~ I(sealevelpressure_avg - mean(seal
 coef(sealevel_reg_centered)
 ```
 
+```
+##                                                        (Intercept) 
+##                                                           27.63117 
+## I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)) 
+##                                                          -21.05011
+```
+
 The new equation would look like:
 
 begin{equation}
@@ -230,7 +237,7 @@ begin{equation}
 This can provide an intercept that is more interpretable and can be a model parameter that is of direct interest. The value for the y-intercept also makes more intuitive sense, which can aid in model interpretation. It should be kept in mind that this model would fit the data the same as before, that is, this model is not inherently better. Instead the benefits of this model is simply in the interpretation and intuitiveness of the y-intercept. The regression line that has been shown in the scatterplots in Figures \@ref(fig:scatter-temp-pressure) and \@ref(fig:scatter-mean-center) are the same ones. 
 
 #### Minimum or Maximum centered sea level pressure
-Mean centering an attribute can be an attractive way to make the y-intercept more intuitive and interpretable, but it is not the only option. A few other options that are common include subtracting the minimum or maximum values from the predictor attribute. These are shown below
+Mean centering an attribute can be an attractive way to make the y-intercept more intuitive and interpretable, but it is not the only option. A few other options that are common include subtracting the minimum or maximum values from the predictor attribute. These are shown below, starting first with the minimum centered and then the maximum centered regression. 
 
 
 ```r
@@ -260,6 +267,10 @@ coef(sealevel_reg_max)
 ##                                                         -21.05011
 ```
 
+Two main takeaways from these two new models. First, the relationship between the minimum temperature and the sea level pressure does not change. The average change in the minimum temperature for a unit change of sea level pressure is still 21 degrees Fahrenheit and the relationship is always negative. The element that changes is the y-intercept. For the minimum centered model, the y-intercept is 49.18 degrees Fahrenheit. The interpretation is that when the sea level pressure has a value of 0 (ie., a value of 29.02 in the original metric), the average minimum temperature is 49.18 degrees Fahrenheit. Similarly, the maximum centered model has a y-intercept of 11.29. This represents the average minimum temperature when the sea level pressure is 0 (ie., a value of 30.82 in the original metric). 
+
+If the three different centered y-intercepts are compared, min-centered = 49.18, mean-centered = 27.63, and max-centered = 11.29. The mean-centered y-intercept is in between the minimum and maximum centered values, why is this occurring? This is happening due to the linear relationship that is assumed between the minimum temperature and the sea level pressure with the linear regression model. If a different functional form was assumed (ie., a curved relationship), there would likely be larger differences between the pairs of y-intercept values shown above. 
+
 
 ## Conditional Means
-
+To come ...

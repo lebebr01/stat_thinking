@@ -5,27 +5,14 @@
 library(tidyverse)
 library(ggformula)
 library(mosaic)
-library(broom)
+library(rsample)
 library(statthink)
 
 # Set theme for plots
 theme_set(theme_statthinking())
 
-baby <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/baby.csv")
-head(baby)
-```
-
-```
-## # A tibble: 6 x 6
-##   birth_weight gestational_days maternal_age maternal_height maternal_pregnancy…
-##          <dbl>            <dbl>        <dbl>           <dbl>               <dbl>
-## 1          120              284           27              62                 100
-## 2          113              282           33              64                 135
-## 3          128              279           28              64                 115
-## 4          108              282           23              67                 125
-## 5          136              286           25              62                  93
-## 6          138              244           33              62                 178
-## # … with 1 more variable: maternal_smoker <lgl>
+us_weather <- mutate(us_weather, snow_factor = factor(snow), 
+                     snow_numeric = ifelse(snow == 'Yes', 1, 0))
 ```
 
 
@@ -58,11 +45,6 @@ resample_baby <- function(...) {
 resample_baby()
 ```
 
-```
-##                          .
-## gestational_days 0.4813612
-```
-
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
 
 
@@ -74,17 +56,10 @@ names(baby_coef) <- 'slope'
 gf_density(~ slope, data = baby_coef)
 ```
 
-<img src="08-estimation_files/figure-html/resample-10k-density-1.png" width="672" />
-
 
 ```r
 baby_coef %>%
   df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
-```
-
-```
-##   response        5%       50%       95%
-## 1    slope 0.3944778 0.4688362 0.5438366
 ```
 
 ## Categorical Predictor(s)
@@ -100,8 +75,6 @@ gf_density(~ birth_weight, color = ~ maternal_smoker, size = 1.25, fill = 'gray8
           color = 'Smoked?')
 ```
 
-<img src="08-estimation_files/figure-html/density-smoker-1.png" width="672" />
-
 
 What are the general take-aways from the distributions above? To give some additional information, a violin plot may be helpful.
 
@@ -114,20 +87,12 @@ gf_violin(birth_weight ~ maternal_smoker, data = baby, draw_quantiles = c(0.1, 0
           x = "Smoker?")
 ```
 
-<img src="08-estimation_files/figure-html/violin-smoker-1.png" width="672" />
-
 Any additional information shown here that shows differences? To finish the descriptive exploration, let's compute some descriptive statistics.
 
 
 ```r
 baby %>%
   df_stats(birth_weight ~ maternal_smoker, mean, sd, median, quantile(c(0.25, 0.75)), length)
-```
-
-```
-##       response maternal_smoker     mean       sd median 25% 75% length
-## 1 birth_weight           FALSE 123.0853 17.42370    123 113 134    715
-## 2 birth_weight            TRUE 113.8192 18.29501    115 101 126    459
 ```
 
 ### Linear Regression - Categorical Predictor
@@ -139,11 +104,6 @@ smoker_reg <- lm(birth_weight ~ maternal_smoker, data = baby)
 coef(smoker_reg)
 ```
 
-```
-##         (Intercept) maternal_smokerTRUE 
-##          123.085315           -9.266143
-```
-
 To explore what these coefficients mean in a bit more detail, let's look at the data a bit more.
 
 
@@ -151,19 +111,6 @@ To explore what these coefficients mean in a bit more detail, let's look at the 
 baby <- baby %>%
   mutate(smoker = ifelse(maternal_smoker, 1, 0))
 head(baby)
-```
-
-```
-## # A tibble: 6 x 7
-##   birth_weight gestational_days maternal_age maternal_height maternal_pregnancy…
-##          <dbl>            <dbl>        <dbl>           <dbl>               <dbl>
-## 1          120              284           27              62                 100
-## 2          113              282           33              64                 135
-## 3          128              279           28              64                 115
-## 4          108              282           23              67                 125
-## 5          136              286           25              62                  93
-## 6          138              244           33              62                 178
-## # … with 2 more variables: maternal_smoker <lgl>, smoker <dbl>
 ```
 
 Instead of using the `maternal_smoker` attribute, instead let's run the model with the `smoker` attribute.
@@ -174,11 +121,6 @@ smoker_reg_new <- lm(birth_weight ~ smoker, data = baby)
 coef(smoker_reg_new)
 ```
 
-```
-## (Intercept)      smoker 
-##  123.085315   -9.266143
-```
-
 Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter "A", meaning that the 0 is the first category in alphabetical order.
 
 To again get a better grasp, the descriptive stats and the coefficients from the regression are shown together below.
@@ -187,21 +129,8 @@ To again get a better grasp, the descriptive stats and the coefficients from the
 ```r
 baby %>%
   df_stats(birth_weight ~ maternal_smoker, mean, sd, median, quantile(c(0.25, 0.75)), length)
-```
 
-```
-##       response maternal_smoker     mean       sd median 25% 75% length
-## 1 birth_weight           FALSE 123.0853 17.42370    123 113 134    715
-## 2 birth_weight            TRUE 113.8192 18.29501    115 101 126    459
-```
-
-```r
 coef(smoker_reg)
-```
-
-```
-##         (Intercept) maternal_smokerTRUE 
-##          123.085315           -9.266143
 ```
 
 ### Inference
@@ -231,11 +160,6 @@ resample_baby <- function(...) {
 resample_baby()
 ```
 
-```
-##                             .
-## maternal_smokerTRUE -8.315132
-```
-
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
 
 
@@ -247,17 +171,10 @@ names(baby_coef) <- 'slope'
 gf_density(~ slope, data = baby_coef)
 ```
 
-<img src="08-estimation_files/figure-html/smoker-many-resamp-1.png" width="672" />
-
 
 ```r
 baby_coef %>%
   df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
-```
-
-```
-##   response        5%      50%       95%
-## 1    slope -11.02819 -9.26355 -7.495601
 ```
 
 ## More than 2 categorical groups
@@ -357,19 +274,11 @@ baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
 summary(baby_reg)$r.squared
 ```
 
-```
-## [1] 0.1660911
-```
-
 For models with a single predictor variable, R-squared is the correlation coefficient squared. For example:
 
 
 ```r
 cor(birth_weight ~ gestational_days, data = baby) ^ 2
-```
-
-```
-## [1] 0.1660911
 ```
 
 
@@ -383,26 +292,11 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
   gf_facet_wrap(~ maternal_smoker)
 ```
 
-```
-## `geom_smooth()` using method = 'loess'
-```
-
-<img src="08-estimation_files/figure-html/scatter-smoker-1.png" width="672" />
-
 
 
 ```r
 baby_reg_smoker <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)) + maternal_smoker, data = baby)
 coef(baby_reg_smoker)
-```
-
-```
-##                                  (Intercept) 
-##                                  122.7366688 
-## I(gestational_days - mean(gestational_days)) 
-##                                    0.4511679 
-##                          maternal_smokerTRUE 
-##                                   -8.3743990
 ```
 
 We can write out the regression equation similar to before:
@@ -435,15 +329,6 @@ resample_baby <- function(...) {
 resample_baby()
 ```
 
-```
-## # A tibble: 3 x 2
-##   term                                         estimate
-##   <chr>                                           <dbl>
-## 1 (Intercept)                                   123.   
-## 2 I(gestational_days - mean(gestational_days))    0.480
-## 3 maternal_smokerTRUE                            -9.57
-```
-
 
 ```r
 coef_baby <- map(1:10000, resample_baby) %>%
@@ -453,8 +338,6 @@ coef_baby %>%
   gf_density(~ estimate) %>% 
   gf_facet_wrap(~ term, scales = 'free')
 ```
-
-<img src="08-estimation_files/figure-html/mult-reg-dist-1.png" width="672" />
 
 ### Interactions
 One additional idea that can be quite powerful is the idea of interactions. This was indirectly shown earlier in the course with classification and regression trees, where the models after each split re-evaluated which attributes were most helpful. In this way, the same attribute could be used in different places with different scores identifying the split. A similar idea can be explored in the regression framework, where the idea is that there are differential effects for different groups. This can be shown visually:
@@ -466,27 +349,10 @@ gf_point(birth_weight ~ gestational_days, data = baby, size = 3) %>%
   gf_facet_wrap(~ maternal_smoker)
 ```
 
-```
-## `geom_smooth()` using method = 'loess'
-```
-
-<img src="08-estimation_files/figure-html/scatter-smoker-int-1.png" width="672" />
-
 
 ```r
 baby_reg_int <- lm(birth_weight ~ I(gestational_days - mean(gestational_days)) * maternal_smoker, data = baby)
 coef(baby_reg_int)
-```
-
-```
-##                                                      (Intercept) 
-##                                                       122.799690 
-##                     I(gestational_days - mean(gestational_days)) 
-##                                                         0.369615 
-##                                              maternal_smokerTRUE 
-##                                                        -8.257707 
-## I(gestational_days - mean(gestational_days)):maternal_smokerTRUE 
-##                                                         0.230846
 ```
 
 
@@ -503,16 +369,6 @@ resample_baby <- function(...) {
 resample_baby()
 ```
 
-```
-## # A tibble: 4 x 2
-##   term                                                             estimate
-##   <chr>                                                               <dbl>
-## 1 (Intercept)                                                       122.   
-## 2 I(gestational_days - mean(gestational_days))                        0.424
-## 3 maternal_smokerTRUE                                                -8.63 
-## 4 I(gestational_days - mean(gestational_days)):maternal_smokerTRUE    0.189
-```
-
 
 ```r
 coef_baby <- map(1:10000, resample_baby) %>%
@@ -523,41 +379,14 @@ coef_baby %>%
   gf_facet_wrap(~ term, scales = 'free')
 ```
 
-<img src="08-estimation_files/figure-html/interaction-distribution-1.png" width="672" />
-
 ### Evaluating model fit
 As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby's birth weight.
 
 
 ```r
 summary(baby_reg)$r.square
-```
-
-```
-## [1] 0.1660911
-```
-
-```r
 summary(smoker_reg)$r.square
-```
-
-```
-## [1] 0.06091
-```
-
-```r
 summary(baby_reg_smoker)$r.square
-```
-
-```
-## [1] 0.215661
-```
-
-```r
 summary(baby_reg_int)$r.square
-```
-
-```
-## [1] 0.2249173
 ```
 

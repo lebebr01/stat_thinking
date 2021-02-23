@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-02-22" />
+<meta name="date" content="2021-02-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -415,40 +415,47 @@ drybulbtemp\_min = 660.05 - 21.05 sealevelpressure\_avg + \epsilon
 <div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="linear-regression.html#cb185-1" aria-hidden="true" tabindex="-1"></a>sealevel_reg_centered <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> <span class="fu">I</span>(sealevelpressure_avg <span class="sc">-</span> <span class="fu">mean</span>(sealevelpressure_avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
 <span id="cb185-2"><a href="linear-regression.html#cb185-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> us_weather)</span>
 <span id="cb185-3"><a href="linear-regression.html#cb185-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(sealevel_reg_centered)</span></code></pre></div>
+<pre><code>##                                                        (Intercept) 
+##                                                           27.63117 
+## I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)) 
+##                                                          -21.05011</code></pre>
 <p>The new equation would look like:</p>
 <p>begin{equation}
  = 27.63 - 21.05 (sealevelpressure_avg - mean(sealevelpressure_avg))
 \end{equation}</p>
-<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="linear-regression.html#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="fl">27.63</span> <span class="sc">-</span> <span class="fl">21.05</span> <span class="sc">*</span> <span class="sc">-</span><span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="linear-regression.html#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="fl">27.63</span> <span class="sc">-</span> <span class="fl">21.05</span> <span class="sc">*</span> <span class="sc">-</span><span class="dv">1</span></span></code></pre></div>
 <pre><code>## [1] 48.68</code></pre>
-<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="linear-regression.html#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="fl">27.63</span> <span class="sc">-</span> <span class="fl">21.05</span> <span class="sc">*</span> <span class="dv">0</span></span></code></pre></div>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="linear-regression.html#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="fl">27.63</span> <span class="sc">-</span> <span class="fl">21.05</span> <span class="sc">*</span> <span class="dv">0</span></span></code></pre></div>
 <pre><code>## [1] 27.63</code></pre>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="linear-regression.html#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="fl">27.63</span> <span class="sc">-</span> <span class="fl">21.05</span> <span class="sc">*</span> .<span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="linear-regression.html#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="fl">27.63</span> <span class="sc">-</span> <span class="fl">21.05</span> <span class="sc">*</span> .<span class="dv">5</span></span></code></pre></div>
 <pre><code>## [1] 17.105</code></pre>
 <p>This can provide an intercept that is more interpretable and can be a model parameter that is of direct interest. The value for the y-intercept also makes more intuitive sense, which can aid in model interpretation. It should be kept in mind that this model would fit the data the same as before, that is, this model is not inherently better. Instead the benefits of this model is simply in the interpretation and intuitiveness of the y-intercept. The regression line that has been shown in the scatterplots in Figures <a href="#fig:scatter-temp-pressure"><strong>??</strong></a> and <a href="#fig:scatter-mean-center"><strong>??</strong></a> are the same ones.</p>
 </div>
 <div id="minimum-or-maximum-centered-sea-level-pressure" class="section level4" number="7.1.4.2">
 <h4><span class="header-section-number">7.1.4.2</span> Minimum or Maximum centered sea level pressure</h4>
-<p>Mean centering an attribute can be an attractive way to make the y-intercept more intuitive and interpretable, but it is not the only option. A few other options that are common include subtracting the minimum or maximum values from the predictor attribute. These are shown below</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="linear-regression.html#cb192-1" aria-hidden="true" tabindex="-1"></a>sealevel_reg_min <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> <span class="fu">I</span>(sealevelpressure_avg <span class="sc">-</span> <span class="fu">min</span>(sealevelpressure_avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb192-2"><a href="linear-regression.html#cb192-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> us_weather)</span>
-<span id="cb192-3"><a href="linear-regression.html#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(sealevel_reg_min)</span></code></pre></div>
+<p>Mean centering an attribute can be an attractive way to make the y-intercept more intuitive and interpretable, but it is not the only option. A few other options that are common include subtracting the minimum or maximum values from the predictor attribute. These are shown below, starting first with the minimum centered and then the maximum centered regression.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="linear-regression.html#cb193-1" aria-hidden="true" tabindex="-1"></a>sealevel_reg_min <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> <span class="fu">I</span>(sealevelpressure_avg <span class="sc">-</span> <span class="fu">min</span>(sealevelpressure_avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb193-2"><a href="linear-regression.html#cb193-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> us_weather)</span>
+<span id="cb193-3"><a href="linear-regression.html#cb193-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(sealevel_reg_min)</span></code></pre></div>
 <pre><code>##                                                       (Intercept) 
 ##                                                          49.17705 
 ## I(sealevelpressure_avg - min(sealevelpressure_avg, na.rm = TRUE)) 
 ##                                                         -21.05011</code></pre>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="linear-regression.html#cb194-1" aria-hidden="true" tabindex="-1"></a>sealevel_reg_max <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> <span class="fu">I</span>(sealevelpressure_avg <span class="sc">-</span> <span class="fu">max</span>(sealevelpressure_avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb194-2"><a href="linear-regression.html#cb194-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> us_weather)</span>
-<span id="cb194-3"><a href="linear-regression.html#cb194-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(sealevel_reg_max)</span></code></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="linear-regression.html#cb195-1" aria-hidden="true" tabindex="-1"></a>sealevel_reg_max <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> <span class="fu">I</span>(sealevelpressure_avg <span class="sc">-</span> <span class="fu">max</span>(sealevelpressure_avg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb195-2"><a href="linear-regression.html#cb195-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> us_weather)</span>
+<span id="cb195-3"><a href="linear-regression.html#cb195-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(sealevel_reg_max)</span></code></pre></div>
 <pre><code>##                                                       (Intercept) 
 ##                                                          11.28686 
 ## I(sealevelpressure_avg - max(sealevelpressure_avg, na.rm = TRUE)) 
 ##                                                         -21.05011</code></pre>
+<p>Two main takeaways from these two new models. First, the relationship between the minimum temperature and the sea level pressure does not change. The average change in the minimum temperature for a unit change of sea level pressure is still 21 degrees Fahrenheit and the relationship is always negative. The element that changes is the y-intercept. For the minimum centered model, the y-intercept is 49.18 degrees Fahrenheit. The interpretation is that when the sea level pressure has a value of 0 (ie., a value of 29.02 in the original metric), the average minimum temperature is 49.18 degrees Fahrenheit. Similarly, the maximum centered model has a y-intercept of 11.29. This represents the average minimum temperature when the sea level pressure is 0 (ie., a value of 30.82 in the original metric).</p>
+<p>If the three different centered y-intercepts are compared, min-centered = 49.18, mean-centered = 27.63, and max-centered = 11.29. The mean-centered y-intercept is in between the minimum and maximum centered values, why is this occurring? This is happening due to the linear relationship that is assumed between the minimum temperature and the sea level pressure with the linear regression model. If a different functional form was assumed (ie., a curved relationship), there would likely be larger differences between the pairs of y-intercept values shown above.</p>
 </div>
 </div>
 </div>
 <div id="conditional-means" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> Conditional Means</h2>
+<p>To come …</p>
 
 </div>
 </div>
