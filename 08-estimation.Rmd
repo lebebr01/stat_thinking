@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Estimation / Bootstrap / Uncertainty   
 
 ```{r chap-setup, message = FALSE, warning = FALSE}
@@ -15,10 +20,10 @@ us_weather <- mutate(us_weather, snow_factor = factor(snow),
 ```
 
 
-Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. 
+Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. This is needed as it is most common to have a subset of the entire population rather than the entire population, therefore the model estimates are approximations of the true population parameters. If another sample of data were obtained, the model estimates would be different from the previous sample. This would occur due to different individuals comprised within the sample. The goal of a good sample is to be able to get good estimates of the population parameters of interest. This happens when the sample obtained is as representative as possible of the population, most notably this can be gathered by collected the sample from a random 
 
 ## Estimating Error
-To get some sense of the amount of error in the estimate of the linear slope here, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:
+To get some sense of the amount of error in the estimate of the linear slope, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:
 
 1. Resample the observed data available, with replacement
 2. Fit the same linear regression model as above.
@@ -28,33 +33,33 @@ To get some sense of the amount of error in the estimate of the linear slope her
 
 When this was done with the classification tree, a function was used to do these steps once, then these were repeated many times. Below is a function that does the steps 1 - 3 above a single time.
 
-```{r resample-baby-once, eval = FALSE}
-resample_baby <- function(...) {
-  baby_resample <- baby %>%
-    sample_n(nrow(baby), replace = TRUE)
+```{r resample-weather-once}
+resample_weather <- function(...) {
+  weather_resample <- us_weather %>%
+    sample_n(nrow(us_weather), replace = TRUE)
 
-  baby_resample %>%
-    lm(birth_weight ~ gestational_days, data = .) %>%
+  weather_resample %>%
+    lm(drybulbtemp_min ~ dewpoint_avg, data = .) %>%
     coef(.) %>%
     .[2] %>%
     data.frame()
 }
 
-resample_baby()
+resample_weather()
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
 
-```{r resample-10k-density, eval = FALSE}
-baby_coef <- map(1:10000, resample_baby) %>%
-  bind_rows()
-names(baby_coef) <- 'slope'
+```{r resample-10k-density, fig.cap = ""}
+weather_coef <- map_dfr(1:10000, resample_weather)
+names(weather_coef) <- 'slope'
 
-gf_density(~ slope, data = baby_coef)
+gf_density(~ slope, data = weather_coef) %>%
+  gf_labs(x = "Linear Slope Estimates")
 ```
 
-```{r quantile-resample, eval = FALSE}
-baby_coef %>%
+```{r quantile-resample}
+weather_coef %>%
   df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
 ```
 
