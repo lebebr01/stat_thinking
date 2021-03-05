@@ -11,6 +11,7 @@ rmd_files: ["index.Rmd",
     "06-regression.Rmd",
     "07-linear-regression.Rmd",
     "08-estimation.Rmd",
-    "09-prediction.Rmd"]
+    "09-categorical.Rmd",
+    "10-misc.Rmd"]
 clean: [packages.bib, bookdown.bbl]
 new_session: yes
