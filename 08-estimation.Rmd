@@ -129,13 +129,14 @@ Different mean values are generated, suggesting that the sampling with replaceme
 popularity_stats <- map_dfr(1:100000, fruit_boot)
 ```
 
-Once these are generated, the distribution of the mean fruit popularity can directly be shown using a density curve. Figure \@ref(fig:density-fruit-pop) shows this distribution which varies from ... to ... . This indicates a likely range of plausible values that the mean fruit popularity falls and helps to estimate the amount of uncertainty in the statistic of interest. In general, ranges that are smaller indicate less uncertainty and more accurate estimate for the statistic of interest.  
+Once these are generated, the distribution of the mean fruit popularity can directly be shown using a density curve. Figure \@ref(fig:density-fruit-pop) shows this distribution which has a minimum value of `r round(min(popularity_stats$mean), 2)` to a maximum value of 'r round(max(popularity_stats$mean), 2)` with a mean of `r round(mean(popularity_stats$mean), 2)`. This indicates a range of possible values that the mean fruit popularity falls and helps to estimate the amount of uncertainty in the statistic of interest. In general, ranges that are smaller indicate less uncertainty and more accurate estimate for the statistic of interest. However, the overall range of a distribution can be misleading and by itself is not a great measure of variation. As can be seen in Figure \@ref(fig:density-fruit-pop), there is a slight positive skew in the distribution, therefore other statistics of variation are often better to truly represent the variation in the distribution. 
 
 ```{r density-fruit-pop, fig.cap = "Density curve of the mean fruit popularity based on 100,000 resampled data sets."}
 gf_density(~ mean, data = popularity_stats) %>%
   gf_labs(x = "Mean Popularity")
 ```
 
+These statistics could be the IQR, standard deviation, or differences between other percentiles that are deemed meaningful (ie., the difference between the 10th and 90th percentiles). In these metric, the amount of variation would be, IQR = `r round(IQR(popularity_stats$mean), 2)`, SD = `r round(sd(popularity_stats$mean), 2)`, and difference between 10th and 90th percentiles = `r round(quantile(popularity_stats$mean, probs = 0.9), 2) - round(quantile(popularity_stats$mean, probs = 0.1), 2)`. These would be a better representation of the amount of uncertainty for this distribution and represent the range of plausible values for the distribution. For example, the SD shows that the on average most of the mean fruit popularity statistics would fall about `r round(sd(popularity_stats$mean), 2)` units away from the mean of `r round(mean(popularity_stats$mean), 2)`.
 
 
 ### Linear regression bootstrap/resampling example
