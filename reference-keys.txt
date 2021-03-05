@@ -33,6 +33,8 @@ fig:cond-error-figure
 fig:two-attr-regtree
 fig:cond-error-compare
 fig:sat-eval-acc
+fig:density-fruit-pop
+fig:resample-10k-density
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -111,8 +113,13 @@ explore-the-y-intercept
 mean-center-sea-level-pressure
 minimum-or-maximum-centered-sea-level-pressure
 conditional-means
-estimation-bootstrap-uncertainty
-estimating-error
+estimation
+bootstrap-and-uncertainty
+estimating-error-or-uncertainty
+resample-with-replacement
+calculate-statistic-of-interest
+replicating-the-resamplingbootstrap
+linear-regression-bootstrapresampling-example
 categorical-predictors
 mothers-smoking
 linear-regression---categorical-predictor
