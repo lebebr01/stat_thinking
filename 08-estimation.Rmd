@@ -126,12 +126,12 @@ fruit_boot()
 Different mean values are generated, suggesting that the sampling with replacement is working properly. Compiling the different mean values would be tedious to do by hand, fortunately, the function can be replicated many times using the computer with the `map_dfr()` function. This function takes the number of times to be replicated in the form of `1:replications` where `replications` is replaced with the number of times to replicate the function.
 
 ```{r replicate-fruit-boot}
-popularity_stats <- map_dfr(1:100000, fruit_boot)
+popularity_stats <- map_dfr(1:10000, fruit_boot)
 ```
 
 Once these are generated, the distribution of the mean fruit popularity can directly be shown using a density curve. Figure \@ref(fig:density-fruit-pop) shows this distribution which has a minimum value of `r round(min(popularity_stats$mean), 2)` to a maximum value of 'r round(max(popularity_stats$mean), 2)` with a mean of `r round(mean(popularity_stats$mean), 2)`. This indicates a range of possible values that the mean fruit popularity falls and helps to estimate the amount of uncertainty in the statistic of interest. In general, ranges that are smaller indicate less uncertainty and more accurate estimate for the statistic of interest. However, the overall range of a distribution can be misleading and by itself is not a great measure of variation. As can be seen in Figure \@ref(fig:density-fruit-pop), there is a slight positive skew in the distribution, therefore other statistics of variation are often better to truly represent the variation in the distribution. 
 
-```{r density-fruit-pop, fig.cap = "Density curve of the mean fruit popularity based on 100,000 resampled data sets."}
+```{r density-fruit-pop, fig.cap = "Density curve of the mean fruit popularity based on 10,000 resampled data sets."}
 gf_density(~ mean, data = popularity_stats) %>%
   gf_labs(x = "Mean Popularity")
 ```
