@@ -85,10 +85,55 @@ Sampling without replacement is commonly done for the selection of subjects from
 
 
 ### Calculate statistic of interest
-If these elements are saved, we could also compute the mean of the popularity column. This would represent  The mean of the original sample is `r mean(fruit$popularity)`. When we do the sampling with replacement, these means will differ as the elements within the sample will differ. 
+If these elements are saved, we could also compute the mean of the popularity column. This would represent  The mean of the original sample is `r mean(fruit$popularity)`. Performing sampling without replacement, the mean will be the same as the elements within the sample will be the same as the original sample. Notice that the mean computed below with the `df_stats()` function is the same as the original data. 
 
-```{r}
+```{r stat-compute-popularity-wor}
+set.seed(50)
 
+sample_n(fruit, 7, replace = FALSE) %>%
+  df_stats(~ popularity, mean)
+```
+
+However, performing sampling with replacement, these means will differ as the elements within the sample will differ. Notice below that both means are slightly larger than `r mean(fruit$popularity)`, but more importantly they differ from the original sample mean. These represent 2 of a total `r 7^7` total resampled values that could be obtained. Even though this is almost a million possible resampled data samples that could be obtained, we can get a large number of these to see how much variation there can be in these statistics. 
+
+```{r stat-compute-popularity-wr}
+sample_n(fruit, 7, replace = TRUE) %>%
+  df_stats(~ popularity, mean)
+
+sample_n(fruit, 7, replace = TRUE) %>%
+  df_stats(~ popularity, mean)
+```
+
+### Replicating the resampling/bootstrap
+
+The process of resampling without replacement and computing the statistic of interest can be combined into a single operation by creating a function that does both steps at once. This function does those steps in the second and third line of the function. You could read this function as the following, first take the data, then do the resampling of the same length (ie., number of observation) and with replacement, and finally compute the mean of the popularity attribute. 
+
+```{r first-boot-func}
+fruit_boot <- function(...) {
+  fruit %>%
+    sample_n(nrow(fruit), replace = TRUE) %>%
+    df_stats(~ popularity, mean)
+}
+```
+
+The resampling procedure can then be replicated a single time by calling this function directly. The function does not need an argument, rather the function directly calls the fruit data and the popularity attribute. Some additional programming would be needed to generalize this resampling/bootstrap function to work on other data. To show that the function is working as intended, that is sampling with replacement, the function is ran twice. 
+
+```{r one-replication}
+fruit_boot()
+fruit_boot()
+```
+
+Different mean values are generated, suggesting that the sampling with replacement is working properly. Compiling the different mean values would be tedious to do by hand, fortunately, the function can be replicated many times using the computer with the `map_dfr()` function. This function takes the number of times to be replicated in the form of `1:replications` where `replications` is replaced with the number of times to replicate the function.
+
+```{r replicate-fruit-boot}
+popularity_stats <- map_dfr(1:100000, fruit_boot)
+```
+
+Once these are generated, the distribution of the mean fruit popularity can directly be shown using a density curve. Figure \@ref(fig:density-fruit-pop) shows this distribution which varies from ... to ... . This indicates a likely range of plausible values that the mean fruit popularity falls and helps to estimate the amount of uncertainty in the statistic of interest. In general, ranges that are smaller indicate less uncertainty and more accurate estimate for the statistic of interest.  
+
+```{r density-fruit-pop, fig.cap = "Density curve of the mean fruit popularity based on 100,000 resampled data sets."}
+gf_density(~ mean, data = popularity_stats) %>%
+  gf_labs(x = "Mean Popularity")
 ```
 
 
