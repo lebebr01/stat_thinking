@@ -3,7 +3,20 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-# Estimation / Bootstrap / Uncertainty   
+
+# Estimation 
+
+This section will explore how the estimates for the linear regression model are obtained. Within this section the characteristics of those estimates and the assumptions for the linear regression model will be explored.
+
+To come ...
+
+# Bootstrap and Uncertainty
+
+Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. This is needed as it is most common to have a subset of the entire population rather than the entire population, therefore the model estimates are approximations of the true population parameters. If another sample of data were obtained, the model estimates would be different from the previous sample. This would occur due to different individuals comprised within the sample. 
+
+The goal of a good sample is to be able to get good estimates of the population parameters of interest. This happens when the sample obtained is as representative as possible of the population, most notably this can be gathered by collected the sample using a random process or ensuring that everyone in the population has the same random chance of being selected to be in the population. This is more challenging than one would expect where practical issues can often tarnish a good sampling plan. For instance, a portion of the population of interest may be difficult to gain access to or a portion of the population may be less likely to participate. These issues could bias the sample to be dissimilar from the population. For this book, we are going to assume that a representative sample is obtained from the population, but this needs to always be explored compared whenever data is gathered.
+
+For this chapter, the United States (US) weather data will be used again. The following code chunk loads the packages used in this chapter, sets the figure theme, and creates a few new attributes for the US weather data.
 
 ```{r chap-setup, message = FALSE, warning = FALSE}
 library(tidyverse)
@@ -20,18 +33,67 @@ us_weather <- mutate(us_weather, snow_factor = factor(snow),
 ```
 
 
-Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. This is needed as it is most common to have a subset of the entire population rather than the entire population, therefore the model estimates are approximations of the true population parameters. If another sample of data were obtained, the model estimates would be different from the previous sample. This would occur due to different individuals comprised within the sample. The goal of a good sample is to be able to get good estimates of the population parameters of interest. This happens when the sample obtained is as representative as possible of the population, most notably this can be gathered by collected the sample from a random 
+## Estimating Error or uncertainty
 
-## Estimating Error
-To get some sense of the amount of error in the estimate of the linear slope, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:
+To get some sense of the amount of error in the estimate of the linear slope, a bootstrap or resampling can be done to provide evidence for the likely range of slope values. This is an empirical approach to estimating uncertainty and the sampling process will be simulated many times. Upon every new data after resampling, the estimate for the linear slope will be estimated. The bootstrap/resampling will take the following general steps:
 
 1. Resample the observed data available, with replacement
-2. Fit the same linear regression model as above.
-3. Save the slope coefficient representing the relationship between birth weight and gestational days
+2. Fit the linear regression model, or more generally any statistic or statistical model.
+3. Save the coefficient of interest.
 4. Repeat steps 1 - 3 many times
-5. Explore the distribution of slope estimates from the many resampled data sets.
+5. Explore the distribution of the coefficient from the many resampled data sets.
 
-When this was done with the classification tree, a function was used to do these steps once, then these were repeated many times. Below is a function that does the steps 1 - 3 above a single time.
+### Resample with replacement
+
+Resampling the data with replacement, is the step in the bootstrap/resampling procedure that is needed to ensure that the estimates obtained are accurate and that there are different samples obtained throughout the process. Before moving on, this idea is worth expanding on to understand the differences and what exactly sampling with replacement means. 
+
+To do this, a simple example of fruit names will be used. An object is created with code below that has 7 fruits in it. The data also contain a made up popularity measure that shows how much individuals like each fruit. These are also printed to show that these elements each show up in the object exactly one time. 
+
+```{r fruit-object}
+fruit <- data.frame(
+  names = c('apple', 'banana', 'kiwi', 'orange', 'plum', 'pear', 'kumquat'),
+  popularity = c(10, 25, 5, 15, 5, 8, 2)
+)
+fruit
+```
+
+Imagine for the setup of the resampling procedure, that these 7 fruit are placed inside a hat, box, or some container and fruit are not able to be seen. Then, to perform the resampling, someone would reach inside and select a single fruit at random. In this case, this would mean to also ignore the shape and size of the fruit as well to keep the process random. What happens next would be the difference between the two primary sampling procedures. 
+
+For sampling with replacement, the single fruit that was selected will then be placed back into the hat or box. Once the selected fruit is returned, the individual would again reach in to select another fruit at random. The fruit would then be returned to the hat or box and the individual would select another fruit at random. This process would be repeated until the same size as the original data, in this case 7 fruits, were selected randomly. 
+
+For sampling without replacement, the process is similar, except that when a fruit is selected from the box or hat it is not placed back to potentially be selected again. For example, if on the first selection with the 7 original fruit in the hat, an individual selects the kiwi, then this kiwi would not go back into the hat and could not be selected another time. 
+
+Using the fruit example above, the `sample_n()` function can be used to generate random samples. The default behavior of this function is to do sampling without replacement. The primary argument for the function is the data to sample from and the second argument is the number of samples to perform. In this case, the number of samples will want to match the number of elements in the original data. The `replace = FALSE` is an explicit way to specify that the sampling should be done without replacement.
+
+```{r sampling-wo-replace}
+set.seed(50)
+sample_n(fruit, 7, replace = FALSE)
+```
+
+Notice that the data each show up 1 time, just like the original sample, however, the data are in a different order. This order is the order that the sampling algorithm selected each element, namely, the kiwi was selected first, then the orange, then the banana, and so on. 
+
+Sampling with replacement is now shown below and is specified by saying, `replace = TRUE`. The process is done twice to show what happens if
+
+```{r sampling-w-replace}
+sample_n(fruit, 7, replace = TRUE)
+sample_n(fruit, 7, replace = TRUE)
+```
+
+First, notice that each time the sampling algorithm is ran, a different set of fruits are returned. Also, notice that for each time, there are more than 1 of some of the fruit and some of the fruit do not show up. For example, in the first resampling with replacement, the orange, kiwi, and plum each show up 2 times, the banana shows up once and the remaining fruit do not show up. For the second resampling with replacement, the banana and kumquat show up 2 times and the plum, orange, and apple each show up 1 time, but the other two fruit do not show up. This is how sampling with replacement works and differs from sampling without replacement here, namely, each element could show up more than one time and that each time the sampling algorithm is performed, a different sample is obtained. 
+
+Sampling without replacement is commonly done for the selection of subjects from a population of interest. However, this procedure would not work well for the bootstrap/resampling procedure to estimate uncertainty because sampling with replacement would always produce the same sample. That is, each element of the original sample would be selected 1 time, therefore, the sample would be the same every time and the estimated statistic of interest would always be the same. 
+
+
+### Calculate statistic of interest
+If these elements are saved, we could also compute the mean of the popularity column. This would represent  The mean of the original sample is `r mean(fruit$popularity)`. When we do the sampling with replacement, these means will differ as the elements within the sample will differ. 
+
+```{r}
+
+```
+
+
+
+### Linear regression bootstrap/resampling example
 
 ```{r resample-weather-once}
 resample_weather <- function(...) {
@@ -50,7 +112,7 @@ resample_weather()
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
 
-```{r resample-10k-density, fig.cap = ""}
+```{r resample-10k-density, fig.cap = "Distribution of linear slopes from bootstrapped sample."}
 weather_coef <- map_dfr(1:10000, resample_weather)
 names(weather_coef) <- 'slope'
 
