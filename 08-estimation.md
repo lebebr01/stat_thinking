@@ -23,7 +23,7 @@ For this chapter, the United States (US) weather data will be used again. The fo
 library(tidyverse)
 library(ggformula)
 library(mosaic)
-library(rsample)
+library(broom)
 library(statthink)
 
 # Set theme for plots
@@ -233,8 +233,33 @@ These statistics could be the IQR, standard deviation, or differences between ot
 
 ### Linear regression bootstrap/resampling example
 
+An example of using the bootstrap/resampling methods with the US weather data will be explored next. In chapter 7, the minimum temperature was predicted or explained using the average daily dew point. As a reminder, here is the model again. Recall that the intercept here represents the average minimum temperature (in Fahrenheit) for an average daily dew point of 0 and that the slope term is the average increase in minimum temperature for every one unit increase in the average daily dew point. 
+
 
 ```r
+temp_lm <- lm(drybulbtemp_min ~ dewpoint_avg, data = us_weather)
+coef(temp_lm)
+```
+
+```
+##  (Intercept) dewpoint_avg 
+##    4.8343103    0.8999469
+```
+
+The one element that was not explored in Chapter 7 is the amount of uncertainty, error, or variation in these estimates from the linear regression model. As shown in this chapter, the bootstrap or resampling methods can be an empirical way to try to capture the uncertainty. The steps to conduct the bootstrap or resample in this situation will be as follows. 
+
+1. Resample, with replacement, from the original US weather data
+2. Fit the linear regression model with minimum temperature and average dew point
+3. Save the regression coefficients
+4. Repeat steps 1 - 3 many times (ie., 10,000)
+5. Visualize distribution of save regression coefficients across replications
+
+The following function aims to do steps 1 through 3 above. First, it resamples the data with replacement of the same size as the original data. Then, using the resampled data, the linear regression model is fitted and the model coefficients are saved. The function is also ran one time to show the estimated coefficients from the resampled data. Notice how these differ from the regression model fitted above to the original data, why do these differ here?
+
+
+```r
+set.seed(2021)
+
 resample_weather <- function(...) {
   weather_resample <- us_weather %>%
     sample_n(nrow(us_weather), replace = TRUE)
@@ -242,43 +267,30065 @@ resample_weather <- function(...) {
   weather_resample %>%
     lm(drybulbtemp_min ~ dewpoint_avg, data = .) %>%
     coef(.) %>%
-    .[2] %>%
-    data.frame()
+    broom::tidy()
 }
 
 resample_weather()
 ```
 
 ```
-##                      .
-## dewpoint_avg 0.8856426
+## # A tibble: 2 x 2
+##   names            x
+##   <chr>        <dbl>
+## 1 (Intercept)  4.80 
+## 2 dewpoint_avg 0.904
 ```
 
-Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
+Now that there is a function that does steps 1 - 3, these processes can now be repeated many times with the `map_dfr()` function. In this example, the resampling is done 10,000 times and the coefficients from each of those are saved. The distribution for the intercept and the linear slope are visualized with density curves in Figure \@ref(fig:resample-10k-density). This figure shows that the regression slopes (right-most) figure, are distributed closely together with most of the slopes ranging from about 0.89 to 0.91. There are some that are smaller than 0.89 or larger than 0.91, but these occur less frequently than between those two values. A similar interpretation can be made for the intercept where the majority of the intercepts fall between about 4.5 and 5.25 or so. 
 
 
 ```r
 weather_coef <- map_dfr(1:10000, resample_weather)
-names(weather_coef) <- 'slope'
+```
 
-gf_density(~ slope, data = weather_coef) %>%
-  gf_labs(x = "Linear Slope Estimates")
+```
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+
+## Warning: 'tidy.numeric' is deprecated.
+## See help("Deprecated")
+```
+
+```r
+gf_density(~ x, data = weather_coef) %>%
+  gf_facet_wrap(~ names, scales = 'free') %>%
+  gf_labs(x = "Regression Estimates")
 ```
 
 <div class="figure">
-<img src="08-estimation_files/figure-html/resample-10k-density-1.png" alt="Distribution of linear slopes from bootstrapped sample." width="672" />
-<p class="caption">(\#fig:resample-10k-density)Distribution of linear slopes from bootstrapped sample.</p>
+<img src="08-estimation_files/figure-html/resample-10k-density-1.png" alt="Distribution of regression coefficients from the bootstrapped samples." width="672" />
+<p class="caption">(\#fig:resample-10k-density)Distribution of regression coefficients from the bootstrapped samples.</p>
 </div>
+
+To get a more accurate sense of where notable percentiles are found, these can be computed with the `df_stats()` function directly. The `quantile()` function helps compute the percentiles of interest with the 5th, 50th (median), and 95th percentiles asked for in the code shown below. The difference between the 95th and 5th percentiles gives evidence for where the majority of the regression coefficients fall. These could be shown using violin plots for a visual depiction of the distributions with percentiles (see Figure \@ref(fig:resample-violin). 
 
 
 ```r
 weather_coef %>%
-  df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
+  df_stats(x ~ names, quantile(c(0.05, 0.5, 0.95)))
 ```
 
 ```
-##   response        5%      50%       95%
-## 1    slope 0.8846698 0.899818 0.9151346
+##   response        names        5%       50%       95%
+## 1        x  (Intercept) 4.3562898 4.8390742 5.3250096
+## 2        x dewpoint_avg 0.8844869 0.8997507 0.9149627
 ```
+
+
+```r
+gf_violin(x ~ 1, data = weather_coef, fill = 'gray85', draw_quantiles = c(0.05, 0.5, 0.95)) %>%
+  gf_facet_wrap(~ names, scales = 'free') %>%
+  gf_refine(coord_flip())
+```
+
+<div class="figure">
+<img src="08-estimation_files/figure-html/resample-violin-1.png" alt="Violin plots showing the distribution of regression coefficients from the bootstrapped samples, with percentiles." width="672" />
+<p class="caption">(\#fig:resample-violin)Violin plots showing the distribution of regression coefficients from the bootstrapped samples, with percentiles.</p>
+</div>
+
 
 

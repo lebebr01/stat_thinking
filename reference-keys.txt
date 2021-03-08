@@ -35,6 +35,7 @@ fig:cond-error-compare
 fig:sat-eval-acc
 fig:density-fruit-pop
 fig:resample-10k-density
+fig:resample-violin
 introduction
 statistics-vs-data-science
 experiments-vs-observations
