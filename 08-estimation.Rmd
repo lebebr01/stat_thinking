@@ -174,19 +174,28 @@ resample_weather <- function(...) {
 resample_weather()
 ```
 
-Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
+Now that there is a function that does steps 1 - 3, these processes can now be repeated many times with the `map_dfr()` function. In this example, the resampling is done 10,000 times and the coefficients from each of those are saved. The distribution for the intercept and the linear slope are visualized with density curves in Figure \@ref(fig:resample-10k-density). This figure shows that the regression slopes (right-most) figure, are distributed closely together with most of the slopes ranging from about 0.89 to 0.91. There are some that are smaller than 0.89 or larger than 0.91, but these occur less frequently than between those two values. A similar interpretation can be made for the intercept where the majority of the intercepts fall between about 4.5 and 5.25 or so. 
 
-```{r resample-10k-density, fig.cap = "Distribution of linear slopes from bootstrapped sample."}
-weather_coef <- map_dfr(1:100, resample_weather)
+```{r resample-10k-density, fig.cap = "Distribution of regression coefficients from the bootstrapped samples.", warnings = FALSE, message = FALSE}
+weather_coef <- map_dfr(1:10000, resample_weather)
 
 gf_density(~ x, data = weather_coef) %>%
-  gf_facet_wrap(~ names) %>%
+  gf_facet_wrap(~ names, scales = 'free') %>%
   gf_labs(x = "Regression Estimates")
 ```
 
+To get a more accurate sense of where notable percentiles are found, these can be computed with the `df_stats()` function directly. The `quantile()` function helps compute the percentiles of interest with the 5th, 50th (median), and 95th percentiles asked for in the code shown below. The difference between the 95th and 5th percentiles gives evidence for where the majority of the regression coefficients fall. These could be shown using violin plots for a visual depiction of the distributions with percentiles (see Figure \@ref(fig:resample-violin). 
+
 ```{r quantile-resample}
 weather_coef %>%
-  df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
+  df_stats(x ~ names, quantile(c(0.05, 0.5, 0.95)))
 ```
+
+```{r resample-violin, fig.cap = "Violin plots showing the distribution of regression coefficients from the bootstrapped samples, with percentiles."}
+gf_violin(x ~ 1, data = weather_coef, fill = 'gray85', draw_quantiles = c(0.05, 0.5, 0.95)) %>%
+  gf_facet_wrap(~ names, scales = 'free') %>%
+  gf_refine(coord_flip())
+```
+
 
 
