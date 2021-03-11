@@ -114,7 +114,7 @@ explore-the-y-intercept
 mean-center-sea-level-pressure
 minimum-or-maximum-centered-sea-level-pressure
 conditional-means
-estimation
+estimation-bootstrap-and-uncertainty
 bootstrap-and-uncertainty
 estimating-error-or-uncertainty
 resample-with-replacement

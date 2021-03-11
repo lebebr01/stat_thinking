@@ -4,13 +4,13 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Estimation 
+# Estimation, Bootstrap and Uncertainty
 
 This section will explore how the estimates for the linear regression model are obtained. Within this section the characteristics of those estimates and the assumptions for the linear regression model will be explored.
 
 To come ...
 
-# Bootstrap and Uncertainty
+## Bootstrap and Uncertainty
 
 Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. This is needed as it is most common to have a subset of the entire population rather than the entire population, therefore the model estimates are approximations of the true population parameters. If another sample of data were obtained, the model estimates would be different from the previous sample. This would occur due to different individuals comprised within the sample. 
 
