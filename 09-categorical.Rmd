@@ -14,6 +14,7 @@ library(ggformula)
 library(mosaic)
 library(rsample)
 library(statthink)
+library(broom)
 
 # Set theme for plots
 theme_set(theme_statthinking())
@@ -31,7 +32,7 @@ Prior to fitting the linear regression model, it is first common to descriptivel
 There are numerous types of figures that can help explore this, but one way to explore this is through a violin plot. Below is the code to generate a violin plot depicting the distribution of minimum temperature for days in which it does snow vs does not snow. 
 
 ```{r violin-snow, fig.cap = "Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not."}
-gf_violin(drybulbtemp_min ~ snow_factor, data = us_weather, 
+gf_violin(drybulbtemp_min ~ snow, data = us_weather, 
           draw_quantiles = c(0.1, 0.5, 0.9), 
            fill = 'gray85') %>%
   gf_refine(coord_flip()) %>%
@@ -49,43 +50,42 @@ In addition to the visualization, computing descriptive statistics can also be h
 
 ```{r descriptive-smoker}
 us_weather %>%
-  df_stats(drybulbtemp_min ~ snow_factor, mean, median, sd, quantile(c(0.25, 0.75)), min, max, length)
+  df_stats(drybulbtemp_min ~ snow, mean, median, sd, quantile(c(0.25, 0.75)), min, max, length)
 ```
 
 The descriptive statistics show much of the same picture as the visualization, but provide specific values to confirm the initial thoughts based on Figure \@ref(fig:violin-snow). In particular, the center for days in which it snows is lower for the mean and median by about 10 degrees Fahrenheit. Secondly, it was noted that there may be less variation for days in which it did snow, but the descriptive statistics (standard deviation and IQR) show that these values are similar across the two distributions. The upper end of the distribution for days in which it snows does appear to be more condensed from Figure \@ref(fig:violin-snow) however. Finally, the minimum and maximum values mimic the sentiments from the violin plot and it should be noted that there are about half the number of days in which it snows compared to days in which it does not snow. 
 
 ### Linear Regression - Categorical Predictor
-Now it is time to fit a model to the data here to explore if there indeed is a difference in the population. We know descriptively there is a difference in the two group means and medians, but is this difference large enough to be practical? The model is fitted similar to before with the `lm()` function and a similar formula as before. The outcome (birth weight) is to the left of the `~` and the predictor (maternal smoking status) is to the right.
 
-```{r smoker-lm, eval = FALSE}
-smoker_reg <- lm(birth_weight ~ maternal_smoker, data = baby)
-coef(smoker_reg)
+
+```{r temp-snow-reg}
+temp_snow_reg <- lm(drybulbtemp_min ~ snow, data = us_weather)
+coef(temp_snow_reg)
 ```
 
 To explore what these coefficients mean in a bit more detail, let's look at the data a bit more.
 
-```{r smoker-attribute, eval = FALSE}
-baby <- baby %>%
-  mutate(smoker = ifelse(maternal_smoker, 1, 0))
-head(baby)
+Instead of using the `snow` attribute, instead let's run the model with the `snow_numeric` attribute. The `snow_numeric` attribute takes on a value of 1 if it snowed that day or 0 if it did not snow. The following table can help to show this more visually. 
+
+```{r table}
+count(us_weather, snow, snow_numeric)
 ```
 
-Instead of using the `maternal_smoker` attribute, instead let's run the model with the `smoker` attribute.
 
-```{r smoker-dummy, eval = FALSE}
-smoker_reg_new <- lm(birth_weight ~ smoker, data = baby)
-coef(smoker_reg_new)
+```{r snow-dummy}
+snow_reg_new <- lm(drybulbtemp_min ~ snow_numeric, data = us_weather)
+coef(snow_reg_new)
 ```
 
 Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter "A", meaning that the 0 is the first category in alphabetical order.
 
 To again get a better grasp, the descriptive stats and the coefficients from the regression are shown together below.
 
-```{r compare-est, eval = FALSE}
-baby %>%
-  df_stats(birth_weight ~ maternal_smoker, mean, sd, median, quantile(c(0.25, 0.75)), length)
+```{r compare-est}
+us_weather %>%
+  df_stats(drybulbtemp_min ~ snow, mean, median, sd, quantile(c(0.25, 0.75)), min, max, length)
 
-coef(smoker_reg)
+coef(temp_snow_reg)
 ```
 
 ### Inference
@@ -99,34 +99,31 @@ In order to get some sense of the amount of error in the estimate of the linear 
 4. Repeat steps 1 - 3 many times
 5. Explore the distribution of slope estimates from the many resampled data sets.
 
-```{r smoker-resamp, eval = FALSE}
-resample_baby <- function(...) {
-  baby_resample <- baby %>%
-    sample_n(nrow(baby), replace = TRUE)
+```{r snow-resamp}
+resample_snow <- function(...) {
+  snow_resample <- us_weather %>%
+    sample_n(nrow(us_weather), replace = TRUE)
 
-  baby_resample %>%
-    lm(birth_weight ~ maternal_smoker, data = .) %>%
-    coef(.) %>%
-    .[2] %>%
-    data.frame()
+  snow_resample %>%
+    lm(drybulbtemp_min ~ snow, data = .) %>%
+    tidy()
 }
 
-resample_baby()
+resample_snow()
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
 
-```{r smoker-many-resamp, eval = FALSE}
-baby_coef <- map(1:10000, resample_baby) %>%
-  bind_rows()
-names(baby_coef) <- 'slope'
+```{r snow-many-resamp, fig.cap = "Density figures of the resampled/bootstrapped linear regression estimates."}
+snow_coef <- map_dfr(1:10000, resample_snow)
 
-gf_density(~ slope, data = baby_coef)
+gf_density(~ estimate, data = snow_coef) %>%
+  gf_facet_wrap(~ term, scales = 'free_x')
 ```
 
-```{r stats-smoker-resamp, eval = FALSE}
-baby_coef %>%
-  df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
+```{r stats-snow-resamp}
+snow_coef %>%
+  df_stats(estimate ~ term, quantile(c(0.05, 0.5, 0.95)))
 ```
 
 ## More than 2 categorical groups
