@@ -1,9 +1,29 @@
 ---
-
+output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
+In previous chapters, linear regression has only included a continuous attribute to help predict or explain variation in a continuous outcome. In previous models from chapter 7 and 8, linear regression models were considered that tried to explain variation in the minimum temperature with the sea level pressure and the average dew point. With both of these models, linear regression estimated how much the minimum temperature changed with a one unit increase for the predictor attribute (eg., either sea level pressure or the average dew point. What happens when a categorical predictor is used instead of a continuous predictor? For example, in the US weather data that has been used so far, one categorical attribute would be whether it snowed or rained on a particular day. In this case, these represents categories rather than continuous attributes that take on many different data points. 
+
+This chapter will explore using linear regression with a categorical attribute to predict/explain variation in the outcome. To mimic other chapters, the outcome attribute will be kept the same, the minimum temperature. First, a single categorical attribute with two categories will be explored. Then, a linear regression model with two terms will be explored, including one that is continuous and another that is categorical. Finally, the idea of a statistical interaction will be introduced and explored within a linear regression model. 
+
+```{r weather-data, message = FALSE, error = FALSE, warning = FALSE}
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(rsample)
+library(statthink)
+
+# Set theme for plots
+theme_set(theme_statthinking())
+
+us_weather <- mutate(us_weather, snow_factor = factor(snow), 
+                     snow_numeric = ifelse(snow == 'Yes', 1, 0))
+```
+
 ## Categorical Predictor(s)
-Before, linear regression has been ran with a continuous attribute. In both models, the baby's birth weight was the outcome of interest and the predictor in one model was the number of gestational days and in the other was the age of the mother at time of birth. What happens when a categorical predictor is used instead of a continuous predictor? This section will introduce that idea with a categorical predictor that has two different levels.
+
 
 ### Mother's smoking
 It is known that a mother smoking while pregnant can hamper the development of the unborn fetus. Will this transition into lower birth weight for baby's born to mothers who smoked during the pregnancy? First, let's explore the distribution and calculate descriptive statistics for birth weight across the two groups.
