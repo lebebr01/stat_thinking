@@ -1,64 +1,115 @@
 ---
-
+output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
+In previous chapters, linear regression has only included a continuous attribute to help predict or explain variation in a continuous outcome. In previous models from chapter 7 and 8, linear regression models were considered that tried to explain variation in the minimum temperature with the sea level pressure and the average dew point. With both of these models, linear regression estimated how much the minimum temperature changed with a one unit increase for the predictor attribute (eg., either sea level pressure or the average dew point. What happens when a categorical predictor is used instead of a continuous predictor? For example, in the US weather data that has been used so far, one categorical attribute would be whether it snowed or rained on a particular day. In this case, these represents categories rather than continuous attributes that take on many different data points. 
+
+This chapter will explore using linear regression with a categorical attribute to predict/explain variation in the outcome. To mimic other chapters, the outcome attribute will be kept the same, the minimum temperature. First, a single categorical attribute with two categories will be explored. Then, a linear regression model with two terms will be explored, including one that is continuous and another that is categorical. Finally, the idea of a statistical interaction will be introduced and explored within a linear regression model. 
+
+
+```r
+library(tidyverse)
+library(ggformula)
+library(mosaic)
+library(rsample)
+library(statthink)
+library(broom)
+
+# Set theme for plots
+theme_set(theme_statthinking())
+
+us_weather <- mutate(us_weather, snow_factor = factor(snow), 
+                     snow_numeric = ifelse(snow == 'Yes', 1, 0))
+```
+
 ## Categorical Predictor(s)
-Before, linear regression has been ran with a continuous attribute. In both models, the baby's birth weight was the outcome of interest and the predictor in one model was the number of gestational days and in the other was the age of the mother at time of birth. What happens when a categorical predictor is used instead of a continuous predictor? This section will introduce that idea with a categorical predictor that has two different levels.
 
-### Mother's smoking
-It is known that a mother smoking while pregnant can hamper the development of the unborn fetus. Will this transition into lower birth weight for baby's born to mothers who smoked during the pregnancy? First, let's explore the distribution and calculate descriptive statistics for birth weight across the two groups.
+Precipitation can impact the temperature on a given day. For example, days that are sunny are often warmer than days that are cloudy or rainy. Similarly, days that snow often are colder for the precipitation to stay frozen as it falls from the clouds. Therefore, to show how categorical predictors can be entered into a linear regression model, differences in the minimum temperature will be explored based on whether it snows or not on a given day. Take a minute or so to hypothesize potential differences in the minimum temperature for days in which it snows.
 
+Prior to fitting the linear regression model, it is first common to descriptively explore the distribution of the outcome by the different groups of the categorical attribute. This descriptive analysis can help to identify similarities or differences in center, variation, extreme cases, or other features across the two groups. For example, are there descriptive differences in the distribution of minimum temperature for days in which it snows vs does not snow? 
 
-```r
-gf_density(~ birth_weight, color = ~ maternal_smoker, size = 1.25, fill = 'gray80', data = baby) %>%
-  gf_labs(x = 'Birth Weight (in oz)',
-          color = 'Smoked?')
-```
-
-
-What are the general take-aways from the distributions above? To give some additional information, a violin plot may be helpful.
+There are numerous types of figures that can help explore this, but one way to explore this is through a violin plot. Below is the code to generate a violin plot depicting the distribution of minimum temperature for days in which it does snow vs does not snow. 
 
 
 ```r
-gf_violin(birth_weight ~ maternal_smoker, data = baby, draw_quantiles = c(0.1, 0.5, 0.9), 
-           fill = 'gray85', size = 1) %>%
+gf_violin(drybulbtemp_min ~ snow, data = us_weather, 
+          draw_quantiles = c(0.1, 0.5, 0.9), 
+           fill = 'gray85') %>%
   gf_refine(coord_flip()) %>%
-  gf_labs(y = "Birth Weight (in oz)",
-          x = "Smoker?")
+  gf_labs(y = 'Minimum Temperature (in F)',
+          x = 'Snowed?')
 ```
 
-Any additional information shown here that shows differences? To finish the descriptive exploration, let's compute some descriptive statistics.
+<div class="figure">
+<img src="09-categorical_files/figure-html/violin-snow-1.png" alt="Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not." width="672" />
+<p class="caption">(\#fig:violin-snow)Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not.</p>
+</div>
+
+Figure \@ref(fig:violin-snow) shows the two violin plots, the one on top is for days in which it does snow and the one on the bottom is for days in which it does not snow. What notable feature differences do you notice in this figure? 
+
+One element that stands out is the center differences in the median of the two groups, depicted by the middle vertical line in each violin plot. For days that it does snow, the median minimum temperature is just under 25 degrees whereas this is around 30 degrees for days in which it does not snow. Another notable difference is the shape of the two distributions. For days in which it snows (top violin plot), the distribution is left/negative skewed, whereas the distribution for days in which it does snow is much more symmetric. This makes some sense theoretically as days in which it does snow likely would have lower temperatures to ensure the precipitation does stay frozen as it falls. 
+
+Furthermore, there may be some slight evidence of differences in variation across the two distributions with the minimum temperatures being more condensed for days in which it does snow compared to days it does not snow. Finally, both seem to have some extreme values on the lower end of the distribution, around or below -25 degrees Fahrenheit. However, for days in which it does not snow, there are also some extreme values on the positive end where minimum temperatures are close to 70 degrees Fahrenheit. Although the range is not the best measure of variation, it can be helpful to descriptively explore differences in extreme values in the distributions. 
+
+In addition to the visualization, computing descriptive statistics can also be helpful. These can provide a more accurate values for the center, variation, and can also highlight sample size in each group. The `df_stats()` function can be used to compute statistics of interest. Below, these statistics were computed into three different groups. First, the mean and median were computed to represent the center of the distribution, then the standard deviation and IQR related to variation were computed, and finally information on the minimum and maximum values as well as the sample size of each group with the `length()` function. 
 
 
 ```r
-baby %>%
-  df_stats(birth_weight ~ maternal_smoker, mean, sd, median, quantile(c(0.25, 0.75)), length)
+us_weather %>%
+  df_stats(drybulbtemp_min ~ snow, mean, median, sd, quantile(c(0.25, 0.75)), min, max, length)
 ```
+
+```
+##          response snow     mean median       sd 25% 75% min max length
+## 1 drybulbtemp_min   No 30.98119     32 13.16565  24  39 -31  71   2392
+## 2 drybulbtemp_min  Yes 19.63095     23 12.32797  13  29 -30  38   1008
+```
+
+The descriptive statistics show much of the same picture as the visualization, but provide specific values to confirm the initial thoughts based on Figure \@ref(fig:violin-snow). In particular, the center for days in which it snows is lower for the mean and median by about 10 degrees Fahrenheit. Secondly, it was noted that there may be less variation for days in which it did snow, but the descriptive statistics (standard deviation and IQR) show that these values are similar across the two distributions. The upper end of the distribution for days in which it snows does appear to be more condensed from Figure \@ref(fig:violin-snow) however. Finally, the minimum and maximum values mimic the sentiments from the violin plot and it should be noted that there are about half the number of days in which it snows compared to days in which it does not snow. 
 
 ### Linear Regression - Categorical Predictor
-Now it is time to fit a model to the data here to explore if there indeed is a difference in the population. We know descriptively there is a difference in the two group means and medians, but is this difference large enough to be practical? The model is fitted similar to before with the `lm()` function and a similar formula as before. The outcome (birth weight) is to the left of the `~` and the predictor (maternal smoking status) is to the right.
+
 
 
 ```r
-smoker_reg <- lm(birth_weight ~ maternal_smoker, data = baby)
-coef(smoker_reg)
+temp_snow_reg <- lm(drybulbtemp_min ~ snow, data = us_weather)
+coef(temp_snow_reg)
+```
+
+```
+## (Intercept)     snowYes 
+##    30.98119   -11.35023
 ```
 
 To explore what these coefficients mean in a bit more detail, let's look at the data a bit more.
 
+Instead of using the `snow` attribute, instead let's run the model with the `snow_numeric` attribute. The `snow_numeric` attribute takes on a value of 1 if it snowed that day or 0 if it did not snow. The following table can help to show this more visually. 
+
 
 ```r
-baby <- baby %>%
-  mutate(smoker = ifelse(maternal_smoker, 1, 0))
-head(baby)
+count(us_weather, snow, snow_numeric)
 ```
 
-Instead of using the `maternal_smoker` attribute, instead let's run the model with the `smoker` attribute.
+```
+## # A tibble: 2 x 3
+##   snow  snow_numeric     n
+##   <chr>        <dbl> <int>
+## 1 No               0  2392
+## 2 Yes              1  1008
+```
+
 
 
 ```r
-smoker_reg_new <- lm(birth_weight ~ smoker, data = baby)
-coef(smoker_reg_new)
+snow_reg_new <- lm(drybulbtemp_min ~ snow_numeric, data = us_weather)
+coef(snow_reg_new)
+```
+
+```
+##  (Intercept) snow_numeric 
+##     30.98119    -11.35023
 ```
 
 Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter "A", meaning that the 0 is the first category in alphabetical order.
@@ -67,10 +118,23 @@ To again get a better grasp, the descriptive stats and the coefficients from the
 
 
 ```r
-baby %>%
-  df_stats(birth_weight ~ maternal_smoker, mean, sd, median, quantile(c(0.25, 0.75)), length)
+us_weather %>%
+  df_stats(drybulbtemp_min ~ snow, mean, median, sd, quantile(c(0.25, 0.75)), min, max, length)
+```
 
-coef(smoker_reg)
+```
+##          response snow     mean median       sd 25% 75% min max length
+## 1 drybulbtemp_min   No 30.98119     32 13.16565  24  39 -31  71   2392
+## 2 drybulbtemp_min  Yes 19.63095     23 12.32797  13  29 -30  38   1008
+```
+
+```r
+coef(temp_snow_reg)
+```
+
+```
+## (Intercept)     snowYes 
+##    30.98119   -11.35023
 ```
 
 ### Inference
@@ -86,35 +150,51 @@ In order to get some sense of the amount of error in the estimate of the linear 
 
 
 ```r
-resample_baby <- function(...) {
-  baby_resample <- baby %>%
-    sample_n(nrow(baby), replace = TRUE)
+resample_snow <- function(...) {
+  snow_resample <- us_weather %>%
+    sample_n(nrow(us_weather), replace = TRUE)
 
-  baby_resample %>%
-    lm(birth_weight ~ maternal_smoker, data = .) %>%
-    coef(.) %>%
-    .[2] %>%
-    data.frame()
+  snow_resample %>%
+    lm(drybulbtemp_min ~ snow, data = .) %>%
+    tidy()
 }
 
-resample_baby()
+resample_snow()
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic   p.value
+##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
+## 1 (Intercept)     31.0     0.268     116.  0.       
+## 2 snowYes        -11.9     0.486     -24.5 2.59e-122
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
 
 
 ```r
-baby_coef <- map(1:10000, resample_baby) %>%
-  bind_rows()
-names(baby_coef) <- 'slope'
+snow_coef <- map_dfr(1:10000, resample_snow)
 
-gf_density(~ slope, data = baby_coef)
+gf_density(~ estimate, data = snow_coef) %>%
+  gf_facet_wrap(~ term, scales = 'free_x')
 ```
+
+<div class="figure">
+<img src="09-categorical_files/figure-html/snow-many-resamp-1.png" alt="Density figures of the resampled/bootstrapped linear regression estimates." width="672" />
+<p class="caption">(\#fig:snow-many-resamp)Density figures of the resampled/bootstrapped linear regression estimates.</p>
+</div>
 
 
 ```r
-baby_coef %>%
-  df_stats(~ slope, quantile(c(0.05, 0.5, 0.95)))
+snow_coef %>%
+  df_stats(estimate ~ term, quantile(c(0.05, 0.5, 0.95)))
+```
+
+```
+##   response        term        5%       50%       95%
+## 1 estimate (Intercept)  30.53221  30.98229  31.42497
+## 2 estimate     snowYes -12.13449 -11.34455 -10.55417
 ```
 
 ## More than 2 categorical groups
@@ -123,141 +203,9 @@ Before the model contained one attribute that represented two groups. What happe
 
 ```r
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
-```
-
-```
-## ✔ ggplot2 3.3.3     ✔ purrr   0.3.4
-## ✔ tibble  3.1.0     ✔ dplyr   1.0.5
-## ✔ tidyr   1.1.3     ✔ stringr 1.4.0
-## ✔ readr   1.4.0     ✔ forcats 0.5.1
-```
-
-```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-```
-
-```r
 library(ggformula)
-```
-
-```
-## Loading required package: ggstance
-```
-
-```
-## 
-## Attaching package: 'ggstance'
-```
-
-```
-## The following objects are masked from 'package:ggplot2':
-## 
-##     geom_errorbarh, GeomErrorbarh
-```
-
-```
-## Loading required package: scales
-```
-
-```
-## 
-## Attaching package: 'scales'
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     discard
-```
-
-```
-## The following object is masked from 'package:readr':
-## 
-##     col_factor
-```
-
-```
-## Loading required package: ggridges
-```
-
-```
-## 
-## New to ggformula?  Try the tutorials: 
-## 	learnr::run_tutorial("introduction", package = "ggformula")
-## 	learnr::run_tutorial("refining", package = "ggformula")
-```
-
-```r
 library(mosaic)
-```
 
-```
-## Registered S3 method overwritten by 'mosaic':
-##   method                           from   
-##   fortify.SpatialPolygonsDataFrame ggplot2
-```
-
-```
-## 
-## The 'mosaic' package masks several functions from core packages in order to add 
-## additional features.  The original behavior of these functions should not be affected by this.
-```
-
-```
-## 
-## Attaching package: 'mosaic'
-```
-
-```
-## The following object is masked from 'package:Matrix':
-## 
-##     mean
-```
-
-```
-## The following object is masked from 'package:scales':
-## 
-##     rescale
-```
-
-```
-## The following objects are masked from 'package:dplyr':
-## 
-##     count, do, tally
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     cross
-```
-
-```
-## The following object is masked from 'package:ggplot2':
-## 
-##     stat
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
-##     quantile, sd, t.test, var
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     max, mean, min, prod, range, sample, sum
-```
-
-```r
 college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", guess_max = 10000)
 ```
 

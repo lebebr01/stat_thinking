@@ -36,6 +36,8 @@ fig:sat-eval-acc
 fig:density-fruit-pop
 fig:resample-10k-density
 fig:resample-violin
+fig:violin-snow
+fig:snow-many-resamp
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -122,7 +124,6 @@ calculate-statistic-of-interest
 replicating-the-resamplingbootstrap
 linear-regression-bootstrapresampling-example
 categorical-predictors
-mothers-smoking
 linear-regression---categorical-predictor
 inference
 more-than-2-categorical-groups
