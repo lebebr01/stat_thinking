@@ -24,34 +24,35 @@ us_weather <- mutate(us_weather, snow_factor = factor(snow),
 
 ## Categorical Predictor(s)
 
+Precipitation can impact the temperature on a given day. For example, days that are sunny are often warmer than days that are cloudy or rainy. Similarly, days that snow often are colder for the precipitation to stay frozen as it falls from the clouds. Therefore, to show how categorical predictors can be entered into a linear regression model, differences in the minimum temperature will be explored based on whether it snows or not on a given day. Take a minute or so to hypothesize potential differences in the minimum temperature for days in which it snows.
 
-### Mother's smoking
-It is known that a mother smoking while pregnant can hamper the development of the unborn fetus. Will this transition into lower birth weight for baby's born to mothers who smoked during the pregnancy? First, let's explore the distribution and calculate descriptive statistics for birth weight across the two groups.
+Prior to fitting the linear regression model, it is first common to descriptively explore the distribution of the outcome by the different groups of the categorical attribute. This descriptive analysis can help to identify similarities or differences in center, variation, extreme cases, or other features across the two groups. For example, are there descriptive differences in the distribution of minimum temperature for days in which it snows vs does not snow? 
 
-```{r density-smoker, eval = FALSE}
-gf_density(~ birth_weight, color = ~ maternal_smoker, size = 1.25, fill = 'gray80', data = baby) %>%
-  gf_labs(x = 'Birth Weight (in oz)',
-          color = 'Smoked?')
-```
+There are numerous types of figures that can help explore this, but one way to explore this is through a violin plot. Below is the code to generate a violin plot depicting the distribution of minimum temperature for days in which it does snow vs does not snow. 
 
-
-What are the general take-aways from the distributions above? To give some additional information, a violin plot may be helpful.
-
-```{r violin-smoker, eval = FALSE}
-gf_violin(birth_weight ~ maternal_smoker, data = baby, draw_quantiles = c(0.1, 0.5, 0.9), 
-           fill = 'gray85', size = 1) %>%
+```{r violin-snow, fig.cap = "Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not."}
+gf_violin(drybulbtemp_min ~ snow_factor, data = us_weather, 
+          draw_quantiles = c(0.1, 0.5, 0.9), 
+           fill = 'gray85') %>%
   gf_refine(coord_flip()) %>%
-  gf_labs(y = "Birth Weight (in oz)",
-          x = "Smoker?")
+  gf_labs(y = 'Minimum Temperature (in F)',
+          x = 'Snowed?')
 ```
 
-Any additional information shown here that shows differences? To finish the descriptive exploration, let's compute some descriptive statistics.
+Figure \@ref(fig:violin-snow) shows the two violin plots, the one on top is for days in which it does snow and the one on the bottom is for days in which it does not snow. What notable feature differences do you notice in this figure? 
 
-```{r descriptive-smoker, eval = FALSE}
-baby %>%
-  df_stats(birth_weight ~ maternal_smoker, mean, sd, median, quantile(c(0.25, 0.75)), length)
+One element that stands out is the center differences in the median of the two groups, depicted by the middle vertical line in each violin plot. For days that it does snow, the median minimum temperature is just under 25 degrees whereas this is around 30 degrees for days in which it does not snow. Another notable difference is the shape of the two distributions. For days in which it snows (top violin plot), the distribution is left/negative skewed, whereas the distribution for days in which it does snow is much more symmetric. This makes some sense theoretically as days in which it does snow likely would have lower temperatures to ensure the precipitation does stay frozen as it falls. 
 
+Furthermore, there may be some slight evidence of differences in variation across the two distributions with the minimum temperatures being more condensed for days in which it does snow compared to days it does not snow. Finally, both seem to have some extreme values on the lower end of the distribution, around or below -25 degrees Fahrenheit. However, for days in which it does not snow, there are also some extreme values on the positive end where minimum temperatures are close to 70 degrees Fahrenheit. Although the range is not the best measure of variation, it can be helpful to descriptively explore differences in extreme values in the distributions. 
+
+In addition to the visualization, computing descriptive statistics can also be helpful. These can provide a more accurate values for the center, variation, and can also highlight sample size in each group. The `df_stats()` function can be used to compute statistics of interest. Below, these statistics were computed into three different groups. First, the mean and median were computed to represent the center of the distribution, then the standard deviation and IQR related to variation were computed, and finally information on the minimum and maximum values as well as the sample size of each group with the `length()` function. 
+
+```{r descriptive-smoker}
+us_weather %>%
+  df_stats(drybulbtemp_min ~ snow_factor, mean, median, sd, quantile(c(0.25, 0.75)), min, max, length)
 ```
+
+The descriptive statistics show much of the same picture as the visualization, but provide specific values to confirm the initial thoughts based on Figure \@ref(fig:violin-snow). In particular, the center for days in which it snows is lower for the mean and median by about 10 degrees Fahrenheit. Secondly, it was noted that there may be less variation for days in which it did snow, but the descriptive statistics (standard deviation and IQR) show that these values are similar across the two distributions. The upper end of the distribution for days in which it snows does appear to be more condensed from Figure \@ref(fig:violin-snow) however. Finally, the minimum and maximum values mimic the sentiments from the violin plot and it should be noted that there are about half the number of days in which it snows compared to days in which it does not snow. 
 
 ### Linear Regression - Categorical Predictor
 Now it is time to fit a model to the data here to explore if there indeed is a difference in the population. We know descriptively there is a difference in the two group means and medians, but is this difference large enough to be practical? The model is fitted similar to before with the `lm()` function and a similar formula as before. The outcome (birth weight) is to the left of the `~` and the predictor (maternal smoking status) is to the right.
