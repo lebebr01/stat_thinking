@@ -124,6 +124,7 @@ resample-with-replacement
 calculate-statistic-of-interest
 replicating-the-resamplingbootstrap
 linear-regression-bootstrapresampling-example
+linear-regression-with-categorical-predictors
 categorical-predictors
 linear-regression---categorical-predictor
 interpreting-the-linear-slope-for-a-categorical-attribute

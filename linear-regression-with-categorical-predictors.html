@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Linear Regression with Categorical Predictors | Statistical Reasoning through Computation and R</title>
+  <meta name="description" content="Chapter 9 Linear Regression with Categorical Predictors | Statistical Reasoning through Computation and R" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Linear Regression with Categorical Predictors | Statistical Reasoning through Computation and R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="true" />
+  
+  
+  <meta name="github-repo" content="lebebr01/stat_thinking" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Linear Regression with Categorical Predictors | Statistical Reasoning through Computation and R" />
+  
+  
+  
+
+<meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
+
+
+<meta name="date" content="2021-04-01" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="estimation-bootstrap-and-uncertainty.html"/>
+<link rel="next" href="prediction-for-individuals.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-43425299-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-43425299-4');
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Statistical Reasoning through Computation and R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
+<li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
+<li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
+<li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
+<li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#range"><i class="fa fa-check"></i><b>3.3.1</b> Range</a></li>
+<li class="chapter" data-level="3.3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#percentile-range"><i class="fa fa-check"></i><b>3.3.2</b> Percentile Range</a></li>
+<li class="chapter" data-level="3.3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#interquartile-range-iqr"><i class="fa fa-check"></i><b>3.3.3</b> Interquartile Range (IQR)</a></li>
+<li class="chapter" data-level="3.3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#empirical-cumulative-density"><i class="fa fa-check"></i><b>3.3.4</b> Empirical Cumulative Density</a></li>
+<li class="chapter" data-level="3.3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>3.3.5</b> Variance and Standard Deviation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-categorical-attributes"><i class="fa fa-check"></i><b>3.4</b> Summarizing Categorical Attributes</a></li>
+<li class="chapter" data-level="3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#advanced-extension-computing-your-own-measure-of-variation"><i class="fa fa-check"></i><b>3.5</b> Advanced Extension: Computing Your Own Measure of Variation</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-distributions"><i class="fa fa-check"></i><b>4.1</b> Multivariate Distributions</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#histograms-1"><i class="fa fa-check"></i><b>4.1.1</b> Histograms</a></li>
+<li class="chapter" data-level="4.1.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#density-curves"><i class="fa fa-check"></i><b>4.1.2</b> Density Curves</a></li>
+<li class="chapter" data-level="4.1.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#violin-plots"><i class="fa fa-check"></i><b>4.1.3</b> Violin Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#faceting"><i class="fa fa-check"></i><b>4.2</b> Faceting</a></li>
+<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-descriptive-statistics"><i class="fa fa-check"></i><b>4.3</b> Multivariate Descriptive Statistics</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.3.1</b> Adding additional groups</a></li>
+<li class="chapter" data-level="4.3.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-more-descriptive-statistics"><i class="fa fa-check"></i><b>4.3.2</b> Adding more descriptive statistics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
+<li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.2</b> Accuracy</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="classification.html"><a href="classification.html#adding-categorical-attributes"><i class="fa fa-check"></i><b>5.2</b> Adding Categorical Attributes</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="classification.html"><a href="classification.html#exploring-location"><i class="fa fa-check"></i><b>5.2.1</b> Exploring Location</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.3</b> Comparison to Baseline</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="classification.html"><a href="classification.html#absolute-vs-relative-comparison"><i class="fa fa-check"></i><b>5.3.1</b> Absolute vs Relative Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.4</b> Training/Test Data</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="classification.html"><a href="classification.html#splitting-the-data-into-trainingtest"><i class="fa fa-check"></i><b>5.4.1</b> Splitting the data into training/test</a></li>
+<li class="chapter" data-level="5.4.2" data-path="classification.html"><a href="classification.html#evaluate-accuracy-on-the-testing-data"><i class="fa fa-check"></i><b>5.4.2</b> Evaluate accuracy on the testing data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="classification.html"><a href="classification.html#introduction-to-resamplingbootstrap"><i class="fa fa-check"></i><b>5.5</b> Introduction to Resampling/Bootstrap</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="classification.html"><a href="classification.html#bootstrap-variation-in-prediction-accuracy"><i class="fa fa-check"></i><b>5.5.1</b> Bootstrap variation in prediction accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regression-trees.html"><a href="regression-trees.html"><i class="fa fa-check"></i><b>6</b> Regression Trees</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regression-trees.html"><a href="regression-trees.html#predicting-act-score"><i class="fa fa-check"></i><b>6.1</b> Predicting ACT Score</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="regression-trees.html"><a href="regression-trees.html#loading-r-packages"><i class="fa fa-check"></i><b>6.1.1</b> Loading R packages</a></li>
+<li class="chapter" data-level="6.1.2" data-path="regression-trees.html"><a href="regression-trees.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.2</b> Visualize distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="regression-trees.html"><a href="regression-trees.html#continuous-association"><i class="fa fa-check"></i><b>6.2</b> Continuous Association</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="regression-trees.html"><a href="regression-trees.html#correlation-computation"><i class="fa fa-check"></i><b>6.2.1</b> Correlation Computation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="regression-trees.html"><a href="regression-trees.html#first-regression-tree"><i class="fa fa-check"></i><b>6.3</b> First Regression Tree</a></li>
+<li class="chapter" data-level="6.4" data-path="regression-trees.html"><a href="regression-trees.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.4</b> Evaluating accuracy</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="regression-trees.html"><a href="regression-trees.html#conditional-error"><i class="fa fa-check"></i><b>6.4.1</b> Conditional Error</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="regression-trees.html"><a href="regression-trees.html#adding-more-attributes"><i class="fa fa-check"></i><b>6.5</b> Adding more attributes</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>7</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>7.1</b> Simple Regression continuous predictor</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="linear-regression.html"><a href="linear-regression.html#description-of-the-data"><i class="fa fa-check"></i><b>7.1.1</b> Description of the Data</a></li>
+<li class="chapter" data-level="7.1.2" data-path="linear-regression.html"><a href="linear-regression.html#scatterplots"><i class="fa fa-check"></i><b>7.1.2</b> Scatterplots</a></li>
+<li class="chapter" data-level="7.1.3" data-path="linear-regression.html"><a href="linear-regression.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>7.1.3</b> Fitting a linear regression model</a></li>
+<li class="chapter" data-level="7.1.4" data-path="linear-regression.html"><a href="linear-regression.html#explore-the-y-intercept"><i class="fa fa-check"></i><b>7.1.4</b> Explore the y-intercept</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="linear-regression.html"><a href="linear-regression.html#conditional-means"><i class="fa fa-check"></i><b>7.2</b> Conditional Means</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html"><i class="fa fa-check"></i><b>8</b> Estimation, Bootstrap and Uncertainty</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#bootstrap-and-uncertainty"><i class="fa fa-check"></i><b>8.1</b> Bootstrap and Uncertainty</a></li>
+<li class="chapter" data-level="8.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#estimating-error-or-uncertainty"><i class="fa fa-check"></i><b>8.2</b> Estimating Error or uncertainty</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#resample-with-replacement"><i class="fa fa-check"></i><b>8.2.1</b> Resample with replacement</a></li>
+<li class="chapter" data-level="8.2.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#calculate-statistic-of-interest"><i class="fa fa-check"></i><b>8.2.2</b> Calculate statistic of interest</a></li>
+<li class="chapter" data-level="8.2.3" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#replicating-the-resamplingbootstrap"><i class="fa fa-check"></i><b>8.2.3</b> Replicating the resampling/bootstrap</a></li>
+<li class="chapter" data-level="8.2.4" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#linear-regression-bootstrapresampling-example"><i class="fa fa-check"></i><b>8.2.4</b> Linear regression bootstrap/resampling example</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html"><i class="fa fa-check"></i><b>9</b> Linear Regression with Categorical Predictors</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#categorical-predictors"><i class="fa fa-check"></i><b>9.1</b> Categorical Predictor(s)</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>9.1.1</b> Linear Regression - Categorical Predictor</a></li>
+<li class="chapter" data-level="9.1.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#inference"><i class="fa fa-check"></i><b>9.1.2</b> Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#more-than-2-categorical-groups"><i class="fa fa-check"></i><b>9.2</b> More than 2 categorical groups</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>9.2.1</b> Explore distribution 3 groups</a></li>
+<li class="chapter" data-level="9.2.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#overall-model-fit"><i class="fa fa-check"></i><b>9.2.2</b> Overall model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#multiple-regression"><i class="fa fa-check"></i><b>9.3</b> Multiple Regression</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#interactions"><i class="fa fa-check"></i><b>9.3.1</b> Interactions</a></li>
+<li class="chapter" data-level="9.3.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#evaluating-model-fit"><i class="fa fa-check"></i><b>9.3.2</b> Evaluating model fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>10</b> Prediction for individuals</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>10.1</b> Comparison of classification / linear model</a></li>
+<li class="chapter" data-level="10.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>10.2</b> Compared linear model with median</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>10.2.1</b> Skewed Data - Inference</a></li>
+<li class="chapter" data-level="10.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>10.2.2</b> Bootstrap Median</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistical Reasoning through Computation and R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="linear-regression-with-categorical-predictors" class="section level1" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Linear Regression with Categorical Predictors</h1>
+<p>In previous chapters, linear regression has only included a continuous attribute to help predict or explain variation in a continuous outcome. In previous models from chapter 7 and 8, linear regression models were considered that tried to explain variation in the minimum temperature with the sea level pressure and the average dew point. With both of these models, linear regression estimated how much the minimum temperature changed with a one unit increase for the predictor attribute (eg., either sea level pressure or the average dew point. What happens when a categorical predictor is used instead of a continuous predictor? For example, in the US weather data that has been used so far, one categorical attribute would be whether it snowed or rained on a particular day. In this case, these represents categories rather than continuous attributes that take on many different data points.</p>
+<p>This chapter will explore using linear regression with a categorical attribute to predict/explain variation in the outcome. To mimic other chapters, the outcome attribute will be kept the same, the minimum temperature. First, a single categorical attribute with two categories will be explored. Then, a linear regression model with two terms will be explored, including one that is continuous and another that is categorical. Finally, the idea of a statistical interaction will be introduced and explored within a linear regression model.</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="linear-regression-with-categorical-predictors.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb229-2"><a href="linear-regression-with-categorical-predictors.html#cb229-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
+<span id="cb229-3"><a href="linear-regression-with-categorical-predictors.html#cb229-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span>
+<span id="cb229-4"><a href="linear-regression-with-categorical-predictors.html#cb229-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb229-5"><a href="linear-regression-with-categorical-predictors.html#cb229-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
+<span id="cb229-6"><a href="linear-regression-with-categorical-predictors.html#cb229-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb229-7"><a href="linear-regression-with-categorical-predictors.html#cb229-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb229-8"><a href="linear-regression-with-categorical-predictors.html#cb229-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb229-9"><a href="linear-regression-with-categorical-predictors.html#cb229-9" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>())</span>
+<span id="cb229-10"><a href="linear-regression-with-categorical-predictors.html#cb229-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb229-11"><a href="linear-regression-with-categorical-predictors.html#cb229-11" aria-hidden="true" tabindex="-1"></a>us_weather <span class="ot">&lt;-</span> <span class="fu">mutate</span>(us_weather, <span class="at">snow_factor =</span> <span class="fu">factor</span>(snow), </span>
+<span id="cb229-12"><a href="linear-regression-with-categorical-predictors.html#cb229-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">snow_numeric =</span> <span class="fu">ifelse</span>(snow <span class="sc">==</span> <span class="st">&#39;Yes&#39;</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div>
+<div id="categorical-predictors" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Categorical Predictor(s)</h2>
+<p>Precipitation can impact the temperature on a given day. For example, days that are sunny are often warmer than days that are cloudy or rainy. Similarly, days that snow often are colder for the precipitation to stay frozen as it falls from the clouds. Therefore, to show how categorical predictors can be entered into a linear regression model, differences in the minimum temperature will be explored based on whether it snows or not on a given day. Take a minute or so to hypothesize potential differences in the minimum temperature for days in which it snows.</p>
+<p>Prior to fitting the linear regression model, it is first common to descriptively explore the distribution of the outcome by the different groups of the categorical attribute. This descriptive analysis can help to identify similarities or differences in center, variation, extreme cases, or other features across the two groups. For example, are there descriptive differences in the distribution of minimum temperature for days in which it snows vs does not snow?</p>
+<p>There are numerous types of figures that can help explore this, but one way to explore this is through a violin plot. Below is the code to generate a violin plot depicting the distribution of minimum temperature for days in which it does snow vs does not snow.</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="linear-regression-with-categorical-predictors.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_violin</span>(drybulbtemp_min <span class="sc">~</span> snow, <span class="at">data =</span> us_weather, </span>
+<span id="cb230-2"><a href="linear-regression-with-categorical-predictors.html#cb230-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">draw_quantiles =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>), </span>
+<span id="cb230-3"><a href="linear-regression-with-categorical-predictors.html#cb230-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">&#39;gray85&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb230-4"><a href="linear-regression-with-categorical-predictors.html#cb230-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">coord_flip</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb230-5"><a href="linear-regression-with-categorical-predictors.html#cb230-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&#39;Minimum Temperature (in F)&#39;</span>,</span>
+<span id="cb230-6"><a href="linear-regression-with-categorical-predictors.html#cb230-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&#39;Snowed?&#39;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:violin-snow"></span>
+<img src="09-categorical_files/figure-html/violin-snow-1.png" alt="Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not." width="672" />
+<p class="caption">
+Figure 9.1: Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not.
+</p>
+</div>
+<p>Figure <a href="linear-regression-with-categorical-predictors.html#fig:violin-snow">9.1</a> shows the two violin plots, the one on top is for days in which it does snow and the one on the bottom is for days in which it does not snow. What notable feature differences do you notice in this figure?</p>
+<p>One element that stands out is the center differences in the median of the two groups, depicted by the middle vertical line in each violin plot. For days that it does snow, the median minimum temperature is just under 25 degrees whereas this is around 30 degrees for days in which it does not snow. Another notable difference is the shape of the two distributions. For days in which it snows (top violin plot), the distribution is left/negative skewed, whereas the distribution for days in which it does snow is much more symmetric. This makes some sense theoretically as days in which it does snow likely would have lower temperatures to ensure the precipitation does stay frozen as it falls.</p>
+<p>Furthermore, there may be some slight evidence of differences in variation across the two distributions with the minimum temperatures being more condensed for days in which it does snow compared to days it does not snow. Finally, both seem to have some extreme values on the lower end of the distribution, around or below -25 degrees Fahrenheit. However, for days in which it does not snow, there are also some extreme values on the positive end where minimum temperatures are close to 70 degrees Fahrenheit. Although the range is not the best measure of variation, it can be helpful to descriptively explore differences in extreme values in the distributions.</p>
+<p>In addition to the visualization, computing descriptive statistics can also be helpful. These can provide a more accurate values for the center, variation, and can also highlight sample size in each group. The <code>df_stats()</code> function can be used to compute statistics of interest. Below, these statistics were computed into three different groups. First, the mean and median were computed to represent the center of the distribution, then the standard deviation and IQR related to variation were computed, and finally information on the minimum and maximum values as well as the sample size of each group with the <code>length()</code> function.</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="linear-regression-with-categorical-predictors.html#cb231-1" aria-hidden="true" tabindex="-1"></a>us_weather <span class="sc">%&gt;%</span></span>
+<span id="cb231-2"><a href="linear-regression-with-categorical-predictors.html#cb231-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(drybulbtemp_min <span class="sc">~</span> snow, mean, median, sd, <span class="fu">quantile</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), min, max, length)</span></code></pre></div>
+<pre><code>##          response snow     mean median       sd 25% 75% min max length
+## 1 drybulbtemp_min   No 30.98119     32 13.16565  24  39 -31  71   2392
+## 2 drybulbtemp_min  Yes 19.63095     23 12.32797  13  29 -30  38   1008</code></pre>
+<p>The descriptive statistics show much of the same picture as the visualization, but provide specific values to confirm the initial thoughts based on Figure <a href="linear-regression-with-categorical-predictors.html#fig:violin-snow">9.1</a>. In particular, the center for days in which it snows is lower for the mean and median by about 10 degrees Fahrenheit. Secondly, it was noted that there may be less variation for days in which it did snow, but the descriptive statistics (standard deviation and IQR) show that these values are similar across the two distributions. The upper end of the distribution for days in which it snows does appear to be more condensed from Figure <a href="linear-regression-with-categorical-predictors.html#fig:violin-snow">9.1</a> however. Finally, the minimum and maximum values mimic the sentiments from the violin plot and it should be noted that there are about half the number of days in which it snows compared to days in which it does not snow.</p>
+<div id="linear-regression---categorical-predictor" class="section level3" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> Linear Regression - Categorical Predictor</h3>
+<p>Performing a linear regression with a categorical attribute works programmatically just like a linear regression with a continuous attribute. More specifically, the same function is used, <code>lm()</code>, and the specification of the attributes in the model formula are the same. The code below fits the linear regression with the snow attribute as the sole categorical attribute that helps to explain variation in the minimum temperature. The coefficients associated with the linear regression are extracted and printed with the <code>coef()</code> function.</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="linear-regression-with-categorical-predictors.html#cb233-1" aria-hidden="true" tabindex="-1"></a>temp_snow_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> snow, <span class="at">data =</span> us_weather)</span>
+<span id="cb233-2"><a href="linear-regression-with-categorical-predictors.html#cb233-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(temp_snow_reg)</span></code></pre></div>
+<pre><code>## (Intercept)     snowYes 
+##    30.98119   -11.35023</code></pre>
+<p>The output shows two parameters being estimated just like before. One is the y-intercept and is interpreted the same as with a continuous attribute. This term would represent the average minimum temperature when all of the attributes in the model are 0. What is not clear is what value is 0 from the model above. This will become more clear once the interpretation for the slope term is expanded upon next.</p>
+<p>Before expanding on this, the linear slope term is interpreted the same as well. For example, the slope term shown above is still interpreted as the change in the outcome for a one unit increase in the predictor attribute. For the weather data example, this would mean that the linear slope coefficient of -11.35 indicates that the average minimum temperature decreases by about -11.35 degrees Fahrenheit for a one unit increase in the snow attribute. Similar to the intercept, it is not intuitive or clear as to what a one unit increase would represent here as the snow attribute represents categories rather than a continuous attribute.</p>
+<div id="interpreting-the-linear-slope-for-a-categorical-attribute" class="section level4" number="9.1.1.1">
+<h4><span class="header-section-number">9.1.1.1</span> Interpreting the Linear Slope for a Categorical Attribute</h4>
+<p>To explore what these coefficients mean in a bit more detail, let’s look at the data a bit more and how the linear regression uses the categorical attribute. In the model internals, the categorical attribute is converted from the category names (ie., Yes vs No) to a numeric representation of those categories. By default, the numbers used to represent the categories used are 0 and 1. Table <a href="linear-regression-with-categorical-predictors.html#tab:cat-to-tab">9.1</a> shows this default numeric representation that R would use. R uses the category that is closer to the letter “A” for the number 0. The category that uses the value of 0 is referred to as the reference category in statistics.</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="linear-regression-with-categorical-predictors.html#cb235-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb235-2"><a href="linear-regression-with-categorical-predictors.html#cb235-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">snow =</span> <span class="fu">c</span>(<span class="st">&#39;No&#39;</span>, <span class="st">&#39;Yes&#39;</span>),</span>
+<span id="cb235-3"><a href="linear-regression-with-categorical-predictors.html#cb235-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">snow_numeric =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)),</span>
+<span id="cb235-4"><a href="linear-regression-with-categorical-predictors.html#cb235-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Conversion of categories to numeric representation.&quot;</span></span>
+<span id="cb235-5"><a href="linear-regression-with-categorical-predictors.html#cb235-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<caption><span id="tab:cat-to-tab">Table 9.1: </span>Conversion of categories to numeric representation.</caption>
+<thead>
+<tr class="header">
+<th align="left">snow</th>
+<th align="right">snow_numeric</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">No</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Yes</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>Within the data, there is an attribute called <code>snow_numeric</code> that follows the logic shown in Table <a href="linear-regression-with-categorical-predictors.html#tab:cat-to-tab">9.1</a>. The <code>count()</code> function below shows these two attributes again and also show the number of observations or sample size for each group. As can be seen, the number of days in which it does not snow is over double those days in which it does snow.</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="linear-regression-with-categorical-predictors.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(us_weather, snow, snow_numeric)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 3
+##   snow  snow_numeric     n
+##   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;
+## 1 No               0  2392
+## 2 Yes              1  1008</code></pre>
+<p>To understand the interpretation of the linear regression coefficient for the snow attribute shown above (ie., the estimated slope), a new linear regression model is fitted that uses the numeric representation directly rather than the categorical representation. Reference back to Table <a href="linear-regression-with-categorical-predictors.html#tab:cat-to-tab">9.1</a> to show what the numeric representation of the categorical element is. For days in which it snows, the numeric attribute would have a value of 1, whereas for days in which it does not snow, the numeric attribute would have a value of 0.</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="linear-regression-with-categorical-predictors.html#cb238-1" aria-hidden="true" tabindex="-1"></a>snow_reg_new <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> snow_numeric, <span class="at">data =</span> us_weather)</span>
+<span id="cb238-2"><a href="linear-regression-with-categorical-predictors.html#cb238-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(snow_reg_new)</span></code></pre></div>
+<pre><code>##  (Intercept) snow_numeric 
+##     30.98119    -11.35023</code></pre>
+<p>Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter “A,” meaning that the 0 is the first category in alphabetical order.</p>
+<p>As mentioned earlier, the linear slope in this model indicates the change in the outcome for a one unit increase in the predictor attribute. In this example, this means that for a one unit change in the snow attribute (or snow numeric attribute) the average minimum temperature decreased by -11.35 degrees Fahrenheit. More specifically though, since there is only a single unit change for the snow numeric attribute, the one unit change can also be interpreted as a change in the categories. Therefore, the one unit change is the average change in the temperature moving from a 0 to a 1 or from a day in which it did not snow to a day in which it did snow.</p>
+<p>The descriptive statistics and the coefficients from the regression are shown together below. Compare the difference in the mean statistics from the descriptive statistics below. How does this related to the slope from the linear regression with a categorical attribute.</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="linear-regression-with-categorical-predictors.html#cb240-1" aria-hidden="true" tabindex="-1"></a>us_weather <span class="sc">%&gt;%</span></span>
+<span id="cb240-2"><a href="linear-regression-with-categorical-predictors.html#cb240-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(drybulbtemp_min <span class="sc">~</span> snow, mean, median, sd, <span class="fu">quantile</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)), min, max, length)</span></code></pre></div>
+<pre><code>##          response snow     mean median       sd 25% 75% min max length
+## 1 drybulbtemp_min   No 30.98119     32 13.16565  24  39 -31  71   2392
+## 2 drybulbtemp_min  Yes 19.63095     23 12.32797  13  29 -30  38   1008</code></pre>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="linear-regression-with-categorical-predictors.html#cb242-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(temp_snow_reg)</span></code></pre></div>
+<pre><code>## (Intercept)     snowYes 
+##    30.98119   -11.35023</code></pre>
+<p>More specifically, the linear slope here can be computed from the descriptive statistics as the mean minimum temperature for days in which it does snow minus the mean minimum temperature for days in which is does not snow. Mathematically, this can be represented with the following relationship and computation. In the equation below, <span class="math inline">\(\bar{Y}_{Yes}\)</span> represents the mean minimum temperature for days in which it does snow and <span class="math inline">\(\bar{Y}_{No}\)</span> represents the mean minimum temperature for days in which it does not snow.</p>
+<p><span class="math display">\[
+slope = \bar{Y}_{Yes} - \bar{Y}_{No} \\
+slope = 19.63 - 30.98 = -11.35
+\]</span></p>
+<p>Finally, circling back to the interpretation of the y-intercept. This term is interpreted as the average value of the outcome when all the terms in the linear regression are equal to zero. In this case, there is a single categorical attribute included in the model, whether it snows or not. From Table <a href="linear-regression-with-categorical-predictors.html#tab:cat-to-tab">9.1</a>, the numeric representation of the categories shows that days in which it does not snow is represented with a value of 0, this category would also be referred to as the reference group. Therefore, the y-intercept (or more generally the intercept), would equal the mean minimum temperature for days in which it does not snow. Notice how the intercept coefficient from the linear regression and the mean minimum temperature for days in which it does not snow are the same value.</p>
+<p>Of final note, although this was fitted with a linear regression, this procedure is equivalent to a two sample independent t-test. We find the unified framework of conducting tests like this using the linear regression model provides an introduction that is easier to extend as the comfort level with statistics increases. Furthermore, the inferential procedures with the resampling/bootstrap techniques discussed next and in the previous chapter will remain the same no matter how complicated the linear regression model becomes.</p>
+</div>
+</div>
+<div id="inference" class="section level3" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> Inference</h3>
+<p>Similar to the continuous predictor, resampling/bootstrap takes a similar method in the case with a single categorical predictor.</p>
+<p>In order to get some sense of the amount of error in the estimate of the linear slope here, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:</p>
+<ol style="list-style-type: decimal">
+<li>Resample the observed data available, with replacement</li>
+<li>Fit the same linear regression model as above.</li>
+<li>Save the slope coefficient representing the relationship between birth weight and gestational days</li>
+<li>Repeat steps 1 - 3 many times</li>
+<li>Explore the distribution of slope estimates from the many resampled data sets.</li>
+</ol>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="linear-regression-with-categorical-predictors.html#cb244-1" aria-hidden="true" tabindex="-1"></a>resample_snow <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb244-2"><a href="linear-regression-with-categorical-predictors.html#cb244-2" aria-hidden="true" tabindex="-1"></a>  snow_resample <span class="ot">&lt;-</span> us_weather <span class="sc">%&gt;%</span></span>
+<span id="cb244-3"><a href="linear-regression-with-categorical-predictors.html#cb244-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(us_weather), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb244-4"><a href="linear-regression-with-categorical-predictors.html#cb244-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb244-5"><a href="linear-regression-with-categorical-predictors.html#cb244-5" aria-hidden="true" tabindex="-1"></a>  snow_resample <span class="sc">%&gt;%</span></span>
+<span id="cb244-6"><a href="linear-regression-with-categorical-predictors.html#cb244-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> snow, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb244-7"><a href="linear-regression-with-categorical-predictors.html#cb244-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>()</span>
+<span id="cb244-8"><a href="linear-regression-with-categorical-predictors.html#cb244-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb244-9"><a href="linear-regression-with-categorical-predictors.html#cb244-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb244-10"><a href="linear-regression-with-categorical-predictors.html#cb244-10" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_snow</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     31.3     0.266     118.  0.       
+## 2 snowYes        -12.1     0.488     -24.7 4.47e-124</code></pre>
+<p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="linear-regression-with-categorical-predictors.html#cb246-1" aria-hidden="true" tabindex="-1"></a>snow_coef <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_snow)</span>
+<span id="cb246-2"><a href="linear-regression-with-categorical-predictors.html#cb246-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb246-3"><a href="linear-regression-with-categorical-predictors.html#cb246-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> estimate, <span class="at">data =</span> snow_coef) <span class="sc">%&gt;%</span></span>
+<span id="cb246-4"><a href="linear-regression-with-categorical-predictors.html#cb246-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:snow-many-resamp"></span>
+<img src="09-categorical_files/figure-html/snow-many-resamp-1.png" alt="Density figures of the resampled/bootstrapped linear regression estimates." width="672" />
+<p class="caption">
+Figure 9.2: Density figures of the resampled/bootstrapped linear regression estimates.
+</p>
+</div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="linear-regression-with-categorical-predictors.html#cb247-1" aria-hidden="true" tabindex="-1"></a>snow_coef <span class="sc">%&gt;%</span></span>
+<span id="cb247-2"><a href="linear-regression-with-categorical-predictors.html#cb247-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(estimate <span class="sc">~</span> term, <span class="fu">quantile</span>(<span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
+<pre><code>##   response        term        5%       50%       95%
+## 1 estimate (Intercept)  30.53826  30.97889  31.41713
+## 2 estimate     snowYes -12.12042 -11.34741 -10.58684</code></pre>
+</div>
+</div>
+<div id="more-than-2-categorical-groups" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> More than 2 categorical groups</h2>
+<p>Before the model contained one attribute that represented two groups. What happens when there are more than two groups for an attribute? To explore this, the college scorecard data will be used again.</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="linear-regression-with-categorical-predictors.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb249-2"><a href="linear-regression-with-categorical-predictors.html#cb249-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
+<span id="cb249-3"><a href="linear-regression-with-categorical-predictors.html#cb249-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span>
+<span id="cb249-4"><a href="linear-regression-with-categorical-predictors.html#cb249-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-5"><a href="linear-regression-with-categorical-predictors.html#cb249-5" aria-hidden="true" tabindex="-1"></a>college_score <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="at">guess_max =</span> <span class="dv">10000</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   instnm = col_character(),
+##   city = col_character(),
+##   stabbr = col_character(),
+##   preddeg = col_character(),
+##   region = col_character(),
+##   locale = col_character(),
+##   adm_rate = col_double(),
+##   actcmmid = col_double(),
+##   ugds = col_double(),
+##   costt4_a = col_double(),
+##   costt4_p = col_double(),
+##   tuitionfee_in = col_double(),
+##   tuitionfee_out = col_double(),
+##   debt_mdn = col_double(),
+##   grad_debt_mdn = col_double(),
+##   female = col_double(),
+##   bachelor_degree = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="linear-regression-with-categorical-predictors.html#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(college_score)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 17
+##   instnm    city   stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
+##   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Alabama … Normal AL     Bachel… South… City:…    0.903       18  4824    22886
+## 2 Universi… Birmi… AL     Bachel… South… City:…    0.918       25 12866    24129
+## 3 Universi… Hunts… AL     Bachel… South… City:…    0.812       28  6917    22108
+## 4 Alabama … Montg… AL     Bachel… South… City:…    0.979       18  4189    19413
+## 5 The Univ… Tusca… AL     Bachel… South… City:…    0.533       28 32387    28836
+## 6 Auburn U… Montg… AL     Bachel… South… City:…    0.825       22  4211    19892
+## # … with 7 more variables: costt4_p &lt;dbl&gt;, tuitionfee_in &lt;dbl&gt;,
+## #   tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;, grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;,
+## #   bachelor_degree &lt;dbl&gt;</code></pre>
+<div id="explore-distribution-3-groups" class="section level3" number="9.2.1">
+<h3><span class="header-section-number">9.2.1</span> Explore distribution 3 groups</h3>
+<p>Early in the course, the distribution of admission rates by the primary degree that the institution grants was explored. Below is a violin plot that shows these three distributions.</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="linear-regression-with-categorical-predictors.html#cb253-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_violin</span>(adm_rate <span class="sc">~</span> preddeg, <span class="at">data =</span> college_score, <span class="at">fill =</span> <span class="st">&#39;gray85&#39;</span>, </span>
+<span id="cb253-2"><a href="linear-regression-with-categorical-predictors.html#cb253-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="dv">1</span>, <span class="at">draw_quantiles =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>))</span></code></pre></div>
+<p><img src="09-categorical_files/figure-html/violin-preddeg-1.png" width="672" /></p>
+<p>There may be some small differences between these groups, but more formally we can test this to understand the amount of uncertainty in the average of the distributions. This again will make use of the <code>lm()</code> function in R and the formula is very similar to what was done before and mimics the formula from the violin plot above.</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="linear-regression-with-categorical-predictors.html#cb254-1" aria-hidden="true" tabindex="-1"></a>adm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(adm_rate <span class="sc">~</span> preddeg, <span class="at">data =</span> college_score)</span>
+<span id="cb254-2"><a href="linear-regression-with-categorical-predictors.html#cb254-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(adm_model)</span></code></pre></div>
+<pre><code>##               (Intercept)    preddegBachelor Degree preddegCertificate Degree 
+##                0.72296993               -0.05170254                0.02193828</code></pre>
+<p>Guesses as to what these coefficients represent? How were the categorical groups turned into the different elements in the model?</p>
+</div>
+<div id="overall-model-fit" class="section level3" number="9.2.2">
+<h3><span class="header-section-number">9.2.2</span> Overall model fit</h3>
+<p>There is a measure of overall model fit that is commonly used in the research literature for linear regression models, called R-squared. R-squared represents the proportion of variation in the outcome that is explained by the attributes in the model. The statistic ranges from 0 to 1 where values closer to 1 indicate larger percentages of variation explained. This can be extracted from the model directly.</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="linear-regression-with-categorical-predictors.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(adm_model)<span class="sc">$</span>r.squared</span></code></pre></div>
+<pre><code>## [1] 0.01404376</code></pre>
+<p>Another one can be computed from the baby data where the birth weight was the outcome and gestational days was the primary attribute used as a predictor.</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="linear-regression-with-categorical-predictors.html#cb258-1" aria-hidden="true" tabindex="-1"></a>baby_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby)</span>
+<span id="cb258-2"><a href="linear-regression-with-categorical-predictors.html#cb258-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(baby_reg)<span class="sc">$</span>r.squared</span></code></pre></div>
+<p>For models with a single predictor variable, R-squared is the correlation coefficient squared. For example:</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="linear-regression-with-categorical-predictors.html#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby) <span class="sc">^</span> <span class="dv">2</span></span></code></pre></div>
+</div>
+</div>
+<div id="multiple-regression" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Multiple Regression</h2>
+<p>What happens if we would like to combine the two predictors? Shown above is that the number of gestational days has a moderate relationship to the baby weight, therefore exploring the effects of smoking, it would be nice to remove the effect of gestational days from the baby weight. More specifically, this essentially allows us to make comparisons on the effect of smoking for the <strong>same</strong> gestational days. One way to think about this is through conditional means. Exploration of these visually first can be particularly helpful.</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="linear-regression-with-categorical-predictors.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb260-2"><a href="linear-regression-with-categorical-predictors.html#cb260-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb260-3"><a href="linear-regression-with-categorical-predictors.html#cb260-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> maternal_smoker)</span></code></pre></div>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="linear-regression-with-categorical-predictors.html#cb261-1" aria-hidden="true" tabindex="-1"></a>baby_reg_smoker <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)) <span class="sc">+</span> maternal_smoker, <span class="at">data =</span> baby)</span>
+<span id="cb261-2"><a href="linear-regression-with-categorical-predictors.html#cb261-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_smoker)</span></code></pre></div>
+<p>We can write out the regression equation similar to before:</p>
+<p><span class="math display">\[\begin{equation}
+birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.17 maternal\_smoker + \epsilon
+\end{equation}\]</span></p>
+<p>Let’s explore how these are interpreted.
+### Distribution of Effects
+Similar to before, the distribution of effects can be obtained with the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Resample the observed data available, with replacement</li>
+<li>Estimate linear model coefficients.</li>
+<li>Save terms of interest</li>
+<li>Repeat steps 1 - 3 many times</li>
+<li>Explore the distribution of median differences from the many resampled data sets.</li>
+</ol>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="linear-regression-with-categorical-predictors.html#cb262-1" aria-hidden="true" tabindex="-1"></a>resample_baby <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb262-2"><a href="linear-regression-with-categorical-predictors.html#cb262-2" aria-hidden="true" tabindex="-1"></a>  baby_resample <span class="ot">&lt;-</span> baby <span class="sc">%&gt;%</span></span>
+<span id="cb262-3"><a href="linear-regression-with-categorical-predictors.html#cb262-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(baby), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb262-4"><a href="linear-regression-with-categorical-predictors.html#cb262-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-5"><a href="linear-regression-with-categorical-predictors.html#cb262-5" aria-hidden="true" tabindex="-1"></a>  baby_resample <span class="sc">%&gt;%</span></span>
+<span id="cb262-6"><a href="linear-regression-with-categorical-predictors.html#cb262-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)) <span class="sc">+</span> maternal_smoker, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb262-7"><a href="linear-regression-with-categorical-predictors.html#cb262-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>(.) <span class="sc">%&gt;%</span></span>
+<span id="cb262-8"><a href="linear-regression-with-categorical-predictors.html#cb262-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(term, estimate)</span>
+<span id="cb262-9"><a href="linear-regression-with-categorical-predictors.html#cb262-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb262-10"><a href="linear-regression-with-categorical-predictors.html#cb262-10" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_baby</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="linear-regression-with-categorical-predictors.html#cb263-1" aria-hidden="true" tabindex="-1"></a>coef_baby <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_baby) <span class="sc">%&gt;%</span></span>
+<span id="cb263-2"><a href="linear-regression-with-categorical-predictors.html#cb263-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
+<span id="cb263-3"><a href="linear-regression-with-categorical-predictors.html#cb263-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb263-4"><a href="linear-regression-with-categorical-predictors.html#cb263-4" aria-hidden="true" tabindex="-1"></a>coef_baby <span class="sc">%&gt;%</span></span>
+<span id="cb263-5"><a href="linear-regression-with-categorical-predictors.html#cb263-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span> estimate) <span class="sc">%&gt;%</span> </span>
+<span id="cb263-6"><a href="linear-regression-with-categorical-predictors.html#cb263-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">&#39;free&#39;</span>)</span></code></pre></div>
+<div id="interactions" class="section level3" number="9.3.1">
+<h3><span class="header-section-number">9.3.1</span> Interactions</h3>
+<p>One additional idea that can be quite powerful is the idea of interactions. This was indirectly shown earlier in the course with classification and regression trees, where the models after each split re-evaluated which attributes were most helpful. In this way, the same attribute could be used in different places with different scores identifying the split. A similar idea can be explored in the regression framework, where the idea is that there are differential effects for different groups. This can be shown visually:</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="linear-regression-with-categorical-predictors.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(birth_weight <span class="sc">~</span> gestational_days, <span class="at">data =</span> baby, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb264-2"><a href="linear-regression-with-categorical-predictors.html#cb264-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb264-3"><a href="linear-regression-with-categorical-predictors.html#cb264-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> maternal_smoker)</span></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="linear-regression-with-categorical-predictors.html#cb265-1" aria-hidden="true" tabindex="-1"></a>baby_reg_int <span class="ot">&lt;-</span> <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)) <span class="sc">*</span> maternal_smoker, <span class="at">data =</span> baby)</span>
+<span id="cb265-2"><a href="linear-regression-with-categorical-predictors.html#cb265-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(baby_reg_int)</span></code></pre></div>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="linear-regression-with-categorical-predictors.html#cb266-1" aria-hidden="true" tabindex="-1"></a>resample_baby <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb266-2"><a href="linear-regression-with-categorical-predictors.html#cb266-2" aria-hidden="true" tabindex="-1"></a>  baby_resample <span class="ot">&lt;-</span> baby <span class="sc">%&gt;%</span></span>
+<span id="cb266-3"><a href="linear-regression-with-categorical-predictors.html#cb266-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(baby), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb266-4"><a href="linear-regression-with-categorical-predictors.html#cb266-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb266-5"><a href="linear-regression-with-categorical-predictors.html#cb266-5" aria-hidden="true" tabindex="-1"></a>  baby_resample <span class="sc">%&gt;%</span></span>
+<span id="cb266-6"><a href="linear-regression-with-categorical-predictors.html#cb266-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(birth_weight <span class="sc">~</span> <span class="fu">I</span>(gestational_days <span class="sc">-</span> <span class="fu">mean</span>(gestational_days)) <span class="sc">*</span> maternal_smoker, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb266-7"><a href="linear-regression-with-categorical-predictors.html#cb266-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tidy</span>(.) <span class="sc">%&gt;%</span></span>
+<span id="cb266-8"><a href="linear-regression-with-categorical-predictors.html#cb266-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(term, estimate)</span>
+<span id="cb266-9"><a href="linear-regression-with-categorical-predictors.html#cb266-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb266-10"><a href="linear-regression-with-categorical-predictors.html#cb266-10" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_baby</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="linear-regression-with-categorical-predictors.html#cb267-1" aria-hidden="true" tabindex="-1"></a>coef_baby <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_baby) <span class="sc">%&gt;%</span></span>
+<span id="cb267-2"><a href="linear-regression-with-categorical-predictors.html#cb267-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
+<span id="cb267-3"><a href="linear-regression-with-categorical-predictors.html#cb267-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb267-4"><a href="linear-regression-with-categorical-predictors.html#cb267-4" aria-hidden="true" tabindex="-1"></a>coef_baby <span class="sc">%&gt;%</span></span>
+<span id="cb267-5"><a href="linear-regression-with-categorical-predictors.html#cb267-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_density</span>(<span class="sc">~</span> estimate) <span class="sc">%&gt;%</span> </span>
+<span id="cb267-6"><a href="linear-regression-with-categorical-predictors.html#cb267-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">&#39;free&#39;</span>)</span></code></pre></div>
+</div>
+<div id="evaluating-model-fit" class="section level3" number="9.3.2">
+<h3><span class="header-section-number">9.3.2</span> Evaluating model fit</h3>
+<p>As discussed earlier, R-square is a measure of overall model fit. These can be compared across the different models to see which one may be doing the best and explaining the most variation in the baby’s birth weight.</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="linear-regression-with-categorical-predictors.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(baby_reg)<span class="sc">$</span>r.square</span>
+<span id="cb268-2"><a href="linear-regression-with-categorical-predictors.html#cb268-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(smoker_reg)<span class="sc">$</span>r.square</span>
+<span id="cb268-3"><a href="linear-regression-with-categorical-predictors.html#cb268-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(baby_reg_smoker)<span class="sc">$</span>r.square</span>
+<span id="cb268-4"><a href="linear-regression-with-categorical-predictors.html#cb268-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(baby_reg_int)<span class="sc">$</span>r.square</span></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estimation-bootstrap-and-uncertainty.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="prediction-for-individuals.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

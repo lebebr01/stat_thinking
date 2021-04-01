@@ -4,6 +4,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Linear Regression with Categorical Predictors
+
 In previous chapters, linear regression has only included a continuous attribute to help predict or explain variation in a continuous outcome. In previous models from chapter 7 and 8, linear regression models were considered that tried to explain variation in the minimum temperature with the sea level pressure and the average dew point. With both of these models, linear regression estimated how much the minimum temperature changed with a one unit increase for the predictor attribute (eg., either sea level pressure or the average dew point. What happens when a categorical predictor is used instead of a continuous predictor? For example, in the US weather data that has been used so far, one categorical attribute would be whether it snowed or rained on a particular day. In this case, these represents categories rather than continuous attributes that take on many different data points. 
 
 This chapter will explore using linear regression with a categorical attribute to predict/explain variation in the outcome. To mimic other chapters, the outcome attribute will be kept the same, the minimum temperature. First, a single categorical attribute with two categories will be explored. Then, a linear regression model with two terms will be explored, including one that is continuous and another that is categorical. Finally, the idea of a statistical interaction will be introduced and explored within a linear regression model. 
@@ -204,8 +206,8 @@ resample_snow()
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     31.5     0.261     121.  0.       
-## 2 snowYes        -11.1     0.479     -23.2 9.71e-111
+## 1 (Intercept)     31.3     0.266     118.  0.       
+## 2 snowYes        -12.1     0.488     -24.7 4.47e-124
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -231,8 +233,8 @@ snow_coef %>%
 
 ```
 ##   response        term        5%       50%       95%
-## 1 estimate (Intercept)  30.54685  30.98554  31.41863
-## 2 estimate     snowYes -12.12534 -11.35324 -10.58958
+## 1 estimate (Intercept)  30.53826  30.97889  31.41713
+## 2 estimate     snowYes -12.12042 -11.34741 -10.58684
 ```
 
 ## More than 2 categorical groups
