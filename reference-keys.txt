@@ -37,6 +37,7 @@ fig:density-fruit-pop
 fig:resample-10k-density
 fig:resample-violin
 fig:violin-snow
+tab:cat-to-tab
 fig:snow-many-resamp
 introduction
 statistics-vs-data-science
@@ -125,6 +126,7 @@ replicating-the-resamplingbootstrap
 linear-regression-bootstrapresampling-example
 categorical-predictors
 linear-regression---categorical-predictor
+interpreting-the-linear-slope-for-a-categorical-attribute
 inference
 more-than-2-categorical-groups
 explore-distribution-3-groups

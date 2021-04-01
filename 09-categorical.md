@@ -71,6 +71,7 @@ The descriptive statistics show much of the same picture as the visualization, b
 
 ### Linear Regression - Categorical Predictor
 
+Performing a linear regression with a categorical attribute works programmatically just like a linear regression with a continuous attribute. More specifically, the same function is used, `lm()`, and the specification of the attributes in the model formula are the same. The code below fits the linear regression with the snow attribute as the sole categorical attribute that helps to explain variation in the minimum temperature. The coefficients associated with the linear regression are extracted and printed with the `coef()` function. 
 
 
 ```r
@@ -83,9 +84,32 @@ coef(temp_snow_reg)
 ##    30.98119   -11.35023
 ```
 
-To explore what these coefficients mean in a bit more detail, let's look at the data a bit more.
+The output shows two parameters being estimated just like before. One is the y-intercept and is interpreted the same as with a continuous attribute. This term would represent the average minimum temperature when all of the attributes in the model are 0. What is not clear is what value is 0 from the model above. This will become more clear once the interpretation for the slope term is expanded upon next. 
 
-Instead of using the `snow` attribute, instead let's run the model with the `snow_numeric` attribute. The `snow_numeric` attribute takes on a value of 1 if it snowed that day or 0 if it did not snow. The following table can help to show this more visually. 
+Before expanding on this, the linear slope term is interpreted the same as well. For example, the slope term shown above is still interpreted as the change in the outcome for a one unit increase in the predictor attribute. For the weather data example, this would mean that the linear slope coefficient of -11.35 indicates that the average minimum temperature decreases by about -11.35 degrees Fahrenheit for a one unit increase in the snow attribute. Similar to the intercept, it is not intuitive or clear as to what a one unit increase would represent here as the snow attribute represents categories rather than a continuous attribute. 
+
+#### Interpreting the Linear Slope for a Categorical Attribute
+To explore what these coefficients mean in a bit more detail, let's look at the data a bit more and how the linear regression uses the categorical attribute. In the model internals, the categorical attribute is converted from the category names (ie., Yes vs No) to a numeric representation of those categories. By default, the numbers used to represent the categories used are 0 and 1. Table \@ref(tab:cat-to-tab) shows this default numeric representation that R would use. R uses the category that is closer to the letter "A" for the number 0. The category that uses the value of 0 is referred to as the reference category in statistics. 
+
+
+```r
+knitr::kable(
+  data.frame(snow = c('No', 'Yes'),
+             snow_numeric = c(0, 1)),
+  caption = "Conversion of categories to numeric representation."
+)
+```
+
+
+
+Table: (\#tab:cat-to-tab)Conversion of categories to numeric representation.
+
+|snow | snow_numeric|
+|:----|------------:|
+|No   |            0|
+|Yes  |            1|
+
+Within the data, there is an attribute called `snow_numeric` that follows the logic shown in Table \@ref(tab:cat-to-tab). The `count()` function below shows these two attributes again and also show the number of observations or sample size for each group. As can be seen, the number of days in which it does not snow is over double those days in which it does snow. 
 
 
 ```r
@@ -100,6 +124,7 @@ count(us_weather, snow, snow_numeric)
 ## 2 Yes              1  1008
 ```
 
+To understand the interpretation of the linear regression coefficient for the snow attribute shown above (ie., the estimated slope), a new linear regression model is fitted that uses the numeric representation directly rather than the categorical representation. Reference back to Table \@ref(tab:cat-to-tab) to show what the numeric representation of the categorical element is. For days in which it snows, the numeric attribute would have a value of 1, whereas for days in which it does not snow, the numeric attribute would have a value of 0. 
 
 
 ```r
@@ -114,7 +139,9 @@ coef(snow_reg_new)
 
 Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter "A", meaning that the 0 is the first category in alphabetical order.
 
-To again get a better grasp, the descriptive stats and the coefficients from the regression are shown together below.
+As mentioned earlier, the linear slope in this model indicates the change in the outcome for a one unit increase in the predictor attribute. In this example, this means that for a one unit change in the snow attribute (or snow numeric attribute) the average minimum temperature decreased by -11.35 degrees Fahrenheit. More specifically though, since there is only a single unit change for the snow numeric attribute, the one unit change can also be interpreted as a change in the categories. Therefore, the one unit change is the average change in the temperature moving from a 0 to a 1 or from a day in which it did not snow to a day in which it did snow. 
+
+The descriptive statistics and the coefficients from the regression are shown together below. Compare the difference in the mean statistics from the descriptive statistics below. How does this related to the slope from the linear regression with a categorical attribute. 
 
 
 ```r
@@ -136,6 +163,17 @@ coef(temp_snow_reg)
 ## (Intercept)     snowYes 
 ##    30.98119   -11.35023
 ```
+
+More specifically, the linear slope here can be computed from the descriptive statistics as the mean minimum temperature for days in which it does snow minus the mean minimum temperature for days in which is does not snow. Mathematically, this can be represented with the following relationship and computation. In the equation below, $\bar{Y}_{Yes}$ represents the mean minimum temperature for days in which it does snow and $\bar{Y}_{No}$ represents the mean minimum temperature for days in which it does not snow.
+
+$$
+slope = \bar{Y}_{Yes} - \bar{Y}_{No} \\
+slope = 19.63 - 30.98 = -11.35
+$$
+
+Finally, circling back to the interpretation of the y-intercept. This term is interpreted as the average value of the outcome when all the terms in the linear regression are equal to zero. In this case, there is a single categorical attribute included in the model, whether it snows or not. From Table \@ref(tab:cat-to-tab), the numeric representation of the categories shows that days in which it does not snow is represented with a value of 0, this category would also be referred to as the reference group. Therefore, the y-intercept (or more generally the intercept), would equal the mean minimum temperature for days in which it does not snow. Notice how the intercept coefficient from the linear regression and the mean minimum temperature for days in which it does not snow are the same value. 
+
+Of final note, although this was fitted with a linear regression, this procedure is equivalent to a two sample independent t-test. We find the unified framework of conducting tests like this using the linear regression model provides an introduction that is easier to extend as the comfort level with statistics increases. Furthermore, the inferential procedures with the resampling/bootstrap techniques discussed next and in the previous chapter will remain the same no matter how complicated the linear regression model becomes. 
 
 ### Inference
 Similar to the continuous predictor, resampling/bootstrap takes a similar method in the case with a single categorical predictor.
@@ -166,8 +204,8 @@ resample_snow()
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     31.0     0.268     116.  0.       
-## 2 snowYes        -11.9     0.486     -24.5 2.59e-122
+## 1 (Intercept)     31.5     0.261     121.  0.       
+## 2 snowYes        -11.1     0.479     -23.2 9.71e-111
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -193,8 +231,8 @@ snow_coef %>%
 
 ```
 ##   response        term        5%       50%       95%
-## 1 estimate (Intercept)  30.53221  30.98229  31.42497
-## 2 estimate     snowYes -12.13449 -11.34455 -10.55417
+## 1 estimate (Intercept)  30.54685  30.98554  31.41863
+## 2 estimate     snowYes -12.12534 -11.35324 -10.58958
 ```
 
 ## More than 2 categorical groups
