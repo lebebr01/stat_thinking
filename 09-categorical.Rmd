@@ -94,9 +94,9 @@ coef(snow_reg_new)
 
 Notice that the coefficients for the linear regression are the same no matter which attribute is entered into the model. When a categorical attribute is entered into the regression in R, the attribute is automatically converted into something called an indicator or dummy variable. This means that one of the two values are represented with a 1, the other with a 0. The value that is represented with a 0 is the one that is closer to the letter "A", meaning that the 0 is the first category in alphabetical order.
 
-The interpretation of the linear slope is also
+As mentioned earlier, the linear slope in this model indicates the change in the outcome for a one unit increase in the predictor attribute. In this example, this means that for a one unit change in the snow attribute (or snow numeric attribute) the average minimum temperature decreased by `r round(coef(snow_reg_new)[2], 2)` degrees Fahrenheit. More specifically though, since there is only a single unit change for the snow numeric attribute, the one unit change can also be interpreted as a change in the categories. Therefore, the one unit change is the average change in the temperature moving from a 0 to a 1 or from a day in which it did not snow to a day in which it did snow. 
 
-To again get a better grasp, the descriptive stats and the coefficients from the regression are shown together below.
+The descriptive statistics and the coefficients from the regression are shown together below. Compare the difference in the mean statistics from the descriptive statistics below. How does this related to the slope from the linear regression with a categorical attribute. 
 
 ```{r compare-est}
 us_weather %>%
@@ -104,6 +104,17 @@ us_weather %>%
 
 coef(temp_snow_reg)
 ```
+
+More specifically, the linear slope here can be computed from the descriptive statistics as the mean minimum temperature for days in which it does snow minus the mean minimum temperature for days in which is does not snow. Mathematically, this can be represented with the following relationship and computation. In the equation below, $\bar{Y}_{Yes}$ represents the mean minimum temperature for days in which it does snow and $\bar{Y}_{No}$ represents the mean minimum temperature for days in which it does not snow.
+
+$$
+slope = \bar{Y}_{Yes} - \bar{Y}_{No} \\
+slope = 19.63 - 30.98 = -11.35
+$$
+
+Finally, circling back to the interpretation of the y-intercept. This term is interpreted as the average value of the outcome when all the terms in the linear regression are equal to zero. In this case, there is a single categorical attribute included in the model, whether it snows or not. From Table \@ref(tab:cat-to-tab), the numeric representation of the categories shows that days in which it does not snow is represented with a value of 0, this category would also be referred to as the reference group. Therefore, the y-intercept (or more generally the intercept), would equal the mean minimum temperature for days in which it does not snow. Notice how the intercept coefficient from the linear regression and the mean minimum temperature for days in which it does not snow are the same value. 
+
+Of final note, although this was fitted with a linear regression, this procedure is equivalent to a two sample independent t-test. We find the unified framework of conducting tests like this using the linear regression model provides an introduction that is easier to extend as the comfort level with statistics increases. Furthermore, the inferential procedures with the resampling/bootstrap techniques discussed next and in the previous chapter will remain the same no matter how complicated the linear regression model becomes. 
 
 ### Inference
 Similar to the continuous predictor, resampling/bootstrap takes a similar method in the case with a single categorical predictor.
