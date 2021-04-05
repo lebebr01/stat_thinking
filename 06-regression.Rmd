@@ -121,8 +121,10 @@ $$
 However, this will have issues, as when the deviation was computed, those values above and below will offset one another. Therefore, simply computing the accuracy as the predicted score minus the observed score will on average be 0. Similarly to the standard deviation, we could square the difference between the predicted and observed values to get the mean square error. We could also take the square root of the mean square error (MSE) to get the root mean square error (RMSE), the benefit of the RMSE over the MSE is that the RMSE will be on the same metric as the outcome of interest. Mathematically, these can be represented as:
 
 $$
-MSE = \frac{\sum (predicted - observed) ^ 2}{n} \\
+MSE = \frac{\sum (predicted - observed) ^ 2}{n}
+$$
 
+$$
 RMSE = \sqrt{\frac{\sum (predicted - observed) ^ 2}{n}}
 $$
 
