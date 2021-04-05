@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-04-01" />
+<meta name="date" content="2021-04-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -372,9 +372,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 3 x 2
 ##   term                      estimate
 ##   &lt;chr&gt;                        &lt;dbl&gt;
-## 1 (Intercept)                0.724  
-## 2 preddegBachelor Degree    -0.0504 
-## 3 preddegCertificate Degree  0.00947</code></pre>
+## 1 (Intercept)                0.744  
+## 2 preddegBachelor Degree    -0.0785 
+## 3 preddegCertificate Degree -0.00265</code></pre>
 <div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="prediction-for-individuals.html#cb275-1" aria-hidden="true" tabindex="-1"></a>admrate_coef <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_admrate) <span class="sc">%&gt;%</span></span>
 <span id="cb275-2"><a href="prediction-for-individuals.html#cb275-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
 <span id="cb275-3"><a href="prediction-for-individuals.html#cb275-3" aria-hidden="true" tabindex="-1"></a></span>

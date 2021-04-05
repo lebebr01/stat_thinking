@@ -206,8 +206,8 @@ resample_snow()
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     31.3     0.266     118.  0.       
-## 2 snowYes        -12.1     0.488     -24.7 4.47e-124
+## 1 (Intercept)     30.6     0.266     115.  0.       
+## 2 snowYes        -10.6     0.484     -21.9 8.64e-100
 ```
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
@@ -232,9 +232,9 @@ snow_coef %>%
 ```
 
 ```
-##   response        term        5%       50%       95%
-## 1 estimate (Intercept)  30.53826  30.97889  31.41713
-## 2 estimate     snowYes -12.12042 -11.34741 -10.58684
+##   response        term       5%       50%      95%
+## 1 estimate (Intercept)  30.5451  30.98287  31.4255
+## 2 estimate     snowYes -12.1338 -11.35562 -10.5781
 ```
 
 ## More than 2 categorical groups

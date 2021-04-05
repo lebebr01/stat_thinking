@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-04-01" />
+<meta name="date" content="2021-04-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -435,10 +435,12 @@ Figure 6.4: Visual depiction of the regression tree splits.
 accuracy = predicted - observed
 \]</span></p>
 <p>However, this will have issues, as when the deviation was computed, those values above and below will offset one another. Therefore, simply computing the accuracy as the predicted score minus the observed score will on average be 0. Similarly to the standard deviation, we could square the difference between the predicted and observed values to get the mean square error. We could also take the square root of the mean square error (MSE) to get the root mean square error (RMSE), the benefit of the RMSE over the MSE is that the RMSE will be on the same metric as the outcome of interest. Mathematically, these can be represented as:</p>
-<p>$$
-MSE =  \</p>
-<p>RMSE = 
-$$</p>
+<p><span class="math display">\[
+MSE = \frac{\sum (predicted - observed) ^ 2}{n}
+\]</span></p>
+<p><span class="math display">\[
+RMSE = \sqrt{\frac{\sum (predicted - observed) ^ 2}{n}}
+\]</span></p>
 <p>Another statistic can also be useful here, the mean absolute error (MAE). This statistic was first introduced in chapter 3 and is similar to the RMSE above, but except for squaring values and taking the square root, the absolute value is used instead. This has the strength of never squaring values, so the metric is the same as the outcome, but has the weakness of having weaker statistical properties. The mathematical computation can be shown as:</p>
 <p><span class="math display">\[ 
 MAE = \frac{\sum \left|predicted - observed \right| }{n}
