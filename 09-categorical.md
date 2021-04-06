@@ -178,15 +178,17 @@ Finally, circling back to the interpretation of the y-intercept. This term is in
 Of final note, although this was fitted with a linear regression, this procedure is equivalent to a two sample independent t-test. We find the unified framework of conducting tests like this using the linear regression model provides an introduction that is easier to extend as the comfort level with statistics increases. Furthermore, the inferential procedures with the resampling/bootstrap techniques discussed next and in the previous chapter will remain the same no matter how complicated the linear regression model becomes. 
 
 ### Inference
-Similar to the continuous predictor, resampling/bootstrap takes a similar method in the case with a single categorical predictor.
+Similar to the continuous predictor, resampling/bootstrapping takes a similar method compared to linear regression with a single categorical predictor. More specifically, the same general steps that were outlined in chapter 8 are done again here. These steps are outlined below for this specific example. 
 
-In order to get some sense of the amount of error in the estimate of the linear slope here, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:
-
-1. Resample the observed data available, with replacement
+1. Resample the observed data available, with replacement.
 2. Fit the same linear regression model as above.
-3. Save the slope coefficient representing the relationship between birth weight and gestational days
-4. Repeat steps 1 - 3 many times
+3. Save the slope coefficient representing the mean difference in minimum temperature between days that it snows or does not snow.
+4. Repeat steps 1 - 3 many times.
 5. Explore the distribution of slope estimates from the many resampled data sets.
+
+The only difference in this example compared to the one outlined in chapter 8 is the linear regression model that is being fitted. In this example, the model is somewhat different to include a categorical predictor rather than a continuous predictor. Therefore, the interpretation of the linear slope term differs, however the framework is still the same. Resample data, fit the linear regression model, and then save the regression coefficients. 
+
+The first three steps outlined above are performed in the following code. The original data are resampled of the same size as the original data, with replacement. Then, the linear regression model is fitted with the snow attribute as the sole predictor helping to explain differences in the minimum temperature. Then, the `tidy()` function is used to extract the coefficients of interest. This process is saved to the function, `resample_snow()`; then this function is processed one time. 
 
 
 ```r
@@ -206,11 +208,15 @@ resample_snow()
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     30.6     0.266     115.  0.       
-## 2 snowYes        -10.6     0.484     -21.9 8.64e-100
+## 1 (Intercept)     30.9     0.265     117.  0.       
+## 2 snowYes        -11.8     0.489     -24.1 7.83e-119
 ```
 
-Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
+Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. This shouldn't be surprising given that the data were resampled. This means that the data being used to estimate the model coefficients are different than the original data. Therefore, the coefficient estimates are different. 
+
+However, the goal of the resampling/bootstrapping procedure is to estimate how much uncertainty would be expected if the sample was obtained again. Getting another sample in the real world would be costly, can take significant time, and is usually not done. The resampling/bootstrapping procedure however, aims to replicate this process using computation. 
+
+To do this, steps 1 - 3 of the resampling/bootstrapping process is  repeated many times. This process of repetition allows the uncertainty found in the coefficients to be estimated. The resampling function written above is replicated 10,000 times below. The resulting estimates are visualized with a density figure. There will be one density figure representing the 10,000 estimates for the intercept and another density figure for the 10,000 estimates for the linear slope (ie., mean difference in minimum temperatures for days in which it snows compared to when it does not snow).
 
 
 ```r
@@ -232,9 +238,9 @@ snow_coef %>%
 ```
 
 ```
-##   response        term       5%       50%      95%
-## 1 estimate (Intercept)  30.5451  30.98287  31.4255
-## 2 estimate     snowYes -12.1338 -11.35562 -10.5781
+##   response        term        5%       50%       95%
+## 1 estimate (Intercept)  30.54612  30.98346  31.42268
+## 2 estimate     snowYes -12.12703 -11.35646 -10.58795
 ```
 
 ## More than 2 categorical groups
@@ -365,9 +371,7 @@ coef(baby_reg_smoker)
 
 We can write out the regression equation similar to before:
 
-\begin{equation}
-birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.17 maternal\_smoker + \epsilon
-\end{equation}
+
 
 Let's explore how these are interpreted.
 ### Distribution of Effects
