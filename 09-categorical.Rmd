@@ -144,9 +144,11 @@ resample_snow <- function(...) {
 resample_snow()
 ```
 
-Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. 
+Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. This shouldn't be surprising given that the data were resampled. This means that the data being used to estimate the model coefficients are different than the original data. Therefore, the coefficient estimates are different. 
 
-Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
+However, the goal of the resampling/bootstrapping procedure is to estimate how much uncertainty would be expected if the sample was obtained again. Getting another sample in the real world would be costly, can take significant time, and is usually not done. The resampling/bootstrapping procedure however, aims to replicate this process using computation. 
+
+To do this, steps 1 - 3 of the resampling/bootstrapping process is  repeated many times. This process of repetition allows the uncertainty found in the coefficients to be estimated. The resampling function written above is replicated 10,000 times below. The resulting estimates are visualized with a density figure. There will be one density figure representing the 10,000 estimates for the intercept and another density figure for the 10,000 estimates for the linear slope (ie., mean difference in minimum temperatures for days in which it snows compared to when it does not snow).
 
 ```{r snow-many-resamp, fig.cap = "Density figures of the resampled/bootstrapped linear regression estimates."}
 snow_coef <- map_dfr(1:10000, resample_snow)
@@ -227,9 +229,7 @@ coef(baby_reg_smoker)
 
 We can write out the regression equation similar to before:
 
-\begin{equation}
-birth\_weight = 122.67 + 0.49 (gestational\_days - mean(gestational\_days) - 8.17 maternal\_smoker + \epsilon
-\end{equation}
+
 
 Let's explore how these are interpreted.
 ### Distribution of Effects
