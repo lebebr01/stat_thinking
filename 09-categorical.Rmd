@@ -119,15 +119,17 @@ Finally, circling back to the interpretation of the y-intercept. This term is in
 Of final note, although this was fitted with a linear regression, this procedure is equivalent to a two sample independent t-test. We find the unified framework of conducting tests like this using the linear regression model provides an introduction that is easier to extend as the comfort level with statistics increases. Furthermore, the inferential procedures with the resampling/bootstrap techniques discussed next and in the previous chapter will remain the same no matter how complicated the linear regression model becomes. 
 
 ### Inference
-Similar to the continuous predictor, resampling/bootstrap takes a similar method in the case with a single categorical predictor.
+Similar to the continuous predictor, resampling/bootstrapping takes a similar method compared to linear regression with a single categorical predictor. More specifically, the same general steps that were outlined in chapter 8 are done again here. These steps are outlined below for this specific example. 
 
-In order to get some sense of the amount of error in the estimate of the linear slope here, a bootstrap can be done to provide some evidence of the likely range of slope values. The bootstrap will take the following general steps:
-
-1. Resample the observed data available, with replacement
+1. Resample the observed data available, with replacement.
 2. Fit the same linear regression model as above.
-3. Save the slope coefficient representing the relationship between birth weight and gestational days
-4. Repeat steps 1 - 3 many times
+3. Save the slope coefficient representing the mean difference in minimum temperature between days that it snows or does not snow.
+4. Repeat steps 1 - 3 many times.
 5. Explore the distribution of slope estimates from the many resampled data sets.
+
+The only difference in this example compared to the one outlined in chapter 8 is the linear regression model that is being fitted. In this example, the model is somewhat different to include a categorical predictor rather than a continuous predictor. Therefore, the interpretation of the linear slope term differs, however the framework is still the same. Resample data, fit the linear regression model, and then save the regression coefficients. 
+
+The first three steps outlined above are performed in the following code. The original data are resampled of the same size as the original data, with replacement. Then, the linear regression model is fitted with the snow attribute as the sole predictor helping to explain differences in the minimum temperature. Then, the `tidy()` function is used to extract the coefficients of interest. This process is saved to the function, `resample_snow()`; then this function is processed one time. 
 
 ```{r snow-resamp}
 resample_snow <- function(...) {
@@ -141,6 +143,8 @@ resample_snow <- function(...) {
 
 resample_snow()
 ```
+
+Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. 
 
 Now that there is a function that does steps 1 - 3, these processes can now be repeated many times.
 
