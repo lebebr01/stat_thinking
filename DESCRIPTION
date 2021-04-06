@@ -15,6 +15,7 @@ Imports:
   broom,
   DT,
   parttree,
-  knitr
+  knitr, 
+  plotly
 Remotes: lebebr01/statthink,
   grantmcdermott/parttree
