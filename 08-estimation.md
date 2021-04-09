@@ -30327,5 +30327,7 @@ gf_violin(x ~ 1, data = weather_coef, fill = 'gray85', draw_quantiles = c(0.05, 
 <p class="caption">(\#fig:resample-violin)Violin plots showing the distribution of regression coefficients from the bootstrapped samples, with percentiles.</p>
 </div>
 
+### Determining if a statistic is "significant"
 
+To come ...
 

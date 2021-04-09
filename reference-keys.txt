@@ -1,3 +1,4 @@
+fig:first-hist-int
 fig:hist
 fig:hist-mean-median
 fig:hist-percentiles
@@ -124,11 +125,13 @@ resample-with-replacement
 calculate-statistic-of-interest
 replicating-the-resamplingbootstrap
 linear-regression-bootstrapresampling-example
+determining-if-a-statistic-is-significant
 linear-regression-with-categorical-predictors
 categorical-predictors
 linear-regression---categorical-predictor
 interpreting-the-linear-slope-for-a-categorical-attribute
 inference
+how-to-tell-if-a-term-is-significant
 more-than-2-categorical-groups
 explore-distribution-3-groups
 overall-model-fit

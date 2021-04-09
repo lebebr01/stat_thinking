@@ -208,28 +208,37 @@ resample_snow()
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     30.9     0.264     117.  0.       
-## 2 snowYes        -11.2     0.486     -23.1 4.99e-110
+## 1 (Intercept)     31.1     0.263     118.  0.       
+## 2 snowYes        -12.2     0.489     -25.0 4.72e-127
 ```
 
 Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. This shouldn't be surprising given that the data were resampled. This means that the data being used to estimate the model coefficients are different than the original data. Therefore, the coefficient estimates are different. 
 
 However, the goal of the resampling/bootstrapping procedure is to estimate how much uncertainty would be expected if the sample was obtained again. Getting another sample in the real world would be costly, can take significant time, and is usually not done. The resampling/bootstrapping procedure however, aims to replicate this process using computation. 
 
-To do this, steps 1 - 3 of the resampling/bootstrapping process is  repeated many times. This process of repetition allows the uncertainty found in the coefficients to be estimated. The resampling function written above is replicated 10,000 times below. The resulting estimates are visualized with a density figure. There will be one density figure representing the 10,000 estimates for the intercept and another density figure for the 10,000 estimates for the linear slope (ie., mean difference in minimum temperatures for days in which it snows compared to when it does not snow).
+To do this, steps 1 - 3 of the resampling/bootstrapping process is  repeated many times. This process of repetition allows the uncertainty found in the coefficients to be estimated. The resampling function written above is replicated 10,000 times below. The resulting estimates are visualized with a density plot shown in Figure \@ref(fig:snow-many-resamp). There will be one density figure representing the 10,000 estimates for the intercept and another density figure for the 10,000 estimates for the linear slope (ie., mean difference in minimum temperatures for days in which it snows compared to when it does not snow).
 
 
 ```r
 snow_coef <- map_dfr(1:10000, resample_snow)
 
 gf_density(~ estimate, data = snow_coef) %>%
-  gf_facet_wrap(~ term, scales = 'free_x')
+  gf_facet_wrap(~ term, scales = 'free_x') %>%
+  gf_labs(x = "")
 ```
 
 <div class="figure">
 <img src="09-categorical_files/figure-html/snow-many-resamp-1.png" alt="Density figures of the resampled/bootstrapped linear regression estimates." width="672" />
 <p class="caption">(\#fig:snow-many-resamp)Density figures of the resampled/bootstrapped linear regression estimates.</p>
 </div>
+
+Interpreting Figure \@ref(fig:snow-many-resamp) is similar to other density figures first explored in Chapter 2, however the primary difference here is that the density does not represent observed data. Instead, these density figures are representing 10,000 different estimates for the intercept and linear slope from the regression model. These estimates differ as part of the resampling process due to different data being used to estimate the intercept and slope coefficients. 
+
+Notice from the left-hand side of Figure \@ref(fig:snow-many-resamp) that the center of the distribution of intercepts is around 31. There is some variation in these estimates. This can be explored explicitly by looking at how wide the middle 90% of the distribution is. This will be computed more explicitly below, but this can be estimated from the figure where it appears most of the intercept values fall between about 30.5 and 31.5. Recall what the intercept represents here, the intercept is the mean minimum temperature when all the predictor terms are 0. For this model with a single categorical attribute included, the intercept is the mean minimum temperature for days in which it does not snow. Therefore, the average minimum temperature for these locations for days in which it does not snow is likely between 30.5 and 31.5 degrees Fahrenheit. 
+
+Moving to the right-hand side of Figure \@ref(fig:snow-many-resamp), the center of the distribution of linear slopes is around -11. There is also some evidence of variation in the linear slopes. Most of the slope estimates seem to fall between -12 and -10.5 degrees Fahrenheit. Recall that for a categorical attribute, the linear slope represents the mean change between the two categories. Since the intercept is the average minimum temperature for days in which it does not snow, the linear slope represents the change in average minimum temperatures moving from days it does not snow to days in which it does snow. More explicitly, the linear slope here says that the average minimum temperature is about 12 to 10.5 degrees Fahrenheit cooler than days in which it does not snow. 
+
+Computing specific descriptive statistics can also be helpful to supplement the distributions shown in Figure \@ref(fig:snow-many-resamp). The `df_stats()` function can do this and these statistics are computed separately for the intercept and linear slope. The 5th, 50th (median), and 95% percentiles are computed for each term. The output shows similar statements that were estimated from the density figures. These statistics will be used in the next section to provide evidence for or against the hypotheses of interest. 
 
 
 ```r
@@ -239,9 +248,11 @@ snow_coef %>%
 
 ```
 ##   response        term        5%       50%       95%
-## 1 estimate (Intercept)  30.54597  30.98661  31.42840
-## 2 estimate     snowYes -12.11705 -11.34989 -10.57807
+## 1 estimate (Intercept)  30.53204  30.98159  31.43032
+## 2 estimate     snowYes -12.13518 -11.35347 -10.57667
 ```
+
+#### How to tell if a term is "significant"
 
 ## More than 2 categorical groups
 Before the model contained one attribute that represented two groups. What happens when there are more than two groups for an attribute? To explore this, the college scorecard data will be used again.
