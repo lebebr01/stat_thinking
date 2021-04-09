@@ -51,7 +51,7 @@ Data scientists and statisticians often start analyses by exploring attributes (
 
 ### Histograms
 
-The first visualization we will examine is a histogram. We can create a histogram of the admission rates using the `gf_histrogram()` function. (This function is part of the **ggformula** package which needs to be loaded prior to using the `gf_histogram()` function.) This function requires two arguments. The first argument is a formula that identifies the variables to be plotted and the second argument, `data=`, specifies the data object we assigned earlier. The syntax used to create a histogram of the admission rates is:
+The first visualization we will examine is a histogram. We can create a histogram of the admission rates using the `gf_histogram()` function. (This function is part of the **ggformula** package which needs to be loaded prior to using the `gf_histogram()` function.) This function requires two arguments. The first argument is a formula that identifies the variables to be plotted and the second argument, `data=`, specifies the data object we assigned earlier. The syntax used to create a histogram of the admission rates is:
 
 ```{r first-hist, eval = FALSE}
 gf_histogram(~ adm_rate, data = colleges)
