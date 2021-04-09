@@ -59,7 +59,7 @@ gf_histogram(~ adm_rate, data = colleges)
 
 ```{r first-hist-int, echo = FALSE}
 gf_histogram(~ adm_rate, data = colleges) %>% 
-  ggplotly()
+  plotly::ggplotly()
 ```
 
 
