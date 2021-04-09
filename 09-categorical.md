@@ -208,8 +208,8 @@ resample_snow()
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     30.9     0.265     117.  0.       
-## 2 snowYes        -11.8     0.489     -24.1 7.83e-119
+## 1 (Intercept)     30.9     0.264     117.  0.       
+## 2 snowYes        -11.2     0.486     -23.1 4.99e-110
 ```
 
 Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. This shouldn't be surprising given that the data were resampled. This means that the data being used to estimate the model coefficients are different than the original data. Therefore, the coefficient estimates are different. 
@@ -239,8 +239,8 @@ snow_coef %>%
 
 ```
 ##   response        term        5%       50%       95%
-## 1 estimate (Intercept)  30.54612  30.98346  31.42268
-## 2 estimate     snowYes -12.12703 -11.35646 -10.58795
+## 1 estimate (Intercept)  30.54597  30.98661  31.42840
+## 2 estimate     snowYes -12.11705 -11.34989 -10.57807
 ```
 
 ## More than 2 categorical groups

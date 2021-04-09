@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-04-06" />
+<meta name="date" content="2021-04-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -59,6 +59,10 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.3/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-43425299-4"></script>
 <script>
@@ -456,8 +460,8 @@ slope = 19.63 - 30.98 = -11.35
 <pre><code>## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)     30.9     0.265     117.  0.       
-## 2 snowYes        -11.8     0.489     -24.1 7.83e-119</code></pre>
+## 1 (Intercept)     30.9     0.264     117.  0.       
+## 2 snowYes        -11.2     0.486     -23.1 4.99e-110</code></pre>
 <p>Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. This shouldn’t be surprising given that the data were resampled. This means that the data being used to estimate the model coefficients are different than the original data. Therefore, the coefficient estimates are different.</p>
 <p>However, the goal of the resampling/bootstrapping procedure is to estimate how much uncertainty would be expected if the sample was obtained again. Getting another sample in the real world would be costly, can take significant time, and is usually not done. The resampling/bootstrapping procedure however, aims to replicate this process using computation.</p>
 <p>To do this, steps 1 - 3 of the resampling/bootstrapping process is repeated many times. This process of repetition allows the uncertainty found in the coefficients to be estimated. The resampling function written above is replicated 10,000 times below. The resulting estimates are visualized with a density figure. There will be one density figure representing the 10,000 estimates for the intercept and another density figure for the 10,000 estimates for the linear slope (ie., mean difference in minimum temperatures for days in which it snows compared to when it does not snow).</p>
@@ -474,8 +478,8 @@ Figure 9.2: Density figures of the resampled/bootstrapped linear regression esti
 <div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="linear-regression-with-categorical-predictors.html#cb247-1" aria-hidden="true" tabindex="-1"></a>snow_coef <span class="sc">%&gt;%</span></span>
 <span id="cb247-2"><a href="linear-regression-with-categorical-predictors.html#cb247-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(estimate <span class="sc">~</span> term, <span class="fu">quantile</span>(<span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
 <pre><code>##   response        term        5%       50%       95%
-## 1 estimate (Intercept)  30.54612  30.98346  31.42268
-## 2 estimate     snowYes -12.12703 -11.35646 -10.58795</code></pre>
+## 1 estimate (Intercept)  30.54597  30.98661  31.42840
+## 2 estimate     snowYes -12.11705 -11.34989 -10.57807</code></pre>
 </div>
 </div>
 <div id="more-than-2-categorical-groups" class="section level2" number="9.2">

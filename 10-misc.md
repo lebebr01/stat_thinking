@@ -70,9 +70,9 @@ resample_admrate()
 ## # A tibble: 3 x 2
 ##   term                      estimate
 ##   <chr>                        <dbl>
-## 1 (Intercept)                 0.735 
-## 2 preddegBachelor Degree     -0.0636
-## 3 preddegCertificate Degree   0.0246
+## 1 (Intercept)                 0.714 
+## 2 preddegBachelor Degree     -0.0449
+## 3 preddegCertificate Degree   0.0474
 ```
 
 

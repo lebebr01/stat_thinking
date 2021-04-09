@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-04-06" />
+<meta name="date" content="2021-04-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -59,6 +59,10 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.3/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-43425299-4"></script>
 <script>
@@ -372,9 +376,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 3 x 2
 ##   term                      estimate
 ##   &lt;chr&gt;                        &lt;dbl&gt;
-## 1 (Intercept)                 0.735 
-## 2 preddegBachelor Degree     -0.0636
-## 3 preddegCertificate Degree   0.0246</code></pre>
+## 1 (Intercept)                 0.714 
+## 2 preddegBachelor Degree     -0.0449
+## 3 preddegCertificate Degree   0.0474</code></pre>
 <div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="prediction-for-individuals.html#cb275-1" aria-hidden="true" tabindex="-1"></a>admrate_coef <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_admrate) <span class="sc">%&gt;%</span></span>
 <span id="cb275-2"><a href="prediction-for-individuals.html#cb275-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
 <span id="cb275-3"><a href="prediction-for-individuals.html#cb275-3" aria-hidden="true" tabindex="-1"></a></span>
