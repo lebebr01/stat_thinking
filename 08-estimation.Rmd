@@ -197,5 +197,7 @@ gf_violin(x ~ 1, data = weather_coef, fill = 'gray85', draw_quantiles = c(0.05, 
   gf_refine(coord_flip())
 ```
 
+### Determining if a statistic is "significant"
 
+To come ...
 
