@@ -148,19 +148,30 @@ Notice from the single instance of running the resampling/bootstrapping function
 
 However, the goal of the resampling/bootstrapping procedure is to estimate how much uncertainty would be expected if the sample was obtained again. Getting another sample in the real world would be costly, can take significant time, and is usually not done. The resampling/bootstrapping procedure however, aims to replicate this process using computation. 
 
-To do this, steps 1 - 3 of the resampling/bootstrapping process is  repeated many times. This process of repetition allows the uncertainty found in the coefficients to be estimated. The resampling function written above is replicated 10,000 times below. The resulting estimates are visualized with a density figure. There will be one density figure representing the 10,000 estimates for the intercept and another density figure for the 10,000 estimates for the linear slope (ie., mean difference in minimum temperatures for days in which it snows compared to when it does not snow).
+To do this, steps 1 - 3 of the resampling/bootstrapping process is  repeated many times. This process of repetition allows the uncertainty found in the coefficients to be estimated. The resampling function written above is replicated 10,000 times below. The resulting estimates are visualized with a density plot shown in Figure \@ref(fig:snow-many-resamp). There will be one density figure representing the 10,000 estimates for the intercept and another density figure for the 10,000 estimates for the linear slope (ie., mean difference in minimum temperatures for days in which it snows compared to when it does not snow).
 
 ```{r snow-many-resamp, fig.cap = "Density figures of the resampled/bootstrapped linear regression estimates."}
 snow_coef <- map_dfr(1:10000, resample_snow)
 
 gf_density(~ estimate, data = snow_coef) %>%
-  gf_facet_wrap(~ term, scales = 'free_x')
+  gf_facet_wrap(~ term, scales = 'free_x') %>%
+  gf_labs(x = "")
 ```
+
+Interpreting Figure \@ref(fig:snow-many-resamp) is similar to other density figures first explored in Chapter 2, however the primary difference here is that the density does not represent observed data. Instead, these density figures are representing 10,000 different estimates for the intercept and linear slope from the regression model. These estimates differ as part of the resampling process due to different data being used to estimate the intercept and slope coefficients. 
+
+Notice from the left-hand side of Figure \@ref(fig:snow-many-resamp) that the center of the distribution of intercepts is around `r round(median(filter(snow_coef, term == '(Intercept)')$estimate), 0)`. There is some variation in these estimates. This can be explored explicitly by looking at how wide the middle 90% of the distribution is. This will be computed more explicitly below, but this can be estimated from the figure where it appears most of the intercept values fall between about 30.5 and 31.5. Recall what the intercept represents here, the intercept is the mean minimum temperature when all the predictor terms are 0. For this model with a single categorical attribute included, the intercept is the mean minimum temperature for days in which it does not snow. Therefore, the average minimum temperature for these locations for days in which it does not snow is likely between 30.5 and 31.5 degrees Fahrenheit. 
+
+Moving to the right-hand side of Figure \@ref(fig:snow-many-resamp), the center of the distribution of linear slopes is around `r round(median(filter(snow_coef, term == 'snowYes')$estimate), 0)`. There is also some evidence of variation in the linear slopes. Most of the slope estimates seem to fall between -12 and -10.5 degrees Fahrenheit. Recall that for a categorical attribute, the linear slope represents the mean change between the two categories. Since the intercept is the average minimum temperature for days in which it does not snow, the linear slope represents the change in average minimum temperatures moving from days it does not snow to days in which it does snow. More explicitly, the linear slope here says that the average minimum temperature is about 12 to 10.5 degrees Fahrenheit cooler than days in which it does not snow. 
+
+Computing specific descriptive statistics can also be helpful to supplement the distributions shown in Figure \@ref(fig:snow-many-resamp). The `df_stats()` function can do this and these statistics are computed separately for the intercept and linear slope. The 5th, 50th (median), and 95% percentiles are computed for each term. The output shows similar statements that were estimated from the density figures. These statistics will be used in the next section to provide evidence for or against the hypotheses of interest. 
 
 ```{r stats-snow-resamp}
 snow_coef %>%
   df_stats(estimate ~ term, quantile(c(0.05, 0.5, 0.95)))
 ```
+
+#### How to tell if a term is "significant"
 
 ## More than 2 categorical groups
 Before the model contained one attribute that represented two groups. What happens when there are more than two groups for an attribute? To explore this, the college scorecard data will be used again.
