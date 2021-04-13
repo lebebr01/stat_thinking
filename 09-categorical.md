@@ -208,8 +208,8 @@ resample_snow()
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
-## 1 (Intercept)     31.1     0.263     118.  0.       
-## 2 snowYes        -12.2     0.489     -25.0 4.72e-127
+## 1 (Intercept)     30.9     0.260     119.  0        
+## 2 snowYes        -10.9     0.477     -22.8 2.25e-107
 ```
 
 Notice from the single instance of running the resampling/bootstrapping function that the coefficients estimated are different from the linear regression using the original data. This shouldn't be surprising given that the data were resampled. This means that the data being used to estimate the model coefficients are different than the original data. Therefore, the coefficient estimates are different. 
@@ -248,8 +248,8 @@ snow_coef %>%
 
 ```
 ##   response        term        5%       50%       95%
-## 1 estimate (Intercept)  30.53204  30.98159  31.43032
-## 2 estimate     snowYes -12.13518 -11.35347 -10.57667
+## 1 estimate (Intercept)  30.53347  30.97632  31.43176
+## 2 estimate     snowYes -12.14820 -11.34965 -10.58296
 ```
 
 #### How to tell if a term is "significant"
