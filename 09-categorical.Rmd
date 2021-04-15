@@ -193,6 +193,7 @@ snow_coef %>%
 ```
 
 #### How to tell if a term is "significant"
+To come ...
 
 ## More than 2 categorical groups
 Before the model contained one attribute that represented two groups. What happens when there are more than two groups for an attribute? To explore this, the college scorecard data will be used again.
