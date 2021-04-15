@@ -33,13 +33,24 @@ Prior to fitting the linear regression model, it is first common to descriptivel
 
 There are numerous types of figures that can help explore this, but one way to explore this is through a violin plot. Below is the code to generate a violin plot depicting the distribution of minimum temperature for days in which it does snow vs does not snow. 
 
-```{r violin-snow, fig.cap = "Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not."}
+```{r eval = FALSE}
 gf_violin(drybulbtemp_min ~ snow, data = us_weather, 
           draw_quantiles = c(0.1, 0.5, 0.9), 
            fill = 'gray85') %>%
   gf_refine(coord_flip()) %>%
   gf_labs(y = 'Minimum Temperature (in F)',
           x = 'Snowed?')
+```
+
+
+```{r violin-snow, fig.cap = "Violin plots showing the distribution of minimum temperature by whether it has snowed on a day or not."}
+gf_violin(drybulbtemp_min ~ snow, data = us_weather, 
+          draw_quantiles = c(0.1, 0.5, 0.9), 
+           fill = 'gray85') %>%
+  gf_refine(coord_flip()) %>%
+  gf_labs(y = 'Minimum Temperature (in F)',
+          x = 'Snowed?') %>%
+  plotly::ggplotly()
 ```
 
 Figure \@ref(fig:violin-snow) shows the two violin plots, the one on top is for days in which it does snow and the one on the bottom is for days in which it does not snow. What notable feature differences do you notice in this figure? 
