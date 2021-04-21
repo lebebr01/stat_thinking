@@ -192,11 +192,13 @@ snow_coef %>%
   df_stats(estimate ~ term, quantile(c(0.05, 0.5, 0.95)))
 ```
 
-#### How to tell if a term is "significant"
+#### How to tell if an effect is "significant"
 To come ...
 
-## More than 2 categorical groups
-Before the model contained one attribute that represented two groups. What happens when there are more than two groups for an attribute? To explore this, the college scorecard data will be used again.
+## More than two categorical groups
+Categorical attributes are not limited to the simply two groups. For example, earlier in the book when the college scorecard data was used, the distributions of admission rate was explored by the primary degree status. This attribute had three groups representing schools that primarily granted associate, bachelor, or certificate degrees. This section is going to explore how a linear regression can be generalized to an attribute that has more than two groups. 
+
+Before exploring the linear regression with more than two categories or groups, first the college scorecard data are read in. Recall, that these data are for higher education institutions, so each row in the data below is for a single higher education institution. The subsequent columns are specific attributes about those higher education institutions, for example, their average admission rate, the median ACT score, the undergraduate enrollment, primary degree status, and a few other attributes. 
 
 ```{r read-college-data}
 library(tidyverse)
@@ -208,21 +210,38 @@ head(college_score)
 ```
 
 ### Explore distribution 3 groups
-Early in the course, the distribution of admission rates by the primary degree that the institution grants was explored. Below is a violin plot that shows these three distributions.
+The first step in any analysis commonly starts with exploring the attributes of interest visually. This is particularly true if this is new data that is being explored for the first time. The code below creates violin plots of the college admission rate by the primary degree status. The 10th, 50th, and 90th percentiles are shown by the vertical lines within each violin plot. These can help guide the exploration by showing the center (50th percentile; median) and variation (difference in the 10th and 90th percentiles). 
 
-```{r violin-preddeg}
-gf_violin(adm_rate ~ preddeg, data = college_score, fill = 'gray85', 
-          size = 1, draw_quantiles = c(0.1, 0.5, 0.9))
+```{r violin-preddeg, warning = FALSE, error = FALSE, message=FALSE, fig.cap="Violin plots of the college admission rates by the primary degree status."}
+gf_violin(adm_rate ~ preddeg, data = college_score, fill = 'gray85',
+          draw_quantiles = c(0.1, 0.5, 0.9)) %>%
+  gf_labs(x = 'Primary Degree Status',
+          y = 'Admission Rate') %>%
+  gf_refine(coord_flip())
 ```
 
-There may be some small differences between these groups, but more formally we can test this to understand the amount of uncertainty in the average of the distributions. This again will make use of the `lm()` function in R and the formula is very similar to what was done before and mimics the formula from the violin plot above.
+Exploring Figure \@ref(fig:violin-preddeg) shows that there are some small differences in the center (median) of the admission rates across the three primary degree statuses. In particular, schools that are primarily bachelor degree granting schools have evidence of slightly lower admission rates compared to primarily associate and certificate degree granting schools. The variation (shown by the gap between the 10th and 90th percentiles) and shapes of the distributions are relatively similar, being left or negatively skewed. 
+
+As there was small observed differences noted in the center of the admission rates across the three degree statuses, this can be explored more explicitly by fitting a linear regression model. This will make use of the `lm()` function in R and the formula is very similar to what was done before when the attribute only had two categories or groups. This also mimics the formula from the violin plot above.
 
 ```{r preddeg-lm}
 adm_model <- lm(adm_rate ~ preddeg, data = college_score)
 coef(adm_model)
 ```
 
-Guesses as to what these coefficients represent? How were the categorical groups turned into the different elements in the model?
+Notice that now there are three coefficients from the linear regression now instead of the two before. There is still the y-intercept, but now there are two linear slope terms. What do these terms represent? To explore this issue, it is helpful to explore how these linear slope terms are created from the primary degree status attribute. Recall when there are two categories with an attribute, a dummy or indicator attribute is created by default where the categories are represented numerically. By default, one category is represented by a value of 0 and the second is represented by a value of 1 (see Table \@ref(tab:cat-to-tab) for a reminder to how this was created for the snow attribute). 
+
+When there are more than two categories or groups, it now takes more than one attribute to represent the categories in a similar fashion. Table \@ref(tab:dummy3)
+
+```{r dummy3}
+knitr::kable(
+  data.frame(primary_degree = c('Associate', 'Bachelor', 'Certificate'),
+             bachelor = c(0, 1, 0),
+             certificate = c(0, 0, 1)),
+  caption = "Default dummy/indicator attributes for an attribute with three categories/groups for a linear regression."
+)
+```
+
 
 ### Overall model fit
 There is a measure of overall model fit that is commonly used in the research literature for linear regression models, called R-squared. R-squared represents the proportion of variation in the outcome that is explained by the attributes in the model. The statistic ranges from 0 to 1 where values closer to 1 indicate larger percentages of variation explained. This can be extracted from the model directly.
