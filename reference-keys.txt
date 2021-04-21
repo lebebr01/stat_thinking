@@ -40,6 +40,9 @@ fig:resample-violin
 fig:violin-snow
 tab:cat-to-tab
 fig:snow-many-resamp
+fig:violin-preddeg
+tab:dummy3
+tab:change-reference
 introduction
 statistics-vs-data-science
 experiments-vs-observations
@@ -131,10 +134,12 @@ categorical-predictors
 linear-regression---categorical-predictor
 interpreting-the-linear-slope-for-a-categorical-attribute
 inference
-how-to-tell-if-a-term-is-significant
-more-than-2-categorical-groups
+how-to-tell-if-an-effect-is-significant
+more-than-two-categorical-groups
 explore-distribution-3-groups
-overall-model-fit
+linear-regression-with-three-categoriesgroups
+inference-for-model-with-three-groups
+exploring-model-fit
 multiple-regression
 interactions
 evaluating-model-fit
