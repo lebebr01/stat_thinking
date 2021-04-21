@@ -222,6 +222,7 @@ gf_violin(adm_rate ~ preddeg, data = college_score, fill = 'gray85',
 
 Exploring Figure \@ref(fig:violin-preddeg) shows that there are some small differences in the center (median) of the admission rates across the three primary degree statuses. In particular, schools that are primarily bachelor degree granting schools have evidence of slightly lower admission rates compared to primarily associate and certificate degree granting schools. The variation (shown by the gap between the 10th and 90th percentiles) and shapes of the distributions are relatively similar, being left or negatively skewed. 
 
+### Linear Regression with three categories/groups
 As there was small observed differences noted in the center of the admission rates across the three degree statuses, this can be explored more explicitly by fitting a linear regression model. This will make use of the `lm()` function in R and the formula is very similar to what was done before when the attribute only had two categories or groups. This also mimics the formula from the violin plot above.
 
 ```{r preddeg-lm}
@@ -229,9 +230,11 @@ adm_model <- lm(adm_rate ~ preddeg, data = college_score)
 coef(adm_model)
 ```
 
-Notice that now there are three coefficients from the linear regression now instead of the two before. There is still the y-intercept, but now there are two linear slope terms. What do these terms represent? To explore this issue, it is helpful to explore how these linear slope terms are created from the primary degree status attribute. Recall when there are two categories with an attribute, a dummy or indicator attribute is created by default where the categories are represented numerically. By default, one category is represented by a value of 0 and the second is represented by a value of 1 (see Table \@ref(tab:cat-to-tab) for a reminder to how this was created for the snow attribute). 
+Notice that now there are three coefficients from the linear regression now instead of the two before. There is still the y-intercept, but now there are two linear slope terms. What do these terms represent? The names of the terms may give some hint into what these terms may represent.
 
-When there are more than two categories or groups, it now takes more than one attribute to represent the categories in a similar fashion. Table \@ref(tab:dummy3)
+To explore this issue, it is helpful to explore how these linear slope terms are created from the primary degree status attribute. Recall when there are two categories with an attribute, a dummy or indicator attribute is created by default where the categories are represented numerically. By default, one category is represented by a value of 0 and the second is represented by a value of 1 (see Table \@ref(tab:cat-to-tab) for a reminder to how this was created for the snow attribute). 
+
+When there are more than two categories or groups, it now takes more than one attribute to represent the categories in a similar fashion. Table \@ref(tab:dummy3) shows this default behavior in creating the dummy or indicator attributes that the linear regression uses internally. Notice that there need to be two attributes to fully represent all three categories from the original attribute. By default, the `lm()` function represents the category that is closer to the letter "A" to be the reference group. This category is represented solely by 0's in the new attributes that are created and similar to the analysis with two categories or groups, the referent group is tied to the y-intercept. 
 
 ```{r dummy3}
 knitr::kable(
@@ -242,8 +245,47 @@ knitr::kable(
 )
 ```
 
+The two additional terms, labeled "bachelor" and "certificate" in Table \@ref(tab:dummy3), are the terms associated with the two linear slopes from the coefficients. The linear slope terms are interpreted as the change in the outcome for a one unit change in the attribute. For the two attributes in Table \@ref(tab:dummy3), there is only a one unit change possible and the one unit change indicates a movement from one category (the associate degree group) to either the bachelor or certificate degree groups. Therefore, as with the two category analysis, each linear slope is interpreted as the mean difference between the reference category (associate degree group here) and the category represented by a value of 1. 
 
-### Overall model fit
+Going back to the coefficients (the means for the categories are also shown for reference) from the linear regression, the y-intercept would represent the mean value for the associate degree group. This can be confirmed by looking at the results below, but theoretically, this occurs because the y-intercept represents the mean of the outcome when all terms in the regression are 0, this occurs for this model for those associate degree schools as shown in Table \@ref(tab:dummy3). The remaining two terms represent the change in admission rates for a one unit change in those attributes. The one with the bachelor degree in the name represents the change in admission rate comparing an associate degree school with a bachelor degree school. Similarly, the term with certificate degree in the name represents the change in admission rates comparing an associate degree school with a certificate degree school. If the differences in the mean values are computed, the values from the linear regression coefficients can be recreated. 
+
+```{r coef-interpret}
+coef(adm_model)
+
+college_score %>%
+  df_stats(adm_rate ~ preddeg, mean)
+```
+
+By default, the linear regression model will not compare the mean difference between all pairwise groups. More specifically, the difference between the bachelor degree and certificate degree is not done. There are ways to do this, often referred to as contrasts, but these are not discussed here. If the difference between bachelor degree and certificate degree schools is of interest, the contrasts could be explored or the reference group could be modified. If the reference group is modified, then another comparison would be missing. The following shows what changing the reference group could have on the model. 
+
+Table \@ref(tab:change-reference) shows what the changing of the reference group can be. In this example, the certificate degree group will serve as the reference group, that is, will be the group that is represented as all zeros. What impact will this have on the resulting linear regression model? Also, what mean difference will be missing from the results?
+
+```{r change-reference}
+knitr::kable(
+  data.frame(primary_degree = c('Associate', 'Bachelor', 'Certificate'),
+             associate = c(1, 0, 0),
+             bachelor = c(0, 1, 0)),
+  caption = "Modifying dummy/indicator attributes for an attribute with three categories/groups for a linear regression."
+)
+```
+
+The following code manually creates these two new attributes shown in Table \@ref(tab:change-reference). Then, the linear regression model is fitted with these two newly created attributes. 
+
+```{r regression-change-reference-group}
+college_score <- college_score %>%
+  mutate(associate = ifelse(preddeg == 'Associate Degree', 1, 0),
+         bachelor = ifelse(preddeg == 'Bachelor Degree', 1, 0))
+
+adm_model_cert <- lm(adm_rate ~ associate + bachelor, data = college_score)
+coef(adm_model_cert)
+```
+
+Notice that the y-intercept differs from before and represents the mean of the certificate degree group. The two linear slope terms represent the mean difference between the associate and bachelor degree group compared to the associate degree group. The missing mean difference comparison is that between the associate degree and bachelor degree groups. 
+
+### Inference for model with three groups
+To come ...
+
+## Exploring Model Fit
 There is a measure of overall model fit that is commonly used in the research literature for linear regression models, called R-squared. R-squared represents the proportion of variation in the outcome that is explained by the attributes in the model. The statistic ranges from 0 to 1 where values closer to 1 indicate larger percentages of variation explained. This can be extracted from the model directly.
 
 ```{r}
