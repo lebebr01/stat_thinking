@@ -286,25 +286,20 @@ Notice that the y-intercept differs from before and represents the mean of the c
 To come ...
 
 ## Exploring Model Fit
-There is a measure of overall model fit that is commonly used in the research literature for linear regression models, called R-squared. R-squared represents the proportion of variation in the outcome that is explained by the attributes in the model. The statistic ranges from 0 to 1 where values closer to 1 indicate larger percentages of variation explained. This can be extracted from the model directly.
+
+### R-Squared
+
 
 ```{r}
 summary(adm_model)$r.squared
 ```
 
-Another one can be computed from the baby data where the birth weight was the outcome and gestational days was the primary attribute used as a predictor.
+### Residual Standard Error
 
-```{r baby-reg-again, eval = FALSE}
-baby_reg <- lm(birth_weight ~ gestational_days, data = baby)
-summary(baby_reg)$r.squared
+
+```{r}
+summary(adm_model)$sigma
 ```
-
-For models with a single predictor variable, R-squared is the correlation coefficient squared. For example:
-
-```{r eval = FALSE}
-cor(birth_weight ~ gestational_days, data = baby) ^ 2
-```
-
 
 ## Multiple Regression
 
