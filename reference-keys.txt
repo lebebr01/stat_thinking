@@ -1,3 +1,4 @@
+tab:tabular
 fig:first-hist-int
 fig:hist
 fig:hist-mean-median
@@ -47,6 +48,8 @@ introduction
 statistics-vs-data-science
 experiments-vs-observations
 data-structure
+tabular-data
+non-tabular-data
 visualization
 college-scorecard-data
 view-the-data
@@ -140,7 +143,10 @@ explore-distribution-3-groups
 linear-regression-with-three-categoriesgroups
 inference-for-model-with-three-groups
 exploring-model-fit
+r-squared
+residual-standard-error
 multiple-regression
+distribution-of-effects
 interactions
 evaluating-model-fit
 prediction-for-individuals

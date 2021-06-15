@@ -664,8 +664,8 @@ us_weather_predict %>%
 ```
 
 ```
-##     response     mean  sum
-## 1 same_class 0.799706 2176
+##     response    mean  sum
+## 1 same_class 0.79375 2159
 ```
 
 The model accuracy on the training data, the same data that was used to fit the model was about 80%. We will now use the testing data to compare to the 80% accuracy obtained from the training data. Make a prediction as to what you think the prediction accuracy may be for the testing data, will it be higher, the same, or lower compared to the accuracy for the training data?
@@ -685,7 +685,7 @@ us_weather_predict_test %>%
 
 ```
 ##     response      mean sum
-## 1 same_class 0.7658321 520
+## 1 same_class 0.7911765 538
 ```
 
 For the test data, prediction accuracy was quite a bit lower, about 76.5%. The reason the accuracy tends to be lower when evaluating accuracy on the testing data is that the model has not seen these data, therefore, there could be new patterns in these data that the model has not seen before. Although the accuracy is lower, it would be more realistic to how these models would be used in practice. Commonly, the model is fitted on data on hand and is used to predict future cases. The training/test data setup is more realistic to this scenario in practice where the testing data mimic those future cases that the model would ultimately be used to predict. 
@@ -779,7 +779,7 @@ calc_predict_acc()
 
 ```
 ##     response      mean sum
-## 1 same_class 0.7982327 542
+## 1 same_class 0.7985294 543
 ```
 
 
