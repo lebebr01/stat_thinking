@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Introduction
 
 Here is an intro. And more.
@@ -9,4 +14,28 @@ Here is an intro. And more.
 
 
 ## Data Structure
+
+Data are often stored in tabular form for ease of use with common statistical programs, however data need not be in this structure. Data can come from anywhere and could consist of text, numbers representing some quantity, text labels representing groups, or many other formats. This section aims to give an introduction to the form and format of data, both common and uncommon.
+
+### Tabular Data
+Tabular data are those that are most commonly used in statistics courses. Tabular data are such that rows indicate unique cases of data and the columns represent different attributes for those cases. Table \@ref(tab:tabular) shows the an example of tabular data. 
+
+```{r tabular, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+knitr::kable(data.frame(name = c('He-Man', 'She-Ra', 'Voltron'),
+           human = c('Yes', 'Yes', 'No'),
+           fictional = c('Yes', 'Yes', 'Yes'),
+           height = c(83, 96, 3936)
+           ),
+  caption = "Example of tabular data.")
+```
+
+In this table, each row represents a unique person and the first column would represent the identifying attribute for each unique row. For example, the first row represents characteristics for He-Man and each subsequent column represents specific attributes about them. For example, the second and third columns are Yes/No attributes indicating if the person is human or fictional or not. What are the primary differences between the second and third columns? Notice that the third column, the fictional attribute, is one in which all elements in the current tabular data are the same value. This would be an attribute that does not vary across the different rows in the data. These attributes are not helpful from a statistical perspective in this small data set, but if more data were added in which some elements were not fictional, then this attribute would contain useful information. In statistics terminology, this type of attribute would be called a **constant attribute**. In statistics, we are interested in attributes that **vary** across our units in the data. Attributes that vary are often referred to as **variables** in statistics terminology. Throughout this textbook, the term attribute will be used instead of variable. An attribute will refer to a column of data that carries information about the units in the data. 
+
+The final column of data in Table \@ref(tab:tabular) is one that represents the approximate height of each character, in inches ^[This is based on a search for the character name plus height, for example, "He-Man height."]. This attribute is different from the rest of the attributes in that it is a numeric quantity for each unit. Numeric quantities usually carry more information about magnitude differences compared to the text attributes described earlier. More explicitly, differences in the height attributes can be quantified and in this case, with the attribute being represented as the height in inches, each unit represents the same distance across the entire scale. That is, a one inch difference across the entire height scale is the same no matter where that inch occurs on the scale. These types of attributes will be used extensively in this text, most commonly these types of attributes will be used as the attribute of most interest in our analyses. For example, from the data above, it could be asked if there are differences in height of the characters based on if they are human or not. For this question, differences in height for those that are human (ie., human attribute = "Yes") compared to those that are not human (ie., human attribute = "No") would be used as the primary comparison. This text will explore questions like this from a descriptive and inferential framework later. 
+
+For these data, there are only three rows, but you could imagine adding more rows to these elements for other characters. More to come ...
+
+### Non-tabular Data
+
+Data can come in many different formats, this book will not extensively cover data that are not in tabular format. However, non-tabular data are very common in practical problems. In these situations, these data are often wrangled into a tabular data format when it is desired to conduct a statistical analysis. Some common non-tabular data formats include: ...
 
