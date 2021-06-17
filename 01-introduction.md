@@ -12,6 +12,13 @@ Here is an intro. And more.
 
 ## Experiments vs Observations
 
+The type of analysis that is relevant for a given problem depends on the experimental design. More generally, experimental design refers to how the data were collected. How the data were collected has implications for the type of conclusions that can be drawn from the data (ie., you may have heard the phrase, "correlation does not imply causation") and the subsequent analysis. A extremely sophisticated analysis does not overcome limitations in how the data were collected. 
+
+Given that how the data were collected greatly impacts the types of conclusions that can be drawn from the analysis, what are design features are important to consider? This topic is large, nuanced, and an entire series of courses have been created on this topic. The goal here is to think about some concepts that are particularly helpful to consider for any analysis. 
+
+The discussion will be framed around articulating whether the data collected were part of an experiment or were simply observed. The simplest definition for observational data are those that were collected without strong consideration about who is or how the data are collected. One example of observational data could be collected information about the shoes that people wear as they are walking in a busy part of town. Given this type of data collected, what could be some limitations about this type of data? 
+
+To contrast observational data, experimental data are those in which care was taken to how the data were collected. 
 
 ## Data Structure
 
@@ -37,5 +44,5 @@ For these data, there are only three rows, but you could imagine adding more row
 
 ### Non-tabular Data
 
-Data can come in many different formats, this book will not extensively cover data that are not in tabular format. However, non-tabular data are very common in practical problems. In these situations, these data are often wrangled into a tabular data format when it is desired to conduct a statistical analysis. Some common non-tabular data formats include: ...
+Data can come in many different formats, this book will not extensively cover data that are not in a tabular format. However, non-tabular data are very common in practical problems. In these situations, these data are often wrangled into a more structured format to conduct a statistical analysis. Some common non-tabular data formats include data coming from text, video, audio, graphics, images, sensors, and even more. 
 
