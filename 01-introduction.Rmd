@@ -18,7 +18,17 @@ Given that how the data were collected greatly impacts the types of conclusions 
 
 The discussion will be framed around articulating whether the data collected were part of an experiment or were simply observed. The simplest definition for observational data are those that were collected without strong consideration about who is or how the data are collected. One example of observational data could be collected information about the shoes that people wear as they are walking in a busy part of town. Given this type of data collected, what could be some limitations about this type of data? 
 
-To contrast observational data, experimental data are those in which care was taken to how the data were collected. 
+To contrast observational data, experimental data are those in which care was taken to how the data were collected. Within experimental data, it is common for there to be two or more conditions that are being explored. For example, in a clinical trial that is testing whether a vaccine or drug is effective and safe, the new vaccine or drug is often tested against a placebo. The placebo is a harmless substance that does not produce any change to the body, for example, the placebo could be a sugar pill that looks just like a new drug to be tested in every other way. The placebo would simply not contain the active ingredients of the new drug. 
+
+When conducting these experiments with two or more groups that are of interest to be compared, those who are participating in the study are randomly assigned or selected to be in one of the groups. Using the placebo vs new drug example, this would mean that each participant is randomly assigned to either receive the placebo or the new drug, but the participant does not know which one they are receiving. Often, those administering the treatment also do not know whether the placebo or active drug is being given as well. 
+
+### Explore Random Assignment
+How does the random assignment of individuals to treatment conditions change the design from an observational to an experimental design? The random process is really the primary differentiator between being an observational vs an experiment. The random assignment to each condition in the study has the ability to, on average, even out differences across the two groups. Since the inclusion of being in one of the two groups is random, if the study has enough participants, it is more likely for the two groups to be as equal as possible across all characteristics for the study participants. 
+
+What could random assignment look like in practice? More to come ... .
+
+
+### Example: Natural Experiments
 
 ## Data Structure
 
