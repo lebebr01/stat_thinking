@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-06-17" />
+<meta name="date" content="2021-06-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -61,7 +61,7 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.4/plotly.js"></script>
+<script src="libs/plotly-binding-4.9.4.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
@@ -162,7 +162,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="introduction.html"><a href="introduction.html#explore-random-assignment"><i class="fa fa-check"></i><b>1.2.1</b> Explore Random Assignment</a></li>
+<li class="chapter" data-level="1.2.2" data-path="introduction.html"><a href="introduction.html#example-natural-experiments"><i class="fa fa-check"></i><b>1.2.2</b> Example: Natural Experiments</a></li>
+</ul></li>
 <li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a>
 <ul>
 <li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#tabular-data"><i class="fa fa-check"></i><b>1.3.1</b> Tabular Data</a></li>
@@ -350,7 +354,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The type of analysis that is relevant for a given problem depends on the experimental design. More generally, experimental design refers to how the data were collected. How the data were collected has implications for the type of conclusions that can be drawn from the data (ie., you may have heard the phrase, “correlation does not imply causation”) and the subsequent analysis. A extremely sophisticated analysis does not overcome limitations in how the data were collected.</p>
 <p>Given that how the data were collected greatly impacts the types of conclusions that can be drawn from the analysis, what are design features are important to consider? This topic is large, nuanced, and an entire series of courses have been created on this topic. The goal here is to think about some concepts that are particularly helpful to consider for any analysis.</p>
 <p>The discussion will be framed around articulating whether the data collected were part of an experiment or were simply observed. The simplest definition for observational data are those that were collected without strong consideration about who is or how the data are collected. One example of observational data could be collected information about the shoes that people wear as they are walking in a busy part of town. Given this type of data collected, what could be some limitations about this type of data?</p>
-<p>To contrast observational data, experimental data are those in which care was taken to how the data were collected.</p>
+<p>To contrast observational data, experimental data are those in which care was taken to how the data were collected. Within experimental data, it is common for there to be two or more conditions that are being explored. For example, in a clinical trial that is testing whether a vaccine or drug is effective and safe, the new vaccine or drug is often tested against a placebo. The placebo is a harmless substance that does not produce any change to the body, for example, the placebo could be a sugar pill that looks just like a new drug to be tested in every other way. The placebo would simply not contain the active ingredients of the new drug.</p>
+<p>When conducting these experiments with two or more groups that are of interest to be compared, those who are participating in the study are randomly assigned or selected to be in one of the groups. Using the placebo vs new drug example, this would mean that each participant is randomly assigned to either receive the placebo or the new drug, but the participant does not know which one they are receiving. Often, those administering the treatment also do not know whether the placebo or active drug is being given as well.</p>
+<div id="explore-random-assignment" class="section level3" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Explore Random Assignment</h3>
+<p>How does the random assignment of individuals to treatment conditions change the design from an observational to an experimental design? The random process is really the primary differentiator between being an observational vs an experiment. The random assignment to each condition in the study has the ability to, on average, even out differences across the two groups. Since the inclusion of being in one of the two groups is random, if the study has enough participants, it is more likely for the two groups to be as equal as possible across all characteristics for the study participants.</p>
+<p>What could random assignment look like in practice? More to come … .</p>
+</div>
+<div id="example-natural-experiments" class="section level3" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Example: Natural Experiments</h3>
+</div>
 </div>
 <div id="data-structure" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> Data Structure</h2>
@@ -391,7 +404,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 <p>In this table, each row represents a unique person and the first column would represent the identifying attribute for each unique row. For example, the first row represents characteristics for He-Man and each subsequent column represents specific attributes about them. For example, the second and third columns are Yes/No attributes indicating if the person is human or fictional or not. What are the primary differences between the second and third columns? Notice that the third column, the fictional attribute, is one in which all elements in the current tabular data are the same value. This would be an attribute that does not vary across the different rows in the data. These attributes are not helpful from a statistical perspective in this small data set, but if more data were added in which some elements were not fictional, then this attribute would contain useful information. In statistics terminology, this type of attribute would be called a <strong>constant attribute</strong>. In statistics, we are interested in attributes that <strong>vary</strong> across our units in the data. Attributes that vary are often referred to as <strong>variables</strong> in statistics terminology. Throughout this textbook, the term attribute will be used instead of variable. An attribute will refer to a column of data that carries information about the units in the data.</p>
 <p>The final column of data in Table <a href="introduction.html#tab:tabular">1.1</a> is one that represents the approximate height of each character, in inches.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> This attribute is different from the rest of the attributes in that it is a numeric quantity for each unit. Numeric quantities usually carry more information about magnitude differences compared to the text attributes described earlier. More explicitly, differences in the height attributes can be quantified and in this case, with the attribute being represented as the height in inches, each unit represents the same distance across the entire scale. That is, a one inch difference across the entire height scale is the same no matter where that inch occurs on the scale. These types of attributes will be used extensively in this text, most commonly these types of attributes will be used as the attribute of most interest in our analyses. For example, from the data above, it could be asked if there are differences in height of the characters based on if they are human or not. For this question, differences in height for those that are human (ie., human attribute = “Yes”) compared to those that are not human (ie., human attribute = “No”) would be used as the primary comparison. This text will explore questions like this from a descriptive and inferential framework later.</p>
-<p>For these data, there are only three rows, but you could imagine adding more rows to these elements for other characters. More to come …</p>
+<p>For these data, there are only three rows, but you could imagine adding more rows to these elements for other characters. For example, imagine adding a new row to this data for a rabbit. Take a few minutes to think about what a new row with the rabbit would look like for each column of Table <a href="introduction.html#tab:tabular">1.1</a>. Would any of the columns in the table change from a constant to now being a variable?</p>
 </div>
 <div id="non-tabular-data" class="section level3" number="1.3.2">
 <h3><span class="header-section-number">1.3.2</span> Non-tabular Data</h3>

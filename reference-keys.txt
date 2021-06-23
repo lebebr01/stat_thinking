@@ -47,6 +47,8 @@ tab:change-reference
 introduction
 statistics-vs-data-science
 experiments-vs-observations
+explore-random-assignment
+example-natural-experiments
 data-structure
 tabular-data
 non-tabular-data

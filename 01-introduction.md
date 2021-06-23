@@ -18,7 +18,17 @@ Given that how the data were collected greatly impacts the types of conclusions 
 
 The discussion will be framed around articulating whether the data collected were part of an experiment or were simply observed. The simplest definition for observational data are those that were collected without strong consideration about who is or how the data are collected. One example of observational data could be collected information about the shoes that people wear as they are walking in a busy part of town. Given this type of data collected, what could be some limitations about this type of data? 
 
-To contrast observational data, experimental data are those in which care was taken to how the data were collected. 
+To contrast observational data, experimental data are those in which care was taken to how the data were collected. Within experimental data, it is common for there to be two or more conditions that are being explored. For example, in a clinical trial that is testing whether a vaccine or drug is effective and safe, the new vaccine or drug is often tested against a placebo. The placebo is a harmless substance that does not produce any change to the body, for example, the placebo could be a sugar pill that looks just like a new drug to be tested in every other way. The placebo would simply not contain the active ingredients of the new drug. 
+
+When conducting these experiments with two or more groups that are of interest to be compared, those who are participating in the study are randomly assigned or selected to be in one of the groups. Using the placebo vs new drug example, this would mean that each participant is randomly assigned to either receive the placebo or the new drug, but the participant does not know which one they are receiving. Often, those administering the treatment also do not know whether the placebo or active drug is being given as well. 
+
+### Explore Random Assignment
+How does the random assignment of individuals to treatment conditions change the design from an observational to an experimental design? The random process is really the primary differentiator between being an observational vs an experiment. The random assignment to each condition in the study has the ability to, on average, even out differences across the two groups. Since the inclusion of being in one of the two groups is random, if the study has enough participants, it is more likely for the two groups to be as equal as possible across all characteristics for the study participants. 
+
+What could random assignment look like in practice? More to come ... .
+
+
+### Example: Natural Experiments
 
 ## Data Structure
 
@@ -40,7 +50,7 @@ In this table, each row represents a unique person and the first column would re
 
 The final column of data in Table \@ref(tab:tabular) is one that represents the approximate height of each character, in inches ^[This is based on a search for the character name plus height, for example, "He-Man height."]. This attribute is different from the rest of the attributes in that it is a numeric quantity for each unit. Numeric quantities usually carry more information about magnitude differences compared to the text attributes described earlier. More explicitly, differences in the height attributes can be quantified and in this case, with the attribute being represented as the height in inches, each unit represents the same distance across the entire scale. That is, a one inch difference across the entire height scale is the same no matter where that inch occurs on the scale. These types of attributes will be used extensively in this text, most commonly these types of attributes will be used as the attribute of most interest in our analyses. For example, from the data above, it could be asked if there are differences in height of the characters based on if they are human or not. For this question, differences in height for those that are human (ie., human attribute = "Yes") compared to those that are not human (ie., human attribute = "No") would be used as the primary comparison. This text will explore questions like this from a descriptive and inferential framework later. 
 
-For these data, there are only three rows, but you could imagine adding more rows to these elements for other characters. More to come ...
+For these data, there are only three rows, but you could imagine adding more rows to these elements for other characters. For example, imagine adding a new row to this data for a rabbit. Take a few minutes to think about what a new row with the rabbit would look like for each column of Table \@ref(tab:tabular). Would any of the columns in the table change from a constant to now being a variable? 
 
 ### Non-tabular Data
 
