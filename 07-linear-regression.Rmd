@@ -27,7 +27,7 @@ us_weather <- mutate(us_weather, snow_factor = factor(snow),
                      snow_numeric = ifelse(snow == 'Yes', 1, 0))
 ```
 
-To provide a bit more context to the data, the station locations are shown below using the function `count(us_weather, location)` and shown in Table \@ref(tab:locations).
+To provide a bit more context to the data, the station locations are shown below using the function `count(us_weather, location)` and shown in Table \@ref(tab:locations). Various weather observations from these station locations were collected, including temperature, dewpoint, humidity, wind speed, precipitation type and amount, and other information. 
 
 ```{r locations, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 knitr::kable(
