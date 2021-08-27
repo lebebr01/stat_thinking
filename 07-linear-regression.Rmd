@@ -11,7 +11,7 @@ Linear regression and regression trees are both used when the outcome is continu
 
 ## Simple Regression continuous predictor
 ### Description of the Data
-These data contain information on mother's and baby's health for 1,174 pregnant women.
+These data contain information on weather from a variety of weather stations in the northern part of the United States during cooler months of the year (October to April). A total of 3400 observations are in the data, 425 observations from each station.
 
 ```{r weather-data, message = FALSE, error = FALSE, warning = FALSE}
 library(tidyverse)
@@ -27,6 +27,16 @@ us_weather <- mutate(us_weather, snow_factor = factor(snow),
                      snow_numeric = ifelse(snow == 'Yes', 1, 0))
 ```
 
+To provide a bit more context to the data, the station locations are shown below using the function `count(us_weather, location)` and shown in Table \@ref(tab:locations).
+
+```{r locations, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+knitr::kable(
+  count(us_weather, location),
+  caption = 'Station locations for the United States weather data'
+)
+```
+
+
 ### Scatterplots
 As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between the low temperature and the average daily dew point.^[Dew point is the temperature to which air must be cooled to become saturated with water vapor. [Wikipedia](https://en.wikipedia.org/wiki/Dew_point)]
 
@@ -41,7 +51,7 @@ Figure \@ref(fig:scatter-temp) shows the relationship between minimum temperatur
 
 To estimate as a single quantity the relationship between the two attributes, the correlation can be calculated with the `cor()` function with the primary argument being a formula depicting the two variables to compute the correlation. The optional argument, `use = 'complete.obs'` is used as there are some missing data on these attributes and these data are removed prior to the calculation. 
 
-```{r cor-baby}
+```{r cor-weather}
 cor(drybulbtemp_min ~ dewpoint_avg, data = us_weather, 
     use = 'complete.obs')
 ```
