@@ -10,6 +10,8 @@ jobs:
   bookdown:
     name: Render-Book
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.BOOKDOWN_DEPLOY }}
     steps:
       - uses: actions/checkout@v2.3.1
 
@@ -50,7 +52,6 @@ jobs:
      - name: Deploy to GitHub Pages
        uses: JamesIves/github-pages-deploy-action@4.1.4
        with:
-         GITHUB_TOKEN: ${{ secrets.BOOKDOWN_DEPLOY }}
          branch: gh-pages
          folder: docs
          clean: true
