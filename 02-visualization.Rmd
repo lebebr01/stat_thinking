@@ -146,8 +146,12 @@ We have created a custom theme to use in the `gf_theme()` function that we will 
 
 ```{r install-book-package, eval = FALSE}
 remotes::install_github('lebebr01/statthink')
+```
+
+```{r book-package}
 library(statthink)
 ```
+
 
 We can then change the theme in a similar manner to how we changed the theme before.
 
