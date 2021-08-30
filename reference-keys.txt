@@ -35,6 +35,7 @@ fig:cond-error-figure
 fig:two-attr-regtree
 fig:cond-error-compare
 fig:sat-eval-acc
+tab:locations
 fig:density-fruit-pop
 fig:resample-10k-density
 fig:resample-violin

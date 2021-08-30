@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Introduction | Statistical Reasoning through Computation and R</title>
-  <meta name="description" content="Chapter 1 Introduction | Statistical Reasoning through Computation and R" />
+  <title>Page not found | Statistical Reasoning through Computation and R</title>
+  <meta name="description" content="Page not found | Statistical Reasoning through Computation and R" />
   <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Introduction | Statistical Reasoning through Computation and R" />
+  <meta property="og:title" content="Page not found | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="true" />
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="lebebr01/stat_thinking" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Introduction | Statistical Reasoning through Computation and R" />
+  <meta name="twitter:title" content="Page not found | Statistical Reasoning through Computation and R" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="visualization.html"/>
+
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -310,89 +310,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>Here is an intro. And more.</p>
-<div id="statistics-vs-data-science" class="section level2">
-<h2><span class="header-section-number">1.1</span> Statistics vs Data Science</h2>
-</div>
-<div id="experiments-vs-observations" class="section level2">
-<h2><span class="header-section-number">1.2</span> Experiments vs Observations</h2>
-<p>The type of analysis that is relevant for a given problem depends on the experimental design. More generally, experimental design refers to how the data were collected. How the data were collected has implications for the type of conclusions that can be drawn from the data (ie., you may have heard the phrase, “correlation does not imply causation”) and the subsequent analysis. A extremely sophisticated analysis does not overcome limitations in how the data were collected.</p>
-<p>Given that how the data were collected greatly impacts the types of conclusions that can be drawn from the analysis, what are design features are important to consider? This topic is large, nuanced, and an entire series of courses have been created on this topic. The goal here is to think about some concepts that are particularly helpful to consider for any analysis.</p>
-<p>The discussion will be framed around articulating whether the data collected were part of an experiment or were simply observed. The simplest definition for observational data are those that were collected without strong consideration about who is or how the data are collected. One example of observational data could be collected information about the shoes that people wear as they are walking in a busy part of town. Given this type of data collected, what could be some limitations about this type of data?</p>
-<p>To contrast observational data, experimental data are those in which care was taken to how the data were collected. Within experimental data, it is common for there to be two or more conditions that are being explored. For example, in a clinical trial that is testing whether a vaccine or drug is effective and safe, the new vaccine or drug is often tested against a placebo. The placebo is a harmless substance that does not produce any change to the body, for example, the placebo could be a sugar pill that looks just like a new drug to be tested in every other way. The placebo would simply not contain the active ingredients of the new drug.</p>
-<p>When conducting these experiments with two or more groups that are of interest to be compared, those who are participating in the study are randomly assigned or selected to be in one of the groups. Using the placebo vs new drug example, this would mean that each participant is randomly assigned to either receive the placebo or the new drug, but the participant does not know which one they are receiving. Often, those administering the treatment also do not know whether the placebo or active drug is being given as well.</p>
-<div id="explore-random-assignment" class="section level3">
-<h3><span class="header-section-number">1.2.1</span> Explore Random Assignment</h3>
-<p>How does the random assignment of individuals to treatment conditions change the design from an observational to an experimental design? The random process is really the primary differentiator between being an observational vs an experiment. The random assignment to each condition in the study has the ability to, on average, even out differences across the two groups. Since the inclusion of being in one of the two groups is random, if the study has enough participants, it is more likely for the two groups to be as equal as possible across all characteristics for the study participants.</p>
-<p>What could random assignment look like in practice? More to come … .</p>
-</div>
-<div id="example-natural-experiments" class="section level3">
-<h3><span class="header-section-number">1.2.2</span> Example: Natural Experiments</h3>
-</div>
-</div>
-<div id="data-structure" class="section level2">
-<h2><span class="header-section-number">1.3</span> Data Structure</h2>
-<p>Data are often stored in tabular form for ease of use with common statistical programs, however data need not be in this structure. Data can come from anywhere and could consist of text, numbers representing some quantity, text labels representing groups, or many other formats. This section aims to give an introduction to the form and format of data, both common and uncommon.</p>
-<div id="tabular-data" class="section level3">
-<h3><span class="header-section-number">1.3.1</span> Tabular Data</h3>
-<p>Tabular data are those that are most commonly used in statistics courses. Tabular data are such that rows indicate unique cases of data and the columns represent different attributes for those cases. Table <a href="introduction.html#tab:tabular">1.1</a> shows the an example of tabular data.</p>
-<table>
-<caption><span id="tab:tabular">Table 1.1: </span>Example of tabular data.</caption>
-<thead>
-<tr class="header">
-<th align="left">name</th>
-<th align="left">human</th>
-<th align="left">fictional</th>
-<th align="right">height</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">He-Man</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="right">83</td>
-</tr>
-<tr class="even">
-<td align="left">She-Ra</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="right">96</td>
-</tr>
-<tr class="odd">
-<td align="left">Voltron</td>
-<td align="left">No</td>
-<td align="left">Yes</td>
-<td align="right">3936</td>
-</tr>
-</tbody>
-</table>
-<p>In this table, each row represents a unique person and the first column would represent the identifying attribute for each unique row. For example, the first row represents characteristics for He-Man and each subsequent column represents specific attributes about them. For example, the second and third columns are Yes/No attributes indicating if the person is human or fictional or not. What are the primary differences between the second and third columns? Notice that the third column, the fictional attribute, is one in which all elements in the current tabular data are the same value. This would be an attribute that does not vary across the different rows in the data. These attributes are not helpful from a statistical perspective in this small data set, but if more data were added in which some elements were not fictional, then this attribute would contain useful information. In statistics terminology, this type of attribute would be called a <strong>constant attribute</strong>. In statistics, we are interested in attributes that <strong>vary</strong> across our units in the data. Attributes that vary are often referred to as <strong>variables</strong> in statistics terminology. Throughout this textbook, the term attribute will be used instead of variable. An attribute will refer to a column of data that carries information about the units in the data.</p>
-<p>The final column of data in Table <a href="introduction.html#tab:tabular">1.1</a> is one that represents the approximate height of each character, in inches.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> This attribute is different from the rest of the attributes in that it is a numeric quantity for each unit. Numeric quantities usually carry more information about magnitude differences compared to the text attributes described earlier. More explicitly, differences in the height attributes can be quantified and in this case, with the attribute being represented as the height in inches, each unit represents the same distance across the entire scale. That is, a one inch difference across the entire height scale is the same no matter where that inch occurs on the scale. These types of attributes will be used extensively in this text, most commonly these types of attributes will be used as the attribute of most interest in our analyses. For example, from the data above, it could be asked if there are differences in height of the characters based on if they are human or not. For this question, differences in height for those that are human (ie., human attribute = “Yes”) compared to those that are not human (ie., human attribute = “No”) would be used as the primary comparison. This text will explore questions like this from a descriptive and inferential framework later.</p>
-<p>For these data, there are only three rows, but you could imagine adding more rows to these elements for other characters. For example, imagine adding a new row to this data for a rabbit. Take a few minutes to think about what a new row with the rabbit would look like for each column of Table <a href="introduction.html#tab:tabular">1.1</a>. Would any of the columns in the table change from a constant to now being a variable?</p>
-</div>
-<div id="non-tabular-data" class="section level3">
-<h3><span class="header-section-number">1.3.2</span> Non-tabular Data</h3>
-<p>Data can come in many different formats, this book will not extensively cover data that are not in a tabular format. However, non-tabular data are very common in practical problems. In these situations, these data are often wrangled into a more structured format to conduct a statistical analysis. Some common non-tabular data formats include data coming from text, video, audio, graphics, images, sensors, and even more.</p>
-
-</div>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>This is based on a search for the character name plus height, for example, “He-Man height.”<a href="introduction.html#fnref1" class="footnote-back">↩︎</a></p></li>
-</ol>
+<div id="page-not-found" class="section level1">
+<h1>Page not found</h1>
+<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
+<p>You may want to try searching to find the page's new location, or use
+the table of contents to find the page you are looking for.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="visualization.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

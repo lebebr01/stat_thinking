@@ -24,7 +24,7 @@ head(college_score)
 ```
 
 ```
-## # A tibble: 6 x 17
+## # A tibble: 6 × 17
 ##   instnm    city   stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
 ##   <chr>     <chr>  <chr>  <chr>   <chr>  <chr>     <dbl>    <dbl> <dbl>    <dbl>
 ## 1 Alabama … Normal AL     Bachel… South… City:…    0.903       18  4824    22886
@@ -67,12 +67,12 @@ resample_admrate()
 ```
 
 ```
-## # A tibble: 3 x 2
+## # A tibble: 3 × 2
 ##   term                      estimate
 ##   <chr>                        <dbl>
-## 1 (Intercept)                 0.716 
-## 2 preddegBachelor Degree     -0.0344
-## 3 preddegCertificate Degree   0.0357
+## 1 (Intercept)                 0.695 
+## 2 preddegBachelor Degree     -0.0197
+## 3 preddegCertificate Degree   0.0550
 ```
 
 

@@ -11,7 +11,7 @@ Linear regression and regression trees are both used when the outcome is continu
 
 ## Simple Regression continuous predictor
 ### Description of the Data
-These data contain information on mother's and baby's health for 1,174 pregnant women.
+These data contain information on weather from a variety of weather stations in the northern part of the United States during cooler months of the year (October to April). A total of 3400 observations are in the data, 425 observations from each station.
 
 
 ```r
@@ -27,6 +27,23 @@ theme_set(theme_statthinking())
 us_weather <- mutate(us_weather, snow_factor = factor(snow), 
                      snow_numeric = ifelse(snow == 'Yes', 1, 0))
 ```
+
+To provide a bit more context to the data, the station locations are shown below using the function `count(us_weather, location)` and shown in Table \@ref(tab:locations). Various weather observations from these station locations were collected, including temperature, dewpoint, humidity, wind speed, precipitation type and amount, and other information. 
+
+
+Table: (\#tab:locations)Station locations for the United States weather data
+
+|location        |   n|
+|:---------------|---:|
+|Boston, MA      | 425|
+|Buffalo, NY     | 425|
+|Chicago, IL     | 425|
+|Detroit, MI     | 425|
+|Duluth, MN      | 425|
+|Iowa City, IA   | 425|
+|Minneapolis, MN | 425|
+|Portland, ME    | 425|
+
 
 ### Scatterplots
 As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between the low temperature and the average daily dew point.^[Dew point is the temperature to which air must be cooled to become saturated with water vapor. [Wikipedia](https://en.wikipedia.org/wiki/Dew_point)]

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Estimation, Bootstrap and Uncertainty | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 8 Estimation, Bootstrap and Uncertainty | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Estimation, Bootstrap and Uncertainty | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-06-23" />
+<meta name="date" content="2021-08-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,7 @@
   
 <link rel="prev" href="linear-regression.html"/>
 <link rel="next" href="linear-regression-with-categorical-predictors.html"/>
-<script src="libs/header-attrs-2.9/header-attrs.js"></script>
-<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -51,6 +50,7 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
@@ -77,18 +77,18 @@
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -108,7 +108,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -159,46 +159,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a>
-<ul>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="introduction.html"><a href="introduction.html#explore-random-assignment"><i class="fa fa-check"></i><b>1.2.1</b> Explore Random Assignment</a></li>
 <li class="chapter" data-level="1.2.2" data-path="introduction.html"><a href="introduction.html#example-natural-experiments"><i class="fa fa-check"></i><b>1.2.2</b> Example: Natural Experiments</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a>
-<ul>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a><ul>
 <li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#tabular-data"><i class="fa fa-check"></i><b>1.3.1</b> Tabular Data</a></li>
 <li class="chapter" data-level="1.3.2" data-path="introduction.html"><a href="introduction.html#non-tabular-data"><i class="fa fa-check"></i><b>1.3.2</b> Non-tabular Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a>
-<ul>
+<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a><ul>
 <li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
 <li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
-<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a>
-<ul>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a><ul>
 <li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
 <li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a>
-<ul>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a><ul>
 <li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
 <li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
 <li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a>
-<ul>
+<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a>
-<ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a>
-<ul>
+<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
 <li class="chapter" data-level="3.3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#range"><i class="fa fa-check"></i><b>3.3.1</b> Range</a></li>
 <li class="chapter" data-level="3.3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#percentile-range"><i class="fa fa-check"></i><b>3.3.2</b> Percentile Range</a></li>
 <li class="chapter" data-level="3.3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#interquartile-range-iqr"><i class="fa fa-check"></i><b>3.3.3</b> Interquartile Range (IQR)</a></li>
@@ -208,68 +199,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-categorical-attributes"><i class="fa fa-check"></i><b>3.4</b> Summarizing Categorical Attributes</a></li>
 <li class="chapter" data-level="3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#advanced-extension-computing-your-own-measure-of-variation"><i class="fa fa-check"></i><b>3.5</b> Advanced Extension: Computing Your Own Measure of Variation</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-distributions"><i class="fa fa-check"></i><b>4.1</b> Multivariate Distributions</a>
-<ul>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
+<li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-distributions"><i class="fa fa-check"></i><b>4.1</b> Multivariate Distributions</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#histograms-1"><i class="fa fa-check"></i><b>4.1.1</b> Histograms</a></li>
 <li class="chapter" data-level="4.1.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#density-curves"><i class="fa fa-check"></i><b>4.1.2</b> Density Curves</a></li>
 <li class="chapter" data-level="4.1.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#violin-plots"><i class="fa fa-check"></i><b>4.1.3</b> Violin Plots</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#faceting"><i class="fa fa-check"></i><b>4.2</b> Faceting</a></li>
-<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-descriptive-statistics"><i class="fa fa-check"></i><b>4.3</b> Multivariate Descriptive Statistics</a>
-<ul>
+<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-descriptive-statistics"><i class="fa fa-check"></i><b>4.3</b> Multivariate Descriptive Statistics</a><ul>
 <li class="chapter" data-level="4.3.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.3.1</b> Adding additional groups</a></li>
 <li class="chapter" data-level="4.3.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-more-descriptive-statistics"><i class="fa fa-check"></i><b>4.3.2</b> Adding more descriptive statistics</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a>
-<ul>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.2</b> Accuracy</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="classification.html"><a href="classification.html#adding-categorical-attributes"><i class="fa fa-check"></i><b>5.2</b> Adding Categorical Attributes</a>
-<ul>
+<li class="chapter" data-level="5.2" data-path="classification.html"><a href="classification.html#adding-categorical-attributes"><i class="fa fa-check"></i><b>5.2</b> Adding Categorical Attributes</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="classification.html"><a href="classification.html#exploring-location"><i class="fa fa-check"></i><b>5.2.1</b> Exploring Location</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.3</b> Comparison to Baseline</a>
-<ul>
+<li class="chapter" data-level="5.3" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.3</b> Comparison to Baseline</a><ul>
 <li class="chapter" data-level="5.3.1" data-path="classification.html"><a href="classification.html#absolute-vs-relative-comparison"><i class="fa fa-check"></i><b>5.3.1</b> Absolute vs Relative Comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.4</b> Training/Test Data</a>
-<ul>
+<li class="chapter" data-level="5.4" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.4</b> Training/Test Data</a><ul>
 <li class="chapter" data-level="5.4.1" data-path="classification.html"><a href="classification.html#splitting-the-data-into-trainingtest"><i class="fa fa-check"></i><b>5.4.1</b> Splitting the data into training/test</a></li>
 <li class="chapter" data-level="5.4.2" data-path="classification.html"><a href="classification.html#evaluate-accuracy-on-the-testing-data"><i class="fa fa-check"></i><b>5.4.2</b> Evaluate accuracy on the testing data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="classification.html"><a href="classification.html#introduction-to-resamplingbootstrap"><i class="fa fa-check"></i><b>5.5</b> Introduction to Resampling/Bootstrap</a>
-<ul>
+<li class="chapter" data-level="5.5" data-path="classification.html"><a href="classification.html#introduction-to-resamplingbootstrap"><i class="fa fa-check"></i><b>5.5</b> Introduction to Resampling/Bootstrap</a><ul>
 <li class="chapter" data-level="5.5.1" data-path="classification.html"><a href="classification.html#bootstrap-variation-in-prediction-accuracy"><i class="fa fa-check"></i><b>5.5.1</b> Bootstrap variation in prediction accuracy</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="regression-trees.html"><a href="regression-trees.html"><i class="fa fa-check"></i><b>6</b> Regression Trees</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="regression-trees.html"><a href="regression-trees.html#predicting-act-score"><i class="fa fa-check"></i><b>6.1</b> Predicting ACT Score</a>
-<ul>
+<li class="chapter" data-level="6" data-path="regression-trees.html"><a href="regression-trees.html"><i class="fa fa-check"></i><b>6</b> Regression Trees</a><ul>
+<li class="chapter" data-level="6.1" data-path="regression-trees.html"><a href="regression-trees.html#predicting-act-score"><i class="fa fa-check"></i><b>6.1</b> Predicting ACT Score</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="regression-trees.html"><a href="regression-trees.html#loading-r-packages"><i class="fa fa-check"></i><b>6.1.1</b> Loading R packages</a></li>
 <li class="chapter" data-level="6.1.2" data-path="regression-trees.html"><a href="regression-trees.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.2</b> Visualize distributions</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="regression-trees.html"><a href="regression-trees.html#continuous-association"><i class="fa fa-check"></i><b>6.2</b> Continuous Association</a>
-<ul>
+<li class="chapter" data-level="6.2" data-path="regression-trees.html"><a href="regression-trees.html#continuous-association"><i class="fa fa-check"></i><b>6.2</b> Continuous Association</a><ul>
 <li class="chapter" data-level="6.2.1" data-path="regression-trees.html"><a href="regression-trees.html#correlation-computation"><i class="fa fa-check"></i><b>6.2.1</b> Correlation Computation</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="regression-trees.html"><a href="regression-trees.html#first-regression-tree"><i class="fa fa-check"></i><b>6.3</b> First Regression Tree</a></li>
-<li class="chapter" data-level="6.4" data-path="regression-trees.html"><a href="regression-trees.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.4</b> Evaluating accuracy</a>
-<ul>
+<li class="chapter" data-level="6.4" data-path="regression-trees.html"><a href="regression-trees.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.4</b> Evaluating accuracy</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="regression-trees.html"><a href="regression-trees.html#conditional-error"><i class="fa fa-check"></i><b>6.4.1</b> Conditional Error</a></li>
 </ul></li>
 <li class="chapter" data-level="6.5" data-path="regression-trees.html"><a href="regression-trees.html#adding-more-attributes"><i class="fa fa-check"></i><b>6.5</b> Adding more attributes</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>7</b> Linear Regression</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>7.1</b> Simple Regression continuous predictor</a>
-<ul>
+<li class="chapter" data-level="7" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>7</b> Linear Regression</a><ul>
+<li class="chapter" data-level="7.1" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>7.1</b> Simple Regression continuous predictor</a><ul>
 <li class="chapter" data-level="7.1.1" data-path="linear-regression.html"><a href="linear-regression.html#description-of-the-data"><i class="fa fa-check"></i><b>7.1.1</b> Description of the Data</a></li>
 <li class="chapter" data-level="7.1.2" data-path="linear-regression.html"><a href="linear-regression.html#scatterplots"><i class="fa fa-check"></i><b>7.1.2</b> Scatterplots</a></li>
 <li class="chapter" data-level="7.1.3" data-path="linear-regression.html"><a href="linear-regression.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>7.1.3</b> Fitting a linear regression model</a></li>
@@ -277,11 +253,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7.2" data-path="linear-regression.html"><a href="linear-regression.html#conditional-means"><i class="fa fa-check"></i><b>7.2</b> Conditional Means</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html"><i class="fa fa-check"></i><b>8</b> Estimation, Bootstrap and Uncertainty</a>
-<ul>
+<li class="chapter" data-level="8" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html"><i class="fa fa-check"></i><b>8</b> Estimation, Bootstrap and Uncertainty</a><ul>
 <li class="chapter" data-level="8.1" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#bootstrap-and-uncertainty"><i class="fa fa-check"></i><b>8.1</b> Bootstrap and Uncertainty</a></li>
-<li class="chapter" data-level="8.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#estimating-error-or-uncertainty"><i class="fa fa-check"></i><b>8.2</b> Estimating Error or uncertainty</a>
-<ul>
+<li class="chapter" data-level="8.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#estimating-error-or-uncertainty"><i class="fa fa-check"></i><b>8.2</b> Estimating Error or uncertainty</a><ul>
 <li class="chapter" data-level="8.2.1" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#resample-with-replacement"><i class="fa fa-check"></i><b>8.2.1</b> Resample with replacement</a></li>
 <li class="chapter" data-level="8.2.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#calculate-statistic-of-interest"><i class="fa fa-check"></i><b>8.2.2</b> Calculate statistic of interest</a></li>
 <li class="chapter" data-level="8.2.3" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#replicating-the-resamplingbootstrap"><i class="fa fa-check"></i><b>8.2.3</b> Replicating the resampling/bootstrap</a></li>
@@ -289,36 +263,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.5" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#determining-if-a-statistic-is-significant"><i class="fa fa-check"></i><b>8.2.5</b> Determining if a statistic is “significant”</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html"><i class="fa fa-check"></i><b>9</b> Linear Regression with Categorical Predictors</a>
-<ul>
-<li class="chapter" data-level="9.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#categorical-predictors"><i class="fa fa-check"></i><b>9.1</b> Categorical Predictor(s)</a>
-<ul>
+<li class="chapter" data-level="9" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html"><i class="fa fa-check"></i><b>9</b> Linear Regression with Categorical Predictors</a><ul>
+<li class="chapter" data-level="9.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#categorical-predictors"><i class="fa fa-check"></i><b>9.1</b> Categorical Predictor(s)</a><ul>
 <li class="chapter" data-level="9.1.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>9.1.1</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="9.1.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#inference"><i class="fa fa-check"></i><b>9.1.2</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#more-than-two-categorical-groups"><i class="fa fa-check"></i><b>9.2</b> More than two categorical groups</a>
-<ul>
+<li class="chapter" data-level="9.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#more-than-two-categorical-groups"><i class="fa fa-check"></i><b>9.2</b> More than two categorical groups</a><ul>
 <li class="chapter" data-level="9.2.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>9.2.1</b> Explore distribution 3 groups</a></li>
 <li class="chapter" data-level="9.2.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#linear-regression-with-three-categoriesgroups"><i class="fa fa-check"></i><b>9.2.2</b> Linear Regression with three categories/groups</a></li>
 <li class="chapter" data-level="9.2.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#inference-for-model-with-three-groups"><i class="fa fa-check"></i><b>9.2.3</b> Inference for model with three groups</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#exploring-model-fit"><i class="fa fa-check"></i><b>9.3</b> Exploring Model Fit</a>
-<ul>
+<li class="chapter" data-level="9.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#exploring-model-fit"><i class="fa fa-check"></i><b>9.3</b> Exploring Model Fit</a><ul>
 <li class="chapter" data-level="9.3.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#r-squared"><i class="fa fa-check"></i><b>9.3.1</b> R-Squared</a></li>
 <li class="chapter" data-level="9.3.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#residual-standard-error"><i class="fa fa-check"></i><b>9.3.2</b> Residual Standard Error</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#multiple-regression"><i class="fa fa-check"></i><b>9.4</b> Multiple Regression</a>
-<ul>
+<li class="chapter" data-level="9.4" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#multiple-regression"><i class="fa fa-check"></i><b>9.4</b> Multiple Regression</a><ul>
 <li class="chapter" data-level="9.4.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#distribution-of-effects"><i class="fa fa-check"></i><b>9.4.1</b> Distribution of Effects</a></li>
 <li class="chapter" data-level="9.4.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#interactions"><i class="fa fa-check"></i><b>9.4.2</b> Interactions</a></li>
 <li class="chapter" data-level="9.4.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#evaluating-model-fit"><i class="fa fa-check"></i><b>9.4.3</b> Evaluating model fit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>10</b> Prediction for individuals</a>
-<ul>
+<li class="chapter" data-level="10" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>10</b> Prediction for individuals</a><ul>
 <li class="chapter" data-level="10.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>10.1</b> Comparison of classification / linear model</a></li>
-<li class="chapter" data-level="10.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>10.2</b> Compared linear model with median</a>
-<ul>
+<li class="chapter" data-level="10.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>10.2</b> Compared linear model with median</a><ul>
 <li class="chapter" data-level="10.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>10.2.1</b> Skewed Data - Inference</a></li>
 <li class="chapter" data-level="10.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>10.2.2</b> Bootstrap Median</a></li>
 </ul></li>
@@ -343,28 +310,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="estimation-bootstrap-and-uncertainty" class="section level1" number="8">
+<div id="estimation-bootstrap-and-uncertainty" class="section level1">
 <h1><span class="header-section-number">Chapter 8</span> Estimation, Bootstrap and Uncertainty</h1>
 <p>This section will explore how the estimates for the linear regression model are obtained. Within this section the characteristics of those estimates and the assumptions for the linear regression model will be explored.</p>
 <p>To come …</p>
-<div id="bootstrap-and-uncertainty" class="section level2" number="8.1">
+<div id="bootstrap-and-uncertainty" class="section level2">
 <h2><span class="header-section-number">8.1</span> Bootstrap and Uncertainty</h2>
 <p>Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. This is needed as it is most common to have a subset of the entire population rather than the entire population, therefore the model estimates are approximations of the true population parameters. If another sample of data were obtained, the model estimates would be different from the previous sample. This would occur due to different individuals comprised within the sample.</p>
 <p>The goal of a good sample is to be able to get good estimates of the population parameters of interest. This happens when the sample obtained is as representative as possible of the population, most notably this can be gathered by collected the sample using a random process or ensuring that everyone in the population has the same random chance of being selected to be in the population. This is more challenging than one would expect where practical issues can often tarnish a good sampling plan. For instance, a portion of the population of interest may be difficult to gain access to or a portion of the population may be less likely to participate. These issues could bias the sample to be dissimilar from the population. For this book, we are going to assume that a representative sample is obtained from the population, but this needs to always be explored compared whenever data is gathered.</p>
 <p>For this chapter, the United States (US) weather data will be used again. The following code chunk loads the packages used in this chapter, sets the figure theme, and creates a few new attributes for the US weather data.</p>
-<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="estimation-bootstrap-and-uncertainty.html#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb197-2"><a href="estimation-bootstrap-and-uncertainty.html#cb197-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
-<span id="cb197-3"><a href="estimation-bootstrap-and-uncertainty.html#cb197-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span>
-<span id="cb197-4"><a href="estimation-bootstrap-and-uncertainty.html#cb197-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb197-5"><a href="estimation-bootstrap-and-uncertainty.html#cb197-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
-<span id="cb197-6"><a href="estimation-bootstrap-and-uncertainty.html#cb197-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb197-7"><a href="estimation-bootstrap-and-uncertainty.html#cb197-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
-<span id="cb197-8"><a href="estimation-bootstrap-and-uncertainty.html#cb197-8" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>())</span>
-<span id="cb197-9"><a href="estimation-bootstrap-and-uncertainty.html#cb197-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb197-10"><a href="estimation-bootstrap-and-uncertainty.html#cb197-10" aria-hidden="true" tabindex="-1"></a>us_weather <span class="ot">&lt;-</span> <span class="fu">mutate</span>(us_weather, <span class="at">snow_factor =</span> <span class="fu">factor</span>(snow), </span>
-<span id="cb197-11"><a href="estimation-bootstrap-and-uncertainty.html#cb197-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">snow_numeric =</span> <span class="fu">ifelse</span>(snow <span class="sc">==</span> <span class="st">&#39;Yes&#39;</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="estimation-bootstrap-and-uncertainty.html#cb197-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb197-2"><a href="estimation-bootstrap-and-uncertainty.html#cb197-2"></a><span class="kw">library</span>(ggformula)</span>
+<span id="cb197-3"><a href="estimation-bootstrap-and-uncertainty.html#cb197-3"></a><span class="kw">library</span>(mosaic)</span>
+<span id="cb197-4"><a href="estimation-bootstrap-and-uncertainty.html#cb197-4"></a><span class="kw">library</span>(broom)</span>
+<span id="cb197-5"><a href="estimation-bootstrap-and-uncertainty.html#cb197-5"></a><span class="kw">library</span>(statthink)</span>
+<span id="cb197-6"><a href="estimation-bootstrap-and-uncertainty.html#cb197-6"></a></span>
+<span id="cb197-7"><a href="estimation-bootstrap-and-uncertainty.html#cb197-7"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb197-8"><a href="estimation-bootstrap-and-uncertainty.html#cb197-8"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())</span>
+<span id="cb197-9"><a href="estimation-bootstrap-and-uncertainty.html#cb197-9"></a></span>
+<span id="cb197-10"><a href="estimation-bootstrap-and-uncertainty.html#cb197-10"></a>us_weather &lt;-<span class="st"> </span><span class="kw">mutate</span>(us_weather, <span class="dt">snow_factor =</span> <span class="kw">factor</span>(snow), </span>
+<span id="cb197-11"><a href="estimation-bootstrap-and-uncertainty.html#cb197-11"></a>                     <span class="dt">snow_numeric =</span> <span class="kw">ifelse</span>(snow <span class="op">==</span><span class="st"> &#39;Yes&#39;</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div>
 </div>
-<div id="estimating-error-or-uncertainty" class="section level2" number="8.2">
+<div id="estimating-error-or-uncertainty" class="section level2">
 <h2><span class="header-section-number">8.2</span> Estimating Error or uncertainty</h2>
 <p>To get some sense of the amount of error in the estimate of the linear slope, a bootstrap or resampling can be done to provide evidence for the likely range of slope values. This is an empirical approach to estimating uncertainty and the sampling process will be simulated many times. Upon every new data after resampling, the estimate for the linear slope will be estimated. The bootstrap/resampling will take the following general steps:</p>
 <ol style="list-style-type: decimal">
@@ -374,15 +341,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Repeat steps 1 - 3 many times</li>
 <li>Explore the distribution of the coefficient from the many resampled data sets.</li>
 </ol>
-<div id="resample-with-replacement" class="section level3" number="8.2.1">
+<div id="resample-with-replacement" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> Resample with replacement</h3>
 <p>Resampling the data with replacement, is the step in the bootstrap/resampling procedure that is needed to ensure that the estimates obtained are accurate and that there are different samples obtained throughout the process. Before moving on, this idea is worth expanding on to understand the differences and what exactly sampling with replacement means.</p>
 <p>To do this, a simple example of fruit names will be used. An object is created with code below that has 7 fruits in it. The data also contain a made up popularity measure that shows how much individuals like each fruit. These are also printed to show that these elements each show up in the object exactly one time.</p>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="estimation-bootstrap-and-uncertainty.html#cb198-1" aria-hidden="true" tabindex="-1"></a>fruit <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb198-2"><a href="estimation-bootstrap-and-uncertainty.html#cb198-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&#39;apple&#39;</span>, <span class="st">&#39;banana&#39;</span>, <span class="st">&#39;kiwi&#39;</span>, <span class="st">&#39;orange&#39;</span>, <span class="st">&#39;plum&#39;</span>, <span class="st">&#39;pear&#39;</span>, <span class="st">&#39;kumquat&#39;</span>),</span>
-<span id="cb198-3"><a href="estimation-bootstrap-and-uncertainty.html#cb198-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">popularity =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">2</span>)</span>
-<span id="cb198-4"><a href="estimation-bootstrap-and-uncertainty.html#cb198-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb198-5"><a href="estimation-bootstrap-and-uncertainty.html#cb198-5" aria-hidden="true" tabindex="-1"></a>fruit</span></code></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="estimation-bootstrap-and-uncertainty.html#cb198-1"></a>fruit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb198-2"><a href="estimation-bootstrap-and-uncertainty.html#cb198-2"></a>  <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&#39;apple&#39;</span>, <span class="st">&#39;banana&#39;</span>, <span class="st">&#39;kiwi&#39;</span>, <span class="st">&#39;orange&#39;</span>, <span class="st">&#39;plum&#39;</span>, <span class="st">&#39;pear&#39;</span>, <span class="st">&#39;kumquat&#39;</span>),</span>
+<span id="cb198-3"><a href="estimation-bootstrap-and-uncertainty.html#cb198-3"></a>  <span class="dt">popularity =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">2</span>)</span>
+<span id="cb198-4"><a href="estimation-bootstrap-and-uncertainty.html#cb198-4"></a>)</span>
+<span id="cb198-5"><a href="estimation-bootstrap-and-uncertainty.html#cb198-5"></a>fruit</span></code></pre></div>
 <pre><code>##     names popularity
 ## 1   apple         10
 ## 2  banana         25
@@ -395,8 +362,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For sampling with replacement, the single fruit that was selected will then be placed back into the hat or box. Once the selected fruit is returned, the individual would again reach in to select another fruit at random. The fruit would then be returned to the hat or box and the individual would select another fruit at random. This process would be repeated until the same size as the original data, in this case 7 fruits, were selected randomly.</p>
 <p>For sampling without replacement, the process is similar, except that when a fruit is selected from the box or hat it is not placed back to potentially be selected again. For example, if on the first selection with the 7 original fruit in the hat, an individual selects the kiwi, then this kiwi would not go back into the hat and could not be selected another time.</p>
 <p>Using the fruit example above, the <code>sample_n()</code> function can be used to generate random samples. The default behavior of this function is to do sampling without replacement. The primary argument for the function is the data to sample from and the second argument is the number of samples to perform. In this case, the number of samples will want to match the number of elements in the original data. The <code>replace = FALSE</code> is an explicit way to specify that the sampling should be done without replacement.</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="estimation-bootstrap-and-uncertainty.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">50</span>)</span>
-<span id="cb200-2"><a href="estimation-bootstrap-and-uncertainty.html#cb200-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(fruit, <span class="dv">7</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="estimation-bootstrap-and-uncertainty.html#cb200-1"></a><span class="kw">set.seed</span>(<span class="dv">50</span>)</span>
+<span id="cb200-2"><a href="estimation-bootstrap-and-uncertainty.html#cb200-2"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>##     names popularity
 ## 1    kiwi          5
 ## 2  orange         15
@@ -407,7 +374,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 7    pear          8</code></pre>
 <p>Notice that the data each show up 1 time, just like the original sample, however, the data are in a different order. This order is the order that the sampling algorithm selected each element, namely, the kiwi was selected first, then the orange, then the banana, and so on.</p>
 <p>Sampling with replacement is now shown below and is specified by saying, <code>replace = TRUE</code>. The process is done twice to show what happens if</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="estimation-bootstrap-and-uncertainty.html#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(fruit, <span class="dv">7</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="estimation-bootstrap-and-uncertainty.html#cb202-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##    names popularity
 ## 1 orange         15
 ## 2 banana         25
@@ -416,7 +383,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 5   plum          5
 ## 6   kiwi          5
 ## 7 orange         15</code></pre>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="estimation-bootstrap-and-uncertainty.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(fruit, <span class="dv">7</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="estimation-bootstrap-and-uncertainty.html#cb204-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##     names popularity
 ## 1  banana         25
 ## 2 kumquat          2
@@ -428,46 +395,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>First, notice that each time the sampling algorithm is ran, a different set of fruits are returned. Also, notice that for each time, there are more than 1 of some of the fruit and some of the fruit do not show up. For example, in the first resampling with replacement, the orange, kiwi, and plum each show up 2 times, the banana shows up once and the remaining fruit do not show up. For the second resampling with replacement, the banana and kumquat show up 2 times and the plum, orange, and apple each show up 1 time, but the other two fruit do not show up. This is how sampling with replacement works and differs from sampling without replacement here, namely, each element could show up more than one time and that each time the sampling algorithm is performed, a different sample is obtained.</p>
 <p>Sampling without replacement is commonly done for the selection of subjects from a population of interest. However, this procedure would not work well for the bootstrap/resampling procedure to estimate uncertainty because sampling with replacement would always produce the same sample. That is, each element of the original sample would be selected 1 time, therefore, the sample would be the same every time and the estimated statistic of interest would always be the same. This will be explored more in the next section.</p>
 </div>
-<div id="calculate-statistic-of-interest" class="section level3" number="8.2.2">
+<div id="calculate-statistic-of-interest" class="section level3">
 <h3><span class="header-section-number">8.2.2</span> Calculate statistic of interest</h3>
 <p>If these elements are saved, we could also compute the mean of the popularity column. This would represent The mean of the original sample is 10. Performing sampling without replacement, the mean will be the same as the elements within the sample will be the same as the original sample. Notice that the mean computed below with the <code>df_stats()</code> function is the same as the original data.</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="estimation-bootstrap-and-uncertainty.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">50</span>)</span>
-<span id="cb206-2"><a href="estimation-bootstrap-and-uncertainty.html#cb206-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb206-3"><a href="estimation-bootstrap-and-uncertainty.html#cb206-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(fruit, <span class="dv">7</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb206-4"><a href="estimation-bootstrap-and-uncertainty.html#cb206-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> popularity, mean)</span></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="estimation-bootstrap-and-uncertainty.html#cb206-1"></a><span class="kw">set.seed</span>(<span class="dv">50</span>)</span>
+<span id="cb206-2"><a href="estimation-bootstrap-and-uncertainty.html#cb206-2"></a></span>
+<span id="cb206-3"><a href="estimation-bootstrap-and-uncertainty.html#cb206-3"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb206-4"><a href="estimation-bootstrap-and-uncertainty.html#cb206-4"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
 <pre><code>##     response mean
 ## 1 popularity   10</code></pre>
-<p>However, performing sampling with replacement, these means will differ as the elements within the sample will differ. Notice below that both means are slightly larger than 10, but more importantly they differ from the original sample mean. These represent 2 of a total 8.23543^{5} total resampled values that could be obtained. Even though this is almost a million possible resampled data samples that could be obtained, we can get a large number of these to see how much variation there can be in these statistics.</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="estimation-bootstrap-and-uncertainty.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(fruit, <span class="dv">7</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb208-2"><a href="estimation-bootstrap-and-uncertainty.html#cb208-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> popularity, mean)</span></code></pre></div>
+<p>However, performing sampling with replacement, these means will differ as the elements within the sample will differ. Notice below that both means are slightly larger than 10, but more importantly they differ from the original sample mean. These represent 2 of a total 8.2354310^{5} total resampled values that could be obtained. Even though this is almost a million possible resampled data samples that could be obtained, we can get a large number of these to see how much variation there can be in these statistics.</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="estimation-bootstrap-and-uncertainty.html#cb208-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb208-2"><a href="estimation-bootstrap-and-uncertainty.html#cb208-2"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
 <pre><code>##     response     mean
 ## 1 popularity 10.71429</code></pre>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="estimation-bootstrap-and-uncertainty.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(fruit, <span class="dv">7</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb210-2"><a href="estimation-bootstrap-and-uncertainty.html#cb210-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> popularity, mean)</span></code></pre></div>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="estimation-bootstrap-and-uncertainty.html#cb210-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb210-2"><a href="estimation-bootstrap-and-uncertainty.html#cb210-2"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
 <pre><code>##     response mean
 ## 1 popularity   12</code></pre>
 </div>
-<div id="replicating-the-resamplingbootstrap" class="section level3" number="8.2.3">
+<div id="replicating-the-resamplingbootstrap" class="section level3">
 <h3><span class="header-section-number">8.2.3</span> Replicating the resampling/bootstrap</h3>
 <p>The process of resampling without replacement and computing the statistic of interest can be combined into a single operation by creating a function that does both steps at once. This function does those steps in the second and third line of the function. You could read this function as the following, first take the data, then do the resampling of the same length (ie., number of observation) and with replacement, and finally compute the mean of the popularity attribute.</p>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="estimation-bootstrap-and-uncertainty.html#cb212-1" aria-hidden="true" tabindex="-1"></a>fruit_boot <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb212-2"><a href="estimation-bootstrap-and-uncertainty.html#cb212-2" aria-hidden="true" tabindex="-1"></a>  fruit <span class="sc">%&gt;%</span></span>
-<span id="cb212-3"><a href="estimation-bootstrap-and-uncertainty.html#cb212-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(fruit), <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb212-4"><a href="estimation-bootstrap-and-uncertainty.html#cb212-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">df_stats</span>(<span class="sc">~</span> popularity, mean)</span>
-<span id="cb212-5"><a href="estimation-bootstrap-and-uncertainty.html#cb212-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="estimation-bootstrap-and-uncertainty.html#cb212-1"></a>fruit_boot &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb212-2"><a href="estimation-bootstrap-and-uncertainty.html#cb212-2"></a>  fruit <span class="op">%&gt;%</span></span>
+<span id="cb212-3"><a href="estimation-bootstrap-and-uncertainty.html#cb212-3"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(fruit), <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb212-4"><a href="estimation-bootstrap-and-uncertainty.html#cb212-4"></a><span class="st">    </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span>
+<span id="cb212-5"><a href="estimation-bootstrap-and-uncertainty.html#cb212-5"></a>}</span></code></pre></div>
 <p>The resampling procedure can then be replicated a single time by calling this function directly. The function does not need an argument, rather the function directly calls the fruit data and the popularity attribute. Some additional programming would be needed to generalize this resampling/bootstrap function to work on other data. To show that the function is working as intended, that is sampling with replacement, the function is ran twice.</p>
-<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="estimation-bootstrap-and-uncertainty.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fruit_boot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="estimation-bootstrap-and-uncertainty.html#cb213-1"></a><span class="kw">fruit_boot</span>()</span></code></pre></div>
 <pre><code>##     response     mean
 ## 1 popularity 14.71429</code></pre>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="estimation-bootstrap-and-uncertainty.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fruit_boot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="estimation-bootstrap-and-uncertainty.html#cb215-1"></a><span class="kw">fruit_boot</span>()</span></code></pre></div>
 <pre><code>##     response     mean
 ## 1 popularity 10.57143</code></pre>
 <p>Different mean values are generated, suggesting that the sampling with replacement is working properly. Compiling the different mean values would be tedious to do by hand, fortunately, the function can be replicated many times using the computer with the <code>map_dfr()</code> function. This function takes the number of times to be replicated in the form of <code>1:replications</code> where <code>replications</code> is replaced with the number of times to replicate the function.</p>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="estimation-bootstrap-and-uncertainty.html#cb217-1" aria-hidden="true" tabindex="-1"></a>popularity_stats <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, fruit_boot)</span></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="estimation-bootstrap-and-uncertainty.html#cb217-1"></a>popularity_stats &lt;-<span class="st"> </span><span class="kw">map_dfr</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, fruit_boot)</span></code></pre></div>
 <p>Once these are generated, the distribution of the mean fruit popularity can directly be shown using a density curve. Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:density-fruit-pop">8.1</a> shows this distribution which has a minimum value of 3.29 to a maximum value of ’r round(max(popularity_stats$mean), 2)` with a mean of 9.97. This indicates a range of possible values that the mean fruit popularity falls and helps to estimate the amount of uncertainty in the statistic of interest. In general, ranges that are smaller indicate less uncertainty and more accurate estimate for the statistic of interest. However, the overall range of a distribution can be misleading and by itself is not a great measure of variation. As can be seen in Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:density-fruit-pop">8.1</a>, there is a slight positive skew in the distribution, therefore other statistics of variation are often better to truly represent the variation in the distribution.</p>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="estimation-bootstrap-and-uncertainty.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> mean, <span class="at">data =</span> popularity_stats) <span class="sc">%&gt;%</span></span>
-<span id="cb218-2"><a href="estimation-bootstrap-and-uncertainty.html#cb218-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Mean Popularity&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:density-fruit-pop"></span>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="estimation-bootstrap-and-uncertainty.html#cb218-1"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean, <span class="dt">data =</span> popularity_stats) <span class="op">%&gt;%</span></span>
+<span id="cb218-2"><a href="estimation-bootstrap-and-uncertainty.html#cb218-2"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Mean Popularity&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:density-fruit-pop"></span>
 <img src="08-estimation_files/figure-html/density-fruit-pop-1.png" alt="Density curve of the mean fruit popularity based on 10,000 resampled data sets." width="672" />
 <p class="caption">
 Figure 8.1: Density curve of the mean fruit popularity based on 10,000 resampled data sets.
@@ -475,11 +442,11 @@ Figure 8.1: Density curve of the mean fruit popularity based on 10,000 resampled
 </div>
 <p>These statistics could be the IQR, standard deviation, or differences between other percentiles that are deemed meaningful (ie., the difference between the 10th and 90th percentiles). In these metric, the amount of variation would be, IQR = 3.71, SD = 2.72, and difference between 10th and 90th percentiles = 7. These would be a better representation of the amount of uncertainty for this distribution and represent the range of plausible values for the distribution. For example, the SD shows that the on average most of the mean fruit popularity statistics would fall about 2.72 units away from the mean of 9.97.</p>
 </div>
-<div id="linear-regression-bootstrapresampling-example" class="section level3" number="8.2.4">
+<div id="linear-regression-bootstrapresampling-example" class="section level3">
 <h3><span class="header-section-number">8.2.4</span> Linear regression bootstrap/resampling example</h3>
 <p>An example of using the bootstrap/resampling methods with the US weather data will be explored next. In chapter 7, the minimum temperature was predicted or explained using the average daily dew point. As a reminder, here is the model again. Recall that the intercept here represents the average minimum temperature (in Fahrenheit) for an average daily dew point of 0 and that the slope term is the average increase in minimum temperature for every one unit increase in the average daily dew point.</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="estimation-bootstrap-and-uncertainty.html#cb219-1" aria-hidden="true" tabindex="-1"></a>temp_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> dewpoint_avg, <span class="at">data =</span> us_weather)</span>
-<span id="cb219-2"><a href="estimation-bootstrap-and-uncertainty.html#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(temp_lm)</span></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="estimation-bootstrap-and-uncertainty.html#cb219-1"></a>temp_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>dewpoint_avg, <span class="dt">data =</span> us_weather)</span>
+<span id="cb219-2"><a href="estimation-bootstrap-and-uncertainty.html#cb219-2"></a><span class="kw">coef</span>(temp_lm)</span></code></pre></div>
 <pre><code>##  (Intercept) dewpoint_avg 
 ##    4.8343103    0.8999469</code></pre>
 <p>The one element that was not explored in Chapter 7 is the amount of uncertainty, error, or variation in these estimates from the linear regression model. As shown in this chapter, the bootstrap or resampling methods can be an empirical way to try to capture the uncertainty. The steps to conduct the bootstrap or resample in this situation will be as follows.</p>
@@ -491,53 +458,53 @@ Figure 8.1: Density curve of the mean fruit popularity based on 10,000 resampled
 <li>Visualize distribution of save regression coefficients across replications</li>
 </ol>
 <p>The following function aims to do steps 1 through 3 above. First, it resamples the data with replacement of the same size as the original data. Then, using the resampled data, the linear regression model is fitted and the model coefficients are saved. The function is also ran one time to show the estimated coefficients from the resampled data. Notice how these differ from the regression model fitted above to the original data, why do these differ here?</p>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="estimation-bootstrap-and-uncertainty.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
-<span id="cb221-2"><a href="estimation-bootstrap-and-uncertainty.html#cb221-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb221-3"><a href="estimation-bootstrap-and-uncertainty.html#cb221-3" aria-hidden="true" tabindex="-1"></a>resample_weather <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb221-4"><a href="estimation-bootstrap-and-uncertainty.html#cb221-4" aria-hidden="true" tabindex="-1"></a>  weather_resample <span class="ot">&lt;-</span> us_weather <span class="sc">%&gt;%</span></span>
-<span id="cb221-5"><a href="estimation-bootstrap-and-uncertainty.html#cb221-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="fu">nrow</span>(us_weather), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb221-6"><a href="estimation-bootstrap-and-uncertainty.html#cb221-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb221-7"><a href="estimation-bootstrap-and-uncertainty.html#cb221-7" aria-hidden="true" tabindex="-1"></a>  weather_resample <span class="sc">%&gt;%</span></span>
-<span id="cb221-8"><a href="estimation-bootstrap-and-uncertainty.html#cb221-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(drybulbtemp_min <span class="sc">~</span> dewpoint_avg, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb221-9"><a href="estimation-bootstrap-and-uncertainty.html#cb221-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coef</span>(.) <span class="sc">%&gt;%</span></span>
-<span id="cb221-10"><a href="estimation-bootstrap-and-uncertainty.html#cb221-10" aria-hidden="true" tabindex="-1"></a>    broom<span class="sc">::</span><span class="fu">tidy</span>()</span>
-<span id="cb221-11"><a href="estimation-bootstrap-and-uncertainty.html#cb221-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb221-12"><a href="estimation-bootstrap-and-uncertainty.html#cb221-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb221-13"><a href="estimation-bootstrap-and-uncertainty.html#cb221-13" aria-hidden="true" tabindex="-1"></a><span class="fu">resample_weather</span>()</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 2
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="estimation-bootstrap-and-uncertainty.html#cb221-1"></a><span class="kw">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb221-2"><a href="estimation-bootstrap-and-uncertainty.html#cb221-2"></a></span>
+<span id="cb221-3"><a href="estimation-bootstrap-and-uncertainty.html#cb221-3"></a>resample_weather &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb221-4"><a href="estimation-bootstrap-and-uncertainty.html#cb221-4"></a>  weather_resample &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span></span>
+<span id="cb221-5"><a href="estimation-bootstrap-and-uncertainty.html#cb221-5"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(us_weather), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb221-6"><a href="estimation-bootstrap-and-uncertainty.html#cb221-6"></a></span>
+<span id="cb221-7"><a href="estimation-bootstrap-and-uncertainty.html#cb221-7"></a>  weather_resample <span class="op">%&gt;%</span></span>
+<span id="cb221-8"><a href="estimation-bootstrap-and-uncertainty.html#cb221-8"></a><span class="st">    </span><span class="kw">lm</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>dewpoint_avg, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb221-9"><a href="estimation-bootstrap-and-uncertainty.html#cb221-9"></a><span class="st">    </span><span class="kw">coef</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb221-10"><a href="estimation-bootstrap-and-uncertainty.html#cb221-10"></a><span class="st">    </span>broom<span class="op">::</span><span class="kw">tidy</span>()</span>
+<span id="cb221-11"><a href="estimation-bootstrap-and-uncertainty.html#cb221-11"></a>}</span>
+<span id="cb221-12"><a href="estimation-bootstrap-and-uncertainty.html#cb221-12"></a></span>
+<span id="cb221-13"><a href="estimation-bootstrap-and-uncertainty.html#cb221-13"></a><span class="kw">resample_weather</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
 ##   names            x
 ##   &lt;chr&gt;        &lt;dbl&gt;
 ## 1 (Intercept)  4.80 
 ## 2 dewpoint_avg 0.904</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times with the <code>map_dfr()</code> function. In this example, the resampling is done 10,000 times and the coefficients from each of those are saved. The distribution for the intercept and the linear slope are visualized with density curves in Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:resample-10k-density">8.2</a>. This figure shows that the regression slopes (right-most) figure, are distributed closely together with most of the slopes ranging from about 0.89 to 0.91. There are some that are smaller than 0.89 or larger than 0.91, but these occur less frequently than between those two values. A similar interpretation can be made for the intercept where the majority of the intercepts fall between about 4.5 and 5.25 or so.</p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="estimation-bootstrap-and-uncertainty.html#cb223-1" aria-hidden="true" tabindex="-1"></a>weather_coef <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, resample_weather)</span>
-<span id="cb223-2"><a href="estimation-bootstrap-and-uncertainty.html#cb223-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb223-3"><a href="estimation-bootstrap-and-uncertainty.html#cb223-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> x, <span class="at">data =</span> weather_coef) <span class="sc">%&gt;%</span></span>
-<span id="cb223-4"><a href="estimation-bootstrap-and-uncertainty.html#cb223-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> names, <span class="at">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb223-5"><a href="estimation-bootstrap-and-uncertainty.html#cb223-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Regression Estimates&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:resample-10k-density"></span>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="estimation-bootstrap-and-uncertainty.html#cb223-1"></a>weather_coef &lt;-<span class="st"> </span><span class="kw">map_dfr</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_weather)</span>
+<span id="cb223-2"><a href="estimation-bootstrap-and-uncertainty.html#cb223-2"></a></span>
+<span id="cb223-3"><a href="estimation-bootstrap-and-uncertainty.html#cb223-3"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> weather_coef) <span class="op">%&gt;%</span></span>
+<span id="cb223-4"><a href="estimation-bootstrap-and-uncertainty.html#cb223-4"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>names, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb223-5"><a href="estimation-bootstrap-and-uncertainty.html#cb223-5"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Regression Estimates&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:resample-10k-density"></span>
 <img src="08-estimation_files/figure-html/resample-10k-density-1.png" alt="Distribution of regression coefficients from the bootstrapped samples." width="672" />
 <p class="caption">
 Figure 8.2: Distribution of regression coefficients from the bootstrapped samples.
 </p>
 </div>
 <p>To get a more accurate sense of where notable percentiles are found, these can be computed with the <code>df_stats()</code> function directly. The <code>quantile()</code> function helps compute the percentiles of interest with the 5th, 50th (median), and 95th percentiles asked for in the code shown below. The difference between the 95th and 5th percentiles gives evidence for where the majority of the regression coefficients fall. These could be shown using violin plots for a visual depiction of the distributions with percentiles (see Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:resample-violin">8.3</a>.</p>
-<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="estimation-bootstrap-and-uncertainty.html#cb224-1" aria-hidden="true" tabindex="-1"></a>weather_coef <span class="sc">%&gt;%</span></span>
-<span id="cb224-2"><a href="estimation-bootstrap-and-uncertainty.html#cb224-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(x <span class="sc">~</span> names, <span class="fu">quantile</span>(<span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="estimation-bootstrap-and-uncertainty.html#cb224-1"></a>weather_coef <span class="op">%&gt;%</span></span>
+<span id="cb224-2"><a href="estimation-bootstrap-and-uncertainty.html#cb224-2"></a><span class="st">  </span><span class="kw">df_stats</span>(x <span class="op">~</span><span class="st"> </span>names, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
 <pre><code>##   response        names        5%       50%       95%
 ## 1        x  (Intercept) 4.3562898 4.8390742 5.3250096
 ## 2        x dewpoint_avg 0.8844869 0.8997507 0.9149627</code></pre>
-<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="estimation-bootstrap-and-uncertainty.html#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_violin</span>(x <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> weather_coef, <span class="at">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="at">draw_quantiles =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb226-2"><a href="estimation-bootstrap-and-uncertainty.html#cb226-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_facet_wrap</span>(<span class="sc">~</span> names, <span class="at">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb226-3"><a href="estimation-bootstrap-and-uncertainty.html#cb226-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">coord_flip</span>())</span></code></pre></div>
-<div class="figure"><span id="fig:resample-violin"></span>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="estimation-bootstrap-and-uncertainty.html#cb226-1"></a><span class="kw">gf_violin</span>(x <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> weather_coef, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb226-2"><a href="estimation-bootstrap-and-uncertainty.html#cb226-2"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>names, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb226-3"><a href="estimation-bootstrap-and-uncertainty.html#cb226-3"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:resample-violin"></span>
 <img src="08-estimation_files/figure-html/resample-violin-1.png" alt="Violin plots showing the distribution of regression coefficients from the bootstrapped samples, with percentiles." width="672" />
 <p class="caption">
 Figure 8.3: Violin plots showing the distribution of regression coefficients from the bootstrapped samples, with percentiles.
 </p>
 </div>
 </div>
-<div id="determining-if-a-statistic-is-significant" class="section level3" number="8.2.5">
+<div id="determining-if-a-statistic-is-significant" class="section level3">
 <h3><span class="header-section-number">8.2.5</span> Determining if a statistic is “significant”</h3>
 <p>To come …</p>
 
@@ -594,6 +561,10 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

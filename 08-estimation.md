@@ -274,7 +274,7 @@ resample_weather()
 ```
 
 ```
-## # A tibble: 2 x 2
+## # A tibble: 2 × 2
 ##   names            x
 ##   <chr>        <dbl>
 ## 1 (Intercept)  4.80 

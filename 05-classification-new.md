@@ -20,15 +20,28 @@ library(rpart)
 library(rpart.plot)
 library(rsample)
 
-remotes::install_github("grantmcdermott/parttree")
-library(parttree)
-
 # Add plot theme
 theme_set(theme_statthinking())
 
 us_weather <- mutate(us_weather, snow_factor = factor(snow), 
                      snow_numeric = ifelse(snow == 'Yes', 1, 0))
 ```
+
+The book will also make use of a package on GitHub that helps to visualize the decision trees in more detail. This can be installed with the following code assuming the remotes package is already installed.
+
+
+```r
+remotes::install_github("grantmcdermott/parttree")
+```
+
+The package can then be loaded with the following single line of code. 
+
+
+```r
+library(parttree)
+```
+
+
 
 ## Topic: Decision Trees 
 
@@ -40,7 +53,7 @@ count(us_weather, rain, snow)
 ```
 
 ```
-## # A tibble: 4 x 3
+## # A tibble: 4 × 3
 ##   rain  snow      n
 ##   <chr> <chr> <int>
 ## 1 No    No     1571
@@ -65,7 +78,7 @@ count(us_weather_rs, rain, snow)
 ```
 
 ```
-## # A tibble: 2 x 3
+## # A tibble: 2 × 3
 ##   rain  snow      n
 ##   <chr> <chr> <int>
 ## 1 No    Yes     728

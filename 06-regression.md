@@ -189,7 +189,7 @@ head(colleges_pred, n = 10)
 ```
 
 ```
-## # A tibble: 10 x 4
+## # A tibble: 10 × 4
 ##    instnm                              actcmmid act_pred error
 ##    <chr>                                  <dbl>    <dbl> <dbl>
 ##  1 Alabama A & M University                  18     21.5 -3.50
@@ -410,7 +410,7 @@ colleges_pred
 ```
 
 ```
-## # A tibble: 1,289 x 7
+## # A tibble: 1,289 × 7
 ##    instnm                    actcmmid act_pred error act_recode act_pred2 error2
 ##    <chr>                        <dbl>    <dbl> <dbl> <chr>          <dbl>  <dbl>
 ##  1 Alabama A & M University        18     21.5 -3.50 18              21.6 -3.55 
