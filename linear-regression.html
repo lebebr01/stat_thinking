@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Linear Regression | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 7 Linear Regression | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Linear Regression | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2021-08-30" />
+<meta name="date" content="2022-01-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -34,6 +34,7 @@
 <link rel="prev" href="regression-trees.html"/>
 <link rel="next" href="estimation-bootstrap-and-uncertainty.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,22 +50,21 @@
 
 
 
-
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.18/datatables.js"></script>
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.4.1/plotly.js"></script>
+<script src="libs/datatables-binding-0.20/datatables.js"></script>
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-43425299-4"></script>
 <script>
@@ -182,7 +182,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
 <li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a></li>
+<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="visualization.html"><a href="visualization.html#interpreting-density-plots"><i class="fa fa-check"></i><b>2.3.1</b> Interpreting Density Plots</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
@@ -313,7 +315,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="linear-regression" class="section level1">
 <h1><span class="header-section-number">Chapter 7</span> Linear Regression</h1>
 <p>Linear regression is another statistical model that can be used when the outcome is an integer or continuous, similar to that of the regression tree. There are similarities between linear regression and regression trees, however there are also very notable differences.</p>
-<p>Linear regression and regression trees are both used when the outcome is continuous or continuous. These methods are both able to make predictions for the outcome and identify which attributes are most important in aiding in making those predictions. There are differences though in the two methods that are important to distinguish. Linear regression makes an assumption on the relationship between the outcome and attributes entered into the model. Linear regression, as in the name, assumes that the relationship between the outcome and an attribute is linearly related.<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a> Regression trees however do not directly make this linear assumption between the outcome and an attribute. This assumption can make linear regression more parsimonious, meaning that the model can be simpler, which is often a goal of science, to explain the phenomenon of interest with the simplest possible explanation.</p>
+<p>Linear regression and regression trees are both used when the outcome is continuous or continuous. These methods are both able to make predictions for the outcome and identify which attributes are most important in aiding in making those predictions. There are differences though in the two methods that are important to distinguish. Linear regression makes an assumption on the relationship between the outcome and attributes entered into the model. Linear regression, as in the name, assumes that the relationship between the outcome and an attribute is linearly related.<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a> Regression trees however do not directly make this linear assumption between the outcome and an attribute. This assumption can make linear regression more parsimonious, meaning that the model can be simpler, which is often a goal of science, to explain the phenomenon of interest with the simplest possible explanation.</p>
 <div id="simple-regression-continuous-predictor" class="section level2">
 <h2><span class="header-section-number">7.1</span> Simple Regression continuous predictor</h2>
 <div id="description-of-the-data" class="section level3">
@@ -377,7 +379,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="scatterplots" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Scatterplots</h3>
-<p>As we’ve explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the <code>gf_point()</code> function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the <code>gf_smooth()</code> function. Below, a scatterplot is created that explores the relationship between the low temperature and the average daily dew point.<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a></p>
+<p>As we’ve explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the <code>gf_point()</code> function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the <code>gf_smooth()</code> function. Below, a scatterplot is created that explores the relationship between the low temperature and the average daily dew point.<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a></p>
 <div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="linear-regression.html#cb167-1"></a><span class="kw">gf_point</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>dewpoint_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">.2</span>) <span class="op">%&gt;%</span></span>
 <span id="cb167-2"><a href="linear-regression.html#cb167-2"></a><span class="st">  </span><span class="kw">gf_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
 <span id="cb167-3"><a href="linear-regression.html#cb167-3"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily dew point&quot;</span>,</span>
@@ -428,8 +430,8 @@ drybulbtemp\_min = 4.83 + 0.90 dewpoint\_avg + \epsilon
 <span id="cb180-5"><a href="linear-regression.html#cb180-5"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily dew point&quot;</span>,</span>
 <span id="cb180-6"><a href="linear-regression.html#cb180-6"></a>          <span class="dt">y =</span> <span class="st">&quot;Minimum daily temperature (in F)&quot;</span>)</span></code></pre></div>
 <p><img src="07-linear-regression_files/figure-html/scatter-temp-int-1.png" width="672" /></p>
-<p>In the example that has been explored so far, a value of 0 for the average daily dew point occurs within the sample of data. That is, an average daily dew point of 0 occurs in the data are is directly interpretable. This would mean that when an average daily dew point of 0 happens in real life, the minimum temperature is 4.83 degrees Fahrenheit on average for the data that is included in this sample. There are situations where a value of 0 for an attribute is not plausible to occur. An example could be predicting a baby’s birth weight based on the number of gestation days.<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a> In situations where the value of 0 is not plausible or meaningful, the data can be centered on a value that is more meaningful or plausible to help with the interpretation of the y-intercept.</p>
-<p>Before this is done, below is a more concrete example that still tries to predict/explain minimum temperature, but now the attribute to explain differences in the minimum temperature is the average daily sea level pressure. Sea-level pressure is a way to measure atmospheric pressure and is measured in inches of mercury<a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a>. Figure <a href="#fig:scatter-temp-pressure"><strong>??</strong></a> shows a scatterplot of this relationship. First, notice that the direction of the blue line is different than before, it starts in the upper left quadrant and decreases as the sea level pressure increases. This is indicative of a negative relationship between the two attributes. The correlation can be estimated to be -0.38, a moderate negative relationship. This relationship is not as strong as the relationship between minimum temperature and average daily dew point. The variation around the blue line in <a href="#fig:scatter-temp-pressure"><strong>??</strong></a> is much larger which depicts a weaker relationship (ie., more error) compared to the minimum temperature and dew point relationship (see Figure <a href="#fig:scatter-temp"><strong>??</strong></a>).</p>
+<p>In the example that has been explored so far, a value of 0 for the average daily dew point occurs within the sample of data. That is, an average daily dew point of 0 occurs in the data are is directly interpretable. This would mean that when an average daily dew point of 0 happens in real life, the minimum temperature is 4.83 degrees Fahrenheit on average for the data that is included in this sample. There are situations where a value of 0 for an attribute is not plausible to occur. An example could be predicting a baby’s birth weight based on the number of gestation days.<a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a> In situations where the value of 0 is not plausible or meaningful, the data can be centered on a value that is more meaningful or plausible to help with the interpretation of the y-intercept.</p>
+<p>Before this is done, below is a more concrete example that still tries to predict/explain minimum temperature, but now the attribute to explain differences in the minimum temperature is the average daily sea level pressure. Sea-level pressure is a way to measure atmospheric pressure and is measured in inches of mercury<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a>. Figure <a href="#fig:scatter-temp-pressure"><strong>??</strong></a> shows a scatterplot of this relationship. First, notice that the direction of the blue line is different than before, it starts in the upper left quadrant and decreases as the sea level pressure increases. This is indicative of a negative relationship between the two attributes. The correlation can be estimated to be -0.38, a moderate negative relationship. This relationship is not as strong as the relationship between minimum temperature and average daily dew point. The variation around the blue line in <a href="#fig:scatter-temp-pressure"><strong>??</strong></a> is much larger which depicts a weaker relationship (ie., more error) compared to the minimum temperature and dew point relationship (see Figure <a href="#fig:scatter-temp"><strong>??</strong></a>).</p>
 <div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="linear-regression.html#cb181-1"></a><span class="kw">gf_point</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>sealevelpressure_avg, <span class="dt">data =</span> us_weather, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">.2</span>) <span class="op">%&gt;%</span></span>
 <span id="cb181-2"><a href="linear-regression.html#cb181-2"></a><span class="st">  </span><span class="kw">gf_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
 <span id="cb181-3"><a href="linear-regression.html#cb181-3"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Average daily sea level pressure&quot;</span>,</span>
@@ -504,11 +506,11 @@ drybulbtemp\_min = 660.05 - 21.05 sealevelpressure\_avg + \epsilon
 </div>
 <div class="footnotes">
 <hr />
-<ol start="14">
-<li id="fn14"><p>Although there is an assumption that the outcome and attribute are linearly related in linear regression, it is possible to specify the model to explore non-linear trends.<a href="linear-regression.html#fnref14" class="footnote-back">↩︎</a></p></li>
-<li id="fn15"><p>Dew point is the temperature to which air must be cooled to become saturated with water vapor. <a href="https://en.wikipedia.org/wiki/Dew_point">Wikipedia</a><a href="linear-regression.html#fnref15" class="footnote-back">↩︎</a></p></li>
-<li id="fn16"><p>Gestational days is the number of days that the baby is in the womb before being born, see <a href="https://en.wikipedia.org/wiki/Gestation">gestation on Wikipedia</a><a href="linear-regression.html#fnref16" class="footnote-back">↩︎</a></p></li>
-<li id="fn17"><p>See <a href="https://en.wikipedia.org/wiki/Atmospheric_pressure#Mean_sea-level_pressure">atmospheric pressure on Wikipedia</a><a href="linear-regression.html#fnref17" class="footnote-back">↩︎</a></p></li>
+<ol start="15">
+<li id="fn15"><p>Although there is an assumption that the outcome and attribute are linearly related in linear regression, it is possible to specify the model to explore non-linear trends.<a href="linear-regression.html#fnref15" class="footnote-back">↩︎</a></p></li>
+<li id="fn16"><p>Dew point is the temperature to which air must be cooled to become saturated with water vapor. <a href="https://en.wikipedia.org/wiki/Dew_point">Wikipedia</a><a href="linear-regression.html#fnref16" class="footnote-back">↩︎</a></p></li>
+<li id="fn17"><p>Gestational days is the number of days that the baby is in the womb before being born, see <a href="https://en.wikipedia.org/wiki/Gestation">gestation on Wikipedia</a><a href="linear-regression.html#fnref17" class="footnote-back">↩︎</a></p></li>
+<li id="fn18"><p>See <a href="https://en.wikipedia.org/wiki/Atmospheric_pressure#Mean_sea-level_pressure">atmospheric pressure on Wikipedia</a><a href="linear-regression.html#fnref18" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -521,7 +523,6 @@ drybulbtemp\_min = 660.05 - 21.05 sealevelpressure\_avg + \epsilon
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -562,7 +563,7 @@ gitbook.start({
 },
 "download": null,
 "search": {
-"engine": "lunr",
+"engine": "fuse",
 "options": null
 },
 "toc": {

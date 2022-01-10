@@ -66,6 +66,7 @@ plot-title-and-subtitle
 plot-theme
 setting-the-default-plot-theme
 density-plots
+interpreting-density-plots
 descriptive-statistics-numerically-describing-the-sample-data
 summarizing-attributes
 understanding-the-median-and-mean
