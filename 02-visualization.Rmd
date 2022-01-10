@@ -60,7 +60,7 @@ One of the primary goals of any data visualization, especially those in this cha
 
 ### Histograms
 
-The first visualization we will examine is a histogram. We can create a histogram of the admission rates using the `gf_histogram()` function. (This function is part of the **ggformula** package which needs to be loaded prior to using the `gf_histogram()` function.) This function requires two arguments. The first argument is a formula that identifies the variables to be plotted and the second argument, `data=`, specifies the data object we assigned earlier. The syntax used to create a histogram of the admission rates is:
+The first visualization we will examine is a histogram. We can create a histogram of the admission rates using the `gf_histogram()` function. (This function is part of the **ggformula** package which needs to be loaded prior to using the `gf_histogram()` function.) This function requires two arguments. The first argument is a formula that identifies the variables to be plotted and the second argument, `data=`, specifies the data object that was assigned on data import. For example, earlier we used the `read_csv()` function to import the college scorecard data and we assigned this to the name, `colleges`. The syntax used to create a histogram of the admission rates is:
 
 ```{r first-hist, eval = FALSE}
 gf_histogram(~ adm_rate, data = colleges)
