@@ -1,7 +1,10 @@
 # Visualization   
 
+Data scientists and statisticians visualize data to explore and understand data. Visualization can help analysts identify features in the data such as typical or extreme observations. Visualizations can also help describe variation. Because it is so powerful, data visualization is often the first step in any statistical analysis. 
 
-Data scientists and statisticians visualize data to explore and understand data. Visualization can help analysts identify features in the data such as typical or extreme observations and also for describe variation. Because it is so powerful, data visualiztion is often the first step in any statistical analysis. 
+The topic of data visualization can be extremely large and entire textbooks are written about the topic.^[Clause Wilke has a great book on the [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/) and Kieran Healy has another great book data visualization called [Data Visualization: A practical introduction](https://socviz.co/). Both of these books are also freely available online with print versions able to be purchased as well.] Given the powerful nature of data visualization, only an introduction of data visualization will be covered in this book, with the goal of using them for interpreting statistical results. As such, only a handful of data visualizations will be explored, described, and used. 
+
+
 
 ### College Scorecard Data
 
