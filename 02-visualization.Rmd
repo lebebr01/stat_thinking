@@ -207,6 +207,8 @@ Another plot that is useful for exploring attributes is the density plot. This p
 gf_density(~ adm_rate, data = colleges)
 ```
 
+### Interpreting Density Plots
+
 Our interpretation remains that most institutions admit a high proportion of applicants. In fact, colleges that admit around 75% of their applicants have the highest probability density.
 
 The axis labels, title, subtitle can be customized with `gf_labs()` in the same manner as with the histogram. The `color=` and `fill=` arguments in `gf_density()` will color the density curve and area under the density curve, respectively.
@@ -220,5 +222,6 @@ gf_density(~ adm_rate, data = colleges, color = 'black', fill = 'yellow') %>%
     subtitle = 'Data Source: U.S. Department of Education College Scorecard'
     )
 ```
+
 
 
