@@ -236,7 +236,7 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
 
 ## Density plots
 
-Another plot that is useful for exploring attributes is the density plot. This plot usually highlights similar distributional features as the histogram, but the visualization does not have the same dependency on the specification of bins. Density plots can be created with the `gf_density()` function which takes similar arguments as `gf_histogram()`, namely a formula identifying the attribute to be plotted and the data object.^[The default kernel used in `gf_density()` is the normal kernel.]
+Another plot that is useful for exploring attributes is the density plot. This plot usually highlights similar distributional features as the histogram, but the visualization does not have the same dependency on the specification of bins. Density plots can be created with the `gf_density()` function which takes similar arguments as `gf_histogram()`, namely a formula identifying the attribute to be plotted and the data object.^[The default kernel used in `gf_density()` is the normal kernel. This can be changed if desired, but the default works well in many situations.] If you compare the code specified for the very first histogram, notice that only the function name changed. 
 
 
 ```{r}
@@ -245,11 +245,15 @@ gf_density(~ adm_rate, data = colleges)
 
 ### Interpreting Density Plots
 
-Our interpretation remains that most institutions admit a high proportion of applicants. In fact, colleges that admit around 75% of their applicants have the highest probability density.
+Density plots are interpreted similarly to a histogram in that areas of the density curve that are higher indicate more data in those areas of the attribute of interest. Places where the density curve are lower indicate areas where data occur infrequently. The density metric on the y-axis is not the same as the histogram, but the relative magnitude can be interpreted similarly. That is, higher indicates more data in that region of the attribute. 
+
+Just like the histogram, the attribute being depicted in the density curve is on the x-axis. Therefore, important features for the attribute of interest can be found by looking at the y-axis, but then the place where high or low prevalence occurs are depicted by looking back to the x-axis. For example, when looking at the density curve in Figure \@ref(fig:density-final), the density curve has a peak on the y-axis density scale of just under 2.0, the peak of this density curve occurs around a 0.75 as shown on the x-axis. 
+
+Our interpretation remains that most institutions admit a high proportion of applicants. In fact, colleges that admit around 75% of their applicants have the highest probability density, indicating this is where most of the institutions are found in the distribution. Additionally, there are just a few institutions that are have an admission rate 25% or less. 
 
 The axis labels, title, subtitle can be customized with `gf_labs()` in the same manner as with the histogram. The `color=` and `fill=` arguments in `gf_density()` will color the density curve and area under the density curve, respectively.
 
-```{r}
+```{r density-final}
 gf_density(~ adm_rate, data = colleges, color = 'black', fill = 'yellow') %>%
   gf_labs(
     x = 'Admission Rate',
