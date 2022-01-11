@@ -119,7 +119,7 @@ $$
 \#\ of\ bins = \frac{1}{.025} = 40
 $$
 
-In general, we will take the approach of letting the software compute these for us, but the equations above shows the general process that is used by the software in selecting the binwidth.  
+We will take the approach of letting the software compute these, but the equations above shows the general process that is used by the software in selecting the binwidth.  
 
 More bins/smaller binwidth can give a slightly more nuanced interpretation of the attribute of interest, whereas fewer bins/large binwidth will do more summarization. Having too few bins or too many bins can make the figure more difficult to interpret by missing key features of the attribute or including too many unique features of the attribute. For this reason, it is often of interest to adjust the binwidth or number of bins to explore the impact on the interpretation. 
 
