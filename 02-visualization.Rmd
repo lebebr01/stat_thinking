@@ -140,11 +140,11 @@ In general, our interpretation remains the same across all the different binwidt
 
 ## Plot Customization
 
-There are many ways to further customize the plot we produced to make it more appealing. For example, you might want to change the label on the *x*-axis from `adm_rate` to something more informative. Or, you may want to add a descriptive title to your plot. These customizations can be specified using the `gf_labs()` function.
+There are many ways to further customize the plot we produced to make it more appealing. For example, you would likely want to change the label on the *x*-axis from `adm_rate` to something more informative. Or, you may want to add a descriptive title to your plot. These customizations can be specified using the `gf_labs()` function. Specific examples are given below. 
 
 ### Axes labels
 
-To change the labels on the *x*- and *y*-axes, we can use the arguments `x=` and `y=` in the `gf_labs()` function. These arguments take the text for the label you want to add to each axis, respectively. Here we change the text on the *x*-axis to "Admission Rate" and the text on the *y*-axis to "Frequency". The `gf_labs()` function is connected to the histogram by linking the `gf_histogram()` and `gf_labs()` functions with the pipe operator (`%>%`).
+To change the labels on the *x*- and *y*-axes, we can use the arguments `x =` and `y =` in the `gf_labs()` function. These arguments take the text for the label you want to add to each axis, respectively. Here we change the text on the *x*-axis to "Admission Rate" and the text on the *y*-axis to "Frequency". The `gf_labs()` function is connected to the histogram by linking the `gf_histogram()` and `gf_labs()` functions with the pipe operator (`%>%`).^[The pipe operator, `%>%`, can be read as "then" and the code can be thought of as logical processes. For example, first the histogram is created, then (`%>%`), the labels for the *x-* and *y-* axes are changed.]
 
 ```{r}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 25) %>%
@@ -156,9 +156,9 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins
 
 ### Plot title and subtitle
 
-We can also add a title and subtitle to our plot. Similar to changing the axis labels, these are added using `gf_labs()`, but using the `title=` and `subtitle=` arguments. 
+We can also add a title and subtitle to our plot. Similar to changing the axis labels, these are added using `gf_labs()`, but using the `title =` and `subtitle =` arguments. 
 
-```{r}
+```{r subtitle}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 25) %>%
   gf_labs(
     x = 'Admission Rate',
@@ -167,6 +167,8 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins
     subtitle = 'Data Source: U.S. Department of Education College Scorecard'
     )
 ```
+
+Plot titles and subtitles are helpful to used to provide context to the figure and describe the overall purpose for the figure. For example, the subtitle in Figure \@ref(fig:subtitle) describes the source for the data plotted. 
 
 ### Plot theme
 
@@ -184,7 +186,7 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins
 ```
 
 
-We have created a custom theme to use in the `gf_theme()` function that we will use for most of the plots in the book. The theme, `theme_statthinking()` is included in the **statthink** library, a supplemental package to the text that can be installed and loaded with the following commands:
+We have created a custom theme to use in the `gf_theme()` function that we will use for most of the plots in the book. The theme, `theme_statthinking()` is included in the **statthink** package, a supplemental package to the text that can be installed and loaded with the following commands:
 
 ```{r install-book-package, eval = FALSE}
 remotes::install_github('lebebr01/statthink')
@@ -210,18 +212,19 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
 
 #### Setting the default plot theme
 
-
-
 Since we will be using this theme for all of our plots, it is useful to make it the default theme (rather than the grey background with white gridlines). To set a different theme as the default, we will use the `theme_set()` function and specify the  `theme_statthinking()` theme as the argument within this function.
 
 ```{r apply-book-theme}
-theme_set(theme_statthinking())
+theme_set(theme_statthinking(base_size = 14))
 ```
 
-Now when we create a plot, it will automatically use the `statthinking` theme without having to specify this in the `gf_theme()` function.
+Now when we create a plot, it will automatically use the `statthinking` theme without having to specify this in the `gf_theme()` function. Often, the plot theme would be one of the first lines of code for any analysis so that all the figures created in subsequent areas would all have a similar theme/style. 
 
+In the code chunk above, the size of the text is increased slightly to make it a bit easier to read throughout the book. This was done with the `base_size =` argument, where the font size was specified to be size 14.
 
-```{r}
+Figure \@ref(fig:stat-think-theme) shows that the theme is now applied automatically without needing to use the `gf_theme()` function to specify. In addition, the font size is increased as well compared to previous figures created in this chapter. 
+
+```{r stat-think-theme}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
   gf_labs(
     x = 'Admission Rate',
