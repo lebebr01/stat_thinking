@@ -60,7 +60,7 @@ One of the primary goals of any data visualization, especially those in this cha
 
 ### Histograms
 
-The first visualization we will examine is a histogram. We can create a histogram of the admission rates using the `gf_histogram()` function. (This function is part of the **ggformula** package which needs to be loaded prior to using the `gf_histogram()` function.) This function requires two arguments. The first argument is a formula that identifies the variables to be plotted and the second argument, `data=`, specifies the data object that was assigned on data import. For example, earlier we used the `read_csv()` function to import the college scorecard data and we assigned this to the name, `colleges`. The syntax used to create a histogram of the admission rates is:
+The first visualization we will examine is a histogram. We can create a histogram of the admission rates using the `gf_histogram()` function. (This function is part of the **ggformula** package which needs to be loaded prior to using the `gf_histogram()` function.) This function requires two arguments. The first argument is a formula that identifies the variables to be plotted and the second argument, `data =`, specifies the data object that was assigned on data import. For example, earlier we used the `read_csv()` function to import the college scorecard data and we assigned this to the name, `colleges`. The syntax used to create a histogram of the admission rates is:
 
 ```{r first-hist, eval = FALSE}
 gf_histogram(~ adm_rate, data = colleges)
@@ -81,18 +81,22 @@ where the attribute name identified to the right of the `~` is the exact name of
 
 ### Interpretting Histograms
 
-Histograms are created by collapsing the data into bins and then counting the number of observations that fall into each bin. To show this more clearly in the figure created previously, we can color the bin lines to highlight the different bins. To do this we include an additional argument, `color=`, in the `gf_histogram()` function. We can also set the color for the bins themselves using the `fill=` argument. Here we color the bin lines black and set the bin color to yellow.^[R knows the names of 657 colors. To see these names type `colors()` at the command prompt.]
+Histograms are created by collapsing the data into bins and then counting the number of observations that fall into each bin. To show this more clearly in the figure created previously, we can color the bin lines to highlight the different bins. To do this we include an additional argument, `color =`, in the `gf_histogram()` function. We can also set the color for the bins themselves using the `fill =` argument. Here we color the bin lines black and set the bin color to yellow.^[R knows the names of 657 colors. To see these names type `colors()` at the command prompt.]
 
 ```{r color-hist-bars}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow')
 ```
+
+When looking at a single bar, for example the bar that is at 0.50, shows the number of institutions with admissions rates between about 0.48 and 0.52. In this case, there are about 80 institutions that have admissions rates between 0.48 and 0.52 (i.e., 48% to 52% admission rates). Similar interpretations are found for all of the other bars as well. 
+
+One common assumption made with a histogram is for the width of the bars be the same width on the attribute of interest. For example, the single bar interpreted in the preceding paragraph, the width of the bar was about 4% on the admission rate scale. Therefore, with the assumption that all bars have the same width, this would mean that all of the 30 bars in the histogram would each range by about 4%. 
 
 Rather than focusing on any one bin, we typically want to describe the distribution as a whole. For example, it appears as though most institutions admit a high proportion of applicants since the bins to the right of 0.5 have higher counts than the bins that are below 0.5. There are, however, some institutions that are quite selective, only admitting fewer than 25% of the students who apply.
 
 
 #### Adjusting Number of Bins
 
-Interpretation of the distribution is sometimes influenced by the width or number of bins. It is often useful to change the number of bins to explore the impact this may have on your interpretation. This can be accomplished by either (1) changing the width of the bins via the`binwidth=` argument in the `gf_histogram()` function, or (2) changing the number of bins using the `bins=` argument. Below we show both methods:
+Interpretation of the distribution is sometimes influenced by the width or number of bins. It is often useful to change the number of bins to explore the impact this may have on your interpretation. This can be accomplished by either (1) changing the width of the bins via the`binwidth =` argument in the `gf_histogram()` function, or (2) changing the number of bins using the `bins =` argument. Below we show both methods:
 
 ```{r}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 10)
@@ -179,7 +183,7 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
 
 
 
-Since we will be using this theme for all of our plots, it is useful to make it the default theme (rather than the grey bckground with white gridlines). To set a different theme as the default, we will use the `theme_set()` function and call our `theme_statthinking()` within this function.
+Since we will be using this theme for all of our plots, it is useful to make it the default theme (rather than the grey background with white gridlines). To set a different theme as the default, we will use the `theme_set()` function and specify the  `theme_statthinking()` theme as the argument within this function.
 
 ```{r apply-book-theme}
 theme_set(theme_statthinking())
