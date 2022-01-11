@@ -96,17 +96,46 @@ Rather than focusing on any one bin, we typically want to describe the distribut
 
 #### Adjusting Number of Bins
 
-Interpretation of the distribution is sometimes influenced by the width or number of bins. It is often useful to change the number of bins to explore the impact this may have on your interpretation. This can be accomplished by either (1) changing the width of the bins via the`binwidth =` argument in the `gf_histogram()` function, or (2) changing the number of bins using the `bins =` argument. Below we show both methods:
+Interpretation of the distribution is sometimes influenced by the width or number of bins. It is often useful to change the number of bins to explore the impact this may have on your interpretation. This can be accomplished by either (1) changing the width of the bins via the`binwidth =` argument in the `gf_histogram()` function, or (2) changing the number of bins using the `bins =` argument.
 
-```{r}
-gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 10)
-```
+The binwidth in the histogram refers to the range or width of each bin. A larger binwidth would mean there are fewer bins as it would take fewer bins to span the entire range of the attribute of interest. In contrast, a smaller binwidth would require more bins to span the entire range of the attribute of interest. 
 
-```{r}
+In contrast, the number of bins can be specified directly, for example 10 or 20 bins. The default within the R graphics package used is 30. Within this framework, each bin will have the same width or binwidth. 
+
+The relationship between the number of bins and binwidth could be shown with the following equation:
+
+$$
+binwidth = \frac{attribute\ range}{\#\ of\ bins}
+$$
+To be more explicit, suppose that we wanted there to be 25 bins, using algebra we could compute the new binwidth given that we know we want 25 bins and knowing the range of the original attribute. The admission rates attribute have values as small as `r round(min(colleges$adm_rate), 2)` and as large as `r round(max(colleges$adm_rate), 2)`. Therefore, the total range would be 1 (`r round(max(colleges$adm_rate), 2)` - `r round(min(colleges$adm_rate), 2)` = `r round(max(colleges$adm_rate), 2) - round(min(colleges$adm_rate), 2)`). The binwidth could then be computed as:
+
+$$
+bindwidth = \frac{1}{25} = .04
+$$
+
+In contrast, if we wanted to specify the binwidth instead of the number of bins, we could do a little bit of algebra in the equation above to compute the number of bins needed to span the range of the attribute given the specified binwidth. For example, if we wanted the binwidth to be .025, 2.5%, we could compute this as follows:
+
+$$
+\#\ of\ bins = \frac{1}{.025} = 40
+$$
+
+In general, we will take the approach of letting the software compute these for us, but the equations above shows the general process that is used by the software in selecting the binwidth.  
+
+More bins/smaller binwidth can give a slightly more nuanced interpretation of the attribute of interest, whereas fewer bins/large binwidth will do more summarization. Having too few bins or too many bins can make the figure more difficult to interpret by missing key features of the attribute or including too many unique features of the attribute. For this reason, it is often of interest to adjust the binwidth or number of bins to explore the impact on the interpretation. 
+
+The code below changes the binwidth to specify it as .01 via the `binwidth = .01` argument with the figure shown in Figure \@ref(fig:binwidth-01).
+
+```{r binwidth-01}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', binwidth = .01)
 ```
 
-In general, our interpretation remains the same, namely that most institutions admit a high proportion of applicants. When we used a bin width of 0.01, however, we were able to see that several institutions admit 100% of applicants. This was obscured in the other histograms we examined. As a data scientist these institutions might warrant a more nuanced examination.
+The code below specifies 10 bins via the `bins = 10` argument with the figure shown in Figure \@ref(fig:bins10).
+
+```{r bins-10}
+gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 10)
+```
+
+In general, our interpretation remains the same across all the different binwidth/bins combinations, namely that most institutions admit a high proportion of applicants. When we used a bin width of 0.01, however, we were able to see that several institutions admit 100% of applicants. This was obscured in the other histograms we examined. As a data scientist these institutions might warrant a more nuanced examination.
 
 
 ## Plot Customization
