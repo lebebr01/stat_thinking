@@ -291,7 +291,7 @@ The cumulative proportion depicted on the *y-*axis are the same as the percentil
 
 ### Variance and Standard Deviation
 
-Two measures of variation that are commonly used by statisticians and datd scientists are the variance and the standard deviation. These can be obtained by including `var` and `sd`, respectively, in the `df_stats()` function.
+Two measures of variation that are commonly used by statisticians and data scientists are the variance and the standard deviation. These can be obtained by including `var` and `sd`, respectively, in the `df_stats()` function.
 
 ```{r var}
 # Compute variance and standard deviation
@@ -329,7 +329,7 @@ $$
 \begin{pmatrix}-14^2\\ -14^2\\ -4^2\\ 6^2\\ 26^2\end{pmatrix} = \begin{pmatrix}196\\ 196\\ 16\\ 36\\ 676\end{pmatrix}
 $$
 
-The sum of these squared deviations is 1,120. And the average squared deviation is then $1120/5 = 224$. If we take the square root of 224, which is 14.97, we now have the average deviation for the five observations. On average, the observations in the distribution are 14.97 units from the mean value of 24. The standard deviation is interpreted as the average deviation from the mean.^[Technically, after summing the squared deviations, we divide this sum by $n-1$ rather than $n$. But, when the sample size is even somewhat large, this difference is trivial.] 
+The sum of these squared deviations is 1,120. And the average squared deviation is then $1120/5 = 224$; which would represent the population variance for these values. If we take the square root of 224, which is 14.97, we now have the average deviation for the five observations. On average, the observations in the distribution are 14.97 units from the mean value of 24. The standard deviation is interpreted as the average deviation from the mean.^[Technically, after summing the squared deviations, we divide this sum by $n-1$ rather than $n$. But, when the sample size is even somewhat large, this difference is trivial.] 
 
 #### Using the Standard Deviation
 
@@ -345,9 +345,9 @@ In our example, the mean admission rate for the 2,019 institutions of higher edu
 
 ## Summarizing Categorical Attributes
 
-Categorical attributes are attributes that have values that represent categories. For example, the attribute `region` indicates the region in the United States where the institution is located (e.g., Midwest). The attribute `bachelor_degree` is a categorical value indicating whether ir not the institution offers a Bachelor's degree. Sometimes statisticians anddata scientists use the terms dichotmous (two categories) and polychotomous (more than two categories) to further define categorical variables. Using this nomenclature, `region` is a polychotomous categorical variable and `bachelor_degree` is a dichotomous categorical variable.
+Categorical attributes are attributes that have values that represent categories. For example, the attribute `region` indicates the region in the United States where the institution is located (e.g., Midwest). The attribute `bachelor_degree` is a categorical value indicating whether or not the institution offers a Bachelor's degree. Sometimes statisticians and data scientists use the terms dichotomous (two categories) and polytomous (more than two categories) to further define categorical variables. Using this nomenclature, `region` is a polytomous categorical variable and `bachelor_degree` is a dichotomous categorical variable.
 
-Sometimes analysts use numeric values to encode the categories of a categorical attribute. For example, the attribute `bachelor_degree` is encoded using the values of 0 and 1. It is important to note that these values just indicate whether the institution offers a Bachelor's degree (1) or not (0). The values are not necessarily ordinal in the sense that a 1 means more of the attribute than a 0. Since the values just refer to categories, an analyst might have reversed the coding and used 0 to encode institutions that offer a Bachelor's degree and 1 to encode those institutions that do not. Similarly, the values of 0 and 1 are not sancrosanct; any two numers could have been used to represent the categories.^[Using 0's and 1's for the encoding does have some advantages over other coding schemes which we will explore later when fitting statistical models.]
+Sometimes analysts use numeric values to encode the categories of a categorical attribute. For example, the attribute `bachelor_degree` is encoded using the values of 0 and 1. It is important to note that these values just indicate whether the institution offers a Bachelor's degree (1) or not (0). The values are not necessarily ordinal in the sense that a 1 means more of the attribute than a 0. Since the values just refer to categories, an analyst might have reversed the coding and used 0 to encode institutions that offer a Bachelor's degree and 1 to encode those institutions that do not. Similarly, the values of 0 and 1 are not sacrosanct; any two numbers could have been used to represent the categories.^[Using 0's and 1's for the encoding does have some advantages over other coding schemes which we will explore later when fitting statistical models.]
 
 Most of the time, the numerical summaries we computed earlier in the chapter do not work so well for categorical attributes. For example, it would not make sense to compute the mean region for the institutions. In general, it suffices to compute counts and proportions for the categories included in these attributes. To compute the category counts we use the `tally()` function. This function takes a formula indicating the name of the categorical attribute and the name of the data object. To find the category counts for the `region` attribute:
 
@@ -372,6 +372,8 @@ You could also compute the proportions directly with the `tally()` function by s
 tally(~region, data = colleges, format = "proportion")
 ```
 
+Often, descriptively exploring both the raw counts and the proportions can be informative when exploring the data. This can be true for more complicated tables when more than one attribute are being explored at the same time, this will be explored in more detail in subsequent chapters. 
+
 
 ## Advanced Extension: Computing Your Own Measure of Variation
 
@@ -392,4 +394,6 @@ We can now use this new function by employing it as an argument in the `df_stats
 colleges %>%
   df_stats(~ adm_rate, mae)
 ```
+
+This statistic would then be interpreted as the average absolute deviation from the mean admission rate is about 16.9%. 
 
