@@ -83,7 +83,7 @@ where the attribute name identified to the right of the `~` is the exact name of
 
 Histograms are created by collapsing the data into bins and then counting the number of observations that fall into each bin. To show this more clearly in the figure created previously, we can color the bin lines to highlight the different bins. To do this we include an additional argument, `color =`, in the `gf_histogram()` function. We can also set the color for the bins themselves using the `fill =` argument. Here we color the bin lines black and set the bin color to yellow.^[R knows the names of 657 colors. To see these names type `colors()` at the command prompt.]
 
-```{r color-hist-bars}
+```{r color-hist-bars, fig.cap = "Histogram changing the color and fill of the bars."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow')
 ```
 
@@ -125,13 +125,13 @@ More bins/smaller binwidth can give a slightly more nuanced interpretation of th
 
 The code below changes the binwidth to specify it as .01 via the `binwidth = .01` argument with the figure shown in Figure \@ref(fig:binwidth-01).
 
-```{r binwidth-01}
+```{r binwidth-01, fig.cap = "Histogram modifying the binwidth."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', binwidth = .01)
 ```
 
 The code below specifies 10 bins via the `bins = 10` argument with the figure shown in Figure \@ref(fig:bins10).
 
-```{r bins-10}
+```{r bins-10, fig.cap = "Histogram modifying the number of bins."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 10)
 ```
 
@@ -146,7 +146,7 @@ There are many ways to further customize the plot we produced to make it more ap
 
 To change the labels on the *x*- and *y*-axes, we can use the arguments `x =` and `y =` in the `gf_labs()` function. These arguments take the text for the label you want to add to each axis, respectively. Here we change the text on the *x*-axis to "Admission Rate" and the text on the *y*-axis to "Frequency". The `gf_labs()` function is connected to the histogram by linking the `gf_histogram()` and `gf_labs()` functions with the pipe operator (`%>%`).^[The pipe operator, `%>%`, can be read as "then" and the code can be thought of as logical processes. For example, first the histogram is created, then (`%>%`), the labels for the *x-* and *y-* axes are changed.]
 
-```{r}
+```{r fig.cap = "Adding custom x and y-axis labels."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 25) %>%
   gf_labs(
     x = 'Admission Rate',
@@ -158,7 +158,7 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins
 
 We can also add a title and subtitle to our plot. Similar to changing the axis labels, these are added using `gf_labs()`, but using the `title =` and `subtitle =` arguments. 
 
-```{r subtitle}
+```{r subtitle, fig.cap = "Adding plot title and subtitle."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 25) %>%
   gf_labs(
     x = 'Admission Rate',
@@ -174,7 +174,7 @@ Plot titles and subtitles are helpful to used to provide context to the figure a
 
 By default, the plot has a grey background and white grid lines. This can be modified to using the `gf_theme()` function. For example, in the syntax below we change the plot theme to a white background with no grid lines using `theme_classic()`. Again, the `gf_theme()` is linked to the histogram with the pipe operator.
 
-```{r}
+```{r fig.cap = "Varying figure theme."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 25) %>%
   gf_labs(
     x = 'Admission Rate',
@@ -199,7 +199,7 @@ library(statthink)
 
 We can then change the theme in a similar manner to how we changed the theme before.
 
-```{r}
+```{r fig.cap = "Histogram showing distribution of admission rates for institutions of higher education."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
   gf_labs(
     x = 'Admission Rate',
@@ -224,7 +224,7 @@ In the code chunk above, the size of the text is increased slightly to make it a
 
 Figure \@ref(fig:stat-think-theme) shows that the theme is now applied automatically without needing to use the `gf_theme()` function to specify. In addition, the font size is increased as well compared to previous figures created in this chapter. 
 
-```{r stat-think-theme}
+```{r stat-think-theme, fig.cap = "Histogram showing the distribution of admission rates for institutions of higher education."}
 gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
   gf_labs(
     x = 'Admission Rate',
@@ -239,7 +239,7 @@ gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
 Another plot that is useful for exploring attributes is the density plot. This plot usually highlights similar distributional features as the histogram, but the visualization does not have the same dependency on the specification of bins. Density plots can be created with the `gf_density()` function which takes similar arguments as `gf_histogram()`, namely a formula identifying the attribute to be plotted and the data object.^[The default kernel used in `gf_density()` is the normal kernel. This can be changed if desired, but the default works well in many situations.] If you compare the code specified for the very first histogram, notice that only the function name changed. 
 
 
-```{r}
+```{r fig.cap = "Density curve of admission rates for institutions of higher education."}
 gf_density(~ adm_rate, data = colleges)
 ```
 
@@ -251,9 +251,9 @@ Just like the histogram, the attribute being depicted in the density curve is on
 
 Our interpretation remains that most institutions admit a high proportion of applicants. In fact, colleges that admit around 75% of their applicants have the highest probability density, indicating this is where most of the institutions are found in the distribution. Additionally, there are just a few institutions that are have an admission rate 25% or less. 
 
-The axis labels, title, subtitle can be customized with `gf_labs()` in the same manner as with the histogram. The `color=` and `fill=` arguments in `gf_density()` will color the density curve and area under the density curve, respectively.
+The axis labels, title, subtitle can be customized with `gf_labs()` in the same manner as with the histogram. The `color =` and `fill =` arguments in `gf_density()` will color the density curve and area under the density curve, respectively.
 
-```{r density-final}
+```{r density-final, fig.cap = "Density curve showing the distribution of admission rates for institutions of higher education."}
 gf_density(~ adm_rate, data = colleges, color = 'black', fill = 'yellow') %>%
   gf_labs(
     x = 'Admission Rate',
