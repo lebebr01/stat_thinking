@@ -35,11 +35,11 @@ In the previous chapter, we visualized different attributes by referencing those
 df_stats(~ adm_rate, data = colleges, median)
 ```
 
-The `df_stats()` function takes a formula syntax that is the same as the formula syntax we introduced in the previous chapter. In particular, the variable that we wish to compute a statistic on is specified after the `~`. We also specify the data object with the `data=` argument. Finally, we include additional arguments indicating the name of the particular numerical summary (or summaries) that we want to compute.^[Note that the names of the summaries we include in the `df_stats()` function need to be the actual names of functions that R recognizes.] In the syntax above, we compute the median admission rate. 
+The `df_stats()` function takes a formula syntax that is the same as the formula syntax we introduced in the previous chapter. In particular, the variable that we wish to compute a statistic on is specified after the `~`. We also specify the data object with the `data =` argument. Finally, we include additional arguments indicating the name of the particular numerical summary (or summaries) that we want to compute.^[Note that the names of the summaries we include in the `df_stats()` function need to be the actual names of functions that R recognizes.] In the syntax above, we compute the median admission rate. 
 
-The median is also referred to as the 50th percentile, and is the value at which half of the admission rates in the data are above and half are below. In our data, the medain admission rate is 70.8%. In our data 1,009 institutions have an admission rate below 70.8% and 1,009 have an admission rate above 70.8%. In the histogram below, we add a vertical line at the median admission rate to help you visualize what this means.
+The median is also referred to as the 50th percentile, and is the value at which half of the admission rates in the data are above and half are below. In our data, the median admission rate is 70.8%. In our data 1,009 institutions have an admission rate below 70.8% and 1,009 have an admission rate above 70.8%. In the histogram shown in Figure \@ref(fig:hist-median), we add a vertical line at the median admission rate to help you visualize where this statistic would fall in the distribution of admission rates.
 
-Another common numerical summary that is often used to describe a distribution is the mean. To compute the mean admission rate we again use the `df_stats()` function, but include `mean` as our additional argument.
+Another common numerical summary that is often used to describe a distribution is the mean. To compute the mean admission rate we again use the `df_stats()` function, but include `mean` as our additional argument. This replaces the `median` function from the previous code using the `df_stats()` function.
 
 
 ```{r mean}
@@ -56,7 +56,7 @@ In your previous educational experiences with the mean and median, you may have 
 - **Mean:** Add up all the values of the attribute and divide by the number of values;
 - **Median:** Order all the values of the attribute from smallest to largest and find the one in the middle. If there is an even number of observations, find the mean of the middle two values.
 
-To better understand these summaries, we will visualize them on the distirbution of admission rates. 
+To better understand these summaries, we will visualize them on the distribution of admission rates. 
 
 
 ```{r hist,echo=FALSE, fig.cap='Distribution of admission rates for thw 2,019 institutions of higher education. The mean admission rate is displayed as a red, dashed line.', warning=FALSE}
@@ -65,7 +65,7 @@ gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
-The mean (displayed as a red, dashed line) represents the "balance point" of the distribution. If the distribution were a physical entity, it is the location where you would put you finger underneath the distribution to balance it. In a statistical sense, we balance the distribution by "balancing" the deviations. To explain this, let's examine a toy data set of five observations:
+The mean (displayed as a red, dashed line in Figure \@ref(fig:hist)) represents the "balance point" of the distribution. If the distribution were a physical entity, it is the location where you would put your finger underneath the distribution to balance it. In a statistical sense, we balance the distribution by "balancing" the deviations. To explain this, let's examine a toy data set of five observations:
 
 $$
 Y = \begin{pmatrix}10\\ 10\\ 20\\ 30\\ 50\end{pmatrix}
@@ -83,18 +83,18 @@ $$
 Y = \begin{pmatrix}10 - 20\\ 10-20\\ 20-20\\ 30-20\\ 50-20\end{pmatrix} = \begin{pmatrix}-10\\ -10\\ 0\\ 10\\ 30\end{pmatrix}
 $$
 
-The median does not balance the deviations; the sum is not zero (it is $+20$). The mean is the only value we can use to "balance" the deviations.
+The median does not balance the deviations; the sum is not zero (it is $+20$). The mean is the only value we can use to "balance" the deviations. In this sense, the mean is optimal and this is another reason the mean is used much more frequently than the median in many statistical applications.
 
 
-What about the median?
+**What about the median?**
 
-```{r hist-median, echo=FALSE, warning=FALSE}
+```{r hist-median, echo=FALSE, warning=FALSE, fig.cap = "Histogram depicting the median of the distribution."}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_vline(color = 'blue', xintercept = 0.708, size = 1) %>%
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
-In the figure, half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas. Note that the median is not necessarily in the middle of the values represented on the $x$-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved.
+In Figure \@ref(fig:hist-median), half of the observations in the histogram have an admission rate below the blue line and half have an admission rate above the blue line. The median splits the distribution into two equal areas; as such, the median is equivalent to the 50th percentile. Note that the median is not necessarily in the middle of the values represented on the $x$-axis; that would be 0.50 rather than 0.708. It is the area under the curve (or embodied by the histogram) that is halved. We will come back to this idea later when we explore a type of figure called the empirical cumulative density to show another way to summarize the distribution and discuss percentiles. 
 
 
 ### Summarize with the Mean or Median?
