@@ -119,8 +119,7 @@ In practice, it is a good idea to compute both the mean and the median and explo
 
 ## Numerically Summarizing Variation
 
-
-In the distribution of admission rates, both the mean and median seems to offer a representative admission rate since both are close to the modal clump of the distribution. (There are several colleges that have an admission rate close to 70%.) But, you will also notice that an admission rate of 70% does not do a great job representing all of the institutions' admissions rates. This is true for any single statistic we pick to summarize the distribution. 
+In the distribution of admission rates, both the mean and median seem to offer a representative admission rate since both are close to the modal clump of the distribution. (There are several colleges that have an admission rate close to 70%.) But, you will also notice that an admission rate of 70% does not do a great job representing all of the institutions' admissions rates. This is true for any single statistic we pick to summarize the distribution. 
 
 To more fully summarize the distribution we need to summarize the variability in the distribution in addition to a "typical" or representative value. There are several summaries that statisticians and data scientists use to describe the variation in a distribution. And, like the representative summary measures, each of the summaries of variation provide slightly different information by highlighting different aspects of the variability. We will explore some of these measures below.
 
@@ -137,7 +136,7 @@ df_stats(~ adm_rate, data = colleges, min, max)
 1 - 0
 ```
 
-The range of the admission rates is 1. When people colloquially describe the range, they typically provide the limits of the data rather than actually providing the range. For example, they may describe the range of the admission rates as: "the admission rates range from 0 to 1". While this is technially not the range (which is a single number), it is probably more descriptive as it also gives a sense of the lower- and upper-limits for the observations.
+The range of the admission rates is 1. When people colloquially describe the range, they typically provide the limits of the data rather than actually providing the range. For example, they may describe the range of the admission rates as: "the admission rates range from 0 to 1". While this is technically not the range (which is a single number), it is probably more descriptive as it also gives a sense of the lower- and upper-limits for the observations.
 
 One problem with the range is that if there are extreme values, the range will not give an accurate picture of the variation encompassing most observations. For example, consider the following five test scores:
 
@@ -145,15 +144,15 @@ $$
 Y = \begin{pmatrix}30\\ 35\\ 36\\ 37\\ 100\end{pmatrix}
 $$
 
-The range of these data is 70, indicating that the variation between the lowest and highest score is 70 points, suggesting a lot of variation in the scores. The range, however, is clearly influenced by the score of 100. Were it not for that score, we would have a much different take on the score variability; the other scores are between 30 and 37 (a range of 7), suggesting that there is not a lot of differenes in the test scores.^[A second issue with range is that it is a *biased statistic*. If we use it as an estimate of the population range, it will almose inevitably be too small. The population range will almost always be larger since the sampling process will often not select extreme population values.] 
+The range of these data is 70, indicating that the variation between the lowest and highest score is 70 points, suggesting a lot of variation in the scores. The range, however, is clearly influenced by the score of 100. Were it not for that score, we would have a much different take on the score variability; the other scores are between 30 and 37 (a range of 7), suggesting that there is not a lot of differences in the test scores.^[A second issue with range is that it is a *biased statistic*. If we use it as an estimate of the population range, it will almost inevitably be too small. The population range will almost always be larger since the sampling process will often not select extreme population values.] 
 
-While the range is perhaps not the best measure of variation, it is quite useful as a validity check on the data to ensure that the attribute's values are theoretically possible. In this case the values are all between 0 and 1, which are values that are theoretically plausible for admission rate.
+While the range is not the best measure of variation, it is quite useful as a validity check on the data to ensure that the attribute's values are theoretically possible. In this case the values are all between 0 and 1, which are values that are theoretically plausible for admission rate. If for example, we had found a data value that was 1.1, this would represent a data error. We would want to confirm that case was entered correctly, or if no adjustment could be made, remove this case from further analysis as a proportion can not be larger than 1. 
 
 ### Percentile Range
 
 One way to deal with extreme values in the sample is simply to not include them when we calculate the range. For example, instead of computing the difference between the maximum and minimum value in the data (which includes extreme values), truncate the bottom 10% and upper 10% of the data and calculate the range between the remaining maximum and minimum values. This is essentially the range of the middle 80% of the data. 
 
-To compute the endpoint after truncatng the lower- and upper 10% we will use the `quantile()` function. This function finds the data value for an associated percentile provided to the function. If we wnat to truncate the lower- and upper 10% of a distribution we are interested in finding the values associated with the 10th and 90th percentiles. The syntax below shows two manners for obtaining these values for the admissions rate attribute.
+To compute the endpoint after truncating the lower- and upper 10% we will use the `quantile()` function. This function finds the data value for an associated percentile provided to the function. If we want to truncate the lower- and upper 10% of a distribution we are interested in finding the values associated with the 10th and 90th percentiles. The syntax below shows two manners for obtaining these values for the admissions rate attribute.
 
 ```{r percentiles}
 # Provide both percentiles separately
@@ -168,7 +167,7 @@ colleges %>%
 0.94706 - 0.39284
 ```
 
-The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates. These values seem to visually correspond to where most of the data are concentrated.
+The range of admissions rates for 80% of the 2,019 institutions of higher education is 0.554. We can visualize this by adding the percentiles on the plot of the distribution of admission rates, shown in Figure \@ref(fig:hist-percentiles). These values seem to visually correspond to where most of the data are concentrated and may provide a better indication for the variability for most of the data or the typical cases in the data.
 
 
 ```{r hist-percentiles, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 10th and 90th percentiles, respectively.', warning=FALSE}
@@ -194,7 +193,7 @@ colleges %>%
 0.83815 - 0.5524
 ```
 
-The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in the plot below, this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
+The range of admission rates for the middle 50% of the distribution is 28.5%. Since it is based on only 50% of the observations, the IQR no longer gives the range for "most" of the data, but, as shown in Figure \@ref(fig:hist-iqr), this range encompasses the modal clump of institutions' admission rates and can be useful for describing the variation.
 
 
 ```{r hist-iqr, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 institutions of higher education. The solid, red lines are placed at the 25th and 75th percentiles, respectively.', warning=FALSE}
@@ -214,7 +213,7 @@ gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
-Since the IQR describes the range for half of the observations, it can also be useful to compare this range with the entire range of the data. Below we compute these values and visualize them on a histogram of the distribution.
+Since the IQR describes the range for half of the observations, it can also be useful to compare this range with the entire range of the data. Below we compute these values and visualize them on a histogram of the distribution, see Figure \@ref(fig:hist-range-iqr).
 
 ```{r range-iqr}
 # Obtain values for the 25th- and 75th percentiles
@@ -256,9 +255,9 @@ gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
-Although our sample of 2,019 institutions of higher education have wildy varying admissions rates (from 0% to 100%), the middle half of those institutions have admissions rates between 55% and 84%. We also note that the 25% of institutions with the lowest admissions rate range from 0% to 55%, while the 25% of institutions with the highest admissions rate range from only 84% to 100%. This means that there is more variation in the admissions rates in the institutions with the lowest admissions rate than in the institutions with the highest admissions rates.
+Although our sample of 2,019 institutions of higher education have wildly varying admissions rates (from 0% to 100%), the middle half of those institutions have admissions rates between 55% and 84%. We also note that the 25% of institutions with the lowest admissions rate range from 0% to 55%, while the 25% of institutions with the highest admissions rate range from only 84% to 100%. This means that there is more variation in the admissions rates in the institutions with the lowest admissions rate than in the institutions with the highest admissions rates.
 
-Understanding how similar the range of variation is in these areas of the distribution can give us information about the shape f the distribution. For example, the bigger range in the lowest 25% of the data suggests that the distribution has a tail on the left side. Seventy-five percent of the institutions have admissions rates higher than 50%. These two features suggest that the distribtion is left-skewed (which we also see in the histogram). When we describe the shape of a distribution, we are actually describing the variability in the data!
+Understanding how similar the range of variation is in these areas of the distribution can give us information about the shape of the distribution. For example, the bigger range in the lowest 25% of the data suggests that the distribution has a tail on the left side. Seventy-five percent of the institutions have admissions rates higher than 50%. These two features suggest that the distribution is left-skewed (which we also see in the histogram). When we describe the shape of a distribution, we are actually describing the variability in the data!
 
 Examining the lowest 25%, highest 25%, and middle 50% of the data is so common that a statistician named John Tukey invented a visualization technique called the box-and-whiskers plot to show these ranges. To create a box-and-whiskers plot we use the `gf_boxploth()` function.^[The `gf_boxplot()` function creates vertical a box-and-whiskers plot, and the `gf_boxploth()` function creates a horizontal box-and-whiskers plot.] This function takes a formula that is slightly different than we have been using, namely `0 ~ attribute name`.  (Note that the `0` in the formula is where the box-and-whiskers plot is centered on the *y*-axis.)
 
@@ -267,11 +266,11 @@ gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  %>%
   gf_labs(x = "Admission rate")
 ```
 
-The "box", etxending from 0.55 to 0.84, depicts the interuartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The "whiskers" extend to either the end of the range, or the next closest observation that is not an extreme value. (There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates.) The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.
+The "box", extending from 0.55 to 0.84, depicts the interquartile range; the middle 50% of the distribution. The line near the middle of the box is the median value. The "whiskers" extend to either the end of the range, or the next closest observation that is not an extreme value.^[Extreme values are typically defined as ranged more than 1.5 times the IQR from either the lower or upper portion of the box. Recall, the lower and upper portion of the box reflect the 25th and 75th percentiles respectively.] There are several extreme values on the left-hand side of the distribution representing institutions with extremely low admission rates. The length of the whisker denotes the range of the lowest 25% of the distribution and the highest 25% of the distribution.
 
-We can also display both the histogram and the box-and-whiskers plot. In the syntax below, we center the box-and-whiskers plot at $y=170$. We also make the box slightly wider to display better in the plot.
+We can also display both the histogram and the box-and-whiskers plot. In the syntax below, we center the box-and-whiskers plot at $y=170$. We also make the box slightly wider to display better in the plot. The resulting figure is shown in Figure \@ref(fig:hist-and-boxplot).
 
-```{r hist-and-boxplot}
+```{r hist-and-boxplot, fig.cap = "Histogram and boxplot shown together."}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
   gf_boxploth(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10) %>%
   gf_labs(x = "Admission rate", y = "Frequency")
@@ -287,6 +286,8 @@ gf_ecdf(~ adm_rate, data = colleges) %>%
 ```
 
 To read this plot, we can map admission rates to their associated cumulative proportion. For example, one-quarter of the admission rates in the distribution are at or below 0.55; that is the admission rate of 0.55 has an associated cumulative proportion of 0.25. Similarly, an admission rate of 0.71 is associated with a cumulative proportion of 0.50; one-half of the admission rates in the distribution are at or below the value of 0.71.
+
+The cumulative proportion depicted on the *y-*axis are the same as the percentiles for the distribution. For example, the admission rate of 0.55 has an associated cumulative proportion of 0.25, is also the 25th percentile. As such, the cumulative proportion represents the amount of data that fall below the associated score on the *x-*axis.
 
 ### Variance and Standard Deviation
 
