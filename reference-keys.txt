@@ -48,6 +48,10 @@ fig:two-attr-regtree
 fig:cond-error-compare
 fig:sat-eval-acc
 tab:locations
+fig:scatter-temp
+fig:scatter-temp-int
+fig:scatter-temp-pressure
+fig:scatter-mean-center
 fig:density-fruit-pop
 fig:resample-10k-density
 fig:resample-violin

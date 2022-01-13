@@ -56,7 +56,10 @@ gf_point(drybulbtemp_min ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2
           y = "Minimum daily temperature (in F)")
 ```
 
-<img src="07-linear-regression_files/figure-html/scatter-temp-1.png" width="672" />
+<div class="figure">
+<img src="07-linear-regression_files/figure-html/scatter-temp-1.png" alt="Scatterplot showing the minimum temperature by dewpoint." width="672" />
+<p class="caption">(\#fig:scatter-temp)Scatterplot showing the minimum temperature by dewpoint.</p>
+</div>
 
 Figure \@ref(fig:scatter-temp) shows the relationship between minimum temperature and average daily dew point assuming a linear relationship (specified with `gf_smooth(method = 'lm')`) between the two attributes. In this example, the relationship between the two attributes goes from the lower left to the upper right, indicating a positive relationship. That is, as the average daily dew point tends to increase, the minimum daily temperature also tends to increase. The relationship is not perfect, which is shown by the points not falling perfectly on the blue line, but the data are clustered relatively closely to this blue line. This would suggest that the relationship is stronger rather than being weaker and closer to +1 than 0. 
 
@@ -97,7 +100,7 @@ drybulbtemp\_min = 4.83 + 0.90 dewpoint\_avg + \epsilon
 
 The equation can also be represented without the error, $\epsilon$ as:
 
-begin{equation}
+\begin{equation}
 \hat{drybulbtemp\_min} = 4.83 + 0.90 dewpoint\_avg 
 \end{equation}
 
@@ -153,11 +156,14 @@ gf_point(drybulbtemp_min ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2
           y = "Minimum daily temperature (in F)")
 ```
 
-<img src="07-linear-regression_files/figure-html/scatter-temp-int-1.png" width="672" />
+<div class="figure">
+<img src="07-linear-regression_files/figure-html/scatter-temp-int-1.png" alt="Scatterplot showing the minimum temperature by dewpoint highlighting the intercept." width="672" />
+<p class="caption">(\#fig:scatter-temp-int)Scatterplot showing the minimum temperature by dewpoint highlighting the intercept.</p>
+</div>
 
 In the example that has been explored so far, a value of 0 for the average daily dew point occurs within the sample of data. That is, an average daily dew point of 0 occurs in the data are is directly interpretable. This would mean that when an average daily dew point of 0 happens in real life, the minimum temperature is 4.83 degrees Fahrenheit on average for the data that is included in this sample. There are situations where a value of 0 for an attribute is not plausible to occur. An example could be predicting a baby's birth weight based on the number of gestation days.^[Gestational days is the number of days that the baby is in the womb before being born, see [gestation on Wikipedia](https://en.wikipedia.org/wiki/Gestation)] In situations where the value of 0 is not plausible or meaningful, the data can be centered on a value that is more meaningful or plausible to help with the interpretation of the y-intercept. 
 
-Before this is done, below is a more concrete example that still tries to predict/explain minimum temperature, but now the attribute to explain differences in the minimum temperature is the average daily sea level pressure. Sea-level pressure is a way to measure atmospheric pressure and is measured in inches of mercury^[See [atmospheric pressure on Wikipedia](https://en.wikipedia.org/wiki/Atmospheric_pressure#Mean_sea-level_pressure)]. Figure \@ref(fig:scatter-temp-pressure) shows a scatterplot of this relationship. First, notice that the direction of the blue line is different than before, it starts in the upper left quadrant and decreases as the sea level pressure increases. This is indicative of a negative relationship between the two attributes. The correlation can be estimated to be -0.38, a moderate negative relationship. This relationship is not as strong as the relationship between minimum temperature and average daily dew point. The variation around the blue line in \@ref(fig:scatter-temp-pressure) is much larger which depicts a weaker relationship (ie., more error) compared to the minimum temperature and dew point relationship (see Figure \@ref(fig:scatter-temp)).
+Before this is done, below is a more concrete example that still tries to predict/explain minimum temperature, but now the attribute to explain differences in the minimum temperature is the average daily sea level pressure. Sea-level pressure is a way to measure atmospheric pressure and is measured in inches of mercury^[See [atmospheric pressure on Wikipedia](https://en.wikipedia.org/wiki/Atmospheric_pressure#Mean_sea-level_pressure)]. Figure \@ref(fig:scatter-temp-pressure) shows a scatterplot of this relationship. First, notice that the direction of the blue line is different than before, it starts in the upper left quadrant and decreases as the sea level pressure increases. This is indicative of a negative relationship between the two attributes. The correlation can be estimated to be -0.38, a moderate negative relationship. This relationship is not as strong as the relationship between minimum temperature and average daily dew point. The variation around the blue line in \@ref(fig:scatter-temp-pressure) is much larger which depicts a weaker relationship (i.e., more error) compared to the minimum temperature and dew point relationship (see Figure \@ref(fig:scatter-temp)).
 
 
 ```r
@@ -167,7 +173,10 @@ gf_point(drybulbtemp_min ~ sealevelpressure_avg, data = us_weather, size = 3, al
           y = "Minimum daily temperature (in F)")
 ```
 
-<img src="07-linear-regression_files/figure-html/scatter-temp-pressure-1.png" width="672" />
+<div class="figure">
+<img src="07-linear-regression_files/figure-html/scatter-temp-pressure-1.png" alt="Scatterplot showing minimum temperature by sea level pressure." width="672" />
+<p class="caption">(\#fig:scatter-temp-pressure)Scatterplot showing minimum temperature by sea level pressure.</p>
+</div>
 
 If a linear regression is estimated with these two attributes, the following coefficients and resulting regression equation can be generated.
 
@@ -186,9 +195,9 @@ coef(sea_temp)
 drybulbtemp\_min = 660.05 - 21.05 sealevelpressure\_avg + \epsilon
 \end{equation}
 
-For these, the y-intercept is about 660 degrees Fahrenheit and the linear slope is about -21 degrees Fahrenheit. How are these interpreted? Starting first with the linear slope, the -21 means that for every one unit increase in sea level pressure (ie., moving from 29 to 30 inches of mercury), the average minimum temperature decreases by 21 degrees Fahrenheit. 
+For these, the y-intercept is about 660 degrees Fahrenheit and the linear slope is about -21 degrees Fahrenheit. How are these interpreted? Starting first with the linear slope, the -21 means that for every one unit increase in sea level pressure (i.e., moving from 29 to 30 inches of mercury), the average minimum temperature decreases by 21 degrees Fahrenheit. 
 
-Why is the y-intercept 660 degrees Fahrenheit, a temperature that is much above the boiling point of water and is hotter than most ovens. Furthermore, this is not an atmospheric temperature that we have seen in the data, so why is the y-intercept 660 degrees Fahrenheit? Ultimately, this comes down to the range of sea level pressure, where the minimum value in the data is 29.02, a value very far from 0. Therefore, the linear relationship depicted above is extrapolated outside the range of the data (ie, decreased by 29.02 sea level units) which increases the temperature by 610.871 degrees Fahrenheit units. This value is not interpretable or meaningful as it would not be possible to get a sea level pressure of 0 in the metric of inches of mercury. It is possible to modify the data, but not change the overall relationship between minimum temperature and sea level pressure to help increase the interpretation of the y-intercept. Three options will be explored, mean value centered, minimum value centered, and maximum value centered, although there are many other potential options. 
+Why is the y-intercept 660 degrees Fahrenheit, a temperature that is much above the boiling point of water and is hotter than most ovens. Furthermore, this is not an atmospheric temperature that we have seen in the data, so why is the y-intercept 660 degrees Fahrenheit? Ultimately, this comes down to the range of sea level pressure, where the minimum value in the data is 29.02, a value very far from 0. Therefore, the linear relationship depicted above is extrapolated outside the range of the data (i.e., decreased by 29.02 sea level units) which increases the temperature by 610.871 degrees Fahrenheit units. This value is not interpretable or meaningful as it would not be possible to get a sea level pressure of 0 in the metric of inches of mercury. It is possible to modify the data, but not change the overall relationship between minimum temperature and sea level pressure to help increase the interpretation of the y-intercept. Three options will be explored, mean value centered, minimum value centered, and maximum value centered, although there are many other potential options. 
 
 #### Mean center sea level pressure
 First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of sea level pressure. More explicitly, the value of 30.04 was subtracted from each sea level pressure value in the data. 
@@ -202,9 +211,12 @@ gf_point(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, n
           y = "Minimum daily temperature (in F)")
 ```
 
-<img src="07-linear-regression_files/figure-html/scatter-mean-center-1.png" width="672" />
+<div class="figure">
+<img src="07-linear-regression_files/figure-html/scatter-mean-center-1.png" alt="Scatterplot showing the relationship between minimum temperature by sea level pressure that is mean centered." width="672" />
+<p class="caption">(\#fig:scatter-mean-center)Scatterplot showing the relationship between minimum temperature by sea level pressure that is mean centered.</p>
+</div>
 
-Notice that the relationship is the same as before, but now the scale of sea level pressure is different. From the coefficients shown below, notice that the linear slope is the same as before, -21.05, showing that the subtraction of the mean for each value did not impact the overall relationship between the two attributes. The difference, is now the y-intercept is much smaller and would represent the mean minimum temperature when the mean-centered sea level pressure is 0 (ie., a value of 30.04 in the original metric). 
+Notice that the relationship is the same as before, but now the scale of sea level pressure is different. From the coefficients shown below, notice that the linear slope is the same as before, -21.05, showing that the subtraction of the mean for each value did not impact the overall relationship between the two attributes. The difference, is now the y-intercept is much smaller and would represent the mean minimum temperature when the mean-centered sea level pressure is 0 (i.e., a value of 30.04 in the original metric). 
 
 
 ```r
@@ -284,9 +296,9 @@ coef(sealevel_reg_max)
 ##                                                         -21.05011
 ```
 
-Two main takeaways from these two new models. First, the relationship between the minimum temperature and the sea level pressure does not change. The average change in the minimum temperature for a unit change of sea level pressure is still 21 degrees Fahrenheit and the relationship is always negative. The element that changes is the y-intercept. For the minimum centered model, the y-intercept is 49.18 degrees Fahrenheit. The interpretation is that when the sea level pressure has a value of 0 (ie., a value of 29.02 in the original metric), the average minimum temperature is 49.18 degrees Fahrenheit. Similarly, the maximum centered model has a y-intercept of 11.29. This represents the average minimum temperature when the sea level pressure is 0 (ie., a value of 30.82 in the original metric). 
+Two main takeaways from these two new models. First, the relationship between the minimum temperature and the sea level pressure does not change. The average change in the minimum temperature for a unit change of sea level pressure is still 21 degrees Fahrenheit and the relationship is always negative. The element that changes is the y-intercept. For the minimum centered model, the y-intercept is 49.18 degrees Fahrenheit. The interpretation is that when the sea level pressure has a value of 0 (i.e., a value of 29.02 in the original metric), the average minimum temperature is 49.18 degrees Fahrenheit. Similarly, the maximum centered model has a y-intercept of 11.29. This represents the average minimum temperature when the sea level pressure is 0 (i.e., a value of 30.82 in the original metric). 
 
-If the three different centered y-intercepts are compared, min-centered = 49.18, mean-centered = 27.63, and max-centered = 11.29. The mean-centered y-intercept is in between the minimum and maximum centered values, why is this occurring? This is happening due to the linear relationship that is assumed between the minimum temperature and the sea level pressure with the linear regression model. If a different functional form was assumed (ie., a curved relationship), there would likely be larger differences between the pairs of y-intercept values shown above. 
+If the three different centered y-intercepts are compared, min-centered = 49.18, mean-centered = 27.63, and max-centered = 11.29. The mean-centered y-intercept is in between the minimum and maximum centered values, why is this occurring? This is happening due to the linear relationship that is assumed between the minimum temperature and the sea level pressure with the linear regression model. If a different functional form was assumed (i.e., a curved relationship), there would likely be larger differences between the pairs of y-intercept values shown above. 
 
 
 ## Conditional Means
