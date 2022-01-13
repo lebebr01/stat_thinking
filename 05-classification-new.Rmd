@@ -20,7 +20,7 @@ library(rpart.plot)
 library(rsample)
 
 # Add plot theme
-theme_set(theme_statthinking())
+theme_set(theme_statthinking(base_size = 14))
 
 us_weather <- mutate(us_weather, snow_factor = factor(snow), 
                      snow_numeric = ifelse(snow == 'Yes', 1, 0))
