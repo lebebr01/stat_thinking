@@ -6,7 +6,7 @@ library(ggformula)
 library(statthink)
 
 # Add plot theme
-theme_set(theme_statthinking())
+theme_set(theme_statthinking(base_size = 14))
 ```
 
 Real world data are never as simple as exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases attributes interact with one another, move in tandem, and many phenomena help to explain the attribute of interest. For example, when thinking about admission rates of higher education institutions, what may be some important attributes that would explain some of the reasons why higher education institutions differ in their admission rates? When thinking about the high temperature for the given day, what attributes would be helpful to understand why the high temperature on a day is different? Take a few minutes to brainstorm some ideas.
