@@ -104,7 +104,7 @@ multivariate-descriptive-statistics
 adding-additional-groups
 adding-more-descriptive-statistics
 classification
-topic-decision-trees
+decision-trees
 fitting-a-classification-tree
 visualizing-results
 accuracy

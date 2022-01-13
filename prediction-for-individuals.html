@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2022-01-12" />
+<meta name="date" content="2022-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -214,7 +214,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#decision-trees"><i class="fa fa-check"></i><b>5.1</b> Decision Trees</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.2</b> Accuracy</a></li>
 </ul></li>
@@ -322,17 +322,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="skewed-data---inference" class="section level3">
 <h3><span class="header-section-number">10.2.1</span> Skewed Data - Inference</h3>
 <p>In one example, a skewed distribution was transformed prior to conducting the analysis with a regression tree. Another approach could be to use a more robust statistic such as the median. One limitation of the median, is that a linear regression model as we have covered so far, does not allow you to fit the model while using the median.</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="prediction-for-individuals.html#cb270-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb270-2"><a href="prediction-for-individuals.html#cb270-2"></a><span class="kw">library</span>(ggformula)</span>
-<span id="cb270-3"><a href="prediction-for-individuals.html#cb270-3"></a><span class="kw">library</span>(mosaic)</span>
-<span id="cb270-4"><a href="prediction-for-individuals.html#cb270-4"></a><span class="kw">library</span>(broom)</span>
-<span id="cb270-5"><a href="prediction-for-individuals.html#cb270-5"></a><span class="kw">library</span>(statthink)</span>
-<span id="cb270-6"><a href="prediction-for-individuals.html#cb270-6"></a></span>
-<span id="cb270-7"><a href="prediction-for-individuals.html#cb270-7"></a><span class="co"># Set theme for plots</span></span>
-<span id="cb270-8"><a href="prediction-for-individuals.html#cb270-8"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())</span>
-<span id="cb270-9"><a href="prediction-for-individuals.html#cb270-9"></a></span>
-<span id="cb270-10"><a href="prediction-for-individuals.html#cb270-10"></a>college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="dt">guess_max =</span> <span class="dv">10000</span>)</span>
-<span id="cb270-11"><a href="prediction-for-individuals.html#cb270-11"></a><span class="kw">head</span>(college_score)</span></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="prediction-for-individuals.html#cb272-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb272-2"><a href="prediction-for-individuals.html#cb272-2"></a><span class="kw">library</span>(ggformula)</span>
+<span id="cb272-3"><a href="prediction-for-individuals.html#cb272-3"></a><span class="kw">library</span>(mosaic)</span>
+<span id="cb272-4"><a href="prediction-for-individuals.html#cb272-4"></a><span class="kw">library</span>(broom)</span>
+<span id="cb272-5"><a href="prediction-for-individuals.html#cb272-5"></a><span class="kw">library</span>(statthink)</span>
+<span id="cb272-6"><a href="prediction-for-individuals.html#cb272-6"></a></span>
+<span id="cb272-7"><a href="prediction-for-individuals.html#cb272-7"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb272-8"><a href="prediction-for-individuals.html#cb272-8"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>(<span class="dt">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb272-9"><a href="prediction-for-individuals.html#cb272-9"></a></span>
+<span id="cb272-10"><a href="prediction-for-individuals.html#cb272-10"></a>college_score &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, <span class="dt">guess_max =</span> <span class="dv">10000</span>)</span>
+<span id="cb272-11"><a href="prediction-for-individuals.html#cb272-11"></a><span class="kw">head</span>(college_score)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 17
 ##   instnm    city   stabbr preddeg region locale adm_rate actcmmid  ugds costt4_a
 ##   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
@@ -345,34 +345,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # … with 7 more variables: costt4_p &lt;dbl&gt;, tuitionfee_in &lt;dbl&gt;,
 ## #   tuitionfee_out &lt;dbl&gt;, debt_mdn &lt;dbl&gt;, grad_debt_mdn &lt;dbl&gt;, female &lt;dbl&gt;,
 ## #   bachelor_degree &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="prediction-for-individuals.html#cb272-1"></a>adm_model &lt;-<span class="st"> </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score)</span>
-<span id="cb272-2"><a href="prediction-for-individuals.html#cb272-2"></a><span class="kw">coef</span>(adm_model)</span></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="prediction-for-individuals.html#cb274-1"></a>adm_model &lt;-<span class="st"> </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> college_score)</span>
+<span id="cb274-2"><a href="prediction-for-individuals.html#cb274-2"></a><span class="kw">coef</span>(adm_model)</span></code></pre></div>
 <pre><code>##               (Intercept)    preddegBachelor Degree preddegCertificate Degree 
 ##                0.72296993               -0.05170254                0.02193828</code></pre>
 <p>Prior to doing the median, we can bootstrap the mean difference from the model above.</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="prediction-for-individuals.html#cb274-1"></a>resample_admrate &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
-<span id="cb274-2"><a href="prediction-for-individuals.html#cb274-2"></a>  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span></span>
-<span id="cb274-3"><a href="prediction-for-individuals.html#cb274-3"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb274-4"><a href="prediction-for-individuals.html#cb274-4"></a></span>
-<span id="cb274-5"><a href="prediction-for-individuals.html#cb274-5"></a>  college_resample <span class="op">%&gt;%</span></span>
-<span id="cb274-6"><a href="prediction-for-individuals.html#cb274-6"></a><span class="st">    </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
-<span id="cb274-7"><a href="prediction-for-individuals.html#cb274-7"></a><span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span></span>
-<span id="cb274-8"><a href="prediction-for-individuals.html#cb274-8"></a><span class="st">    </span><span class="kw">select</span>(term, estimate)</span>
-<span id="cb274-9"><a href="prediction-for-individuals.html#cb274-9"></a>}</span>
-<span id="cb274-10"><a href="prediction-for-individuals.html#cb274-10"></a></span>
-<span id="cb274-11"><a href="prediction-for-individuals.html#cb274-11"></a><span class="kw">resample_admrate</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="prediction-for-individuals.html#cb276-1"></a>resample_admrate &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb276-2"><a href="prediction-for-individuals.html#cb276-2"></a>  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span></span>
+<span id="cb276-3"><a href="prediction-for-individuals.html#cb276-3"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb276-4"><a href="prediction-for-individuals.html#cb276-4"></a></span>
+<span id="cb276-5"><a href="prediction-for-individuals.html#cb276-5"></a>  college_resample <span class="op">%&gt;%</span></span>
+<span id="cb276-6"><a href="prediction-for-individuals.html#cb276-6"></a><span class="st">    </span><span class="kw">lm</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb276-7"><a href="prediction-for-individuals.html#cb276-7"></a><span class="st">    </span><span class="kw">tidy</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb276-8"><a href="prediction-for-individuals.html#cb276-8"></a><span class="st">    </span><span class="kw">select</span>(term, estimate)</span>
+<span id="cb276-9"><a href="prediction-for-individuals.html#cb276-9"></a>}</span>
+<span id="cb276-10"><a href="prediction-for-individuals.html#cb276-10"></a></span>
+<span id="cb276-11"><a href="prediction-for-individuals.html#cb276-11"></a><span class="kw">resample_admrate</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 2
 ##   term                      estimate
 ##   &lt;chr&gt;                        &lt;dbl&gt;
-## 1 (Intercept)                 0.749 
-## 2 preddegBachelor Degree     -0.0770
-## 3 preddegCertificate Degree  -0.0270</code></pre>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="prediction-for-individuals.html#cb276-1"></a>admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span></span>
-<span id="cb276-2"><a href="prediction-for-individuals.html#cb276-2"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
-<span id="cb276-3"><a href="prediction-for-individuals.html#cb276-3"></a></span>
-<span id="cb276-4"><a href="prediction-for-individuals.html#cb276-4"></a>admrate_coef <span class="op">%&gt;%</span></span>
-<span id="cb276-5"><a href="prediction-for-individuals.html#cb276-5"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-6"><a href="prediction-for-individuals.html#cb276-6"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
+## 1 (Intercept)                 0.696 
+## 2 preddegBachelor Degree     -0.0186
+## 3 preddegCertificate Degree   0.0617</code></pre>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="prediction-for-individuals.html#cb278-1"></a>admrate_coef &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate) <span class="op">%&gt;%</span></span>
+<span id="cb278-2"><a href="prediction-for-individuals.html#cb278-2"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb278-3"><a href="prediction-for-individuals.html#cb278-3"></a></span>
+<span id="cb278-4"><a href="prediction-for-individuals.html#cb278-4"></a>admrate_coef <span class="op">%&gt;%</span></span>
+<span id="cb278-5"><a href="prediction-for-individuals.html#cb278-5"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>estimate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb278-6"><a href="prediction-for-individuals.html#cb278-6"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
 <p><img src="10-misc_files/figure-html/replicate-adm-rate-1.png" width="672" /></p>
 </div>
 <div id="bootstrap-median" class="section level3">
@@ -385,33 +385,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Repeat steps 1 - 3 many times</li>
 <li>Explore the distribution of median differences from the many resampled data sets.</li>
 </ol>
-<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="prediction-for-individuals.html#cb277-1"></a>resample_admrate_median &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
-<span id="cb277-2"><a href="prediction-for-individuals.html#cb277-2"></a>  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span></span>
-<span id="cb277-3"><a href="prediction-for-individuals.html#cb277-3"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb277-4"><a href="prediction-for-individuals.html#cb277-4"></a></span>
-<span id="cb277-5"><a href="prediction-for-individuals.html#cb277-5"></a>  med_est &lt;-<span class="st"> </span>college_resample <span class="op">%&gt;%</span></span>
-<span id="cb277-6"><a href="prediction-for-individuals.html#cb277-6"></a><span class="st">    </span><span class="kw">df_stats</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, median) <span class="op">%&gt;%</span></span>
-<span id="cb277-7"><a href="prediction-for-individuals.html#cb277-7"></a><span class="st">    </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> preddeg, <span class="dt">values_from =</span> median_adm_rate)</span>
-<span id="cb277-8"><a href="prediction-for-individuals.html#cb277-8"></a></span>
-<span id="cb277-9"><a href="prediction-for-individuals.html#cb277-9"></a>  <span class="kw">names</span>(med_est) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Associate&quot;</span>, <span class="st">&quot;Bachelor&quot;</span>, <span class="st">&quot;Certificate&quot;</span>)</span>
-<span id="cb277-10"><a href="prediction-for-individuals.html#cb277-10"></a>  </span>
-<span id="cb277-11"><a href="prediction-for-individuals.html#cb277-11"></a>  med_est <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb277-12"><a href="prediction-for-individuals.html#cb277-12"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">bachelor_associate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Associate,</span>
-<span id="cb277-13"><a href="prediction-for-individuals.html#cb277-13"></a>           <span class="dt">certificate_associate =</span> Certificate <span class="op">-</span><span class="st"> </span>Associate,</span>
-<span id="cb277-14"><a href="prediction-for-individuals.html#cb277-14"></a>           <span class="dt">bachelor_certificate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Certificate) <span class="op">%&gt;%</span></span>
-<span id="cb277-15"><a href="prediction-for-individuals.html#cb277-15"></a><span class="st">    </span><span class="kw">pivot_longer</span>(Associate<span class="op">:</span>bachelor_certificate, </span>
-<span id="cb277-16"><a href="prediction-for-individuals.html#cb277-16"></a>                 <span class="dt">names_to =</span> <span class="st">&quot;Term&quot;</span>, </span>
-<span id="cb277-17"><a href="prediction-for-individuals.html#cb277-17"></a>                 <span class="dt">values_to =</span> <span class="st">&quot;Median_Difference&quot;</span>)</span>
-<span id="cb277-18"><a href="prediction-for-individuals.html#cb277-18"></a>}</span>
-<span id="cb277-19"><a href="prediction-for-individuals.html#cb277-19"></a></span>
-<span id="cb277-20"><a href="prediction-for-individuals.html#cb277-20"></a><span class="kw">resample_admrate_median</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="prediction-for-individuals.html#cb278-1"></a>admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span></span>
-<span id="cb278-2"><a href="prediction-for-individuals.html#cb278-2"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
-<span id="cb278-3"><a href="prediction-for-individuals.html#cb278-3"></a></span>
-<span id="cb278-4"><a href="prediction-for-individuals.html#cb278-4"></a>admrate_median <span class="op">%&gt;%</span></span>
-<span id="cb278-5"><a href="prediction-for-individuals.html#cb278-5"></a><span class="st">    </span><span class="kw">filter</span>(Term <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;bachelor_associate&#39;</span>, <span class="st">&#39;certificate_associate&#39;</span>, <span class="st">&#39;bachelor_certificate&#39;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb278-6"><a href="prediction-for-individuals.html#cb278-6"></a><span class="st">    </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>Median_Difference) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb278-7"><a href="prediction-for-individuals.html#cb278-7"></a><span class="st">    </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>Term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="prediction-for-individuals.html#cb279-1"></a>resample_admrate_median &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb279-2"><a href="prediction-for-individuals.html#cb279-2"></a>  college_resample &lt;-<span class="st"> </span>college_score <span class="op">%&gt;%</span></span>
+<span id="cb279-3"><a href="prediction-for-individuals.html#cb279-3"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(college_score), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb279-4"><a href="prediction-for-individuals.html#cb279-4"></a></span>
+<span id="cb279-5"><a href="prediction-for-individuals.html#cb279-5"></a>  med_est &lt;-<span class="st"> </span>college_resample <span class="op">%&gt;%</span></span>
+<span id="cb279-6"><a href="prediction-for-individuals.html#cb279-6"></a><span class="st">    </span><span class="kw">df_stats</span>(adm_rate <span class="op">~</span><span class="st"> </span>preddeg, median) <span class="op">%&gt;%</span></span>
+<span id="cb279-7"><a href="prediction-for-individuals.html#cb279-7"></a><span class="st">    </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> preddeg, <span class="dt">values_from =</span> median_adm_rate)</span>
+<span id="cb279-8"><a href="prediction-for-individuals.html#cb279-8"></a></span>
+<span id="cb279-9"><a href="prediction-for-individuals.html#cb279-9"></a>  <span class="kw">names</span>(med_est) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Associate&quot;</span>, <span class="st">&quot;Bachelor&quot;</span>, <span class="st">&quot;Certificate&quot;</span>)</span>
+<span id="cb279-10"><a href="prediction-for-individuals.html#cb279-10"></a>  </span>
+<span id="cb279-11"><a href="prediction-for-individuals.html#cb279-11"></a>  med_est <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb279-12"><a href="prediction-for-individuals.html#cb279-12"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">bachelor_associate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Associate,</span>
+<span id="cb279-13"><a href="prediction-for-individuals.html#cb279-13"></a>           <span class="dt">certificate_associate =</span> Certificate <span class="op">-</span><span class="st"> </span>Associate,</span>
+<span id="cb279-14"><a href="prediction-for-individuals.html#cb279-14"></a>           <span class="dt">bachelor_certificate =</span> Bachelor <span class="op">-</span><span class="st"> </span>Certificate) <span class="op">%&gt;%</span></span>
+<span id="cb279-15"><a href="prediction-for-individuals.html#cb279-15"></a><span class="st">    </span><span class="kw">pivot_longer</span>(Associate<span class="op">:</span>bachelor_certificate, </span>
+<span id="cb279-16"><a href="prediction-for-individuals.html#cb279-16"></a>                 <span class="dt">names_to =</span> <span class="st">&quot;Term&quot;</span>, </span>
+<span id="cb279-17"><a href="prediction-for-individuals.html#cb279-17"></a>                 <span class="dt">values_to =</span> <span class="st">&quot;Median_Difference&quot;</span>)</span>
+<span id="cb279-18"><a href="prediction-for-individuals.html#cb279-18"></a>}</span>
+<span id="cb279-19"><a href="prediction-for-individuals.html#cb279-19"></a></span>
+<span id="cb279-20"><a href="prediction-for-individuals.html#cb279-20"></a><span class="kw">resample_admrate_median</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="prediction-for-individuals.html#cb280-1"></a>admrate_median &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_admrate_median) <span class="op">%&gt;%</span></span>
+<span id="cb280-2"><a href="prediction-for-individuals.html#cb280-2"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span>
+<span id="cb280-3"><a href="prediction-for-individuals.html#cb280-3"></a></span>
+<span id="cb280-4"><a href="prediction-for-individuals.html#cb280-4"></a>admrate_median <span class="op">%&gt;%</span></span>
+<span id="cb280-5"><a href="prediction-for-individuals.html#cb280-5"></a><span class="st">    </span><span class="kw">filter</span>(Term <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;bachelor_associate&#39;</span>, <span class="st">&#39;certificate_associate&#39;</span>, <span class="st">&#39;bachelor_certificate&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb280-6"><a href="prediction-for-individuals.html#cb280-6"></a><span class="st">    </span><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>Median_Difference) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb280-7"><a href="prediction-for-individuals.html#cb280-7"></a><span class="st">    </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>Term, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</span></code></pre></div>
 
 </div>
 </div>

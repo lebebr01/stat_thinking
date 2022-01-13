@@ -24,7 +24,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2022-01-12" />
+<meta name="date" content="2022-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -214,7 +214,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#topic-decision-trees"><i class="fa fa-check"></i><b>5.1</b> Topic: Decision Trees</a><ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#decision-trees"><i class="fa fa-check"></i><b>5.1</b> Decision Trees</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.2</b> Accuracy</a></li>
 </ul></li>
@@ -321,17 +321,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Bootstrap and resampling methods can be used to estimate the variability in the estimated effects. This is needed as it is most common to have a subset of the entire population rather than the entire population, therefore the model estimates are approximations of the true population parameters. If another sample of data were obtained, the model estimates would be different from the previous sample. This would occur due to different individuals comprised within the sample.</p>
 <p>The goal of a good sample is to be able to get good estimates of the population parameters of interest. This happens when the sample obtained is as representative as possible of the population, most notably this can be gathered by collected the sample using a random process or ensuring that everyone in the population has the same random chance of being selected to be in the population. This is more challenging than one would expect where practical issues can often tarnish a good sampling plan. For instance, a portion of the population of interest may be difficult to gain access to or a portion of the population may be less likely to participate. These issues could bias the sample to be dissimilar from the population. For this book, we are going to assume that a representative sample is obtained from the population, but this needs to always be explored compared whenever data is gathered.</p>
 <p>For this chapter, the United States (US) weather data will be used again. The following code chunk loads the packages used in this chapter, sets the figure theme, and creates a few new attributes for the US weather data.</p>
-<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="estimation-bootstrap-and-uncertainty.html#cb197-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb197-2"><a href="estimation-bootstrap-and-uncertainty.html#cb197-2"></a><span class="kw">library</span>(ggformula)</span>
-<span id="cb197-3"><a href="estimation-bootstrap-and-uncertainty.html#cb197-3"></a><span class="kw">library</span>(mosaic)</span>
-<span id="cb197-4"><a href="estimation-bootstrap-and-uncertainty.html#cb197-4"></a><span class="kw">library</span>(broom)</span>
-<span id="cb197-5"><a href="estimation-bootstrap-and-uncertainty.html#cb197-5"></a><span class="kw">library</span>(statthink)</span>
-<span id="cb197-6"><a href="estimation-bootstrap-and-uncertainty.html#cb197-6"></a></span>
-<span id="cb197-7"><a href="estimation-bootstrap-and-uncertainty.html#cb197-7"></a><span class="co"># Set theme for plots</span></span>
-<span id="cb197-8"><a href="estimation-bootstrap-and-uncertainty.html#cb197-8"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>())</span>
-<span id="cb197-9"><a href="estimation-bootstrap-and-uncertainty.html#cb197-9"></a></span>
-<span id="cb197-10"><a href="estimation-bootstrap-and-uncertainty.html#cb197-10"></a>us_weather &lt;-<span class="st"> </span><span class="kw">mutate</span>(us_weather, <span class="dt">snow_factor =</span> <span class="kw">factor</span>(snow), </span>
-<span id="cb197-11"><a href="estimation-bootstrap-and-uncertainty.html#cb197-11"></a>                     <span class="dt">snow_numeric =</span> <span class="kw">ifelse</span>(snow <span class="op">==</span><span class="st"> &#39;Yes&#39;</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="estimation-bootstrap-and-uncertainty.html#cb199-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb199-2"><a href="estimation-bootstrap-and-uncertainty.html#cb199-2"></a><span class="kw">library</span>(ggformula)</span>
+<span id="cb199-3"><a href="estimation-bootstrap-and-uncertainty.html#cb199-3"></a><span class="kw">library</span>(mosaic)</span>
+<span id="cb199-4"><a href="estimation-bootstrap-and-uncertainty.html#cb199-4"></a><span class="kw">library</span>(broom)</span>
+<span id="cb199-5"><a href="estimation-bootstrap-and-uncertainty.html#cb199-5"></a><span class="kw">library</span>(statthink)</span>
+<span id="cb199-6"><a href="estimation-bootstrap-and-uncertainty.html#cb199-6"></a></span>
+<span id="cb199-7"><a href="estimation-bootstrap-and-uncertainty.html#cb199-7"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb199-8"><a href="estimation-bootstrap-and-uncertainty.html#cb199-8"></a><span class="kw">theme_set</span>(<span class="kw">theme_statthinking</span>(<span class="dt">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb199-9"><a href="estimation-bootstrap-and-uncertainty.html#cb199-9"></a></span>
+<span id="cb199-10"><a href="estimation-bootstrap-and-uncertainty.html#cb199-10"></a>us_weather &lt;-<span class="st"> </span><span class="kw">mutate</span>(us_weather, <span class="dt">snow_factor =</span> <span class="kw">factor</span>(snow), </span>
+<span id="cb199-11"><a href="estimation-bootstrap-and-uncertainty.html#cb199-11"></a>                     <span class="dt">snow_numeric =</span> <span class="kw">ifelse</span>(snow <span class="op">==</span><span class="st"> &#39;Yes&#39;</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div>
 </div>
 <div id="estimating-error-or-uncertainty" class="section level2">
 <h2><span class="header-section-number">8.2</span> Estimating Error or uncertainty</h2>
@@ -347,11 +347,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">8.2.1</span> Resample with replacement</h3>
 <p>Resampling the data with replacement, is the step in the bootstrap/resampling procedure that is needed to ensure that the estimates obtained are accurate and that there are different samples obtained throughout the process. Before moving on, this idea is worth expanding on to understand the differences and what exactly sampling with replacement means.</p>
 <p>To do this, a simple example of fruit names will be used. An object is created with code below that has 7 fruits in it. The data also contain a made up popularity measure that shows how much individuals like each fruit. These are also printed to show that these elements each show up in the object exactly one time.</p>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="estimation-bootstrap-and-uncertainty.html#cb198-1"></a>fruit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
-<span id="cb198-2"><a href="estimation-bootstrap-and-uncertainty.html#cb198-2"></a>  <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&#39;apple&#39;</span>, <span class="st">&#39;banana&#39;</span>, <span class="st">&#39;kiwi&#39;</span>, <span class="st">&#39;orange&#39;</span>, <span class="st">&#39;plum&#39;</span>, <span class="st">&#39;pear&#39;</span>, <span class="st">&#39;kumquat&#39;</span>),</span>
-<span id="cb198-3"><a href="estimation-bootstrap-and-uncertainty.html#cb198-3"></a>  <span class="dt">popularity =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">2</span>)</span>
-<span id="cb198-4"><a href="estimation-bootstrap-and-uncertainty.html#cb198-4"></a>)</span>
-<span id="cb198-5"><a href="estimation-bootstrap-and-uncertainty.html#cb198-5"></a>fruit</span></code></pre></div>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="estimation-bootstrap-and-uncertainty.html#cb200-1"></a>fruit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb200-2"><a href="estimation-bootstrap-and-uncertainty.html#cb200-2"></a>  <span class="dt">names =</span> <span class="kw">c</span>(<span class="st">&#39;apple&#39;</span>, <span class="st">&#39;banana&#39;</span>, <span class="st">&#39;kiwi&#39;</span>, <span class="st">&#39;orange&#39;</span>, <span class="st">&#39;plum&#39;</span>, <span class="st">&#39;pear&#39;</span>, <span class="st">&#39;kumquat&#39;</span>),</span>
+<span id="cb200-3"><a href="estimation-bootstrap-and-uncertainty.html#cb200-3"></a>  <span class="dt">popularity =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">2</span>)</span>
+<span id="cb200-4"><a href="estimation-bootstrap-and-uncertainty.html#cb200-4"></a>)</span>
+<span id="cb200-5"><a href="estimation-bootstrap-and-uncertainty.html#cb200-5"></a>fruit</span></code></pre></div>
 <pre><code>##     names popularity
 ## 1   apple         10
 ## 2  banana         25
@@ -364,8 +364,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For sampling with replacement, the single fruit that was selected will then be placed back into the hat or box. Once the selected fruit is returned, the individual would again reach in to select another fruit at random. The fruit would then be returned to the hat or box and the individual would select another fruit at random. This process would be repeated until the same size as the original data, in this case 7 fruits, were selected randomly.</p>
 <p>For sampling without replacement, the process is similar, except that when a fruit is selected from the box or hat it is not placed back to potentially be selected again. For example, if on the first selection with the 7 original fruit in the hat, an individual selects the kiwi, then this kiwi would not go back into the hat and could not be selected another time.</p>
 <p>Using the fruit example above, the <code>sample_n()</code> function can be used to generate random samples. The default behavior of this function is to do sampling without replacement. The primary argument for the function is the data to sample from and the second argument is the number of samples to perform. In this case, the number of samples will want to match the number of elements in the original data. The <code>replace = FALSE</code> is an explicit way to specify that the sampling should be done without replacement.</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="estimation-bootstrap-and-uncertainty.html#cb200-1"></a><span class="kw">set.seed</span>(<span class="dv">50</span>)</span>
-<span id="cb200-2"><a href="estimation-bootstrap-and-uncertainty.html#cb200-2"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="estimation-bootstrap-and-uncertainty.html#cb202-1"></a><span class="kw">set.seed</span>(<span class="dv">50</span>)</span>
+<span id="cb202-2"><a href="estimation-bootstrap-and-uncertainty.html#cb202-2"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>##     names popularity
 ## 1    kiwi          5
 ## 2  orange         15
@@ -376,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 7    pear          8</code></pre>
 <p>Notice that the data each show up 1 time, just like the original sample, however, the data are in a different order. This order is the order that the sampling algorithm selected each element, namely, the kiwi was selected first, then the orange, then the banana, and so on.</p>
 <p>Sampling with replacement is now shown below and is specified by saying, <code>replace = TRUE</code>. The process is done twice to show what happens if</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="estimation-bootstrap-and-uncertainty.html#cb202-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="estimation-bootstrap-and-uncertainty.html#cb204-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##    names popularity
 ## 1 orange         15
 ## 2 banana         25
@@ -385,7 +385,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 5   plum          5
 ## 6   kiwi          5
 ## 7 orange         15</code></pre>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="estimation-bootstrap-and-uncertainty.html#cb204-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="estimation-bootstrap-and-uncertainty.html#cb206-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##     names popularity
 ## 1  banana         25
 ## 2 kumquat          2
@@ -400,42 +400,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="calculate-statistic-of-interest" class="section level3">
 <h3><span class="header-section-number">8.2.2</span> Calculate statistic of interest</h3>
 <p>If these elements are saved, we could also compute the mean of the popularity column. This would represent The mean of the original sample is 10. Performing sampling without replacement, the mean will be the same as the elements within the sample will be the same as the original sample. Notice that the mean computed below with the <code>df_stats()</code> function is the same as the original data.</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="estimation-bootstrap-and-uncertainty.html#cb206-1"></a><span class="kw">set.seed</span>(<span class="dv">50</span>)</span>
-<span id="cb206-2"><a href="estimation-bootstrap-and-uncertainty.html#cb206-2"></a></span>
-<span id="cb206-3"><a href="estimation-bootstrap-and-uncertainty.html#cb206-3"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
-<span id="cb206-4"><a href="estimation-bootstrap-and-uncertainty.html#cb206-4"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="estimation-bootstrap-and-uncertainty.html#cb208-1"></a><span class="kw">set.seed</span>(<span class="dv">50</span>)</span>
+<span id="cb208-2"><a href="estimation-bootstrap-and-uncertainty.html#cb208-2"></a></span>
+<span id="cb208-3"><a href="estimation-bootstrap-and-uncertainty.html#cb208-3"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb208-4"><a href="estimation-bootstrap-and-uncertainty.html#cb208-4"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
 <pre><code>##     response mean
 ## 1 popularity   10</code></pre>
 <p>However, performing sampling with replacement, these means will differ as the elements within the sample will differ. Notice below that both means are slightly larger than 10, but more importantly they differ from the original sample mean. These represent 2 of a total 8.2354310^{5} total resampled values that could be obtained. Even though this is almost a million possible resampled data samples that could be obtained, we can get a large number of these to see how much variation there can be in these statistics.</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="estimation-bootstrap-and-uncertainty.html#cb208-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
-<span id="cb208-2"><a href="estimation-bootstrap-and-uncertainty.html#cb208-2"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
-<pre><code>##     response     mean
-## 1 popularity 10.71429</code></pre>
 <div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="estimation-bootstrap-and-uncertainty.html#cb210-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
 <span id="cb210-2"><a href="estimation-bootstrap-and-uncertainty.html#cb210-2"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
+<pre><code>##     response     mean
+## 1 popularity 10.71429</code></pre>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="estimation-bootstrap-and-uncertainty.html#cb212-1"></a><span class="kw">sample_n</span>(fruit, <span class="dv">7</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb212-2"><a href="estimation-bootstrap-and-uncertainty.html#cb212-2"></a><span class="st">  </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span></code></pre></div>
 <pre><code>##     response mean
 ## 1 popularity   12</code></pre>
 </div>
 <div id="replicating-the-resamplingbootstrap" class="section level3">
 <h3><span class="header-section-number">8.2.3</span> Replicating the resampling/bootstrap</h3>
 <p>The process of resampling without replacement and computing the statistic of interest can be combined into a single operation by creating a function that does both steps at once. This function does those steps in the second and third line of the function. You could read this function as the following, first take the data, then do the resampling of the same length (ie., number of observation) and with replacement, and finally compute the mean of the popularity attribute.</p>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="estimation-bootstrap-and-uncertainty.html#cb212-1"></a>fruit_boot &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
-<span id="cb212-2"><a href="estimation-bootstrap-and-uncertainty.html#cb212-2"></a>  fruit <span class="op">%&gt;%</span></span>
-<span id="cb212-3"><a href="estimation-bootstrap-and-uncertainty.html#cb212-3"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(fruit), <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
-<span id="cb212-4"><a href="estimation-bootstrap-and-uncertainty.html#cb212-4"></a><span class="st">    </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span>
-<span id="cb212-5"><a href="estimation-bootstrap-and-uncertainty.html#cb212-5"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="estimation-bootstrap-and-uncertainty.html#cb214-1"></a>fruit_boot &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb214-2"><a href="estimation-bootstrap-and-uncertainty.html#cb214-2"></a>  fruit <span class="op">%&gt;%</span></span>
+<span id="cb214-3"><a href="estimation-bootstrap-and-uncertainty.html#cb214-3"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(fruit), <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb214-4"><a href="estimation-bootstrap-and-uncertainty.html#cb214-4"></a><span class="st">    </span><span class="kw">df_stats</span>(<span class="op">~</span><span class="st"> </span>popularity, mean)</span>
+<span id="cb214-5"><a href="estimation-bootstrap-and-uncertainty.html#cb214-5"></a>}</span></code></pre></div>
 <p>The resampling procedure can then be replicated a single time by calling this function directly. The function does not need an argument, rather the function directly calls the fruit data and the popularity attribute. Some additional programming would be needed to generalize this resampling/bootstrap function to work on other data. To show that the function is working as intended, that is sampling with replacement, the function is ran twice.</p>
-<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="estimation-bootstrap-and-uncertainty.html#cb213-1"></a><span class="kw">fruit_boot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="estimation-bootstrap-and-uncertainty.html#cb215-1"></a><span class="kw">fruit_boot</span>()</span></code></pre></div>
 <pre><code>##     response     mean
 ## 1 popularity 14.71429</code></pre>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="estimation-bootstrap-and-uncertainty.html#cb215-1"></a><span class="kw">fruit_boot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="estimation-bootstrap-and-uncertainty.html#cb217-1"></a><span class="kw">fruit_boot</span>()</span></code></pre></div>
 <pre><code>##     response     mean
 ## 1 popularity 10.57143</code></pre>
 <p>Different mean values are generated, suggesting that the sampling with replacement is working properly. Compiling the different mean values would be tedious to do by hand, fortunately, the function can be replicated many times using the computer with the <code>map_dfr()</code> function. This function takes the number of times to be replicated in the form of <code>1:replications</code> where <code>replications</code> is replaced with the number of times to replicate the function.</p>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="estimation-bootstrap-and-uncertainty.html#cb217-1"></a>popularity_stats &lt;-<span class="st"> </span><span class="kw">map_dfr</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, fruit_boot)</span></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="estimation-bootstrap-and-uncertainty.html#cb219-1"></a>popularity_stats &lt;-<span class="st"> </span><span class="kw">map_dfr</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, fruit_boot)</span></code></pre></div>
 <p>Once these are generated, the distribution of the mean fruit popularity can directly be shown using a density curve. Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:density-fruit-pop">8.1</a> shows this distribution which has a minimum value of 3.29 to a maximum value of ’r round(max(popularity_stats$mean), 2)` with a mean of 9.97. This indicates a range of possible values that the mean fruit popularity falls and helps to estimate the amount of uncertainty in the statistic of interest. In general, ranges that are smaller indicate less uncertainty and more accurate estimate for the statistic of interest. However, the overall range of a distribution can be misleading and by itself is not a great measure of variation. As can be seen in Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:density-fruit-pop">8.1</a>, there is a slight positive skew in the distribution, therefore other statistics of variation are often better to truly represent the variation in the distribution.</p>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="estimation-bootstrap-and-uncertainty.html#cb218-1"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean, <span class="dt">data =</span> popularity_stats) <span class="op">%&gt;%</span></span>
-<span id="cb218-2"><a href="estimation-bootstrap-and-uncertainty.html#cb218-2"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Mean Popularity&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="estimation-bootstrap-and-uncertainty.html#cb220-1"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>mean, <span class="dt">data =</span> popularity_stats) <span class="op">%&gt;%</span></span>
+<span id="cb220-2"><a href="estimation-bootstrap-and-uncertainty.html#cb220-2"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Mean Popularity&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:density-fruit-pop"></span>
 <img src="08-estimation_files/figure-html/density-fruit-pop-1.png" alt="Density curve of the mean fruit popularity based on 10,000 resampled data sets." width="672" />
 <p class="caption">
@@ -447,8 +447,8 @@ Figure 8.1: Density curve of the mean fruit popularity based on 10,000 resampled
 <div id="linear-regression-bootstrapresampling-example" class="section level3">
 <h3><span class="header-section-number">8.2.4</span> Linear regression bootstrap/resampling example</h3>
 <p>An example of using the bootstrap/resampling methods with the US weather data will be explored next. In chapter 7, the minimum temperature was predicted or explained using the average daily dew point. As a reminder, here is the model again. Recall that the intercept here represents the average minimum temperature (in Fahrenheit) for an average daily dew point of 0 and that the slope term is the average increase in minimum temperature for every one unit increase in the average daily dew point.</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="estimation-bootstrap-and-uncertainty.html#cb219-1"></a>temp_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>dewpoint_avg, <span class="dt">data =</span> us_weather)</span>
-<span id="cb219-2"><a href="estimation-bootstrap-and-uncertainty.html#cb219-2"></a><span class="kw">coef</span>(temp_lm)</span></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="estimation-bootstrap-and-uncertainty.html#cb221-1"></a>temp_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>dewpoint_avg, <span class="dt">data =</span> us_weather)</span>
+<span id="cb221-2"><a href="estimation-bootstrap-and-uncertainty.html#cb221-2"></a><span class="kw">coef</span>(temp_lm)</span></code></pre></div>
 <pre><code>##  (Intercept) dewpoint_avg 
 ##    4.8343103    0.8999469</code></pre>
 <p>The one element that was not explored in Chapter 7 is the amount of uncertainty, error, or variation in these estimates from the linear regression model. As shown in this chapter, the bootstrap or resampling methods can be an empirical way to try to capture the uncertainty. The steps to conduct the bootstrap or resample in this situation will be as follows.</p>
@@ -460,30 +460,30 @@ Figure 8.1: Density curve of the mean fruit popularity based on 10,000 resampled
 <li>Visualize distribution of save regression coefficients across replications</li>
 </ol>
 <p>The following function aims to do steps 1 through 3 above. First, it resamples the data with replacement of the same size as the original data. Then, using the resampled data, the linear regression model is fitted and the model coefficients are saved. The function is also ran one time to show the estimated coefficients from the resampled data. Notice how these differ from the regression model fitted above to the original data, why do these differ here?</p>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="estimation-bootstrap-and-uncertainty.html#cb221-1"></a><span class="kw">set.seed</span>(<span class="dv">2021</span>)</span>
-<span id="cb221-2"><a href="estimation-bootstrap-and-uncertainty.html#cb221-2"></a></span>
-<span id="cb221-3"><a href="estimation-bootstrap-and-uncertainty.html#cb221-3"></a>resample_weather &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
-<span id="cb221-4"><a href="estimation-bootstrap-and-uncertainty.html#cb221-4"></a>  weather_resample &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span></span>
-<span id="cb221-5"><a href="estimation-bootstrap-and-uncertainty.html#cb221-5"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(us_weather), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb221-6"><a href="estimation-bootstrap-and-uncertainty.html#cb221-6"></a></span>
-<span id="cb221-7"><a href="estimation-bootstrap-and-uncertainty.html#cb221-7"></a>  weather_resample <span class="op">%&gt;%</span></span>
-<span id="cb221-8"><a href="estimation-bootstrap-and-uncertainty.html#cb221-8"></a><span class="st">    </span><span class="kw">lm</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>dewpoint_avg, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
-<span id="cb221-9"><a href="estimation-bootstrap-and-uncertainty.html#cb221-9"></a><span class="st">    </span><span class="kw">coef</span>(.) <span class="op">%&gt;%</span></span>
-<span id="cb221-10"><a href="estimation-bootstrap-and-uncertainty.html#cb221-10"></a><span class="st">    </span>broom<span class="op">::</span><span class="kw">tidy</span>()</span>
-<span id="cb221-11"><a href="estimation-bootstrap-and-uncertainty.html#cb221-11"></a>}</span>
-<span id="cb221-12"><a href="estimation-bootstrap-and-uncertainty.html#cb221-12"></a></span>
-<span id="cb221-13"><a href="estimation-bootstrap-and-uncertainty.html#cb221-13"></a><span class="kw">resample_weather</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="estimation-bootstrap-and-uncertainty.html#cb223-1"></a><span class="kw">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb223-2"><a href="estimation-bootstrap-and-uncertainty.html#cb223-2"></a></span>
+<span id="cb223-3"><a href="estimation-bootstrap-and-uncertainty.html#cb223-3"></a>resample_weather &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb223-4"><a href="estimation-bootstrap-and-uncertainty.html#cb223-4"></a>  weather_resample &lt;-<span class="st"> </span>us_weather <span class="op">%&gt;%</span></span>
+<span id="cb223-5"><a href="estimation-bootstrap-and-uncertainty.html#cb223-5"></a><span class="st">    </span><span class="kw">sample_n</span>(<span class="kw">nrow</span>(us_weather), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb223-6"><a href="estimation-bootstrap-and-uncertainty.html#cb223-6"></a></span>
+<span id="cb223-7"><a href="estimation-bootstrap-and-uncertainty.html#cb223-7"></a>  weather_resample <span class="op">%&gt;%</span></span>
+<span id="cb223-8"><a href="estimation-bootstrap-and-uncertainty.html#cb223-8"></a><span class="st">    </span><span class="kw">lm</span>(drybulbtemp_min <span class="op">~</span><span class="st"> </span>dewpoint_avg, <span class="dt">data =</span> .) <span class="op">%&gt;%</span></span>
+<span id="cb223-9"><a href="estimation-bootstrap-and-uncertainty.html#cb223-9"></a><span class="st">    </span><span class="kw">coef</span>(.) <span class="op">%&gt;%</span></span>
+<span id="cb223-10"><a href="estimation-bootstrap-and-uncertainty.html#cb223-10"></a><span class="st">    </span>broom<span class="op">::</span><span class="kw">tidy</span>()</span>
+<span id="cb223-11"><a href="estimation-bootstrap-and-uncertainty.html#cb223-11"></a>}</span>
+<span id="cb223-12"><a href="estimation-bootstrap-and-uncertainty.html#cb223-12"></a></span>
+<span id="cb223-13"><a href="estimation-bootstrap-and-uncertainty.html#cb223-13"></a><span class="kw">resample_weather</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 2
 ##   names            x
 ##   &lt;chr&gt;        &lt;dbl&gt;
 ## 1 (Intercept)  4.80 
 ## 2 dewpoint_avg 0.904</code></pre>
 <p>Now that there is a function that does steps 1 - 3, these processes can now be repeated many times with the <code>map_dfr()</code> function. In this example, the resampling is done 10,000 times and the coefficients from each of those are saved. The distribution for the intercept and the linear slope are visualized with density curves in Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:resample-10k-density">8.2</a>. This figure shows that the regression slopes (right-most) figure, are distributed closely together with most of the slopes ranging from about 0.89 to 0.91. There are some that are smaller than 0.89 or larger than 0.91, but these occur less frequently than between those two values. A similar interpretation can be made for the intercept where the majority of the intercepts fall between about 4.5 and 5.25 or so.</p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="estimation-bootstrap-and-uncertainty.html#cb223-1"></a>weather_coef &lt;-<span class="st"> </span><span class="kw">map_dfr</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_weather)</span>
-<span id="cb223-2"><a href="estimation-bootstrap-and-uncertainty.html#cb223-2"></a></span>
-<span id="cb223-3"><a href="estimation-bootstrap-and-uncertainty.html#cb223-3"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> weather_coef) <span class="op">%&gt;%</span></span>
-<span id="cb223-4"><a href="estimation-bootstrap-and-uncertainty.html#cb223-4"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>names, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb223-5"><a href="estimation-bootstrap-and-uncertainty.html#cb223-5"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Regression Estimates&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="estimation-bootstrap-and-uncertainty.html#cb225-1"></a>weather_coef &lt;-<span class="st"> </span><span class="kw">map_dfr</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, resample_weather)</span>
+<span id="cb225-2"><a href="estimation-bootstrap-and-uncertainty.html#cb225-2"></a></span>
+<span id="cb225-3"><a href="estimation-bootstrap-and-uncertainty.html#cb225-3"></a><span class="kw">gf_density</span>(<span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> weather_coef) <span class="op">%&gt;%</span></span>
+<span id="cb225-4"><a href="estimation-bootstrap-and-uncertainty.html#cb225-4"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>names, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb225-5"><a href="estimation-bootstrap-and-uncertainty.html#cb225-5"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x =</span> <span class="st">&quot;Regression Estimates&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:resample-10k-density"></span>
 <img src="08-estimation_files/figure-html/resample-10k-density-1.png" alt="Distribution of regression coefficients from the bootstrapped samples." width="672" />
 <p class="caption">
@@ -491,14 +491,14 @@ Figure 8.2: Distribution of regression coefficients from the bootstrapped sample
 </p>
 </div>
 <p>To get a more accurate sense of where notable percentiles are found, these can be computed with the <code>df_stats()</code> function directly. The <code>quantile()</code> function helps compute the percentiles of interest with the 5th, 50th (median), and 95th percentiles asked for in the code shown below. The difference between the 95th and 5th percentiles gives evidence for where the majority of the regression coefficients fall. These could be shown using violin plots for a visual depiction of the distributions with percentiles (see Figure <a href="estimation-bootstrap-and-uncertainty.html#fig:resample-violin">8.3</a>.</p>
-<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="estimation-bootstrap-and-uncertainty.html#cb224-1"></a>weather_coef <span class="op">%&gt;%</span></span>
-<span id="cb224-2"><a href="estimation-bootstrap-and-uncertainty.html#cb224-2"></a><span class="st">  </span><span class="kw">df_stats</span>(x <span class="op">~</span><span class="st"> </span>names, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="estimation-bootstrap-and-uncertainty.html#cb226-1"></a>weather_coef <span class="op">%&gt;%</span></span>
+<span id="cb226-2"><a href="estimation-bootstrap-and-uncertainty.html#cb226-2"></a><span class="st">  </span><span class="kw">df_stats</span>(x <span class="op">~</span><span class="st"> </span>names, <span class="kw">quantile</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)))</span></code></pre></div>
 <pre><code>##   response        names        5%       50%       95%
 ## 1        x  (Intercept) 4.3562898 4.8390742 5.3250096
 ## 2        x dewpoint_avg 0.8844869 0.8997507 0.9149627</code></pre>
-<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="estimation-bootstrap-and-uncertainty.html#cb226-1"></a><span class="kw">gf_violin</span>(x <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> weather_coef, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb226-2"><a href="estimation-bootstrap-and-uncertainty.html#cb226-2"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>names, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb226-3"><a href="estimation-bootstrap-and-uncertainty.html#cb226-3"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="estimation-bootstrap-and-uncertainty.html#cb228-1"></a><span class="kw">gf_violin</span>(x <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> weather_coef, <span class="dt">fill =</span> <span class="st">&#39;gray85&#39;</span>, <span class="dt">draw_quantiles =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb228-2"><a href="estimation-bootstrap-and-uncertainty.html#cb228-2"></a><span class="st">  </span><span class="kw">gf_facet_wrap</span>(<span class="op">~</span><span class="st"> </span>names, <span class="dt">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb228-3"><a href="estimation-bootstrap-and-uncertainty.html#cb228-3"></a><span class="st">  </span><span class="kw">gf_refine</span>(<span class="kw">coord_flip</span>())</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:resample-violin"></span>
 <img src="08-estimation_files/figure-html/resample-violin-1.png" alt="Violin plots showing the distribution of regression coefficients from the bootstrapped samples, with percentiles." width="672" />
 <p class="caption">

@@ -17,7 +17,7 @@ library(broom)
 library(statthink)
 
 # Set theme for plots
-theme_set(theme_statthinking())
+theme_set(theme_statthinking(base_size = 14))
 
 college_score <- read_csv("https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv", guess_max = 10000)
 head(college_score)
@@ -70,9 +70,9 @@ resample_admrate()
 ## # A tibble: 3 × 2
 ##   term                      estimate
 ##   <chr>                        <dbl>
-## 1 (Intercept)                 0.749 
-## 2 preddegBachelor Degree     -0.0770
-## 3 preddegCertificate Degree  -0.0270
+## 1 (Intercept)                 0.696 
+## 2 preddegBachelor Degree     -0.0186
+## 3 preddegCertificate Degree   0.0617
 ```
 
 

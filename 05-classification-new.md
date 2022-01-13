@@ -21,7 +21,7 @@ library(rpart.plot)
 library(rsample)
 
 # Add plot theme
-theme_set(theme_statthinking())
+theme_set(theme_statthinking(base_size = 14))
 
 us_weather <- mutate(us_weather, snow_factor = factor(snow), 
                      snow_numeric = ifelse(snow == 'Yes', 1, 0))
@@ -43,7 +43,7 @@ library(parttree)
 
 
 
-## Topic: Decision Trees 
+## Decision Trees 
 
 We will continue to use the United States weather data introduced in Chapter 4. Given that this data was for the winter months in the United States, the classification task we will attempt to perform is to correct predict if it will snow on a particular day that precipitation occurs. To get a sense of how often it rains vs snows in these data, we can use the `count()` function to do this. For the `count()` function, the first argument is the name of the data, followed by the attributes we wish to count the number of observations in the unique values of those attributes.
 
@@ -94,7 +94,7 @@ Let's class_tree our first classification tree to predict whether it snowed on a
 
 Before we fit the model, what attributes do you think would be predictive of whether it will rain or snow on a particular day during the winter months? Take a few minutes to brainstorm some ideas.
 
-In this example, a handful of attributes to explore, including the average, minimum, and maximum temperature for the day. These happen to be all continuous attributes, meaning that these attributes can take many data values. The model is not limited to those types of data attributes, but that is where we will start the classification journey. 
+In this example, a handful of attributes may be interesting to explore, including the average, minimum, and maximum temperature for the day. These happen to be all continuous attributes, meaning that these attributes can take many data values. The model is not limited to those types of data attributes, but that is where we will start the classification journey. 
 
 Notice that the fitted model is saved to the object, `class_tree`. This will allow for easier interaction with the model results later. Then after fitting the model, the model is visualized using the `rpart.plot()` function. The primary argument to the `rpart.plot()` function is the fitted model object from the `rpart()` function, here that would be `class_tree`. The additional arguments passed below adjust the appearance of the visualization. 
 
@@ -601,15 +601,15 @@ us_weather_predict %>%
 ## Comparison to Baseline
 Overall model accuracy or conditional model accuracy as shown above, can be an important first step to evaluate how well the classification model is performing. However, it is useful to compare the model accuracy to a baseline. This is important to consider as it is often not the case that the event the model is predicting occurs equally likely, more specifically has a probability of occurring equal to 50%. For example, in the US weather data, the observed number of days in which it snows was 0.3, meaning that on average for the days and locations in the data, it snowed on 3 out of 10 days. This would mean that a naive model that only predicted it did not snow would be correct 70% of the time. Therefore, the overall accuracy of the classification models can use this information to see if the model outperforms a simple analysis that simply predicts the predominate category (in this case that it does not snow). 
 
-The first model fitted to the US weather data used the drybulb maximum and minimum temperature and had an overall model accuracy of around 77%. Therefore, using the two temperature attributes increased the overall model accuracy about 7%, $77% - 70% = 7%$, compared to the naive/baseline prediction of not snowing for every day. Is this 7% improved accuracy useful in this situation? In general, likely yes, but this answer is more complicated after looking at the conditional accuracy presented for the model using the two temperature attributes (see Figure  \@ref(fig:bar-accuracy-fill)). For example, the model does a good job of accurately predicting days in which it won't snow (about 90% accurate), but not days in which it does snow (less than 50% accurate). 
+The first model fitted to the US weather data used the drybulb maximum and minimum temperature and had an overall model accuracy of around 77%. Therefore, using the two temperature attributes increased the overall model accuracy about 7%, $77% - 70% = 7%$, compared to the naive/baseline prediction of not snowing for every day. Is this 7% improved accuracy useful in this situation? In general, likely yes, but this answer is more complicated after looking at the conditional accuracy presented for the model using the two temperature attributes (see Figure \@ref(fig:bar-accuracy-fill)). For example, the model does a good job of accurately predicting days in which it won't snow (about 90% accurate), but not days in which it does snow (less than 50% accurate). 
 
 When thinking about this situation compared to the baseline model that would predict that all observations would not snow, this model would correctly predict all of the days in which it would not snow (left-bar in Figure \@ref(fig:bar-accuracy-fill)), but would not predict any days correctly in which it did snow (right-bar in Figure \@ref(fig:bar-accuracy-fill)). Arguably, accurately predicting the days in which it snows is the more interesting/useful characteristic, therefore this model going from a 0% prediction accuracy for the baseline model to almost 50% is a sizable increase in prediction accuracy.
 
-This same idea could be taken with the updated model that includes location in addition to the two temperature attributes (see Figure \@ref(location-accuracy)). The prediction accuracy is somewhat worse for days in which it does not snow, but about a 12% increase in accuracy compared to the model with just temperature. Compared to the baseline model there would be a 62% increase in accuracy for days it does snows. This shows that the idea of the baseline comparison can come from the naive model, that is predicting a single category for all attributes, but the baseline comparison can be a previous model to compare how the model improves with the inclusion of even more attributes. 
+This same idea could be taken with the updated model that includes location in addition to the two temperature attributes (see Figure \@ref(fig:location-accuracy)). The prediction accuracy is somewhat worse for days in which it does not snow, but about a 12% increase in accuracy compared to the model with just temperature. Compared to the baseline model there would be a 62% increase in accuracy for days it does snows. This shows that the idea of the baseline comparison can come from the naive model, that is predicting a single category for all attributes, but the baseline comparison can be a previous model to compare how the model improves with the inclusion of even more attributes. 
 
 #### Further conditional accuracy
 
-Not explored earlier, but the model uses location in the prediction, therefore it would also be possible to condition the accuracy based on the location to understand if the model is performing better for certain locations than others. Figure \@ref(location-accuracy-facet) shows a bar chart on model accuracy for each location separately. This could be compared directly with Figure \@ref(location-accuracy) to see if there are differences in the prediction accuracy by different locations. 
+Not explored earlier, but the model uses location in the prediction, therefore it would also be possible to condition the accuracy based on the location to understand if the model is performing better for certain locations than others. Figure \@ref(fig:location-accuracy-facet) shows a bar chart on model accuracy for each location separately. This could be compared directly with Figure \@ref(fig:location-accuracy) to see if there are differences in the prediction accuracy by different locations. 
 
 
 ```r
@@ -796,7 +796,7 @@ calc_predict_acc()
 ```
 
 
-The function will then be replicated 10,000 times to generate the prediction accuracy. 
+The function will then be replicated 10,000 times to generate the prediction accuracy. The following code replicates the function written above 10,000 times, then creates a density figure of the mean column which represents the average prediction accuracy for each of the resampled datasets. Would you expect there to be variation in the average prediction accuracy across the 10,000 resampled datasets? If you answered yes, then you would be correct? Why is there variation? The variation occurs due to the resampling **with replacement**. This process mimics what would occur if we had obtained 10,000 different random samples from the population of interest, in this case, 10,000 random samples of weather data from the locations of interest. 
 
 
 ```r
@@ -811,4 +811,16 @@ gf_density(~ mean, data = predict_accuracy_fulldata) %>%
 <p class="caption">(\#fig:prediction-accuracy-resample)Prediction accuracy of classification model on resampled data with training/testing split.</p>
 </div>
 
+The distribution shown in Figure \@ref(fig:prediction-accuracy-resample) depicts the overall prediction accuracy for each of the 10,000 resampled cases. This figure can be interpreted similar to the density curves first introduced in chapter 3, however now the context is the average prediction accuracy rather than for a specific attribute in the data. First, the center or peak for this distribution is about 0.78, meaning that on average the classification model has an overall accuracy of about 78%. As discussed earlier, there is variation however. The prediction accuracy tends to fall between about 75% (0.75) and 81% (0.81) or so. We could be a bit more accurate for these values and compute percentiles instead of estimating the values from the figure. 
 
+
+```r
+df_stats(~ mean, data = predict_accuracy_fulldata, quantile(c(0.05, 0.95)))
+```
+
+```
+##   response        5%       95%
+## 1     mean 0.7544118 0.8088235
+```
+
+The preceding code chunk computed the 5th and 95th percentiles for the average prediction accuracy across the 10,000 resampled estimates. These values show that most of the prediction accuracy values fall between 0.75 and 0.81. We made the deliberate assumption to use the 5th and 95th percentiles, but other percentiles could be used as well, for example, 2.5th and 97.5th percentiles would depict the values that encompass the middle 95% rather than middle 90%. 
