@@ -271,8 +271,6 @@ bind_rows(
 
 Comparison of the conditional error can be helpful to evaluate areas of the model that improved and if any other areas did not improve or were worse. 
 
-
-
 ## Adding more attributes
 
 To evaluate how well this model can do, all of the attributes will be open to be included in the final model. The only one that is removed from the main data is the institution name. This can be done with the `.` character after the `~` in the model formula. The model tree is not printed as it is large and not able to be easily viewed. Instead, the evaluation of accuracy will be compared to the other two models fitted. The attributes included in the final model though can be accessed and ranked by those that are the most important. 

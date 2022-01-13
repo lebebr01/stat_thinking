@@ -40,7 +40,7 @@ knitr::kable(
 ### Scatterplots
 As we've explored before, scatterplots help to explore the relationship between two continuous, quantitative data attributes. These are created with the `gf_point()` function and adding lines to the figure to provide some guidance to the relationship between the two attributes can be done with the `gf_smooth()` function. Below, a scatterplot is created that explores the relationship between the low temperature and the average daily dew point.^[Dew point is the temperature to which air must be cooled to become saturated with water vapor. [Wikipedia](https://en.wikipedia.org/wiki/Dew_point)]
 
-```{r scatter-temp, message = FALSE, warning = FALSE}
+```{r scatter-temp, message = FALSE, warning = FALSE, fig.cap = "Scatterplot showing the minimum temperature by dewpoint."}
 gf_point(drybulbtemp_min ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2) %>%
   gf_smooth(method = 'lm', size = 1) %>%
   gf_labs(x = "Average daily dew point",
@@ -75,7 +75,7 @@ drybulbtemp\_min = 4.83 + 0.90 dewpoint\_avg + \epsilon
 
 The equation can also be represented without the error, $\epsilon$ as:
 
-begin{equation}
+\begin{equation}
 \hat{drybulbtemp\_min} = 4.83 + 0.90 dewpoint\_avg 
 \end{equation}
 
@@ -95,7 +95,7 @@ So far the discussion has focused on the linear slope, often a term that is of m
 
 Figure \@ref(fig:scatter-temp-int) shows a scatterplot where the y-axis is the minimum temperature and the x-axis is the average daily dew point. This figure shows a horizontal and vertical line that cross on the blue line shown in the figure. The vertical line is shown at an average daily dew point of 0 and the horizontal line is at a minimum temperature at 4.83. These cross or intersect on the blue line which represents the relationship between the average daily dew point and the minimum temperature. This depicts what the y-intercept is, the y-intercept represents the average minimum temperature for an average daily dew point of 0. More generally, the y-intercept is the *average value of the outcome when all of the attributes included in the linear regression are 0*. 
 
-```{r scatter-temp-int, message = FALSE, warning = FALSE}
+```{r scatter-temp-int, message = FALSE, warning = FALSE, fig.cap = "Scatterplot showing the minimum temperature by dewpoint highlighting the intercept."}
 gf_point(drybulbtemp_min ~ dewpoint_avg, data = us_weather, size = 3, alpha = .2) %>%
   gf_smooth(method = 'lm', size = 1) %>%
   gf_vline(xintercept = 0) %>%
@@ -108,7 +108,7 @@ In the example that has been explored so far, a value of 0 for the average daily
 
 Before this is done, below is a more concrete example that still tries to predict/explain minimum temperature, but now the attribute to explain differences in the minimum temperature is the average daily sea level pressure. Sea-level pressure is a way to measure atmospheric pressure and is measured in inches of mercury^[See [atmospheric pressure on Wikipedia](https://en.wikipedia.org/wiki/Atmospheric_pressure#Mean_sea-level_pressure)]. Figure \@ref(fig:scatter-temp-pressure) shows a scatterplot of this relationship. First, notice that the direction of the blue line is different than before, it starts in the upper left quadrant and decreases as the sea level pressure increases. This is indicative of a negative relationship between the two attributes. The correlation can be estimated to be `r round(cor(drybulbtemp_min ~ sealevelpressure_avg, data = us_weather, use = 'complete.obs'), 2)`, a moderate negative relationship. This relationship is not as strong as the relationship between minimum temperature and average daily dew point. The variation around the blue line in \@ref(fig:scatter-temp-pressure) is much larger which depicts a weaker relationship (ie., more error) compared to the minimum temperature and dew point relationship (see Figure \@ref(fig:scatter-temp)).
 
-```{r scatter-temp-pressure, message = FALSE, warning = FALSE}
+```{r scatter-temp-pressure, message = FALSE, warning = FALSE, fig.cap = "Scatterplot showing minimum temperature by sea level pressure."}
 gf_point(drybulbtemp_min ~ sealevelpressure_avg, data = us_weather, size = 3, alpha = .2) %>%
   gf_smooth(method = 'lm', size = 1) %>%
   gf_labs(x = "Average daily sea level pressure",
@@ -128,12 +128,12 @@ drybulbtemp\_min = 660.05 - 21.05 sealevelpressure\_avg + \epsilon
 
 For these, the y-intercept is about 660 degrees Fahrenheit and the linear slope is about -21 degrees Fahrenheit. How are these interpreted? Starting first with the linear slope, the -21 means that for every one unit increase in sea level pressure (ie., moving from 29 to 30 inches of mercury), the average minimum temperature decreases by 21 degrees Fahrenheit. 
 
-Why is the y-intercept 660 degrees Fahrenheit, a temperature that is much above the boiling point of water and is hotter than most ovens. Furthermore, this is not an atmospheric temperature that we have seen in the data, so why is the y-intercept 660 degrees Fahrenheit? Ultimately, this comes down to the range of sea level pressure, where the minimum value in the data is `r min(us_weather$sealevelpressure_avg, na.rm = TRUE)`, a value very far from 0. Therefore, the linear relationship depicted above is extrapolated outside the range of the data (ie, decreased by `r min(us_weather$sealevelpressure_avg, na.rm = TRUE)` sea level units) which increases the temperature by `r min(us_weather$sealevelpressure_avg, na.rm = TRUE) * 21.05` degrees Fahrenheit units. This value is not interpretable or meaningful as it would not be possible to get a sea level pressure of 0 in the metric of inches of mercury. It is possible to modify the data, but not change the overall relationship between minimum temperature and sea level pressure to help increase the interpretation of the y-intercept. Three options will be explored, mean value centered, minimum value centered, and maximum value centered, although there are many other potential options. 
+Why is the y-intercept 660 degrees Fahrenheit, a temperature that is much above the boiling point of water and is hotter than most ovens. Furthermore, this is not an atmospheric temperature that we have seen in the data, so why is the y-intercept 660 degrees Fahrenheit? Ultimately, this comes down to the range of sea level pressure, where the minimum value in the data is `r min(us_weather$sealevelpressure_avg, na.rm = TRUE)`, a value very far from 0. Therefore, the linear relationship depicted above is extrapolated outside the range of the data (i.e., decreased by `r min(us_weather$sealevelpressure_avg, na.rm = TRUE)` sea level units) which increases the temperature by `r min(us_weather$sealevelpressure_avg, na.rm = TRUE) * 21.05` degrees Fahrenheit units. This value is not interpretable or meaningful as it would not be possible to get a sea level pressure of 0 in the metric of inches of mercury. It is possible to modify the data, but not change the overall relationship between minimum temperature and sea level pressure to help increase the interpretation of the y-intercept. Three options will be explored, mean value centered, minimum value centered, and maximum value centered, although there are many other potential options. 
 
 #### Mean center sea level pressure
 First, mean centering the x attribute can often be a way to make the y-intercept more interpretable. The code below shows a scatterplot by subtracting the mean from all the values of sea level pressure. More explicitly, the value of `r round(mean(us_weather$sealevelpressure_avg, na.rm = TRUE), 2)` was subtracted from each sea level pressure value in the data. 
 
-```{r scatter-mean-center, message = FALSE, warning = FALSE}
+```{r scatter-mean-center, message = FALSE, warning = FALSE, fig.cap = "Scatterplot showing the relationship between minimum temperature by sea level pressure that is mean centered."}
 gf_point(drybulbtemp_min ~ I(sealevelpressure_avg - mean(sealevelpressure_avg, na.rm = TRUE)), 
          data = us_weather, size = 3, alpha = .2) %>%
   gf_smooth(method = 'lm', size = 1) %>%
