@@ -46,7 +46,7 @@ gf_density(~ actcmmid, data = colleges) %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing non-finite values (stat_density).
+## Warning: Removed 730 rows containing non-finite values (`stat_density()`).
 ```
 
 <div class="figure">
@@ -70,7 +70,7 @@ gf_point(actcmmid ~ adm_rate, data = colleges, size = 3) %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing missing values (geom_point).
+## Warning: Removed 730 rows containing missing values (`geom_point()`).
 ```
 
 <div class="figure">
@@ -144,7 +144,7 @@ gf_point(actcmmid ~ adm_rate, data = colleges, color = 'gray55') %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing missing values (geom_point).
+## Warning: Removed 730 rows containing missing values (`geom_point()`).
 ```
 
 <div class="figure">
@@ -356,6 +356,14 @@ gf_pointrangeh(act_recode ~ mean + min + max,
           x = "Absolute Error")
 ```
 
+```
+## Warning: Using the `size` aesthetic with geom_segment was deprecated in ggplot2 3.4.0.
+## ℹ Please use the `linewidth` aesthetic instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+```
+
 <div class="figure">
 <img src="06-regression_files/figure-html/cond-error-figure-1.png" alt="Ranges of absolute errors across different median ACT scores with mean absolute error." width="672" />
 <p class="caption">(\#fig:cond-error-figure)Ranges of absolute errors across different median ACT scores with mean absolute error.</p>
@@ -376,7 +384,7 @@ gf_point(actcmmid ~ ugds, data = colleges, size = 3) %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing missing values (geom_point).
+## Warning: Removed 730 rows containing missing values (`geom_point()`).
 ```
 
 <img src="06-regression_files/figure-html/unnamed-chunk-4-1.png" width="672" />
@@ -423,7 +431,7 @@ colleges_pred
 ##  8 Birmingham Southern Coll…       26     23.1  2.89 26              21.7  4.34 
 ##  9 Faulkner University             20     23.1 -3.11 20              23.3 -3.31 
 ## 10 Huntingdon College              22     23.1 -1.11 22              21.7  0.342
-## # … with 1,279 more rows
+## # ℹ 1,279 more rows
 ```
 
 

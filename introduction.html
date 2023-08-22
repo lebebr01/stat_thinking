@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 1 Introduction | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 1 Introduction | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 1 Introduction | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="true" />
   
   
   <meta name="github-repo" content="lebebr01/stat_thinking" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2022-01-13" />
+<meta name="date" content="2023-08-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,21 +49,21 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.20/datatables.js"></script>
-<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="libs/datatables-binding-0.28/datatables.js"></script>
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/plotly-binding-4.10.2/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-43425299-4"></script>
 <script>
@@ -77,18 +76,18 @@
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -108,13 +107,13 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -127,7 +126,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -141,6 +140,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -159,39 +162,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#statistics-vs-data-science"><i class="fa fa-check"></i><b>1.1</b> Statistics vs Data Science</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a><ul>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#experiments-vs-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments vs Observations</a>
+<ul>
 <li class="chapter" data-level="1.2.1" data-path="introduction.html"><a href="introduction.html#explore-random-assignment"><i class="fa fa-check"></i><b>1.2.1</b> Explore Random Assignment</a></li>
 <li class="chapter" data-level="1.2.2" data-path="introduction.html"><a href="introduction.html#example-natural-experiments"><i class="fa fa-check"></i><b>1.2.2</b> Example: Natural Experiments</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a><ul>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#data-structure"><i class="fa fa-check"></i><b>1.3</b> Data Structure</a>
+<ul>
 <li class="chapter" data-level="1.3.1" data-path="introduction.html"><a href="introduction.html#tabular-data"><i class="fa fa-check"></i><b>1.3.1</b> Tabular Data</a></li>
 <li class="chapter" data-level="1.3.2" data-path="introduction.html"><a href="introduction.html#non-tabular-data"><i class="fa fa-check"></i><b>1.3.2</b> Non-tabular Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a><ul>
+<li class="chapter" data-level="2" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>2</b> Visualization</a>
+<ul>
 <li class="chapter" data-level="2.0.1" data-path="visualization.html"><a href="visualization.html#college-scorecard-data"><i class="fa fa-check"></i><b>2.0.1</b> College Scorecard Data</a></li>
 <li class="chapter" data-level="2.0.2" data-path="visualization.html"><a href="visualization.html#view-the-data"><i class="fa fa-check"></i><b>2.0.2</b> View the Data</a></li>
-<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a><ul>
+<li class="chapter" data-level="2.1" data-path="visualization.html"><a href="visualization.html#exploring-attributes"><i class="fa fa-check"></i><b>2.1</b> Exploring Attributes</a>
+<ul>
 <li class="chapter" data-level="2.1.1" data-path="visualization.html"><a href="visualization.html#histograms"><i class="fa fa-check"></i><b>2.1.1</b> Histograms</a></li>
 <li class="chapter" data-level="2.1.2" data-path="visualization.html"><a href="visualization.html#interpretting-histograms"><i class="fa fa-check"></i><b>2.1.2</b> Interpretting Histograms</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a><ul>
+<li class="chapter" data-level="2.2" data-path="visualization.html"><a href="visualization.html#plot-customization"><i class="fa fa-check"></i><b>2.2</b> Plot Customization</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="visualization.html"><a href="visualization.html#axes-labels"><i class="fa fa-check"></i><b>2.2.1</b> Axes labels</a></li>
 <li class="chapter" data-level="2.2.2" data-path="visualization.html"><a href="visualization.html#plot-title-and-subtitle"><i class="fa fa-check"></i><b>2.2.2</b> Plot title and subtitle</a></li>
 <li class="chapter" data-level="2.2.3" data-path="visualization.html"><a href="visualization.html#plot-theme"><i class="fa fa-check"></i><b>2.2.3</b> Plot theme</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a><ul>
+<li class="chapter" data-level="2.3" data-path="visualization.html"><a href="visualization.html#density-plots"><i class="fa fa-check"></i><b>2.3</b> Density plots</a>
+<ul>
 <li class="chapter" data-level="2.3.1" data-path="visualization.html"><a href="visualization.html#interpreting-density-plots"><i class="fa fa-check"></i><b>2.3.1</b> Interpreting Density Plots</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a><ul>
+<li class="chapter" data-level="3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html"><i class="fa fa-check"></i><b>3</b> Descriptive Statistics: Numerically Describing the Sample Data</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-attributes"><i class="fa fa-check"></i><b>3.1</b> Summarizing Attributes</a></li>
-<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a><ul>
+<li class="chapter" data-level="3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#understanding-the-median-and-mean"><i class="fa fa-check"></i><b>3.2</b> Understanding the Median and Mean</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarize-with-the-mean-or-median"><i class="fa fa-check"></i><b>3.2.1</b> Summarize with the Mean or Median?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a><ul>
+<li class="chapter" data-level="3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#numerically-summarizing-variation"><i class="fa fa-check"></i><b>3.3</b> Numerically Summarizing Variation</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#range"><i class="fa fa-check"></i><b>3.3.1</b> Range</a></li>
 <li class="chapter" data-level="3.3.2" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#percentile-range"><i class="fa fa-check"></i><b>3.3.2</b> Percentile Range</a></li>
 <li class="chapter" data-level="3.3.3" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#interquartile-range-iqr"><i class="fa fa-check"></i><b>3.3.3</b> Interquartile Range (IQR)</a></li>
@@ -201,53 +214,68 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#summarizing-categorical-attributes"><i class="fa fa-check"></i><b>3.4</b> Summarizing Categorical Attributes</a></li>
 <li class="chapter" data-level="3.5" data-path="descriptive-statistics-numerically-describing-the-sample-data.html"><a href="descriptive-statistics-numerically-describing-the-sample-data.html#advanced-extension-computing-your-own-measure-of-variation"><i class="fa fa-check"></i><b>3.5</b> Advanced Extension: Computing Your Own Measure of Variation</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a><ul>
-<li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-distributions"><i class="fa fa-check"></i><b>4.1</b> Multivariate Distributions</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html"><i class="fa fa-check"></i><b>4</b> Multivariate Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-distributions"><i class="fa fa-check"></i><b>4.1</b> Multivariate Distributions</a>
+<ul>
 <li class="chapter" data-level="4.1.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#histograms-1"><i class="fa fa-check"></i><b>4.1.1</b> Histograms</a></li>
 <li class="chapter" data-level="4.1.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#density-curves"><i class="fa fa-check"></i><b>4.1.2</b> Density Curves</a></li>
 <li class="chapter" data-level="4.1.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#violin-plots"><i class="fa fa-check"></i><b>4.1.3</b> Violin Plots</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#faceting"><i class="fa fa-check"></i><b>4.2</b> Faceting</a></li>
-<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-descriptive-statistics"><i class="fa fa-check"></i><b>4.3</b> Multivariate Descriptive Statistics</a><ul>
+<li class="chapter" data-level="4.3" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#multivariate-descriptive-statistics"><i class="fa fa-check"></i><b>4.3</b> Multivariate Descriptive Statistics</a>
+<ul>
 <li class="chapter" data-level="4.3.1" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-additional-groups"><i class="fa fa-check"></i><b>4.3.1</b> Adding additional groups</a></li>
 <li class="chapter" data-level="4.3.2" data-path="multivariate-visualization.html"><a href="multivariate-visualization.html#adding-more-descriptive-statistics"><i class="fa fa-check"></i><b>4.3.2</b> Adding more descriptive statistics</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a><ul>
-<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#decision-trees"><i class="fa fa-check"></i><b>5.1</b> Decision Trees</a><ul>
+<li class="chapter" data-level="5" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>5</b> Classification</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="classification.html"><a href="classification.html#decision-trees"><i class="fa fa-check"></i><b>5.1</b> Decision Trees</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="classification.html"><a href="classification.html#fitting-a-classification-tree"><i class="fa fa-check"></i><b>5.1.1</b> Fitting a Classification Tree</a></li>
 <li class="chapter" data-level="5.1.2" data-path="classification.html"><a href="classification.html#accuracy"><i class="fa fa-check"></i><b>5.1.2</b> Accuracy</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="classification.html"><a href="classification.html#adding-categorical-attributes"><i class="fa fa-check"></i><b>5.2</b> Adding Categorical Attributes</a><ul>
+<li class="chapter" data-level="5.2" data-path="classification.html"><a href="classification.html#adding-categorical-attributes"><i class="fa fa-check"></i><b>5.2</b> Adding Categorical Attributes</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="classification.html"><a href="classification.html#exploring-location"><i class="fa fa-check"></i><b>5.2.1</b> Exploring Location</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.3</b> Comparison to Baseline</a><ul>
+<li class="chapter" data-level="5.3" data-path="classification.html"><a href="classification.html#comparison-to-baseline"><i class="fa fa-check"></i><b>5.3</b> Comparison to Baseline</a>
+<ul>
 <li class="chapter" data-level="5.3.1" data-path="classification.html"><a href="classification.html#absolute-vs-relative-comparison"><i class="fa fa-check"></i><b>5.3.1</b> Absolute vs Relative Comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.4</b> Training/Test Data</a><ul>
+<li class="chapter" data-level="5.4" data-path="classification.html"><a href="classification.html#trainingtest-data"><i class="fa fa-check"></i><b>5.4</b> Training/Test Data</a>
+<ul>
 <li class="chapter" data-level="5.4.1" data-path="classification.html"><a href="classification.html#splitting-the-data-into-trainingtest"><i class="fa fa-check"></i><b>5.4.1</b> Splitting the data into training/test</a></li>
 <li class="chapter" data-level="5.4.2" data-path="classification.html"><a href="classification.html#evaluate-accuracy-on-the-testing-data"><i class="fa fa-check"></i><b>5.4.2</b> Evaluate accuracy on the testing data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="classification.html"><a href="classification.html#introduction-to-resamplingbootstrap"><i class="fa fa-check"></i><b>5.5</b> Introduction to Resampling/Bootstrap</a><ul>
+<li class="chapter" data-level="5.5" data-path="classification.html"><a href="classification.html#introduction-to-resamplingbootstrap"><i class="fa fa-check"></i><b>5.5</b> Introduction to Resampling/Bootstrap</a>
+<ul>
 <li class="chapter" data-level="5.5.1" data-path="classification.html"><a href="classification.html#bootstrap-variation-in-prediction-accuracy"><i class="fa fa-check"></i><b>5.5.1</b> Bootstrap variation in prediction accuracy</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="regression-trees.html"><a href="regression-trees.html"><i class="fa fa-check"></i><b>6</b> Regression Trees</a><ul>
-<li class="chapter" data-level="6.1" data-path="regression-trees.html"><a href="regression-trees.html#predicting-act-score"><i class="fa fa-check"></i><b>6.1</b> Predicting ACT Score</a><ul>
+<li class="chapter" data-level="6" data-path="regression-trees.html"><a href="regression-trees.html"><i class="fa fa-check"></i><b>6</b> Regression Trees</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regression-trees.html"><a href="regression-trees.html#predicting-act-score"><i class="fa fa-check"></i><b>6.1</b> Predicting ACT Score</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="regression-trees.html"><a href="regression-trees.html#loading-r-packages"><i class="fa fa-check"></i><b>6.1.1</b> Loading R packages</a></li>
 <li class="chapter" data-level="6.1.2" data-path="regression-trees.html"><a href="regression-trees.html#visualize-distributions"><i class="fa fa-check"></i><b>6.1.2</b> Visualize distributions</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="regression-trees.html"><a href="regression-trees.html#continuous-association"><i class="fa fa-check"></i><b>6.2</b> Continuous Association</a><ul>
+<li class="chapter" data-level="6.2" data-path="regression-trees.html"><a href="regression-trees.html#continuous-association"><i class="fa fa-check"></i><b>6.2</b> Continuous Association</a>
+<ul>
 <li class="chapter" data-level="6.2.1" data-path="regression-trees.html"><a href="regression-trees.html#correlation-computation"><i class="fa fa-check"></i><b>6.2.1</b> Correlation Computation</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="regression-trees.html"><a href="regression-trees.html#first-regression-tree"><i class="fa fa-check"></i><b>6.3</b> First Regression Tree</a></li>
-<li class="chapter" data-level="6.4" data-path="regression-trees.html"><a href="regression-trees.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.4</b> Evaluating accuracy</a><ul>
+<li class="chapter" data-level="6.4" data-path="regression-trees.html"><a href="regression-trees.html#evaluating-accuracy"><i class="fa fa-check"></i><b>6.4</b> Evaluating accuracy</a>
+<ul>
 <li class="chapter" data-level="6.4.1" data-path="regression-trees.html"><a href="regression-trees.html#conditional-error"><i class="fa fa-check"></i><b>6.4.1</b> Conditional Error</a></li>
 </ul></li>
 <li class="chapter" data-level="6.5" data-path="regression-trees.html"><a href="regression-trees.html#adding-more-attributes"><i class="fa fa-check"></i><b>6.5</b> Adding more attributes</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>7</b> Linear Regression</a><ul>
-<li class="chapter" data-level="7.1" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>7.1</b> Simple Regression continuous predictor</a><ul>
+<li class="chapter" data-level="7" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>7</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-continuous-predictor"><i class="fa fa-check"></i><b>7.1</b> Simple Regression continuous predictor</a>
+<ul>
 <li class="chapter" data-level="7.1.1" data-path="linear-regression.html"><a href="linear-regression.html#description-of-the-data"><i class="fa fa-check"></i><b>7.1.1</b> Description of the Data</a></li>
 <li class="chapter" data-level="7.1.2" data-path="linear-regression.html"><a href="linear-regression.html#scatterplots"><i class="fa fa-check"></i><b>7.1.2</b> Scatterplots</a></li>
 <li class="chapter" data-level="7.1.3" data-path="linear-regression.html"><a href="linear-regression.html#fitting-a-linear-regression-model"><i class="fa fa-check"></i><b>7.1.3</b> Fitting a linear regression model</a></li>
@@ -255,9 +283,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7.2" data-path="linear-regression.html"><a href="linear-regression.html#conditional-means"><i class="fa fa-check"></i><b>7.2</b> Conditional Means</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html"><i class="fa fa-check"></i><b>8</b> Estimation, Bootstrap and Uncertainty</a><ul>
+<li class="chapter" data-level="8" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html"><i class="fa fa-check"></i><b>8</b> Estimation, Bootstrap and Uncertainty</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#bootstrap-and-uncertainty"><i class="fa fa-check"></i><b>8.1</b> Bootstrap and Uncertainty</a></li>
-<li class="chapter" data-level="8.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#estimating-error-or-uncertainty"><i class="fa fa-check"></i><b>8.2</b> Estimating Error or uncertainty</a><ul>
+<li class="chapter" data-level="8.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#estimating-error-or-uncertainty"><i class="fa fa-check"></i><b>8.2</b> Estimating Error or uncertainty</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#resample-with-replacement"><i class="fa fa-check"></i><b>8.2.1</b> Resample with replacement</a></li>
 <li class="chapter" data-level="8.2.2" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#calculate-statistic-of-interest"><i class="fa fa-check"></i><b>8.2.2</b> Calculate statistic of interest</a></li>
 <li class="chapter" data-level="8.2.3" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#replicating-the-resamplingbootstrap"><i class="fa fa-check"></i><b>8.2.3</b> Replicating the resampling/bootstrap</a></li>
@@ -265,29 +295,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.5" data-path="estimation-bootstrap-and-uncertainty.html"><a href="estimation-bootstrap-and-uncertainty.html#determining-if-a-statistic-is-significant"><i class="fa fa-check"></i><b>8.2.5</b> Determining if a statistic is “significant”</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html"><i class="fa fa-check"></i><b>9</b> Linear Regression with Categorical Predictors</a><ul>
-<li class="chapter" data-level="9.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#categorical-predictors"><i class="fa fa-check"></i><b>9.1</b> Categorical Predictor(s)</a><ul>
+<li class="chapter" data-level="9" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html"><i class="fa fa-check"></i><b>9</b> Linear Regression with Categorical Predictors</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#categorical-predictors"><i class="fa fa-check"></i><b>9.1</b> Categorical Predictor(s)</a>
+<ul>
 <li class="chapter" data-level="9.1.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#linear-regression---categorical-predictor"><i class="fa fa-check"></i><b>9.1.1</b> Linear Regression - Categorical Predictor</a></li>
 <li class="chapter" data-level="9.1.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#inference"><i class="fa fa-check"></i><b>9.1.2</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#more-than-two-categorical-groups"><i class="fa fa-check"></i><b>9.2</b> More than two categorical groups</a><ul>
+<li class="chapter" data-level="9.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#more-than-two-categorical-groups"><i class="fa fa-check"></i><b>9.2</b> More than two categorical groups</a>
+<ul>
 <li class="chapter" data-level="9.2.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#explore-distribution-3-groups"><i class="fa fa-check"></i><b>9.2.1</b> Explore distribution 3 groups</a></li>
 <li class="chapter" data-level="9.2.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#linear-regression-with-three-categoriesgroups"><i class="fa fa-check"></i><b>9.2.2</b> Linear Regression with three categories/groups</a></li>
 <li class="chapter" data-level="9.2.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#inference-for-model-with-three-groups"><i class="fa fa-check"></i><b>9.2.3</b> Inference for model with three groups</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#exploring-model-fit"><i class="fa fa-check"></i><b>9.3</b> Exploring Model Fit</a><ul>
+<li class="chapter" data-level="9.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#exploring-model-fit"><i class="fa fa-check"></i><b>9.3</b> Exploring Model Fit</a>
+<ul>
 <li class="chapter" data-level="9.3.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#r-squared"><i class="fa fa-check"></i><b>9.3.1</b> R-Squared</a></li>
 <li class="chapter" data-level="9.3.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#residual-standard-error"><i class="fa fa-check"></i><b>9.3.2</b> Residual Standard Error</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#multiple-regression"><i class="fa fa-check"></i><b>9.4</b> Multiple Regression</a><ul>
+<li class="chapter" data-level="9.4" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#multiple-regression"><i class="fa fa-check"></i><b>9.4</b> Multiple Regression</a>
+<ul>
 <li class="chapter" data-level="9.4.1" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#distribution-of-effects"><i class="fa fa-check"></i><b>9.4.1</b> Distribution of Effects</a></li>
 <li class="chapter" data-level="9.4.2" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#interactions"><i class="fa fa-check"></i><b>9.4.2</b> Interactions</a></li>
 <li class="chapter" data-level="9.4.3" data-path="linear-regression-with-categorical-predictors.html"><a href="linear-regression-with-categorical-predictors.html#evaluating-model-fit"><i class="fa fa-check"></i><b>9.4.3</b> Evaluating model fit</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>10</b> Prediction for individuals</a><ul>
+<li class="chapter" data-level="10" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html"><i class="fa fa-check"></i><b>10</b> Prediction for individuals</a>
+<ul>
 <li class="chapter" data-level="10.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#comparison-of-classification-linear-model"><i class="fa fa-check"></i><b>10.1</b> Comparison of classification / linear model</a></li>
-<li class="chapter" data-level="10.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>10.2</b> Compared linear model with median</a><ul>
+<li class="chapter" data-level="10.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#compared-linear-model-with-median"><i class="fa fa-check"></i><b>10.2</b> Compared linear model with median</a>
+<ul>
 <li class="chapter" data-level="10.2.1" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#skewed-data---inference"><i class="fa fa-check"></i><b>10.2.1</b> Skewed Data - Inference</a></li>
 <li class="chapter" data-level="10.2.2" data-path="prediction-for-individuals.html"><a href="prediction-for-individuals.html#bootstrap-median"><i class="fa fa-check"></i><b>10.2.2</b> Bootstrap Median</a></li>
 </ul></li>
@@ -312,34 +349,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<div id="introduction" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Here is an intro. And more.</p>
-<div id="statistics-vs-data-science" class="section level2">
-<h2><span class="header-section-number">1.1</span> Statistics vs Data Science</h2>
+<div id="statistics-vs-data-science" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Statistics vs Data Science<a href="introduction.html#statistics-vs-data-science" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="experiments-vs-observations" class="section level2">
-<h2><span class="header-section-number">1.2</span> Experiments vs Observations</h2>
-<p>The type of analysis that is relevant for a given problem depends on the experimental design. More generally, experimental design refers to how the data were collected. How the data were collected has implications for the type of conclusions that can be drawn from the data (ie., you may have heard the phrase, “correlation does not imply causation”) and the subsequent analysis. A extremely sophisticated analysis does not overcome limitations in how the data were collected.</p>
-<p>Given that how the data were collected greatly impacts the types of conclusions that can be drawn from the analysis, what are design features are important to consider? This topic is large, nuanced, and an entire series of courses have been created on this topic. The goal here is to think about some concepts that are particularly helpful to consider for any analysis.</p>
-<p>The discussion will be framed around articulating whether the data collected were part of an experiment or were simply observed. The simplest definition for observational data are those that were collected without strong consideration about who is or how the data are collected. One example of observational data could be collected information about the shoes that people wear as they are walking in a busy part of town. Given this type of data collected, what could be some limitations about this type of data?</p>
-<p>To contrast observational data, experimental data are those in which care was taken to how the data were collected. Within experimental data, it is common for there to be two or more conditions that are being explored. For example, in a clinical trial that is testing whether a vaccine or drug is effective and safe, the new vaccine or drug is often tested against a placebo. The placebo is a harmless substance that does not produce any change to the body, for example, the placebo could be a sugar pill that looks just like a new drug to be tested in every other way. The placebo would simply not contain the active ingredients of the new drug.</p>
-<p>When conducting these experiments with two or more groups that are of interest to be compared, those who are participating in the study are randomly assigned or selected to be in one of the groups. Using the placebo vs new drug example, this would mean that each participant is randomly assigned to either receive the placebo or the new drug, but the participant does not know which one they are receiving. Often, those administering the treatment also do not know whether the placebo or active drug is being given as well.</p>
-<div id="explore-random-assignment" class="section level3">
-<h3><span class="header-section-number">1.2.1</span> Explore Random Assignment</h3>
-<p>How does the random assignment of individuals to treatment conditions change the design from an observational to an experimental design? The random process is really the primary differentiator between being an observational vs an experiment. The random assignment to each condition in the study has the ability to, on average, even out differences across the two groups. Since the inclusion of being in one of the two groups is random, if the study has enough participants, it is more likely for the two groups to be as equal as possible across all characteristics for the study participants.</p>
+<div id="experiments-vs-observations" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Experiments vs Observations<a href="introduction.html#experiments-vs-observations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The analysis type relevant to a given problem depends on the experimental design. More generally, experimental design refers to how the data was collected. How the data were collected has implications for the type of conclusions drawn from the data (i.e., you may have heard the phrase, “correlation does not imply causation”) and the subsequent analysis. An extremely sophisticated analysis does not overcome limitations in how the data were collected.</p>
+<p>Given that how the data were collected dramatically impacts the conclusions drawn from the analysis, what design features are essential to consider? This topic is extensive and nuanced and would fill up numerous statistics courses. The goal here is to think about some concepts that are particularly helpful to consider for any analysis.</p>
+<p>The discussion will be framed around articulating whether the data collected were part of an experiment or were observed. The simplest definition for observational data is those collected without strong consideration about who is or how the data is collected. One example of observational data could be collected information about the shoes people wear while walking in a busy part of town. Given this type of data collected, what could be some limitations of this type of data?</p>
+<p>In contrast to observational data, experimental data are those in which care was taken to how the data was collected. Within experimental data, it is common for two or more conditions to be explored. For example, in a clinical trial that tests whether a vaccine or drug is effective and safe, the new vaccine or drug is often tested against a placebo. The placebo is a harmless substance that does not change the body; for example, the placebo could be a sugar pill that looks just like a new drug to be tested in every other way. The placebo would not contain the active ingredients of the new drug.</p>
+<p>When conducting these experiments with two or more groups of interest to be compared, those participating in the study are randomly assigned or selected to be in one of the groups. Using the placebo vs new drug example, each participant is randomly assigned to either receive the placebo or the new drug. However, the participant does not know which one they are receiving. Often, those administering the treatment also do not know whether the placebo or active drug is being given as well.</p>
+<div id="explore-random-assignment" class="section level3 hasAnchor" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Explore Random Assignment<a href="introduction.html#explore-random-assignment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>How does the random assignment of individuals to treatment conditions change the design from observational to experimental? The random process is the primary difference between being an observational and an experiment. The random assignment to each condition in the study can, on average, even out differences across the two groups. Since the inclusion of being in one of the two groups is random, if the study has enough participants, it is more likely for the two groups to be as equal as possible across all characteristics of the study participants.</p>
 <p>What could random assignment look like in practice? More to come … .</p>
 </div>
-<div id="example-natural-experiments" class="section level3">
-<h3><span class="header-section-number">1.2.2</span> Example: Natural Experiments</h3>
+<div id="example-natural-experiments" class="section level3 hasAnchor" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Example: Natural Experiments<a href="introduction.html#example-natural-experiments" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 </div>
 </div>
-<div id="data-structure" class="section level2">
-<h2><span class="header-section-number">1.3</span> Data Structure</h2>
-<p>Data are often stored in tabular form for ease of use with common statistical programs, however data need not be in this structure. Data can come from anywhere and could consist of text, numbers representing some quantity, text labels representing groups, or many other formats. This section aims to give an introduction to the form and format of data, both common and uncommon.</p>
-<div id="tabular-data" class="section level3">
-<h3><span class="header-section-number">1.3.1</span> Tabular Data</h3>
-<p>Tabular data are those that are most commonly used in statistics courses. Tabular data are such that rows indicate unique cases of data and the columns represent different attributes for those cases. Table <a href="introduction.html#tab:tabular">1.1</a> shows the an example of tabular data.</p>
+<div id="data-structure" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Data Structure<a href="introduction.html#data-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Data are often stored in tabular form for ease of use with standard statistical programs. However, data need not be in this structure. Data can come from anywhere and consist of text, numbers representing some quantity, text labels representing groups, or many other formats. This section introduces the form and format of common and uncommon data.</p>
+<div id="tabular-data" class="section level3 hasAnchor" number="1.3.1">
+<h3><span class="header-section-number">1.3.1</span> Tabular Data<a href="introduction.html#tabular-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Tabular data are those that are most used in statistics courses. Tabular data are such that rows indicate unique cases of data, and the columns represent different attributes for those cases. Table <a href="introduction.html#tab:tabular">1.1</a> shows an example of tabular data.</p>
 <table>
 <caption><span id="tab:tabular">Table 1.1: </span>Example of tabular data.</caption>
 <thead>
@@ -371,13 +408,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>In this table, each row represents a unique person and the first column would represent the identifying attribute for each unique row. For example, the first row represents characteristics for He-Man and each subsequent column represents specific attributes about them. For example, the second and third columns are Yes/No attributes indicating if the person is human or fictional or not. What are the primary differences between the second and third columns? Notice that the third column, the fictional attribute, is one in which all elements in the current tabular data are the same value. This would be an attribute that does not vary across the different rows in the data. These attributes are not helpful from a statistical perspective in this small data set, but if more data were added in which some elements were not fictional, then this attribute would contain useful information. In statistics terminology, this type of attribute would be called a <strong>constant attribute</strong>. In statistics, we are interested in attributes that <strong>vary</strong> across our units in the data. Attributes that vary are often referred to as <strong>variables</strong> in statistics terminology. Throughout this textbook, the term attribute will be used instead of variable. An attribute will refer to a column of data that carries information about the units in the data.</p>
-<p>The final column of data in Table <a href="introduction.html#tab:tabular">1.1</a> is one that represents the approximate height of each character, in inches.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> This attribute is different from the rest of the attributes in that it is a numeric quantity for each unit. Numeric quantities usually carry more information about magnitude differences compared to the text attributes described earlier. More explicitly, differences in the height attributes can be quantified and in this case, with the attribute being represented as the height in inches, each unit represents the same distance across the entire scale. That is, a one inch difference across the entire height scale is the same no matter where that inch occurs on the scale. These types of attributes will be used extensively in this text, most commonly these types of attributes will be used as the attribute of most interest in our analyses. For example, from the data above, it could be asked if there are differences in height of the characters based on if they are human or not. For this question, differences in height for those that are human (ie., human attribute = “Yes”) compared to those that are not human (ie., human attribute = “No”) would be used as the primary comparison. This text will explore questions like this from a descriptive and inferential framework later.</p>
-<p>For these data, there are only three rows, but you could imagine adding more rows to these elements for other characters. For example, imagine adding a new row to this data for a rabbit. Take a few minutes to think about what a new row with the rabbit would look like for each column of Table <a href="introduction.html#tab:tabular">1.1</a>. Would any of the columns in the table change from a constant to now being a variable?</p>
+<p>In this table, each row represents a unique person, and the first column represents the identifying attribute for each unique row. For example, the first row represents characteristics of He-Man, and each subsequent column represents specific attributes about them. For example, the second and third columns are Yes/No attributes indicating whether the person is human or fictional. What are the primary differences between the second and third columns? Notice that the third column, the fictional attribute, is one in which all elements in the current tabular data are the same value. This column of data would be an attribute that does not vary across the different rows in the data. These attributes are not helpful from a statistical perspective in this small data set. However, if more data were added in which some elements were not fictional, this attribute would contain useful information. In statistics terminology, this type of attribute would be called a <strong>constant attribute</strong>. In statistics, we are interested in attributes that <strong>vary</strong> across our units in the data. Attributes that vary are often referred to as <strong>variables</strong> in statistics terminology. Throughout this textbook, the term attribute will be used instead of variable. An attribute will refer to a column of data that carries information about the units in the data.</p>
+<p>The final column of data in Table <a href="introduction.html#tab:tabular">1.1</a> represents the approximate height of each character, in inches <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. This attribute is different from the rest because it is a numeric quantity for each unit. Numeric quantities usually carry more information about magnitude differences compared to the text attributes described earlier. More explicitly, differences in the height attributes can be quantified, and, in this case, with the attribute being represented as the height in inches, each unit represents the same distance across the entire scale. That is, a one-inch difference across the entire height scale is the same no matter where that inch occurs. These types of attributes will be used extensively in this text; most commonly, these types of attributes will be used as the attribute of most interest in our analyses. For example, from the data above, it could be asked if there are differences in the characters’ height based on whether they are human or not. For this question, differences in height for those that are human (i.e., human attribute = “Yes”) compared to those that are not human (i.e., human attribute = “No”) would be used as the primary comparison. This text will explore questions like this from a descriptive and inferential framework later.</p>
+<p>There are only three rows for these data, but imagine adding more rows to these elements for other characters. For example, imagine adding a row to this data for a rabbit. Take a few minutes to think about what a new row with the rabbit would look like for each column of Table <a href="introduction.html#tab:tabular">1.1</a>. Would any of the columns in the table change from a constant to now being a variable?</p>
 </div>
-<div id="non-tabular-data" class="section level3">
-<h3><span class="header-section-number">1.3.2</span> Non-tabular Data</h3>
-<p>Data can come in many different formats, this book will not extensively cover data that are not in a tabular format. However, non-tabular data are very common in practical problems. In these situations, these data are often wrangled into a more structured format to conduct a statistical analysis. Some common non-tabular data formats include data coming from text, video, audio, graphics, images, sensors, and even more.</p>
+<div id="non-tabular-data" class="section level3 hasAnchor" number="1.3.2">
+<h3><span class="header-section-number">1.3.2</span> Non-tabular Data<a href="introduction.html#non-tabular-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Data can come in many formats; this book will only extensively cover data in a tabular format. However, non-tabular data are prevalent in practical problems. These data are often wrangled into a more structured format to conduct statistical analysis. Some common non-tabular data formats include data coming from text, video, audio, graphics, images, sensors, and even more.</p>
 
 </div>
 </div>
@@ -454,7 +491,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
