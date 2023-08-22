@@ -48,7 +48,7 @@ jobs:
          # Destination path
          path: docs # optional
      - name: Deploy to GitHub Pages
-       uses: JamesIves/github-pages-deploy-action@4.4.1
+       uses: JamesIves/github-pages-deploy-action@4
        with:
          GITHUB_TOKEN: ${{ secrets.BOOKDOWN_DEPLOY }}
          branch: gh-pages
