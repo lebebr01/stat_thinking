@@ -60,8 +60,8 @@ To better understand these summaries, we will visualize them on the distribution
 
 
 ```{r hist,echo=FALSE, fig.cap='Distribution of admission rates for the 2,019 higher education institutions. The mean admission rate is displayed as a red, dashed line.', warning=FALSE}
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed") %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
+  gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed") |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
@@ -89,8 +89,8 @@ The median does not balance the deviations; the sum is not zero ($+20$). The mea
 **What about the median?**
 
 ```{r hist-median, echo=FALSE, warning=FALSE, fig.cap = "Histogram depicting the median of the distribution."}
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'blue', xintercept = 0.708, size = 1) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
+  gf_vline(color = 'blue', xintercept = 0.708, size = 1) |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
@@ -104,9 +104,9 @@ The goal of numerically summarizing the distribution is to provide a single valu
 
 
 ```{r hist-mean-median, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 higher education institutions. The mean admission rate is displayed as a red, dashed line. The median admission rate is displayed as a blue, solid line.', warning=FALSE}
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed") %>%
-  gf_vline(color = 'blue', xintercept = 0.708, size = 1) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
+  gf_vline(color = 'red', xintercept = 0.683, size = 1, linetype = "dashed") |>
+  gf_vline(color = 'blue', xintercept = 0.708, size = 1) |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
@@ -156,11 +156,11 @@ To compute the endpoint after truncating the lower- and upper 10%, we will use t
 
 ```{r percentiles}
 # Provide both percentiles separately
-colleges %>%
+colleges |>
   df_stats(~ adm_rate, quantile(0.10), quantile(.90))
 
 # Provide both percentiles in a single quantile() call
-colleges %>%
+colleges |>
   df_stats(~ adm_rate, quantile(c(0.1, 0.9)))
 
 # Compute the range of the middle 80% of the data
@@ -171,12 +171,12 @@ The range of admissions rates for 80% of the 2,019 higher education institutions
 
 
 ```{r hist-percentiles, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 higher education institutions. The solid, red lines are placed at the 10th and 90th percentiles, respectively.', warning=FALSE}
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'red', xintercept = 0.39284, size = 1) %>%
-  gf_vline(color = 'red', xintercept = 0.94706, size = 1) %>%
-  gf_text(x = 0.2, y = 5, label = "10%", color = "red", size = 5) %>%
-  gf_text(x = 0.7, y = 5, label = "80%", color = "red", size = 5) %>%
-  gf_text(x = 0.99, y = 5, label = "10%", color = "red", size = 5) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
+  gf_vline(color = 'red', xintercept = 0.39284, size = 1) |>
+  gf_vline(color = 'red', xintercept = 0.94706, size = 1) |>
+  gf_text(x = 0.2, y = 5, label = "10%", color = "red", size = 5) |>
+  gf_text(x = 0.7, y = 5, label = "80%", color = "red", size = 5) |>
+  gf_text(x = 0.99, y = 5, label = "10%", color = "red", size = 5) |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
@@ -186,7 +186,7 @@ One percentile range that statisticians and data scientists use extensively is t
 
 ```{r iqr}
 # Obtain values for the 25th- and 75th percentiles
-colleges %>%
+colleges |>
   df_stats(~ adm_rate, quantile(c(0.25, 0.75)))
 
 # Compute the IQR
@@ -197,19 +197,19 @@ The range of admission rates for the middle 50% of the distribution is 28.5%. Si
 
 
 ```{r hist-iqr, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 higher education institutions. The solid, red lines are placed at the 25th and 75th percentiles, respectively.', warning=FALSE}
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%
-  gf_vline(color = 'red', xintercept = 0.83815, size = 1)  %>%
-  gf_text(x = 0.3, y = 5, label = "25%", color = "red", size = 5) %>%
-  gf_text(x = 0.7, y = 5, label = "50%", color = "red", size = 5) %>%
-  gf_text(x = 0.93, y = 5, label = "25%", color = "red", size = 5) %>%
-  gf_text(x = 0.7, y = 50, label = "IQR", color = "red", size = 5) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
+  gf_vline(color = 'red', xintercept = 0.5524, size = 1) |>
+  gf_vline(color = 'red', xintercept = 0.83815, size = 1)  |>
+  gf_text(x = 0.3, y = 5, label = "25%", color = "red", size = 5) |>
+  gf_text(x = 0.7, y = 5, label = "50%", color = "red", size = 5) |>
+  gf_text(x = 0.93, y = 5, label = "25%", color = "red", size = 5) |>
+  gf_text(x = 0.7, y = 50, label = "IQR", color = "red", size = 5) |>
   gf_segment(x = 0.66, y = 50, xend = 0.56, yend = 50, 
              arrow =  arrow(length=unit(0.30,"cm"), ends="last", type = "closed"), 
-             color = "red") %>%
+             color = "red") |>
   gf_segment(x = 0.74, y = 50, xend = 0.83, yend = 50, 
              arrow =  arrow(length=unit(0.30,"cm"), ends="last", type = "closed"), 
-             color = "red") %>%
+             color = "red") |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
@@ -217,7 +217,7 @@ Since the IQR describes the range for half of the observations, it can also be h
 
 ```{r range-iqr}
 # Obtain values for the 25th- and 75th percentiles
-colleges %>%
+colleges |>
   df_stats(~ adm_rate, min, quantile(c(0.25, 0.75)), max)
 
 # Compute the IQR
@@ -230,28 +230,28 @@ colleges %>%
 
 ```{r  hist-range-iqr, echo=FALSE, fig.cap='Distribution of the admission rates for 2,019 higher education institutions. The solid red lines are placed at the 25th and 75th percentiles. The dashed, blue lines are placed at the minimum and maximum values, respectively.', warning=FALSE}
 # Plot the IQR and range on the distribution
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_vline(color = 'red', xintercept = 0.5524, size = 1) %>%
-  gf_vline(color = 'red', xintercept = 0.83815, size = 1) %>%
-  gf_vline(color = 'blue', xintercept = 0, size = 1, linetype = "dashed") %>%
-  gf_vline(color = 'blue', xintercept = 1, size = 1, linetype = "dashed") %>%
-  gf_text(x = 0.3, y = 5, label = "25%", color = "red", size = 5) %>%
-  gf_text(x = 0.7, y = 5, label = "50%", color = "red", size = 5) %>%
-  gf_text(x = 0.93, y = 5, label = "25%", color = "red", size = 5) %>%
-  gf_text(x = 0.4, y = 120, label = "Range", color = "blue", size = 5) %>%
-  gf_text(x = 0.7, y = 50, label = "IQR", color = "red", size = 5) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
+  gf_vline(color = 'red', xintercept = 0.5524, size = 1) |>
+  gf_vline(color = 'red', xintercept = 0.83815, size = 1) |>
+  gf_vline(color = 'blue', xintercept = 0, size = 1, linetype = "dashed") |>
+  gf_vline(color = 'blue', xintercept = 1, size = 1, linetype = "dashed") |>
+  gf_text(x = 0.3, y = 5, label = "25%", color = "red", size = 5) |>
+  gf_text(x = 0.7, y = 5, label = "50%", color = "red", size = 5) |>
+  gf_text(x = 0.93, y = 5, label = "25%", color = "red", size = 5) |>
+  gf_text(x = 0.4, y = 120, label = "Range", color = "blue", size = 5) |>
+  gf_text(x = 0.7, y = 50, label = "IQR", color = "red", size = 5) |>
   gf_segment(x = 0.66, y = 50, xend = 0.56, yend = 50, 
              arrow =  arrow(length=unit(0.30,"cm"), ends="last", type = "closed"), 
-             color = "red") %>%
+             color = "red") |>
   gf_segment(x = 0.74, y = 50, xend = 0.83, yend = 50, 
              arrow =  arrow(length=unit(0.30,"cm"), ends="last", type = "closed"), 
-             color = "red") %>%
+             color = "red") |>
   gf_segment(x = 0.34, y = 120, xend = 0.02, yend = 120, 
              arrow =  arrow(length=unit(0.30,"cm"), ends="last", type = "closed"), 
-             color = "blue") %>%
+             color = "blue") |>
   gf_segment(x = 0.46, y = 120, xend = 0.98, yend = 120, 
              arrow =  arrow(length=unit(0.30,"cm"), ends="last", type = "closed"), 
-             color = "blue") %>%
+             color = "blue") |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
@@ -262,7 +262,7 @@ Understanding how similar the range of variation is in these areas of the distri
 Examining the lowest 25%, highest 25% and middle 50% of the data is so common that a statistician named John Tukey invented a visualization technique called the box-and-whiskers plot to show these ranges. To create a box-and-whiskers plot we use the `gf_boxploth()` function.^[The `gf_boxplot()` function creates vertical a box-and-whiskers plot, and the `gf_boxploth()` function creates a horizontal box-and-whiskers plot.] This function takes a slightly different formula than we have been using, namely `0 ~ attribute name`. (Note that the `0` in the formula is where the box-and-whiskers plot is centered on the *y*-axis.)
 
 ```{r boxplot}
-gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  %>%
+gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  |>
   gf_labs(x = "Admission rate")
 ```
 
@@ -271,8 +271,8 @@ The "box", extending from 0.55 to 0.84, depicts the interquartile range, the mid
 We can also display both the histogram and the box-and-whiskers plot. In the syntax below, we center the box-and-whiskers plot at $y=170$. We also made the box slightly wider to display better in the plot. The resulting figure is shown in Figure \@ref(fig:hist-and-boxplot).
 
 ```{r hist-and-boxplot, fig.cap = "Histogram and boxplot shown together."}
-gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
-  gf_boxploth(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10) %>%
+gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
+  gf_boxploth(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10) |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
@@ -281,7 +281,7 @@ gf_histogram(~ adm_rate, data = colleges, bins = 30) %>%
 The percentile range plots and the boxplot indicated the values of the distribution that demarcated a particular proportion of the distribution. For example, the boxplot visually showed the admission rates at the 25th, 50th, and 75th percentiles. Another plot that can be useful for understanding how much of a distribution is at or below a particular value is a plot of the *empirical cumulative density*. To create this plot, we use the `gf_ecdf()` function from the **ggformula** package.
 
 ```{r ecdf}
-gf_ecdf(~ adm_rate, data = colleges) %>%
+gf_ecdf(~ adm_rate, data = colleges) |>
   gf_labs(x = "Admission rate", y = 'Cumulative proportion')
 ```
 
@@ -295,7 +295,7 @@ Two variation measures commonly used by statisticians and data scientists are th
 
 ```{r var}
 # Compute variance and standard deviation
-colleges %>%
+colleges |>
   df_stats(~ adm_rate, var, sd)
 ```
 
@@ -391,7 +391,7 @@ mae <- function(x, na.rm = TRUE, ...) {
 We can now use this new function as an argument in the `df_stats()` function.
 
 ```{r mae}
-colleges %>%
+colleges |>
   df_stats(~ adm_rate, mae)
 ```
 
