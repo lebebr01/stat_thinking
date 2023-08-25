@@ -96,7 +96,7 @@ variance-and-standard-deviation
 understanding-the-standard-deviation
 using-the-standard-deviation
 summarizing-categorical-attributes
-advanced-extension-computing-your-own-measure-of-variation
+advanced-extension-computing-another-measure-of-variation
 multivariate-visualization
 multivariate-distributions
 histograms-1
