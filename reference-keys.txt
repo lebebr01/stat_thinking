@@ -74,8 +74,8 @@ college-scorecard-data
 view-the-data
 exploring-attributes
 histograms
-interpretting-histograms
-adjusting-number-of-bins
+interpreting-histograms
+adjusting-the-number-of-bins
 plot-customization
 axes-labels
 plot-title-and-subtitle
