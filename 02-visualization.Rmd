@@ -67,7 +67,7 @@ gf_histogram(~ adm_rate, data = colleges)
 ```
 
 ```{r first-hist-int, echo = FALSE, fig.cap = "Histogram of college admission rates"}
-gf_histogram(~ adm_rate, data = colleges) %>%
+gf_histogram(~ adm_rate, data = colleges) |>
   plotly::ggplotly()
 ```
 
@@ -175,13 +175,13 @@ Plot titles and subtitles are helpful to use to provide context to the figure an
 By default, the plot has a grey background and white grid lines. This can be modified by using the `gf_theme()` function. For example, in the syntax below, we change the plot theme to a white background with no grid lines using `theme_classic().` Again, the `gf_theme()` is linked to the histogram with the pipe operator.
 
 ```{r fig.cap = "Varying figure theme."}
-gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 25) %>%
+gf_histogram(~ adm_rate, data = colleges, color = 'black', fill = 'yellow', bins = 25) |>
   gf_labs(
     x = 'Admission Rate',
     y = 'Frequency',
     title = 'Distribution of admission rates for 2,019 institutions of higher education.',
     subtitle = 'Data Source: U.S. Department of Education College Scorecard'
-    ) %>%
+    ) |>
  
 gf_theme(theme_classic())
 ```
@@ -201,13 +201,13 @@ library(statthink)
 We can then similarly change the theme to how we changed the theme before.
 
 ```{r fig.cap = "Histogram showing distribution of admission rates for institutions of higher education."}
-gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
+gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) |>
   gf_labs(
     x = 'Admission Rate',
     y = 'Frequency',
     title = 'Distribution of admission rates for 2,000 institutions of higher education.',
     subtitle = 'Data Source: U.S. Department of Education College Scorecard'
-    ) %>%
+    ) |>
  
 gf_theme(theme_statthinking())
 ```
@@ -228,7 +228,7 @@ In the code chunk above, the size of the text is increased to make it easier to 
 Figure \@ref(fig:stat-think-theme) shows that the theme is now applied automatically without needing to use the `gf_theme()` function to specify. In addition, the font size is increased as well compared to previous figures created in this chapter.
 
 ```{r stat-think-theme, fig.cap = "Histogram showing the distribution of admission rates for institutions of higher education."}
-gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) %>%
+gf_histogram(~ adm_rate, data = colleges, color = 'black', bins = 25) |>
   gf_labs(
     x = 'Admission Rate',
     y = 'Frequency',
@@ -257,7 +257,7 @@ Our interpretation remains that most institutions admit a high proportion of app
 The axis labels, title, and subtitle can be customized with `gf_labs()` in the same manner as with the histogram. The `color =` and `fill =` arguments in `gf_density()` will color the density curve and area under the density curve, respectively.
 
 ```{r density-final, fig.cap = "Density curve showing the distribution of admission rates for institutions of higher education."}
-gf_density(~ adm_rate, data = colleges, color = 'black', fill = 'yellow') %>%
+gf_density(~ adm_rate, data = colleges, color = 'black', fill = 'yellow') |>
   gf_labs(
     x = 'Admission Rate',
     y = 'Probability density',
