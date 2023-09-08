@@ -11,7 +11,7 @@ theme_set(theme_statthinking(base_size = 14))
 
 Real world data are more complex than exploring a distribution of a single variable, particularly when trying to understand individual variation. In most cases, attributes interact with one another and move in tandem, and many phenomena help to explain the attribute of interest. For example, when thinking about admission rates of higher education institutions, what are some important attributes that explain why higher education institutions differ in their admission rates? When considering the high temperature for the given day, what attributes would be helpful to understand why the high temperature on a day is different? Take a few minutes to brainstorm some ideas.
 
-Building off the high-temperature example, we will use weather data from two seasons of cooler months of the year, October through April of 2018-2019 and 2019-2020, of various locations around the United States. This data was downloaded from the [National Centers for Environmental Information (NCEI) Climate Data Online portal](https://www.ncdc.noaa.gov/cdo-web/) and is part of the companion package, `statthink`. The locations extracted in these data are found in the northern part of the United States and include: `r distinct(us_weather, location) %>% paste(sep = ", ").` The first few rows of the data are shown below.
+Building off the high-temperature example, we will use weather data from two seasons of cooler months of the year, October through April of 2018-2019 and 2019-2020, of various locations around the United States. This data was downloaded from the [National Centers for Environmental Information (NCEI) Climate Data Online portal](https://www.ncdc.noaa.gov/cdo-web/) and is part of the companion package, `statthink`. The locations extracted in these data are found in the northern part of the United States and include: `r distinct(us_weather, location) |> paste(sep = ", ").` The first few rows of the data are shown below.
 
 ```{r show-data, message=FALSE}
 DT::datatable(us_weather)
@@ -21,7 +21,7 @@ DT::datatable(us_weather)
 Before moving to multivariate distributions, first, we will explore a univariate distribution of the average daily temperature. The average daily temperature takes the recorded temperatures from a single day and averages those. Therefore, this value would fall somewhere between the high and low temperature for the day. What are some key characteristics of the average daily temperature distribution? Take a few minutes to summarize the key characteristics.
 
 ```{r temp-hist}
-gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30) %>% 
+gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30) |> 
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Univariate distribution of avg daily temperature")
 ```
@@ -38,7 +38,7 @@ Below is the multivariate distribution of the average daily temperature by wheth
 
 ```{r temp-snow-hist}
 gf_histogram(~ drybulbtemp_avg, data = us_weather, bins = 30, 
-             fill = ~ snow) %>%
+             fill = ~ snow) |>
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of avg daily temperature by whether it snowed",
           fill = "Snow?")
@@ -60,7 +60,7 @@ Often, density plots are easier to visualize when there is more than one group. 
 
 ```{r temp-density-fill}
 gf_density(~ drybulbtemp_avg, data = us_weather, size = 1,
-             fill = ~ snow) %>%
+             fill = ~ snow) |>
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of avg daily temperature by whether it snowed",
           fill = "Snow?")
@@ -74,7 +74,7 @@ There is another plotting aesthetic that is useful to know about when using dens
 
 ```{r temp-color-density}
 gf_density(~ drybulbtemp_avg, data = us_weather, 
-             color = ~ snow, size = 1) %>%
+             color = ~ snow, size = 1) |>
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of avg daily temperature by whether it snowed",
           color = "Snow?")
@@ -87,7 +87,7 @@ Combining the `color` and `fill` aesthetics is also possible, even with the same
 ```{r temp-color-fill-density}
 gf_density(~ drybulbtemp_avg, data = us_weather, 
            color = ~ snow, size = 1,
-           fill = ~ snow) %>%
+           fill = ~ snow) |>
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of avg daily temperature by whether it snowed",
           fill = "Snow?",
@@ -99,7 +99,7 @@ It is also possible to use both aesthetics but set one to be constant rather tha
 ```{r temp-color-fixedfill-density}
 gf_density(~ drybulbtemp_avg, data = us_weather, 
            color = ~ snow, size = 1,
-           fill = 'gray75') %>%
+           fill = 'gray75') |>
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           title = "Multivariate distribution of avg daily temperature by whether it snowed",
           color = "Snow?")
@@ -110,7 +110,7 @@ This results in a figure that is lighter than the default gray color used in den
 ```{r temp-density-location, fig.cap = "Multivariate distribution of avg daily temperature by whether it snowed"}
 gf_density(~ drybulbtemp_avg, data = us_weather, 
            color = ~ location, size = 1,
-           fill = 'gray85') %>%
+           fill = 'gray85') |>
   gf_labs(x = "Average daily temperature, in Fahrenheit", 
           color = "")
 ```
@@ -122,7 +122,7 @@ In this figure, the grayscale was also changed from 75 to 85, but it is still di
 Violin plots are another way to make comparisons of distributions across groups. Violin plots are also easier to interpret when there are more than two groups on a single graph. Violin plots are density plots that are mirrored to be fully enclosed. Procedurally, the density curve that was shown above is mirrored or flipped across the x-axis. Let us explore an example that creates a violin plot with the `gf_violin()` function and a two-sided formula, `drybulbtemp_avg ~ snow` which will visualize the average daily temperature by whether it has snowed or not.
 
 ```{r violin-temp-snow}
-gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
+gf_violin(drybulbtemp_avg ~ snow, data = us_weather) |>
   gf_labs(y = "Average daily temperature, in Fahrenheit",
           title = 'Multivariate distribution of avg daily temperature by whether it snowed',
           x = "Snow?")
@@ -132,10 +132,10 @@ By default, the violin plots are oriented vertically, where the temperature is o
 
 
 ```{r violin-temp-snow-flipped}
-gf_violin(drybulbtemp_avg ~ snow, data = us_weather) %>%
+gf_violin(drybulbtemp_avg ~ snow, data = us_weather) |>
   gf_labs(y = "Average daily temperature, in Fahrenheit",
           title = 'Multivariate distribution of avg daily temperature by whether it snowed',
-          x = "Snow?") %>%
+          x = "Snow?") |>
   gf_refine(coord_flip())
 ```
 
@@ -146,10 +146,10 @@ From the figure, similar findings discussed earlier can be articulated. For exam
 Aesthetically, these figures are more pleasing if they include a light fill color. This is done similarly to the density plots shown above with the `fill = ` argument, specified as `fill = 'gray85'`.
 
 ```{r violin-temp-snow-gray}
-gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85') %>%
+gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85') |>
   gf_labs(y = "Average daily temperature, in Fahrenheit",
           title = 'Multivariate distribution of avg daily temperature by whether it snowed', 
-          x = "Snow?") %>%
+          x = "Snow?") |>
   gf_refine(coord_flip())
 ```
 
@@ -157,9 +157,9 @@ Percentiles are another helpful feature to aid in comparing groups with violin p
 
 ```{r violin-temp-snow-quantile, fig.cap = 'Multivariate distribution of average daily temperature by whether it snowed'}
 gf_violin(drybulbtemp_avg ~ snow, data = us_weather, fill = 'gray85', 
-          draw_quantiles = c(0.1, 0.5, 0.9)) %>%
+          draw_quantiles = c(0.1, 0.5, 0.9)) |>
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          x = "Snow?") %>%
+          x = "Snow?") |>
   gf_refine(coord_flip())
 ```
 
@@ -174,9 +174,9 @@ As discussed earlier, visualizing many groups can be done more efficiently using
 
 ```{r temp-location-violin, fig.cap = 'Average daily temperature by the location of weather measurement.'}
 gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
-          draw_quantiles = c(.1, .5, .9)) %>%
+          draw_quantiles = c(.1, .5, .9)) |>
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          x = "Location") %>%
+          x = "Location") |>
   gf_refine(coord_flip())
 ```
 
@@ -188,10 +188,10 @@ Below is an example of adding the faceting to a violin plot. The violin plot wil
 
 ```{r temp-location-violin-facet, fig.cap = 'Average daily temperature by the location of weather measurement and whether it snowed on a given day.'} 
 gf_violin(drybulbtemp_avg ~ location, data = us_weather, fill = 'gray85', 
-          draw_quantiles = c(.1, .5, .9)) %>%
+          draw_quantiles = c(.1, .5, .9)) |>
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          x = "Location") %>%
-  gf_refine(coord_flip()) %>%
+          x = "Location") |>
+  gf_refine(coord_flip()) |>
   gf_facet_wrap(~ snow)
 ```
 
@@ -203,10 +203,10 @@ In contrast, one instance that may have a more impact than location would be the
 
 ```{r temp-month-violin-facet, fig.cap = 'Average daily temperature by the month of weather measurement and whether it snowed on a given day.'} 
 gf_violin(drybulbtemp_avg ~ month, data = us_weather, fill = 'gray85', 
-          draw_quantiles = c(.1, .5, .9)) %>%
+          draw_quantiles = c(.1, .5, .9)) |>
   gf_labs(y = "Average daily temperature, in Fahrenheit",
-          x = "Month") %>%
-  gf_refine(coord_flip()) %>%
+          x = "Month") |>
+  gf_refine(coord_flip()) |>
   gf_facet_wrap(~ snow)
 ```
 
@@ -220,7 +220,7 @@ In this section, we will revisit descriptive statistics or single-number summari
 Recall from Chapter 3, the `df_stats()` function is used to compute descriptive statistics. The primary arguments to this function are a formula indicating the attributes to consider and the statistics to be calculated. In Chapter 3, the formula used for the `df_stats()` function was one-sided as these were univariate descriptive statistics. When calculating multivariate (conditional) descriptive statistics, the formula will be two-sided of the following form `primary-attribute ~ conditional-attributes`. In this formula specification, the primary attribute would represent the attribute the descriptive statistics will be computed for or the attribute of interest. The conditional attribute(s) represents the attribute that the data will be conditioned or split on. Looking at the following code chunk, notice that the formula specification is `drybulbtemp_avg ~ snow` which means that the descriptive statistics will be computed for the average daily temperature or the primary attribute and this computation will be done for each unique value of the `snow` attribute. As we know, the snow attribute takes on two unique values: it snowed or did not snow. Therefore, the resulting output will contain two rows, one for days it did snow and one for when it did not snow. 
 
 ```{r mult-stats-snow} 
-us_weather %>% 
+us_weather |> 
   df_stats(drybulbtemp_avg ~ snow, median) 
 ``` 
 
@@ -229,7 +229,7 @@ Presented above are the conditional medians for the average daily temperature fo
 One helpful thing to add when computing conditional statistics is how many data points are in each group. This is particularly useful when the groups are different sizes, which commonly occurs. To do this, we can add another function, `length,` to the `df_stats()` function. 
 
 ```{r mult-stats-snow-length} 
-us_weather %>% 
+us_weather |> 
  df_stats(drybulbtemp_avg ~ snow, median, length) 
 ``` 
 
@@ -239,11 +239,11 @@ This adds another column that represents the number of observations that went in
 What if we thought more than one attribute was important in explaining variation in the outcome? These can also be added to the `df_stats()` function for additional conditional statistics. The key is to add another attribute to the right-hand side of the formula argument. Each attribute on the right-hand side of the `~` is separated with a `+` symbol. The following example computes the median and number of observations for the average daily temperature based on the unique values of whether it snowed each month. 
 
 ```{r mult-stats-twogroup} 
-us_weather %>% 
+us_weather |> 
    df_stats(drybulbtemp_avg ~ snow + month, median, length) 
 ``` 
 
-From the output, there are `r nrow(us_weather %>% df_stats(drybulbtemp_avg ~ snow + month, median, length))` rows which coincide with the number of months times 2. The 2 here represents the number of categories for the snow attribute, whether it snowed or not. In this case, each month by snow combination has data, but if a combination of the attributes on the right-hand side of the equation does not have any data, those rows would not show up in the descriptive statistic summary table. These multivariate descriptive statistics coincide with Figure \@ref(fig:temp-month-violin-facet), specifically the middle line in these violin plots. 
+From the output, there are `r nrow(us_weather |> df_stats(drybulbtemp_avg ~ snow + month, median, length))` rows which coincide with the number of months times 2. The 2 here represents the number of categories for the snow attribute, whether it snowed or not. In this case, each month by snow combination has data, but if a combination of the attributes on the right-hand side of the equation does not have any data, those rows would not show up in the descriptive statistic summary table. These multivariate descriptive statistics coincide with Figure \@ref(fig:temp-month-violin-facet), specifically the middle line in these violin plots. 
 
 ### Adding more descriptive statistics
 Chapter 3 discussed adding descriptive statistics to the `df_stats()` function. This section serves as a reminder of how to do that. In this chapter, we have only computed the median and number of observations. These are useful statistics, but it is often helpful to compute descriptive statistics of variation or other location-based statistics such as percentiles or means. 
@@ -251,7 +251,7 @@ Chapter 3 discussed adding descriptive statistics to the `df_stats()` function. 
 To do this, we can continue adding functions separated by commas directly at the end of the `df_stats()` function. For example, we can add the mean and standard deviation to the previous multivariate descriptive statistics tables by adding `, mean, sd` to the end of the previous `df_stats()` function. 
 
 ```{r mult-stats-morestats}
-us_weather %>% 
+us_weather |> 
    df_stats(drybulbtemp_avg ~ snow + month, median, length, mean, sd) 
 ```
 
