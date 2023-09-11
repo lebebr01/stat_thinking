@@ -121,7 +121,7 @@ further-conditional-accuracy
 absolute-vs-relative-comparison
 trainingtest-data
 splitting-the-data-into-trainingtest
-evaluate-accuracy-on-the-testing-data
+evaluating-the-accuracy-of-the-testing-data
 introduction-to-resamplingbootstrap
 bootstrap-variation-in-prediction-accuracy
 regression-trees
