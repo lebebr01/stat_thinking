@@ -1,7 +1,7 @@
 --- 
 title: "Statistical Reasoning through Computation and R"
 author: "Brandon LeBeau and Andrew S. Zieffler"
-date: "September 11, 2023"
+date: "October 02, 2023"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib]
