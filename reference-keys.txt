@@ -148,7 +148,7 @@ estimation-bootstrap-and-uncertainty
 bootstrap-and-uncertainty
 estimating-error-or-uncertainty
 resample-with-replacement
-calculate-statistic-of-interest
+calculate-the-statistic-of-interest
 replicating-the-resamplingbootstrap
 linear-regression-bootstrapresampling-example
 determining-if-a-statistic-is-significant
