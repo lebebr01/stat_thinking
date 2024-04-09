@@ -259,10 +259,10 @@ Although our sample of 2,019 higher education institutions has wildly varying ad
 
 Understanding how similar the range of variation is in these areas of the distribution can give us information about the shape of the distribution. For example, the larger range in the lowest 25% of the data suggests that the distribution has a tail on the left side. Seventy-five percent of the institutions have admissions rates higher than 50%. These two features suggest that the distribution is left-skewed (which we also see in the histogram). When we describe the shape of a distribution, we describe the variability in the data!
 
-Examining the lowest 25%, highest 25% and middle 50% of the data is so common that a statistician named John Tukey invented a visualization technique called the box-and-whiskers plot to show these ranges. To create a box-and-whiskers plot we use the `gf_boxploth()` function.^[The `gf_boxplot()` function creates vertical a box-and-whiskers plot, and the `gf_boxploth()` function creates a horizontal box-and-whiskers plot.] This function takes a slightly different formula than we have been using, namely `0 ~ attribute name`. (Note that the `0` in the formula is where the box-and-whiskers plot is centered on the *y*-axis.)
+Examining the lowest 25%, highest 25% and middle 50% of the data is so common that a statistician named John Tukey invented a visualization technique called the box-and-whiskers plot to show these ranges. To create a box-and-whiskers plot we use the `gf_boxplot()` function. This function takes a slightly different formula than we have been using, namely `0 ~ attribute name`. (Note that the `0` in the formula is where the box-and-whiskers plot is centered on the *y*-axis.)
 
 ```{r boxplot}
-gf_boxploth(0 ~ adm_rate, data = colleges, fill = "skyblue")  |>
+gf_boxplot(0 ~ adm_rate, data = colleges, fill = "skyblue")  |>
   gf_labs(x = "Admission rate")
 ```
 
