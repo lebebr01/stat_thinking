@@ -133,7 +133,7 @@ sample_n(fruit, 7, replace = TRUE)
 
 First, notice that a different set of fruits is returned each time the sampling algorithm is run. Also, notice that for each time, more than 1 of some fruit and some of the fruit do not show up. For example, in the first resampling with replacement, the orange, kiwi, and plum each show up twice, the banana shows up once, and the remaining fruit does not. For the second resampling with replacement, the banana and kumquat show up twice, and the plum, orange, and apple each show up once, but the other two fruits do not. This is how sampling with replacement works and differs from sampling without replacement here. Namely, each element could appear more than once, and a different sample occurs for each iteration of the sampling algorithm. 
 
-Sampling without replacement is commonly done for the selection of subjects from a population of interest. However, this procedure would not work well for the bootstrap/resampling procedure to estimate uncertainty because sampling with replacement would always produce the same sample. That is, each element of the original sample would be selected one time. Therefore, the sample would be the same every time, and the estimated statistic of interest would always be the same. This will be explored more in the next section.
+Sampling without replacement is commonly done for the selection of subjects from a population of interest. However, this procedure would not work well for the bootstrap/resampling procedure to estimate uncertainty because sampling without replacement would always produce the same sample. That is, each element of the original sample would be selected one time. Therefore, the sample would be the same every time, and the estimated statistic of interest would always be the same. This will be explored more in the next section.
 
 
 ### Calculate the statistic of interest
@@ -180,7 +180,7 @@ These represent 2 of a total 8.23543\times 10^{5} possible resampled data. Even 
 
 ### Replicating the resampling/bootstrap
 
-The process of resampling without replacement and computing the statistic of interest can be combined into a single operation by creating a function that does both steps at once. This function does those steps in the second and third lines of the function. This function is read as follows: first, take the data, then do the resampling of the same length (i.e., number of observations) with replacement, and finally compute the mean of the popularity attribute. 
+The process of resampling with replacement and computing the statistic of interest can be combined into a single operation by creating a function that does both steps at once. This function does those steps in the second and third lines of the function. This function is read as follows: first, take the data, then do the resampling of the same length (i.e., number of observations) with replacement, and finally compute the mean of the popularity attribute. 
 
 
 ```r

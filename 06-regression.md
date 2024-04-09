@@ -46,7 +46,8 @@ gf_density(~ actcmmid, data = colleges) %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing non-finite values (`stat_density()`).
+## Warning: Removed 730 rows containing non-finite outside the scale range
+## (`stat_density()`).
 ```
 
 <div class="figure">
@@ -70,7 +71,8 @@ gf_point(actcmmid ~ adm_rate, data = colleges, size = 3) %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing missing values (`geom_point()`).
+## Warning: Removed 730 rows containing missing values or values outside the scale range
+## (`geom_point()`).
 ```
 
 <div class="figure">
@@ -144,7 +146,8 @@ gf_point(actcmmid ~ adm_rate, data = colleges, color = 'gray55') %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing missing values (`geom_point()`).
+## Warning: Removed 730 rows containing missing values or values outside the scale range
+## (`geom_point()`).
 ```
 
 <div class="figure">
@@ -346,22 +349,14 @@ conditional_error
 ## 20 abs(error)  34 or larger  2.4340659  2.3571429 2.3571429  3.357143     13
 ```
 
-It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A point range plot shows the average mean absolute error and minimum and maximum absolute error values for each median ACT score. The dot in the figure represents the mean absolute error, and the range of the horizontal line stretches to the minimum and maximum absolute error statistics. The `gf_pointrangeh()` function aids in plotting this in R. The formula input for this function is `y-scores ~ mean-value + min-value + max-value`. 
+It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A point range plot shows the average mean absolute error and minimum and maximum absolute error values for each median ACT score. The dot in the figure represents the mean absolute error, and the range of the horizontal line stretches to the minimum and maximum absolute error statistics. The `gf_pointrange()` function aids in plotting this in R. The formula input for this function is `y-scores ~ mean-value + min-value + max-value`. 
 
 
 ```r
-gf_pointrangeh(act_recode ~ mean + min + max, 
+gf_pointrange(act_recode ~ mean + min + max, 
                data = conditional_error) %>% 
   gf_labs(y = "Median ACT Score",
           x = "Absolute Error")
-```
-
-```
-## Warning: Using the `size` aesthetic with geom_segment was deprecated in ggplot2 3.4.0.
-## ℹ Please use the `linewidth` aesthetic instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
 ```
 
 <div class="figure">
@@ -384,7 +379,8 @@ gf_point(actcmmid ~ ugds, data = colleges, size = 3) %>%
 ```
 
 ```
-## Warning: Removed 730 rows containing missing values (`geom_point()`).
+## Warning: Removed 730 rows containing missing values or values outside the scale range
+## (`geom_point()`).
 ```
 
 <img src="06-regression_files/figure-html/unnamed-chunk-4-1.png" width="672" />
@@ -472,7 +468,7 @@ bind_rows(
   mutate(conditional_error, model = 'model1'),
   mutate(conditional_error2, model = 'model2')
 ) %>%
-  gf_pointrangeh(act_recode ~ mean + min + max, 
+  gf_pointrange(act_recode ~ mean + min + max, 
                  color = ~ model,
                position = position_dodge(width = 0.5)) %>% 
   gf_labs(y = "Median ACT Score",
@@ -542,7 +538,7 @@ bind_rows(
   mutate(conditional_error_sat, model = 'model_sat')
 ) %>%
   mutate(model = factor(model, levels = c('model1', 'model2', 'model_sat'))) %>%
-  gf_pointrangeh(act_recode ~ mean + min + max, 
+  gf_pointrange(act_recode ~ mean + min + max, 
                  color = ~ model,
                position = position_dodge(width = 0.5)) %>% 
   gf_labs(y = "Median ACT Score",

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Regression Trees | Statistical Reasoning through Computation and R</title>
   <meta name="description" content="Chapter 6 Regression Trees | Statistical Reasoning through Computation and R" />
-  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.38 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Regression Trees | Statistical Reasoning through Computation and R" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Brandon LeBeau and Andrew S. Zieffler" />
 
 
-<meta name="date" content="2023-10-12" />
+<meta name="date" content="2024-04-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,15 +52,16 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.30/datatables.js"></script>
-<link href="libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.10.2/plotly.js"></script>
+<script src="libs/datatables-binding-0.33/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.10.4/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
@@ -77,7 +78,7 @@
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -359,30 +360,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="loading-r-packages" class="section level3 hasAnchor" number="6.1.1">
 <h3><span class="header-section-number">6.1.1</span> Loading R packages<a href="regression-trees.html#loading-r-packages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The following code will load the packages to use for fitting the regression tree and loading the college scorecard data used earlier in the book (see Chapters 2 and 3).</p>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="regression-trees.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb137-2"><a href="regression-trees.html#cb137-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
-<span id="cb137-3"><a href="regression-trees.html#cb137-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span>
-<span id="cb137-4"><a href="regression-trees.html#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
-<span id="cb137-5"><a href="regression-trees.html#cb137-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
-<span id="cb137-6"><a href="regression-trees.html#cb137-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
-<span id="cb137-7"><a href="regression-trees.html#cb137-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
-<span id="cb137-8"><a href="regression-trees.html#cb137-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parttree)</span>
-<span id="cb137-9"><a href="regression-trees.html#cb137-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-10"><a href="regression-trees.html#cb137-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
-<span id="cb137-11"><a href="regression-trees.html#cb137-11" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb137-12"><a href="regression-trees.html#cb137-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-13"><a href="regression-trees.html#cb137-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Load in data</span></span>
-<span id="cb137-14"><a href="regression-trees.html#cb137-14" aria-hidden="true" tabindex="-1"></a>colleges <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
-<span id="cb137-15"><a href="regression-trees.html#cb137-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, </span>
-<span id="cb137-16"><a href="regression-trees.html#cb137-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">guess_max =</span> <span class="dv">10000</span></span>
-<span id="cb137-17"><a href="regression-trees.html#cb137-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="regression-trees.html#cb133-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb133-2"><a href="regression-trees.html#cb133-2" tabindex="-1"></a><span class="fu">library</span>(ggformula)</span>
+<span id="cb133-3"><a href="regression-trees.html#cb133-3" tabindex="-1"></a><span class="fu">library</span>(mosaic)</span>
+<span id="cb133-4"><a href="regression-trees.html#cb133-4" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb133-5"><a href="regression-trees.html#cb133-5" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb133-6"><a href="regression-trees.html#cb133-6" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
+<span id="cb133-7"><a href="regression-trees.html#cb133-7" tabindex="-1"></a><span class="fu">library</span>(statthink)</span>
+<span id="cb133-8"><a href="regression-trees.html#cb133-8" tabindex="-1"></a><span class="fu">library</span>(parttree)</span>
+<span id="cb133-9"><a href="regression-trees.html#cb133-9" tabindex="-1"></a></span>
+<span id="cb133-10"><a href="regression-trees.html#cb133-10" tabindex="-1"></a><span class="co"># Set theme for plots</span></span>
+<span id="cb133-11"><a href="regression-trees.html#cb133-11" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_statthinking</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb133-12"><a href="regression-trees.html#cb133-12" tabindex="-1"></a></span>
+<span id="cb133-13"><a href="regression-trees.html#cb133-13" tabindex="-1"></a><span class="co"># Load in data</span></span>
+<span id="cb133-14"><a href="regression-trees.html#cb133-14" tabindex="-1"></a>colleges <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb133-15"><a href="regression-trees.html#cb133-15" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;https://raw.githubusercontent.com/lebebr01/statthink/master/data-raw/College-scorecard-clean.csv&quot;</span>, </span>
+<span id="cb133-16"><a href="regression-trees.html#cb133-16" tabindex="-1"></a>  <span class="at">guess_max =</span> <span class="dv">10000</span></span>
+<span id="cb133-17"><a href="regression-trees.html#cb133-17" tabindex="-1"></a>  )</span></code></pre></div>
 </div>
 <div id="visualize-distributions" class="section level3 hasAnchor" number="6.1.2">
 <h3><span class="header-section-number">6.1.2</span> Visualize distributions<a href="regression-trees.html#visualize-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Exploring the distribution of the variable of interest is often the first step in an analysis. A density figure is used to understand</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="regression-trees.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> actcmmid, <span class="at">data =</span> colleges) <span class="sc">%&gt;%</span></span>
-<span id="cb138-2"><a href="regression-trees.html#cb138-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Median college ACT score&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 730 rows containing non-finite values (`stat_density()`).</code></pre>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="regression-trees.html#cb134-1" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> actcmmid, <span class="at">data =</span> colleges) <span class="sc">%&gt;%</span></span>
+<span id="cb134-2"><a href="regression-trees.html#cb134-2" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Median college ACT score&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 730 rows containing non-finite outside the scale range
+## (`stat_density()`).</code></pre>
 <div class="figure"><span style="display:block;" id="fig:density-act"></span>
 <img src="06-regression_files/figure-html/density-act-1.png" alt="Density curve of median college ACT score." width="672" />
 <p class="caption">
@@ -399,10 +401,11 @@ Figure 6.1: Density curve of median college ACT score.
 <h2><span class="header-section-number">6.2</span> Continuous Association<a href="regression-trees.html#continuous-association" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Estimating whether two continuous/interval attributes are associated or related is often interesting. This can be done with a statistic called the correlation. The correlation measures the degree to which the two attributes move together or not. For example, if one attribute increases, does it indicate whether the second attribute increases (i.e., a positive correlation) or decreases (i.e., a negative correlation)? Before getting to the computation, exploring a sample can be helpful.</p>
 <p>First, it is helpful to explore a scatterplot to understand what the correlation represents. The scatterplot depicts two attributes and places a point where the two attributes intersect. For this first example, a scatterplot with median college ACT score and admission rate is explored.</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="regression-trees.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb140-2"><a href="regression-trees.html#cb140-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&#39;Admission Rate&#39;</span>,</span>
-<span id="cb140-3"><a href="regression-trees.html#cb140-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">&#39;Median College ACT Score&#39;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 730 rows containing missing values (`geom_point()`).</code></pre>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="regression-trees.html#cb136-1" tabindex="-1"></a><span class="fu">gf_point</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb136-2"><a href="regression-trees.html#cb136-2" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&#39;Admission Rate&#39;</span>,</span>
+<span id="cb136-3"><a href="regression-trees.html#cb136-3" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">&#39;Median College ACT Score&#39;</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 730 rows containing missing values or values outside the scale range
+## (`geom_point()`).</code></pre>
 <div class="figure"><span style="display:block;" id="fig:scatter-act"></span>
 <img src="06-regression_files/figure-html/scatter-act-1.png" alt="Scatterplot of median college ACT score by college admission rate." width="672" />
 <p class="caption">
@@ -412,7 +415,7 @@ Figure 6.2: Scatterplot of median college ACT score by college admission rate.
 <p>Figure <a href="regression-trees.html#fig:scatter-act">6.2</a> shows the bivariate relationship between median college ACT score and the college admission rate. If these two attributes are unrelated, it would not be possible to identify a trend in the scatterplot. However, there is a noticeable trend in Figure <a href="regression-trees.html#fig:scatter-act">6.2</a>. As median college ACT scores increase, the admission rates tend to decrease. This example of a negative trend would represent a negative relationship, association, or correlation.</p>
 <p>Although there is a trend in the relationship, there are exceptions to this rule. For instance, notice the points with deficient median college ACT scores; some cases have lower admission rates (about 0.25 or 25%), and some have higher admission rates (above 0.5 or 50%). Focusing on the single point at about 0.25 admission rate and nine median college ACT scores, most of the median college ACT scores for an admission rate around 0.25 are above 30, with a few clustered around 20. This indicates the variation and imperfect relationship between the two attributes. The mantra, “correlation does not mean causation,” is common in statistics courses, and this variation and imperfect relationship shows one example of this. In short, it requires precise designs for the data collection to make powerful statements about causation. Most often, the data available represent observations that were simply observed rather than being part of a more stringent experimental design.</p>
 <p>The correlation statistic provides a numeric summary of the degree of relationship between two quantitative attributes. These can be estimated with the <code>cor()</code> function. The primary argument is a formula used before and similar to the <code>gf_point()</code> function used above. The data argument is specified, and another argument may be helpful when data is missing. This is the <code>use = 'complete.obs'</code> argument. Specifying this argument with <code>'complete.obs'</code> tells the <code>cor()</code> function to remove any missing data on the two attributes being specified and keep any data where pairs of data are present.</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="regression-trees.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, <span class="at">use =</span> <span class="st">&#39;complete.obs&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="regression-trees.html#cb138-1" tabindex="-1"></a><span class="fu">cor</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, <span class="at">use =</span> <span class="st">&#39;complete.obs&#39;</span>)</span></code></pre></div>
 <pre><code>## [1] -0.4058855</code></pre>
 <p>The correlation estimate depicted here is -0.41, which carries two pieces of information. One, it shows the direction of the association. Here, negative means that as one attribute increases, the other tends to decrease (an inverse relationship). This was what was noticed in <a href="regression-trees.html#fig:scatter-act">6.2</a>. The second element the correlation shows is the magnitude of association. The correlation is standardized, meaning that regardless of the attributes used for the computation, the correlation will always be in the same range. The correlation will exclusively be between -1 and +1. Values of -1 or +1 indicate perfect negative or positive relationships, respectively. A correlation of 0 means no relationship. The correlation in the example was -0.41, which means the relationship is negative/inverse (as one attribute increases, the other tends to decrease) and the magnitude of association is about in between -1 and 0, but slightly closer to 0. What is considered a large, medium, or small association largely depends on the industry, but with education or social science data, this type of association would likely be considered a moderate or medium degree of association.</p>
 <p>The correlation makes one other assumption about the data. The correlation computed above and considered in this text is sometimes referred to as the Pearson correlation. This correlation assumes a straight line or a linear relationship best represents the data. If the relationship is not linear but is best represented by a curved line, the correlation used in this course would likely underrepresent the degree of association.</p>
@@ -431,10 +434,10 @@ r = \frac{\sum (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sqrt{\sum(x_{i} - \bar{x})^2
 <h2><span class="header-section-number">6.3</span> First Regression Tree<a href="regression-trees.html#first-regression-tree" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Another, and related to the correlation, way to explore the relationship between two quantitative attributes is through fitting a regression tree. A regression tree is similar to a classification tree. However, now the output is a numeric or continuous type variable that takes on many different values. In the classification tree example, this class focused on predicting if a case belonged to one of two classes. The regression tree, in contrast, will predict the numeric variable with many potential values rather than just two. This will have implications for how the model is evaluated for accuracy as well as how well the model does at predicting specific values. These will be discussed in more detail later.</p>
 <p>The syntax for fitting a regression tree is similar to the classification tree in R. The same function, <code>rpart()</code> is used and the function <code>rpart.plot()</code> will be used to visualize the fitted regression tree similar to before. The primary argument to the <code>rpart()</code> function is a formula where the left-hand side is the attribute of interest, and the right-hand side contains attributes that help predict the outcome. In the example below, the median college ACT score (<code>actcmmid</code>) is the outcome attribute, and the college admission rate (<code>adm_rate</code>) is used as the sole continuous attribute to predict the median college ACT score. The data argument is also specified, and the only difference here between a classification tree and a regression tree is the <code>method</code> argument. In the regression tree, the method argument should be set to <code>method = 'anova'</code>. This tells the <code>rpart()</code> function that the outcome is numeric and that an ANOVA method should be used in the model fitting. The ANOVA stands for Analysis of Variance, and we will discuss this in more detail moving forward.</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="regression-trees.html#cb144-1" aria-hidden="true" tabindex="-1"></a>act_reg <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, </span>
-<span id="cb144-2"><a href="regression-trees.html#cb144-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
-<span id="cb144-3"><a href="regression-trees.html#cb144-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb144-4"><a href="regression-trees.html#cb144-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(act_reg, <span class="at">roundint =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">branch =</span> .<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="regression-trees.html#cb140-1" tabindex="-1"></a>act_reg <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, </span>
+<span id="cb140-2"><a href="regression-trees.html#cb140-2" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
+<span id="cb140-3"><a href="regression-trees.html#cb140-3" tabindex="-1"></a></span>
+<span id="cb140-4"><a href="regression-trees.html#cb140-4" tabindex="-1"></a><span class="fu">rpart.plot</span>(act_reg, <span class="at">roundint =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">branch =</span> .<span class="dv">3</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:act-regression-tree"></span>
 <img src="06-regression_files/figure-html/act-regression-tree-1.png" alt="The first regression tree predicting median college ACT score based on the admission rate." width="672" />
 <p class="caption">
@@ -443,13 +446,14 @@ Figure 6.3: The first regression tree predicting median college ACT score based 
 </div>
 <p>The output from the regression tree is similar to that from a classification tree. One significant difference is that the predicted values in the end are numeric quantities instead of classes. The probabilities in the classification tree are not shown here, as there is no probability of being in a class. The percentage of cases in the predicted nodes is at the regression tree’s end. The logic for following the tree is the same as before, where each split can have two new paths. Then, the variable(s) are re-evaluated after the first split to see if additional splits can help predict the outcome of interest.</p>
 <p>Below is a figure that builds on the scatterplot we saw above. Vertical lines indicate the splits established from the regression tree in Figure <a href="regression-trees.html#fig:act-regression-tree">6.3</a>. The end buckets lie in these splits, and all data points residing in a single area have the same median ACT score. For example, all schools in the left-most quadrant of Figure <a href="regression-trees.html#fig:visualize-regression-tree">6.4</a> would all have the same predicted median ACT score of 32. In reality, one can see that the value of 32 is correct for some of the schools, but others in this quadrant have median ACT scores of less than 20. The following section will explore how to estimate the accuracy of the regression tree.</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="regression-trees.html#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, <span class="at">color =</span> <span class="st">&#39;gray55&#39;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb145-2"><a href="regression-trees.html#cb145-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median college ACT score&quot;</span>,</span>
-<span id="cb145-3"><a href="regression-trees.html#cb145-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">x =</span> <span class="st">&quot;Admission Rate&quot;</span>,</span>
-<span id="cb145-4"><a href="regression-trees.html#cb145-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">&quot;Log salary by number of home runs&quot;</span>) <span class="sc">+</span></span>
-<span id="cb145-5"><a href="regression-trees.html#cb145-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_parttree</span>(<span class="at">data =</span> act_reg, <span class="fu">aes</span>(<span class="at">fill =</span> actcmmid), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> </span>
-<span id="cb145-6"><a href="regression-trees.html#cb145-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="st">&quot;ACT&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 730 rows containing missing values (`geom_point()`).</code></pre>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="regression-trees.html#cb141-1" tabindex="-1"></a><span class="fu">gf_point</span>(actcmmid <span class="sc">~</span> adm_rate, <span class="at">data =</span> colleges, <span class="at">color =</span> <span class="st">&#39;gray55&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb141-2"><a href="regression-trees.html#cb141-2" tabindex="-1"></a>    <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median college ACT score&quot;</span>,</span>
+<span id="cb141-3"><a href="regression-trees.html#cb141-3" tabindex="-1"></a>            <span class="at">x =</span> <span class="st">&quot;Admission Rate&quot;</span>,</span>
+<span id="cb141-4"><a href="regression-trees.html#cb141-4" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">&quot;Log salary by number of home runs&quot;</span>) <span class="sc">+</span></span>
+<span id="cb141-5"><a href="regression-trees.html#cb141-5" tabindex="-1"></a>  <span class="fu">geom_parttree</span>(<span class="at">data =</span> act_reg, <span class="fu">aes</span>(<span class="at">fill =</span> actcmmid), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> </span>
+<span id="cb141-6"><a href="regression-trees.html#cb141-6" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="st">&quot;ACT&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 730 rows containing missing values or values outside the scale range
+## (`geom_point()`).</code></pre>
 <div class="figure"><span style="display:block;" id="fig:visualize-regression-tree"></span>
 <img src="06-regression_files/figure-html/visualize-regression-tree-1.png" alt="Visual depiction of the regression tree splits." width="672" />
 <p class="caption">
@@ -475,12 +479,12 @@ RMSE = \sqrt{\frac{\sum (predicted - observed) ^ 2}{n}}
 MAE = \frac{\sum \left|predicted - observed \right| }{n}
 \]</span></p>
 <p>The below code chunk computes the deviation labeled as an error. The first 10 rows are shown along with the institution name (<code>instnm</code>), median ACT score (<code>actcmmid</code>), and the predicted median ACT score (<code>act_pred</code>). Notice within the error column some values above and below zero. Notice how those with a negative error have median ACT scores less than predicted. Conversely, those with positive errors have median ACT scores greater than the predicted ACT value.</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="regression-trees.html#cb147-1" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges <span class="sc">%&gt;%</span></span>
-<span id="cb147-2"><a href="regression-trees.html#cb147-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(actcmmid) <span class="sc">%&gt;%</span></span>
-<span id="cb147-3"><a href="regression-trees.html#cb147-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred =</span> <span class="fu">predict</span>(act_reg),</span>
-<span id="cb147-4"><a href="regression-trees.html#cb147-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">error =</span> actcmmid <span class="sc">-</span> act_pred) <span class="sc">%&gt;%</span></span>
-<span id="cb147-5"><a href="regression-trees.html#cb147-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(instnm, actcmmid, act_pred, error)</span>
-<span id="cb147-6"><a href="regression-trees.html#cb147-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(colleges_pred, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="regression-trees.html#cb143-1" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges <span class="sc">%&gt;%</span></span>
+<span id="cb143-2"><a href="regression-trees.html#cb143-2" tabindex="-1"></a>  <span class="fu">drop_na</span>(actcmmid) <span class="sc">%&gt;%</span></span>
+<span id="cb143-3"><a href="regression-trees.html#cb143-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred =</span> <span class="fu">predict</span>(act_reg),</span>
+<span id="cb143-4"><a href="regression-trees.html#cb143-4" tabindex="-1"></a>         <span class="at">error =</span> actcmmid <span class="sc">-</span> act_pred) <span class="sc">%&gt;%</span></span>
+<span id="cb143-5"><a href="regression-trees.html#cb143-5" tabindex="-1"></a>  <span class="fu">select</span>(instnm, actcmmid, act_pred, error)</span>
+<span id="cb143-6"><a href="regression-trees.html#cb143-6" tabindex="-1"></a><span class="fu">head</span>(colleges_pred, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 10 × 4
 ##    instnm                              actcmmid act_pred error
 ##    &lt;chr&gt;                                  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
@@ -495,13 +499,13 @@ MAE = \frac{\sum \left|predicted - observed \right| }{n}
 ##  9 Faulkner University                       20     23.1 -3.11
 ## 10 Huntingdon College                        22     23.1 -1.11</code></pre>
 <p>The <code>df_stats()</code> function can compute summary statistics for the <code>error</code> attribute, representing the difference between the observed and predicted college ACT scores. A variety of statistics are computed on the <code>error</code> attribute, including the mean, median, variance (var), standard deviation (sd), minimum (min), and maximum (max).</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="regression-trees.html#cb149-1" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb149-2"><a href="regression-trees.html#cb149-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> error, mean, median, var, sd, min, max)</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="regression-trees.html#cb145-1" tabindex="-1"></a>colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb145-2"><a href="regression-trees.html#cb145-2" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> error, mean, median, var, sd, min, max)</span></code></pre></div>
 <pre><code>##   response          mean    median      var       sd       min      max
 ## 1    error -5.043527e-16 -0.111001 9.919378 3.149504 -16.68116 7.888999</code></pre>
 <p>Notice from the statistics computed, the mean and median of the deviation or raw error (i.e., <span class="math inline">\(predicted - observed\)</span>), the values are very close to zero and are practically zero for the mean. This occurs because the positive and negative errors offset one another. The median is not exactly zero, as the error distribution is not symmetric. Figure <a href="regression-trees.html#fig:error-dist">6.5</a> shows the distribution of errors. Notice there is a longer tail on the negative side, meaning that some predicted values are much larger than the observed median ACT score. This is also shown by the min and max statistics computed above.</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="regression-trees.html#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> error, <span class="at">data =</span> colleges_pred) <span class="sc">%&gt;%</span></span>
-<span id="cb151-2"><a href="regression-trees.html#cb151-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Error = Predicted - Observed&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="regression-trees.html#cb147-1" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> error, <span class="at">data =</span> colleges_pred) <span class="sc">%&gt;%</span></span>
+<span id="cb147-2"><a href="regression-trees.html#cb147-2" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Error = Predicted - Observed&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:error-dist"></span>
 <img src="06-regression_files/figure-html/error-dist-1.png" alt="Distribution of error deviations from the regression tree model." width="672" />
 <p class="caption">
@@ -510,13 +514,13 @@ Figure 6.5: Distribution of error deviations from the regression tree model.
 </div>
 <p>Circling back to the final statistic computed above, the variance (var) and standard deviation (sd) of the error term represent the MSE and RMSE, respectively, and are interpretable. In general, larger values of these statistics indicate less accuracy. On average, the squared deviations of the predicted minus the observed are larger. In practice, the RMSE is often used more than the MSE as the metric is the same as the outcome, in this case, the median ACT scores. The RMSE of 3.15 says that, on average, the predicted median institution ACT scores are about 3.15 away from the observed median institution ACT score.</p>
 <p>The computation of the mean absolute error is similar, except instead of using the raw deviations (i.e., errors), the computation is done on the absolute value of the deviations. The <code>abs()</code> function computes the absolute value in R. In the context of errors, the absolute value is <code>abs(error)</code>. The <code>error</code> term represents the errors computed as the difference in the predicted and observed median ACT scores. The computation of the mean, median, minimum, and maximum statistics helps interpret model prediction accuracy.</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="regression-trees.html#cb152-1" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb152-2"><a href="regression-trees.html#cb152-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> <span class="fu">abs</span>(error), mean, median, min, max)</span></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="regression-trees.html#cb148-1" tabindex="-1"></a>colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb148-2"><a href="regression-trees.html#cb148-2" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="sc">~</span> <span class="fu">abs</span>(error), mean, median, min, max)</span></code></pre></div>
 <pre><code>##     response     mean   median      min      max
 ## 1 abs(error) 2.396454 1.888999 0.111001 16.68116</code></pre>
 <p>When interpreting these statistics, the mean and median columns represent the mean and median absolute error. They are on the same scale as the outcome attribute, in this case, the median ACT score. Therefore, the value of 2.4 states that on average the predicted median ACT scores are within 2.4 from the observed scores. Interpretation of the median is similar, but instead of the average absolute deviation, this represents the median absolute deviation. Finally, notice how the absolute value worked. The minimum statistic is positive, whereas before, it was negative. The largest negative deviation/error from before is in the maximum column. The absolute value of the errors can be shown graphically to understand the new distribution fully.</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="regression-trees.html#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> <span class="fu">abs</span>(error), <span class="at">data =</span> colleges_pred) <span class="sc">%&gt;%</span></span>
-<span id="cb154-2"><a href="regression-trees.html#cb154-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Error = |Predicted - Observed|&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="regression-trees.html#cb150-1" tabindex="-1"></a><span class="fu">gf_density</span>(<span class="sc">~</span> <span class="fu">abs</span>(error), <span class="at">data =</span> colleges_pred) <span class="sc">%&gt;%</span></span>
+<span id="cb150-2"><a href="regression-trees.html#cb150-2" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Error = |Predicted - Observed|&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:absolute-error-dist"></span>
 <img src="06-regression_files/figure-html/absolute-error-dist-1.png" alt="The distribution of errors after taking the absolute value ." width="672" />
 <p class="caption">
@@ -528,8 +532,8 @@ Figure 6.6: The distribution of errors after taking the absolute value .
 <div id="conditional-error" class="section level3 hasAnchor" number="6.4.1">
 <h3><span class="header-section-number">6.4.1</span> Conditional Error<a href="regression-trees.html#conditional-error" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Similar to problems with just using the overall classification accuracy with classification trees, it can be helpful to use conditional error with regression trees. The conditional error can help to identify areas of the model that are performing worse, more specifically, to understand where the model has larger errors. The <code>df_stats()</code> function can be used to compute conditional statistics. The formula input includes two attributes: the error on the left side of the <code>~</code> and the attribute to explore the conditional error on the right-hand side. The formula used below explores the MAE across different median ACT scores using the formula, <code>abs(error) ~ actcmmid</code>. The function <code>length</code> calculates how many schools are in each computation.</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="regression-trees.html#cb155-1" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb155-2"><a href="regression-trees.html#cb155-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error) <span class="sc">~</span> actcmmid, mean, median, min, max, length)</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="regression-trees.html#cb151-1" tabindex="-1"></a>colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb151-2"><a href="regression-trees.html#cb151-2" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error) <span class="sc">~</span> actcmmid, mean, median, min, max, length)</span></code></pre></div>
 <pre><code>##      response actcmmid       mean     median        min       max length
 ## 1  abs(error)        6 15.5032258 15.5032258 15.5032258 15.503226      1
 ## 2  abs(error)        7 16.1110010 16.1110010 16.1110010 16.111001      1
@@ -558,14 +562,14 @@ Figure 6.6: The distribution of errors after taking the absolute value .
 ## 25 abs(error)       35  3.3571429  3.3571429  3.3571429  3.357143      1</code></pre>
 <p>Notice a row for each median ACT score found in the data and that each statistic is computed for each unique median ACT score. Procedurally, the data are split into compartments, and the statistics are computed on the data that fit into those compartments. The MAE (shown by the mean column) shows larger errors at low values of median ACT score, which decreases quickly until a median ACT score of 23, then increases slightly, then decreases again for higher values.</p>
 <p>Before spending too much time with this table, peak at the last column, labeled length. This column tells how many data points are in each of the compartments to do the calculation. In general, compartments with less data will produce more unstable statistics. For instance, very few schools have poor ACT scores, for example, scores of 15 and under. Furthermore, only one school has a median ACT score of 35. When there are small numbers for some of these categories, combining them to evaluate model accuracy can be helpful. In this example, ACT scores less than 15 in one category and 34 and higher in another. The other median ACT scores are in the category by themselves.</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="regression-trees.html#cb157-1" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb157-2"><a href="regression-trees.html#cb157-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_recode =</span> <span class="fu">ifelse</span>(actcmmid <span class="sc">&lt;=</span> <span class="dv">15</span>, <span class="st">&#39;15 or smaller&#39;</span>, </span>
-<span id="cb157-3"><a href="regression-trees.html#cb157-3" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(actcmmid <span class="sc">&gt;=</span> <span class="dv">34</span>, <span class="st">&#39;34 or larger&#39;</span>, actcmmid)))</span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="regression-trees.html#cb153-1" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb153-2"><a href="regression-trees.html#cb153-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_recode =</span> <span class="fu">ifelse</span>(actcmmid <span class="sc">&lt;=</span> <span class="dv">15</span>, <span class="st">&#39;15 or smaller&#39;</span>, </span>
+<span id="cb153-3"><a href="regression-trees.html#cb153-3" tabindex="-1"></a>                             <span class="fu">ifelse</span>(actcmmid <span class="sc">&gt;=</span> <span class="dv">34</span>, <span class="st">&#39;34 or larger&#39;</span>, actcmmid)))</span></code></pre></div>
 <p>The <code>mutate()</code> function above collapses the categories and creates a new attribute named <code>act_recode.</code> Then, this new attribute is used to compute the MAE and other statistics to evaluate conditional model performance. Notice that the length column at the end no longer has categories with a single data point in them. Rather, the smallest is now six, which is still small, but at least there is more than one data point in them. Similar trends to those discussed above pertain here.</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="regression-trees.html#cb158-1" aria-hidden="true" tabindex="-1"></a>conditional_error <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb158-2"><a href="regression-trees.html#cb158-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span>
-<span id="cb158-3"><a href="regression-trees.html#cb158-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-4"><a href="regression-trees.html#cb158-4" aria-hidden="true" tabindex="-1"></a>conditional_error</span></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="regression-trees.html#cb154-1" tabindex="-1"></a>conditional_error <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb154-2"><a href="regression-trees.html#cb154-2" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span>
+<span id="cb154-3"><a href="regression-trees.html#cb154-3" tabindex="-1"></a></span>
+<span id="cb154-4"><a href="regression-trees.html#cb154-4" tabindex="-1"></a>conditional_error</span></code></pre></div>
 <pre><code>##      response    act_recode       mean     median       min       max length
 ## 1  abs(error) 15 or smaller 13.1997579 13.8071134 8.1110010 16.681159      6
 ## 2  abs(error)            16  7.0523290  7.1110010 5.5032258  9.681159     11
@@ -587,16 +591,11 @@ Figure 6.6: The distribution of errors after taking the absolute value .
 ## 18 abs(error)            32  2.1915114  0.3571429 0.3571429  6.318841     26
 ## 19 abs(error)            33  1.7545894  1.3571429 1.3571429  7.318841     15
 ## 20 abs(error)  34 or larger  2.4340659  2.3571429 2.3571429  3.357143     13</code></pre>
-<p>It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A point range plot shows the average mean absolute error and minimum and maximum absolute error values for each median ACT score. The dot in the figure represents the mean absolute error, and the range of the horizontal line stretches to the minimum and maximum absolute error statistics. The <code>gf_pointrangeh()</code> function aids in plotting this in R. The formula input for this function is <code>y-scores ~ mean-value + min-value + max-value</code>.</p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="regression-trees.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_pointrangeh</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
-<span id="cb160-2"><a href="regression-trees.html#cb160-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> conditional_error) <span class="sc">%&gt;%</span> </span>
-<span id="cb160-3"><a href="regression-trees.html#cb160-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
-<span id="cb160-4"><a href="regression-trees.html#cb160-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Using the `size` aesthetic with geom_segment was deprecated in ggplot2 3.4.0.
-## ℹ Please use the `linewidth` aesthetic instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
+<p>It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A point range plot shows the average mean absolute error and minimum and maximum absolute error values for each median ACT score. The dot in the figure represents the mean absolute error, and the range of the horizontal line stretches to the minimum and maximum absolute error statistics. The <code>gf_pointrange()</code> function aids in plotting this in R. The formula input for this function is <code>y-scores ~ mean-value + min-value + max-value</code>.</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="regression-trees.html#cb156-1" tabindex="-1"></a><span class="fu">gf_pointrange</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
+<span id="cb156-2"><a href="regression-trees.html#cb156-2" tabindex="-1"></a>               <span class="at">data =</span> conditional_error) <span class="sc">%&gt;%</span> </span>
+<span id="cb156-3"><a href="regression-trees.html#cb156-3" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
+<span id="cb156-4"><a href="regression-trees.html#cb156-4" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:cond-error-figure"></span>
 <img src="06-regression_files/figure-html/cond-error-figure-1.png" alt="Ranges of absolute errors across different median ACT scores with mean absolute error." width="672" />
 <p class="caption">
@@ -608,15 +607,16 @@ Figure 6.7: Ranges of absolute errors across different median ACT scores with me
 <div id="explore-another-attribute" class="section level4 hasAnchor" number="6.4.1.1">
 <h4><span class="header-section-number">6.4.1.1</span> Explore another attribute<a href="regression-trees.html#explore-another-attribute" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Let us explore another attribute, the undergraduate enrollment of institutions, to see if it is related to the median ACT score. First, a scatterplot is shown then the correlation is computed.</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="regression-trees.html#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(actcmmid <span class="sc">~</span> ugds, <span class="at">data =</span> colleges, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb162-2"><a href="regression-trees.html#cb162-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Undergraduate Enrollment&quot;</span>,</span>
-<span id="cb162-3"><a href="regression-trees.html#cb162-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 730 rows containing missing values (`geom_point()`).</code></pre>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="regression-trees.html#cb157-1" tabindex="-1"></a><span class="fu">gf_point</span>(actcmmid <span class="sc">~</span> ugds, <span class="at">data =</span> colleges, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb157-2"><a href="regression-trees.html#cb157-2" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">x =</span> <span class="st">&quot;Undergraduate Enrollment&quot;</span>,</span>
+<span id="cb157-3"><a href="regression-trees.html#cb157-3" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 730 rows containing missing values or values outside the scale range
+## (`geom_point()`).</code></pre>
 <p><img src="06-regression_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>The correlation is 0.27 between median ACT score and the undergraduate enrollment of institutions.</p>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="regression-trees.html#cb164-1" aria-hidden="true" tabindex="-1"></a>act_reg2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> adm_rate <span class="sc">+</span> ugds, <span class="at">data =</span> colleges, <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
-<span id="cb164-2"><a href="regression-trees.html#cb164-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb164-3"><a href="regression-trees.html#cb164-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(act_reg2, <span class="at">roundint =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">branch =</span> .<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="regression-trees.html#cb159-1" tabindex="-1"></a>act_reg2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> adm_rate <span class="sc">+</span> ugds, <span class="at">data =</span> colleges, <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
+<span id="cb159-2"><a href="regression-trees.html#cb159-2" tabindex="-1"></a></span>
+<span id="cb159-3"><a href="regression-trees.html#cb159-3" tabindex="-1"></a><span class="fu">rpart.plot</span>(act_reg2, <span class="at">roundint =</span> <span class="cn">FALSE</span>, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">branch =</span> .<span class="dv">3</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:two-attr-regtree"></span>
 <img src="06-regression_files/figure-html/two-attr-regtree-1.png" alt="Regression tree with admission rates and ungraduate enrollments predicting median ACT score" width="672" />
 <p class="caption">
@@ -625,11 +625,11 @@ Figure 6.8: Regression tree with admission rates and ungraduate enrollments pred
 </div>
 <p>Figure <a href="regression-trees.html#fig:two-attr-regtree">6.8</a> shows the regression tree when adding the undergraduate enrollment attribute and the admission rate. The regression tree shows that the admission rate is the most important attribute in predicting the median ACT score (the first split in the regression tree). However, undergraduate enrollment is important as this is the second split for those with admission rates greater than 25%.</p>
 <p>To fully understand how much better this model is than the one with only admission rates included, we can use MAE to evaluate the prediction accuracy. First, the predicted values from the new model and the new errors (predicted - observed) must be added to the data.</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="regression-trees.html#cb165-1" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb165-2"><a href="regression-trees.html#cb165-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred2 =</span> <span class="fu">predict</span>(act_reg2),</span>
-<span id="cb165-3"><a href="regression-trees.html#cb165-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">error2 =</span> actcmmid <span class="sc">-</span> act_pred2)</span>
-<span id="cb165-4"><a href="regression-trees.html#cb165-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-5"><a href="regression-trees.html#cb165-5" aria-hidden="true" tabindex="-1"></a>colleges_pred</span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="regression-trees.html#cb160-1" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb160-2"><a href="regression-trees.html#cb160-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred2 =</span> <span class="fu">predict</span>(act_reg2),</span>
+<span id="cb160-3"><a href="regression-trees.html#cb160-3" tabindex="-1"></a>         <span class="at">error2 =</span> actcmmid <span class="sc">-</span> act_pred2)</span>
+<span id="cb160-4"><a href="regression-trees.html#cb160-4" tabindex="-1"></a></span>
+<span id="cb160-5"><a href="regression-trees.html#cb160-5" tabindex="-1"></a>colleges_pred</span></code></pre></div>
 <pre><code>## # A tibble: 1,289 × 7
 ##    instnm                    actcmmid act_pred error act_recode act_pred2 error2
 ##    &lt;chr&gt;                        &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt;
@@ -644,10 +644,10 @@ Figure 6.8: Regression tree with admission rates and ungraduate enrollments pred
 ##  9 Faulkner University             20     23.1 -3.11 20              23.3 -3.31 
 ## 10 Huntingdon College              22     23.1 -1.11 22              21.7  0.342
 ## # ℹ 1,279 more rows</code></pre>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="regression-trees.html#cb167-1" aria-hidden="true" tabindex="-1"></a>conditional_error2 <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb167-2"><a href="regression-trees.html#cb167-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error2) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span>
-<span id="cb167-3"><a href="regression-trees.html#cb167-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb167-4"><a href="regression-trees.html#cb167-4" aria-hidden="true" tabindex="-1"></a>conditional_error2</span></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="regression-trees.html#cb162-1" tabindex="-1"></a>conditional_error2 <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb162-2"><a href="regression-trees.html#cb162-2" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error2) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span>
+<span id="cb162-3"><a href="regression-trees.html#cb162-3" tabindex="-1"></a></span>
+<span id="cb162-4"><a href="regression-trees.html#cb162-4" tabindex="-1"></a>conditional_error2</span></code></pre></div>
 <pre><code>##       response    act_recode       mean     median       min       max length
 ## 1  abs(error2) 15 or smaller 11.9076028 13.6583541 6.6583541 15.658354      6
 ## 2  abs(error2)            16  5.9580028  5.6583541 5.6583541  7.306422     11
@@ -669,15 +669,15 @@ Figure 6.8: Regression tree with admission rates and ungraduate enrollments pred
 ## 18 abs(error2)            32  1.9545834  0.3571429 0.3571429 10.341646     26
 ## 19 abs(error2)            33  1.4939394  1.3571429 1.3571429  3.409091     15
 ## 20 abs(error2)  34 or larger  2.4340659  2.3571429 2.3571429  3.357143     13</code></pre>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="regression-trees.html#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
-<span id="cb169-2"><a href="regression-trees.html#cb169-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error, <span class="at">model =</span> <span class="st">&#39;model1&#39;</span>),</span>
-<span id="cb169-3"><a href="regression-trees.html#cb169-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error2, <span class="at">model =</span> <span class="st">&#39;model2&#39;</span>)</span>
-<span id="cb169-4"><a href="regression-trees.html#cb169-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb169-5"><a href="regression-trees.html#cb169-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_pointrangeh</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
-<span id="cb169-6"><a href="regression-trees.html#cb169-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="sc">~</span> model,</span>
-<span id="cb169-7"><a href="regression-trees.html#cb169-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb169-8"><a href="regression-trees.html#cb169-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
-<span id="cb169-9"><a href="regression-trees.html#cb169-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="regression-trees.html#cb164-1" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb164-2"><a href="regression-trees.html#cb164-2" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error, <span class="at">model =</span> <span class="st">&#39;model1&#39;</span>),</span>
+<span id="cb164-3"><a href="regression-trees.html#cb164-3" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error2, <span class="at">model =</span> <span class="st">&#39;model2&#39;</span>)</span>
+<span id="cb164-4"><a href="regression-trees.html#cb164-4" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb164-5"><a href="regression-trees.html#cb164-5" tabindex="-1"></a>  <span class="fu">gf_pointrange</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
+<span id="cb164-6"><a href="regression-trees.html#cb164-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="sc">~</span> model,</span>
+<span id="cb164-7"><a href="regression-trees.html#cb164-7" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb164-8"><a href="regression-trees.html#cb164-8" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
+<span id="cb164-9"><a href="regression-trees.html#cb164-9" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:cond-error-compare"></span>
 <img src="06-regression_files/figure-html/cond-error-compare-1.png" alt="Compared absolute error across the two regression tree models fitted." width="672" />
 <p class="caption">
@@ -691,18 +691,18 @@ Figure 6.9: Compared absolute error across the two regression tree models fitted
 <div id="adding-more-attributes" class="section level2 hasAnchor" number="6.5">
 <h2><span class="header-section-number">6.5</span> Adding more attributes<a href="regression-trees.html#adding-more-attributes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To evaluate how well this model can do, all attributes will be open to be included in the final model. The institution name is the only one removed from the data. This can be done with the <code>.</code> character after the <code>~</code> in the model formula. The model tree is not printed as it is large and cannot be easily viewed. Instead, the accuracy evaluation will be compared to the other two models fitted. The attributes included in the final model, though, can be accessed and ranked by those most important.</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="regression-trees.html#cb170-1" aria-hidden="true" tabindex="-1"></a>act_reg_sat <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> ., </span>
-<span id="cb170-2"><a href="regression-trees.html#cb170-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> <span class="fu">select</span>(colleges, <span class="sc">-</span>instnm),</span>
-<span id="cb170-3"><a href="regression-trees.html#cb170-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
-<span id="cb170-4"><a href="regression-trees.html#cb170-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-5"><a href="regression-trees.html#cb170-5" aria-hidden="true" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb170-6"><a href="regression-trees.html#cb170-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred_sat =</span> <span class="fu">predict</span>(act_reg_sat),</span>
-<span id="cb170-7"><a href="regression-trees.html#cb170-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">error_sat =</span> actcmmid <span class="sc">-</span> act_pred_sat)</span>
-<span id="cb170-8"><a href="regression-trees.html#cb170-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-9"><a href="regression-trees.html#cb170-9" aria-hidden="true" tabindex="-1"></a>conditional_error_sat <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
-<span id="cb170-10"><a href="regression-trees.html#cb170-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error_sat) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span>
-<span id="cb170-11"><a href="regression-trees.html#cb170-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-12"><a href="regression-trees.html#cb170-12" aria-hidden="true" tabindex="-1"></a>act_reg_sat<span class="sc">$</span>variable.importance</span></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="regression-trees.html#cb165-1" tabindex="-1"></a>act_reg_sat <span class="ot">&lt;-</span> <span class="fu">rpart</span>(actcmmid <span class="sc">~</span> ., </span>
+<span id="cb165-2"><a href="regression-trees.html#cb165-2" tabindex="-1"></a>                     <span class="at">data =</span> <span class="fu">select</span>(colleges, <span class="sc">-</span>instnm),</span>
+<span id="cb165-3"><a href="regression-trees.html#cb165-3" tabindex="-1"></a>                                   <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>)</span>
+<span id="cb165-4"><a href="regression-trees.html#cb165-4" tabindex="-1"></a></span>
+<span id="cb165-5"><a href="regression-trees.html#cb165-5" tabindex="-1"></a>colleges_pred <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb165-6"><a href="regression-trees.html#cb165-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act_pred_sat =</span> <span class="fu">predict</span>(act_reg_sat),</span>
+<span id="cb165-7"><a href="regression-trees.html#cb165-7" tabindex="-1"></a>         <span class="at">error_sat =</span> actcmmid <span class="sc">-</span> act_pred_sat)</span>
+<span id="cb165-8"><a href="regression-trees.html#cb165-8" tabindex="-1"></a></span>
+<span id="cb165-9"><a href="regression-trees.html#cb165-9" tabindex="-1"></a>conditional_error_sat <span class="ot">&lt;-</span> colleges_pred <span class="sc">%&gt;%</span></span>
+<span id="cb165-10"><a href="regression-trees.html#cb165-10" tabindex="-1"></a>  <span class="fu">df_stats</span>(<span class="fu">abs</span>(error_sat) <span class="sc">~</span> act_recode, mean, median, min, max, length)</span>
+<span id="cb165-11"><a href="regression-trees.html#cb165-11" tabindex="-1"></a></span>
+<span id="cb165-12"><a href="regression-trees.html#cb165-12" tabindex="-1"></a>act_reg_sat<span class="sc">$</span>variable.importance</span></code></pre></div>
 <pre><code>##           city tuitionfee_out  tuitionfee_in       costt4_a       adm_rate 
 ##    10608.27504     8438.13169     7869.78358     6700.46334     2858.66475 
 ##         stabbr       debt_mdn  grad_debt_mdn           ugds         region 
@@ -765,17 +765,17 @@ Figure 6.9: Compared absolute error across the two regression tree models fitted
 </tbody>
 </table>
 <p>The evaluation accuracy of this model that could contain most of the attributes in the data is shown in Figure <a href="regression-trees.html#fig:sat-eval-acc">6.10</a>. The figure also shows the comparisons to the other two models explored in this chapter, labeled as ‘model1’ and ‘model2’, respectively. Notice the improvement across all of the median ACT scores for the model that was fitted with the ability to include all attributes.</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="regression-trees.html#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
-<span id="cb172-2"><a href="regression-trees.html#cb172-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error, <span class="at">model =</span> <span class="st">&#39;model1&#39;</span>),</span>
-<span id="cb172-3"><a href="regression-trees.html#cb172-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error2, <span class="at">model =</span> <span class="st">&#39;model2&#39;</span>),</span>
-<span id="cb172-4"><a href="regression-trees.html#cb172-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error_sat, <span class="at">model =</span> <span class="st">&#39;model_sat&#39;</span>)</span>
-<span id="cb172-5"><a href="regression-trees.html#cb172-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb172-6"><a href="regression-trees.html#cb172-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">factor</span>(model, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&#39;model1&#39;</span>, <span class="st">&#39;model2&#39;</span>, <span class="st">&#39;model_sat&#39;</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb172-7"><a href="regression-trees.html#cb172-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_pointrangeh</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
-<span id="cb172-8"><a href="regression-trees.html#cb172-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="sc">~</span> model,</span>
-<span id="cb172-9"><a href="regression-trees.html#cb172-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb172-10"><a href="regression-trees.html#cb172-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
-<span id="cb172-11"><a href="regression-trees.html#cb172-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="regression-trees.html#cb167-1" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb167-2"><a href="regression-trees.html#cb167-2" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error, <span class="at">model =</span> <span class="st">&#39;model1&#39;</span>),</span>
+<span id="cb167-3"><a href="regression-trees.html#cb167-3" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error2, <span class="at">model =</span> <span class="st">&#39;model2&#39;</span>),</span>
+<span id="cb167-4"><a href="regression-trees.html#cb167-4" tabindex="-1"></a>  <span class="fu">mutate</span>(conditional_error_sat, <span class="at">model =</span> <span class="st">&#39;model_sat&#39;</span>)</span>
+<span id="cb167-5"><a href="regression-trees.html#cb167-5" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb167-6"><a href="regression-trees.html#cb167-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">factor</span>(model, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&#39;model1&#39;</span>, <span class="st">&#39;model2&#39;</span>, <span class="st">&#39;model_sat&#39;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb167-7"><a href="regression-trees.html#cb167-7" tabindex="-1"></a>  <span class="fu">gf_pointrange</span>(act_recode <span class="sc">~</span> mean <span class="sc">+</span> min <span class="sc">+</span> max, </span>
+<span id="cb167-8"><a href="regression-trees.html#cb167-8" tabindex="-1"></a>                 <span class="at">color =</span> <span class="sc">~</span> model,</span>
+<span id="cb167-9"><a href="regression-trees.html#cb167-9" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb167-10"><a href="regression-trees.html#cb167-10" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">y =</span> <span class="st">&quot;Median ACT Score&quot;</span>,</span>
+<span id="cb167-11"><a href="regression-trees.html#cb167-11" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">&quot;Absolute Error&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:sat-eval-acc"></span>
 <img src="06-regression_files/figure-html/sat-eval-acc-1.png" alt="Evaluation of model accuracy across the three models fitted." width="672" />
 <p class="caption">
