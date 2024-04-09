@@ -272,7 +272,7 @@ We can also display both the histogram and the box-and-whiskers plot. In the syn
 
 ```{r hist-and-boxplot, fig.cap = "Histogram and boxplot shown together."}
 gf_histogram(~ adm_rate, data = colleges, bins = 30) |>
-  gf_boxploth(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10) |>
+  gf_boxplot(170 ~ adm_rate, data = colleges, fill = "skyblue", width = 10) |>
   gf_labs(x = "Admission rate", y = "Frequency")
 ```
 
