@@ -207,10 +207,10 @@ conditional_error <- colleges_pred %>%
 conditional_error
 ```
 
-It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A point range plot shows the average mean absolute error and minimum and maximum absolute error values for each median ACT score. The dot in the figure represents the mean absolute error, and the range of the horizontal line stretches to the minimum and maximum absolute error statistics. The `gf_pointrangeh()` function aids in plotting this in R. The formula input for this function is `y-scores ~ mean-value + min-value + max-value`. 
+It can be helpful to visualize some of these statistics to help facilitate any trend in the model performance across the median ACT values. A point range plot shows the average mean absolute error and minimum and maximum absolute error values for each median ACT score. The dot in the figure represents the mean absolute error, and the range of the horizontal line stretches to the minimum and maximum absolute error statistics. The `gf_pointrange()` function aids in plotting this in R. The formula input for this function is `y-scores ~ mean-value + min-value + max-value`. 
 
 ```{r cond-error-figure, fig.cap = "Ranges of absolute errors across different median ACT scores with mean absolute error."}
-gf_pointrangeh(act_recode ~ mean + min + max, 
+gf_pointrange(act_recode ~ mean + min + max, 
                data = conditional_error) %>% 
   gf_labs(y = "Median ACT Score",
           x = "Absolute Error")
@@ -262,7 +262,7 @@ bind_rows(
   mutate(conditional_error, model = 'model1'),
   mutate(conditional_error2, model = 'model2')
 ) %>%
-  gf_pointrangeh(act_recode ~ mean + min + max, 
+  gf_pointrange(act_recode ~ mean + min + max, 
                  color = ~ model,
                position = position_dodge(width = 0.5)) %>% 
   gf_labs(y = "Median ACT Score",
@@ -305,7 +305,7 @@ bind_rows(
   mutate(conditional_error_sat, model = 'model_sat')
 ) %>%
   mutate(model = factor(model, levels = c('model1', 'model2', 'model_sat'))) %>%
-  gf_pointrangeh(act_recode ~ mean + min + max, 
+  gf_pointrange(act_recode ~ mean + min + max, 
                  color = ~ model,
                position = position_dodge(width = 0.5)) %>% 
   gf_labs(y = "Median ACT Score",
